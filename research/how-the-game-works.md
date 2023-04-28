@@ -34,7 +34,7 @@ Every so many seconds, each animatronic has a 'movement opportunity'. These AI l
 
 The game will pick a random number between **1 and 20**. This number is compared to the animatronic's AI level. If the AI is **greater than or equal to** the random number, the animatronic will successfully make whatever action it was wanting to do.
 
-This means at AI level 0, it is impossible for the animatronic to move. At AI level 1, it has a 1 in 20 (5%) chance of moving, at AI level 2 it has a 2 in 20 (10%) chance, all the way up to AI level 20 where it is *guanteed* to make every movement it wants to make. In a way this makes the AI levels leading up to 20 harder than level 20 itself - at level 20 you can predict with absolute certainty what the animatronic will do next, whereas at the slightly lower levels there is an element of uncertainty - you know what they are *probably* going to do next, but you could be wrong.
+This means at AI level 0, it is impossible for the animatronic to move. At AI level 1, it has a 1 in 20 (5%) chance of moving, at AI level 2 it has a 2 in 20 (10%) chance, all the way up to AI level 20 where it is *guanteed* to make every movement it wants to make. In a way this makes the AI levels leading up to 20 harder than level 20 itself - at level 20 you can predict with absolute certainty when the animatronic will act next, whereas at the slightly lower levels there is an element of uncertainty - you know when they are *probably* going to move, but you could be wrong.
 
 Each animatronic has different amounts of time between each of their movement opportunities:
 
