@@ -1,6 +1,9 @@
 $black: #000;
 $white: #fff;
 
+@import url('css-modules/timer.css');
+
+
 
 body{
   background: $black;
@@ -37,9 +40,3 @@ body{
 }
 
 
-/* Timer -------------------------------------------------------------------- */
-
-#seconds{
-  font-size: 3em;
-  font-weight: bold;
-}

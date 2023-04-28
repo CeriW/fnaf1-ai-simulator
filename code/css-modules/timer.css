@@ -1,0 +1,1 @@
+#real-time-seconds{font-size:3em}#in-game-time{display:grid;grid-template:"hour minutes" min-content "hour am" min-content/min-content 1fr;gap:0 10px}#in-game-time>span{line-height:.8}#in-game-time>span:not(.in-game-hour){font-size:1.6em}.in-game-hour{font-size:4em;grid-area:hour}

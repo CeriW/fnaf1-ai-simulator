@@ -1,0 +1,33 @@
+/* Timer -------------------------------------------------------------------- */
+
+$timer-chunky-text: 4em;
+
+#real-time-seconds{
+  font-size: 3em;
+}
+
+
+
+
+#in-game-time{
+  display: grid;
+  grid-template:
+    "hour minutes" min-content
+    "hour am" min-content
+    / min-content 1fr
+  ;
+  gap: 0 10px;
+}
+
+#in-game-time > span{
+  line-height: 0.8;
+}
+
+#in-game-time > span:not(.in-game-hour){
+  font-size: $timer-chunky-text / 2.5;
+}
+
+.in-game-hour{
+  font-size: $timer-chunky-text;
+  grid-area: hour;
+}

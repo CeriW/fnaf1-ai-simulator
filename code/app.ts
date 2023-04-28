@@ -3,8 +3,8 @@
 /* Time related page elements */
 const timer: HTMLDivElement = document.querySelector('#timer')!;
 const framesDisplay: HTMLDivElement = document.querySelector('#frames')!;
-const secondsDisplay: HTMLDivElement = document.querySelector('#seconds')!;
-const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-hour')!;
+const secondsDisplay: HTMLDivElement = document.querySelector('#real-time-seconds')!;
+const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time')!;
 
 /* Time related variables */
 let currentFrames: number = 0;
@@ -17,6 +17,11 @@ const updateFrames = () => {
 
   updateRealTime();
   updateInGameTime();
+
+  // Make it stop at 6AM
+  if (currentFrames >= 32100) {
+    clearInterval(frameUpdate);
+  }
 };
 
 const updateRealTime = () => {
@@ -35,9 +40,12 @@ const updateInGameTime = () => {
   let hours = Math.floor(minutes / 60) > 0 ? Math.floor(minutes / 60) : 12;
   let remainingMinutes = minutes % 60;
 
-  inGameHourDisplay.textContent = `
-    ${hours} : ${String(remainingMinutes).padStart(2, '0')}
+  inGameHourDisplay.innerHTML = `
+
+    <span class="in-game-hour">${hours}</span>
+    <span class="in-game-minutes">${String(remainingMinutes).padStart(2, '0')}</span>
+    <span class="am-marker">AM</span>
   `;
 };
 
-const frameUpdate = window.setInterval(updateFrames, 0.5); // Update the frames every 1/60th of a second
+const frameUpdate = window.setInterval(updateFrames, 0.0005); // Update the frames every 1/60th of a second
