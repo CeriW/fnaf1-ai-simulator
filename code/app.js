@@ -12,34 +12,24 @@ let currentFrames = 0;
 const updateFrames = () => {
     currentFrames++;
     framesDisplay.textContent = `${Math.floor(currentFrames)}`;
+    updateRealTime();
+    updateInGameTime();
 };
-const updateTime = () => {
+const updateRealTime = () => {
     let seconds = Math.floor(currentFrames / 60);
-    var minutes = Math.floor(seconds / 60);
-    var remainingSeconds = seconds % 60;
+    let minutes = Math.floor(seconds / 60);
+    let remainingSeconds = seconds % 60;
     secondsDisplay.textContent = `
     ${minutes} : ${String(remainingSeconds).padStart(2, '0')}
   `;
 };
-// const updateTime = () => {
-//   currentSeconds++;
-//   secondsDisplay.textContent = `
-//     ${Math.floor(currentSeconds / 60)} : ${String(currentSeconds % 60).padStart(2, '0')}
-//   `;
-//   if (currentSeconds === 854) {
-//     clearInterval(timeUpdate);
-//     clearInterval(frameUpdate);
-//   }
-// };
-// const updateInGameTime = () => {
-//   let inGameTime = currentSeconds * 1.5;
-//   let myHour = Math.floor(inGameTime / 90);
-//   if (!myHour) {
-//     myHour = 12;
-//   }
-//   let myMinute = inGameTime / 60;
-//   inGameHourDisplay.textContent = `${myHour}:${Math.floor(myMinute)}AM`;
-// };
-const frameUpdate = window.setInterval(updateFrames, 1000 / 60); // Update the frames every 1/60th of a second
-const timeUpdate = window.setInterval(updateTime, 1000); // Update the seconds every second.
-const inGameHourUpdate = window.setInterval(updateInGameTime, 150); // Update the in-game time every 1.5 seconds (an in game 'hour' is 90 real time seconds)
+// One in game hour is 90 real-life seconds
+const updateInGameTime = () => {
+    let minutes = Math.floor((currentFrames - 60) / (60 * 1.5)) > 0 ? Math.floor((currentFrames - 60) / (60 * 1.5)) : 0;
+    let hours = Math.floor(minutes / 60) > 0 ? Math.floor(minutes / 60) : 12;
+    let remainingMinutes = minutes % 60;
+    inGameHourDisplay.textContent = `
+    ${hours} : ${String(remainingMinutes).padStart(2, '0')}
+  `;
+};
+const frameUpdate = window.setInterval(updateFrames, 0.5); // Update the frames every 1/60th of a second
