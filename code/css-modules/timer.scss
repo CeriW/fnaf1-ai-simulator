@@ -1,13 +1,15 @@
 /* Timer -------------------------------------------------------------------- */
 
-$timer-chunky-text: 4em;
+@use 'var.scss';
 
-#real-time-seconds{
-  font-size: 3em;
+
+#in-game-time,
+#real-time{
+  font-family: 'VT323', monospace;
 }
 
 
-
+/* IN GAME TIME ------------------------------------------------------------- */
 
 #in-game-time{
   display: grid;
@@ -17,17 +19,39 @@ $timer-chunky-text: 4em;
     / min-content 1fr
   ;
   gap: 0 10px;
+  align-items: end;
+
 }
 
 #in-game-time > span{
-  line-height: 0.8;
-}
-
-#in-game-time > span:not(.in-game-hour){
-  font-size: $timer-chunky-text / 2.5;
+  line-height: 0.6;
+  text-align: right;
 }
 
 .in-game-hour{
-  font-size: $timer-chunky-text;
+  font-size: 10em;
   grid-area: hour;
+}
+
+.in-game-minutes{
+  font-size: 2em;
+  
+}
+
+.am-marker{
+  font-size: 3em;
+}
+
+
+/* REAL TIME ---------------------------------------------------------------- */
+
+#supplementary-time-info{
+  border: 1px solid var.$white;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+#real-time{
+  font-size: 2em;
+  margin: 10px 0;
 }

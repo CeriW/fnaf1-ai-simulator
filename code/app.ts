@@ -3,17 +3,22 @@
 /* Time related page elements */
 const timer: HTMLDivElement = document.querySelector('#timer')!;
 const framesDisplay: HTMLDivElement = document.querySelector('#frames')!;
-const secondsDisplay: HTMLDivElement = document.querySelector('#real-time-seconds')!;
+const secondsDisplay: HTMLDivElement = document.querySelector('#real-time')!;
 const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time')!;
 
 /* Time related variables */
 let currentFrames: number = 0;
-// let currentSeconds: number = -1; // We start at -1 because the first 'hour' is 1 second shorter than the rest.
+
+let framesPerSecond: number = 60;
+
+// ========================================================================== //
+// TIMER BASED FUNCTIONS
+// ========================================================================== //
 
 // We are running at 60fps
 const updateFrames = () => {
   currentFrames++;
-  framesDisplay.textContent = `${Math.floor(currentFrames)}`;
+  framesDisplay.textContent = `${Math.floor(currentFrames)} frames at ${framesPerSecond}fps`;
 
   updateRealTime();
   updateInGameTime();
@@ -36,7 +41,7 @@ const updateRealTime = () => {
 
 // One in game hour is 90 real-life seconds
 const updateInGameTime = () => {
-  let minutes = Math.floor((currentFrames - 60) / (60 * 1.5)) > 0 ? Math.floor((currentFrames - 60) / (60 * 1.5)) : 0;
+  let minutes = Math.floor(currentFrames / (60 * 1.5)) > 0 ? Math.floor((currentFrames - 60) / (60 * 1.5)) : 0;
   let hours = Math.floor(minutes / 60) > 0 ? Math.floor(minutes / 60) : 12;
   let remainingMinutes = minutes % 60;
 
@@ -48,4 +53,8 @@ const updateInGameTime = () => {
   `;
 };
 
-const frameUpdate = window.setInterval(updateFrames, 0.0005); // Update the frames every 1/60th of a second
+// ========================================================================== //
+// INITIALISE THE PAGE
+// ========================================================================== //
+
+const frameUpdate = window.setInterval(updateFrames, 1000 / framesPerSecond); // Update the frames every 1/60th of a second

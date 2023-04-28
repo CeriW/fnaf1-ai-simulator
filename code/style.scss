@@ -1,7 +1,6 @@
-$black: #000;
-$white: #fff;
 
-@import url('css-modules/timer.css');
+@use 'css-modules/var.scss';
+@use 'css-modules/timer.scss';
 
 
 
@@ -17,7 +16,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'VT323', monospace;
+
 }
 
 
