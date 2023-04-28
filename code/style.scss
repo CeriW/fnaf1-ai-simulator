@@ -1,0 +1,30 @@
+$black: #000;
+$white: #fff;
+
+
+body{
+  background: $black;
+  color: $white;
+  padding: 30px;
+  margin: 0;
+  width: 100vw;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+#pizzeria-layout{
+  max-width: 750px;
+
+  *{
+    stroke-width: 3;
+  }
+
+  #Rooms *{
+    stroke: $white;
+  }
+
+  #Dead_space{
+    stroke: #333333;
+  }
+}
