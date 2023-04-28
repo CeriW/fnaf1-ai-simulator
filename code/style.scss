@@ -11,6 +11,9 @@ body{
   min-height: 100vh;
   box-sizing: border-box;
   font-family: monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -20,7 +23,7 @@ body{
   max-width: 750px;
 
   *{
-    stroke-width: 3;
+    stroke-width: 2;
   }
 
   #Rooms *{
