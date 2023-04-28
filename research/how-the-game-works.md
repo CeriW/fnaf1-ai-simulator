@@ -1,8 +1,10 @@
-# HOW FIVE NIGHTS AT FREDDY'S WORKS
 
 All details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
 
-# HOW AI LEVELS WORK
+12AM lasts 90 seconds, while 1AM - 6AM each last 89 seconds each hour, meaning a night lasts 8:55.
+
+
+# How AI levels work
 
 Each animatronic has an AI level which determines how likely they are to take an action at any given time, ranging from 0 (completely deactivated) to 20 (maximum aggression, guaranteed to move). These are:
 
@@ -26,7 +28,7 @@ Freddy does not receive any boosts throughout the night.
 
 TODO - IS THIS STILL THE CASE FOR CUSTOM NIGHT OR DO THEY REMAIN WHERE YOU SET THEM?
 
-## HOW AI LEVELS ARE USED
+## How AI levels are used
 
 Every so many seconds, each animatronic has a 'movement opportunity'. These AI levels determine whether the animatronic in question will be successful in making the move it wants to make.
 
@@ -94,11 +96,11 @@ In a way this makes AI level 20 easier than the AI levels leading up to it. If y
 
 
 ## Freddy
-Always comes down the **left** corridor. Unlike Bonnie and Chica his progress will not reverse - he will always come towards you and never away from you.
+Always comes down the **right** corridor. Unlike Bonnie and Chica his progress will not reverse - he will always come towards you and never away from you.
 
-Once he is in the space immediately outside your **left** door, he will wait until you have the cameras up. If your door is open at this time, you will be jumpscared once you put the cameras down.
+Once he is in the space immediately outside your **right** door, he will wait until you have the cameras up. If your door is open at this time, you will be jumpscared once you put the cameras down.
 
-Having the cameras on Freddy while he is calculating a movement opportunity will cause him to automatically fail it.
+Having the cameras up (on any camera, not specifically the one Freddy is in) while he is calculating a movement opportunity will cause him to automatically fail it.
 
 However, when Freddy *does* get a successful movement opportunity he does not immediately move, but rather waits a certain number of *frames* (remembering that the game runs at 60fps) before doing so. How many frames this is depends on his AI level.
 
@@ -121,6 +123,24 @@ This effectively means that he waits this amount of time at each AI level before
 | 9  |  100  | 1.667s |
 | 10+  |  0  | 0s |
 
+If he is already in a countdown and you put the cameras back up this countdown will not be affected - he will take it as soon as you put the cameras down.
+
+### Freddy at camera 4B
+Freddy's behaviour changes when he's at camera 4B - the one immediately outside your office.
+* He will no longer automatically fail his movement opportunities when the cameras are up.
+* There is an exception - looking at camera 4B will continue to make him fail his movement opportunities.
+
+He will attack when both of these conditions are met:
+* He succeeds a movement opportunity
+* The cameras are up and you are looking at a camera that isn't 4B
+
+### How Freddy differs to Bonnie and Chica
+
+* Freddy cannot enter your office when your camera is down. He can only enter while you are looking at a camera that isn't 4B while the doors are open.
+* Once he is outside your office, he pretty much never leaves. If he gets a successful movement opportunity while at 4B and the door is closed, he moves back to 4A rather than all the way back to the dining room.
+* Once Freddy is inside your office, he will only jumpscare you when the camera is down. Unlike Bonnie and Chica, he will not pull the camera down if you spend too long in it - you could theoretically win by never putting the camera down once he's inside.
+* While the cameras *are* down, his chances of jumpscaring you are 25% every 1 second (meaning theoretically he could be in your office and never jumpscare you).
+
 Despite common belief, if you run out of power, not moving does not slow down the time you have before Freddy attacks you.
 
 
@@ -130,10 +150,28 @@ Moves from the stage in Pirate's Cove as a result of poor camera usage. Despite 
 If he is able to leave Pirate's Cove, he will rush down the **left** corridor at you.
 * If the door is open at this time, he will jumpscare you.
 * If the door is closed, he will bash on it, causing you to lose power. This power drainage is 1% the first time he does it, and increases by 6% each time after that.
-* Once he has based on your door and drained your power he will return to Pirate's Cove and restart his cycle at either step 1 or 2
+* Once he has bashed on your door and drained your power he will return to Pirate's Cove and restart his cycle at either step 1 or 2.
 
 Each successful "movement opportunity" (see *How AI levels are used* below) Foxy gets means he gets 1 step closer to attacking. However, while the cameras are up (on any camera, not specifically the one in Pirate's Cove), he will automatically fail **all** of his movement opportunities.
 
 He will continue to fail all of his movement opportunities for a random amount of time after the cameras come down, ranging from 0.83s to 16.67s (calculated on each frame at 60fps).
 
 Once Foxy makes 4 successful movement opportunities he will attack as soon as he can, which will either be when you next check the camera for the left hall (giving you a very short amount of time to shut the door before you get jumpscared), or after 25s has passed.
+
+## Golden Freddy
+There is a 0.0001% chance of the Golden Freddy poster appearing every time camera 2B is clicked. This is calculated once per second - reopening camera 2B more than once per second does not increase your chances.
+
+When you put the camera down, he will be sitting in your office. If you do not put the cameras back up within ? seconds, you will be jumpscared.
+
+If you put the camera up and then back down again, he will be gone.
+
+
+# What happens when you run out of power
+
+Everything else stops. You cannot use lights or cameras, and the doors are open. The only animatronic you can be jumpscared by is Freddy. Even if someone was already in your office or Foxy was on his way, none of it matters now.
+
+1. Every 5 seconds, you have a 20% chance of Freddy showing up outside the **left** door and start playing his song, up to a maximum of 20 seconds, after which he is guaranteed to show up.
+2.  The same thing then happens for how long the song lasts - a 20% chance up to a maximum of 20 seconds.
+3.  The lights go off, and you have a 20% chance every 2 seconds for him to jumpscare you.
+
+This means it can theoretically be 40+ seconds between the time the power runs out and you actually being jumpscared - long enough that you could pass 6AM in the meantime.
