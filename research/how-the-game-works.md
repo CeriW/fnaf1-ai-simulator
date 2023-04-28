@@ -56,7 +56,7 @@ Not taking into account any actions you take which drain additional power (camer
 
 | Night | Power |
 | ----  | ----- |
-| 1 | ? |
+| 1 | 1% every 9.6 seconds |
 | 2 | 1% every 6 seconds |
 | 3 | 1% every 5 seconds |
 | 4 | 1% every 4 seconds |
