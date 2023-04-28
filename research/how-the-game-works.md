@@ -1,6 +1,8 @@
 
 All details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
 
+When using "left" and "right" in this document, this will be from the point of view of the player sat in the security office.
+
 12AM lasts 90 seconds, while 1AM - 6AM each last 89 seconds each hour, meaning a night lasts 8:55.
 
 
@@ -64,8 +66,6 @@ Not taking into account any actions you take which drain additional power (camer
 
 
 # How the animatronics work
-
-When using "left" and "right" in this document, this will be from the point of view of the player sat in the security office.
 
 Freddy, Chica and Bonnie all move around during the night, generally getting closer to your office. Once they are at their final destination they will not jumpscare you right away, but rather they will wait for you to put up the cameras.
 
