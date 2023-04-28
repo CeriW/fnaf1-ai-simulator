@@ -141,8 +141,6 @@ He will attack when both of these conditions are met:
 * Once Freddy is inside your office, he will only jumpscare you when the camera is down. Unlike Bonnie and Chica, he will not pull the camera down if you spend too long in it - you could theoretically win by never putting the camera down once he's inside.
 * While the cameras *are* down, his chances of jumpscaring you are 25% every 1 second (meaning theoretically he could be in your office and never jumpscare you).
 
-Despite common belief, if you run out of power, not moving does not slow down the time you have before Freddy attacks you.
-
 
 ## Foxy
 Moves from the stage in Pirate's Cove as a result of poor camera usage. Despite common belief, you don't actually have to look at the cameras specifically in Pirate's Cove - camera usage of any kind is enough to stop Foxy from moving.
@@ -175,3 +173,5 @@ Everything else stops. You cannot use lights or cameras, and the doors are open.
 3.  The lights go off, and you have a 20% chance every 2 seconds for him to jumpscare you.
 
 This means it can theoretically be 40+ seconds between the time the power runs out and you actually being jumpscared - long enough that you could pass 6AM in the meantime.
+
+Despite common belief, not moving does not slow down the time you have before Freddy attacks you.
