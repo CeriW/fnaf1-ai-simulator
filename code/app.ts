@@ -1,15 +1,41 @@
-/* HELLO */
+// TODO - PUT THIS IN A MODULE
+
+export type Animatronic = {
+  name: string;
+  possibleLocations: string[];
+  startingPosition: string;
+};
+
+export const animatronics: Animatronic[] = [
+  {
+    name: 'Chica',
+    possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
+    startingPosition: '1A',
+  },
+  {
+    name: 'Bonnie',
+    possibleLocations: ['1A'],
+    startingPosition: '1A',
+  },
+  {
+    name: 'Freddy',
+    possibleLocations: ['1A'],
+    startingPosition: '1A',
+  },
+];
+
+// import { Animatronic, animatronics } from './animatronics';
+
+/* Time related variables */
+let currentFrames: number = 0;
+let framesPerSecond: number = 60;
 
 /* Time related page elements */
-const timer: HTMLDivElement = document.querySelector('#timer')!;
 const framesDisplay: HTMLDivElement = document.querySelector('#frames')!;
 const secondsDisplay: HTMLDivElement = document.querySelector('#real-time')!;
 const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time')!;
 
-/* Time related variables */
-let currentFrames: number = 0;
-
-let framesPerSecond: number = 60;
+const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -54,7 +80,23 @@ const updateInGameTime = () => {
 };
 
 // ========================================================================== //
+// ANIMATRONIC BASED FUNCTIONS
+// ========================================================================== //
+
+const generateAnimatronics = () => {
+  animatronics.forEach((animatronic: Animatronic) => {
+    let animatronicDisplay = document.createElement('span');
+    animatronicDisplay.innerHTML = `
+      <span class="animatronic" id=${animatronic.name} position="${animatronic.startingPosition}">
+      </span>
+    `;
+    simulator.appendChild(animatronicDisplay);
+  });
+};
+
+// ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
 
 const frameUpdate = window.setInterval(updateFrames, 1000 / framesPerSecond); // Update the frames every 1/60th of a second
+generateAnimatronics();
