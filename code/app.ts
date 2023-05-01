@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 5;
-let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
@@ -80,14 +80,12 @@ const updateTime = () => {
   `;
 
   // IN GAME TIME
-  // One in game hour is 90 real-life seconds (with the exception of 12AM which is 89 seconds)
-  let inGameMinutes = Math.ceil(currentSecond * 0.666666666667) > 0 ? Math.ceil(currentSecond * 0.666666666667) : 0;
-  let inGameHours = Math.floor(inGameMinutes / 60) > 0 ? Math.floor(inGameMinutes / 60) : 12;
-  let inGameRemainingMinutes = inGameMinutes % 60;
+
+  const gameTime = calculateInGameTime();
 
   inGameHourDisplay.innerHTML = `
-    <span class="in-game-hour">${inGameHours}</span>
-    <span class="in-game-minutes">${String(inGameRemainingMinutes).padStart(2, '0')}</span>
+    <span class="in-game-hour">${gameTime.hour}</span>
+    <span class="in-game-minutes">${String(gameTime.minute).padStart(2, '0')}</span>
     <span class="am-marker">AM</span>
   `;
 
@@ -102,8 +100,17 @@ const updateTime = () => {
   if (currentSecond === 539) {
     clearInterval(timeUpdate);
     clearInterval(frameUpdate);
-    clearInterval(freddyInterval);
+    // clearInterval(freddyInterval);
   }
+};
+
+const calculateInGameTime = () => {
+  let inGameMinutes = Math.ceil(currentSecond * 0.666666666667) > 0 ? Math.ceil(currentSecond * 0.666666666667) : 0;
+
+  return {
+    hour: String(Math.floor(inGameMinutes / 60) > 0 ? Math.floor(inGameMinutes / 60) : 12),
+    minute: String(inGameMinutes % 60).padStart(2, '0'),
+  };
 };
 
 // ========================================================================== //
@@ -156,12 +163,15 @@ const moveAnimatronic = (name: string, position: string) => {
 
 const addReport = (animatronicName: string, message: string, success: boolean) => {
   let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
+  const InGameTime = calculateInGameTime();
 
   if (reportToAddTo) {
     reportToAddTo.innerHTML = `
 
     ${reportToAddTo?.innerHTML ?? ''}
-    <div class="report-item" type="${success}">${message}</div>
+    <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${
+      InGameTime.minute
+    }AM</span> ${message}</div>
   `;
   }
 };
@@ -172,6 +182,11 @@ const addReport = (animatronicName: string, message: string, success: boolean) =
 
 const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
-const freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+let freddyInterval;
+
+// Since we're starting the time at -1 to accommodate 12AM being 89 seconds long, wait 1 second before starting the movement calculations
+window.setTimeout(() => {
+  freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+}, 1000);
 
 generateAnimatronics();
