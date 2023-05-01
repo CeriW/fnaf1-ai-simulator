@@ -4,16 +4,19 @@ export const animatronics = [
         name: 'Chica',
         possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
         startingPosition: '1A',
+        movementOpportunityInterval: 4980,
     },
     {
         name: 'Bonnie',
         possibleLocations: ['1A'],
         startingPosition: '1A',
+        movementOpportunityInterval: 4970,
     },
     {
         name: 'Freddy',
         possibleLocations: ['1A'],
         startingPosition: '1A',
+        movementOpportunityInterval: 3020,
     },
 ];
 // import { Animatronic, animatronics } from './animatronics';

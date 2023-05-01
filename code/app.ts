@@ -2,8 +2,9 @@
 
 export type Animatronic = {
   name: string;
-  possibleLocations: string[];
-  startingPosition: string;
+  possibleLocations: string[]; // The cameras where they can be
+  startingPosition: string; // The camera where they start
+  movementOpportunityInterval: number; // How often in milliseconds this animatronic gets a movement opportunity
 };
 
 export const animatronics: Animatronic[] = [
@@ -11,16 +12,19 @@ export const animatronics: Animatronic[] = [
     name: 'Chica',
     possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
     startingPosition: '1A',
+    movementOpportunityInterval: 4980,
   },
   {
     name: 'Bonnie',
     possibleLocations: ['1A'],
     startingPosition: '1A',
+    movementOpportunityInterval: 4970,
   },
   {
     name: 'Freddy',
     possibleLocations: ['1A'],
     startingPosition: '1A',
+    movementOpportunityInterval: 3020,
   },
 ];
 
