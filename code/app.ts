@@ -250,7 +250,7 @@ const moveFreddy = () => {
   } else {
     addReport(
       'Freddy',
-      `Freddy has failed to move and remains at cam ${Freddy.currentPosition} (${
+      `Freddy has failed his AI check and remains at cam ${Freddy.currentPosition} (${
         cameraNames[Freddy.currentPosition]
       }) ${generateCalculationText(Freddy, comparisonNumber)}`,
       success

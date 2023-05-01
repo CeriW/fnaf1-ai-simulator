@@ -196,7 +196,7 @@ const moveFreddy = () => {
         }, secondLength / framesPerSecond);
     }
     else {
-        addReport('Freddy', `Freddy has failed to move and remains at cam ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(Freddy, comparisonNumber)}`, success);
+        addReport('Freddy', `Freddy has failed his AI check and remains at cam ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(Freddy, comparisonNumber)}`, success);
     }
 };
 const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
