@@ -5,18 +5,21 @@ export const animatronics = [
         possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
         startingPosition: '1A',
         movementOpportunityInterval: 4980,
+        aiLevels: [0, 1, 5, 4, 7, 12],
     },
     {
         name: 'Bonnie',
         possibleLocations: ['1A'],
         startingPosition: '1A',
         movementOpportunityInterval: 4970,
+        aiLevels: [0, 3, 0, 2, 5, 10],
     },
     {
         name: 'Freddy',
         possibleLocations: ['1A'],
         startingPosition: '1A',
         movementOpportunityInterval: 3020,
+        aiLevels: [0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
     },
 ];
 // import { Animatronic, animatronics } from './animatronics';
