@@ -1,17 +1,19 @@
 // TESTING VARIABLES
 const nightToSimulate = 3;
-let secondLength: number = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
-export type Animatronic = {
+type Animatronic = {
   name: string;
   possibleLocations: string[]; // The cameras where they can be
-  startingPosition: string; // The camera where they start
-  currentPosition: string; // The camera the animatronic is currently at
+  startingPosition: Camera; // The camera where they start
+  currentPosition: Camera; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
 };
+
+type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '3' | '4A' | '4B' | '5' | '6' | '7';
 
 const Freddy: Animatronic = {
   name: 'Freddy',
@@ -40,6 +42,20 @@ const Bonnie: Animatronic = {
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
 };
 
+const cameraNames = {
+  '1A': 'Show stage',
+  '1B': 'Dining area',
+  '1C': 'Pirate cove',
+  '2A': 'West hall',
+  '2B': 'W. hall corner',
+  '3': 'Supply closet',
+  '4A': 'East hall',
+  '4B': 'E. hall corner',
+  '5': 'Backstage',
+  '6': 'Kitchen',
+  '7': 'Restrooms',
+};
+
 // import { Animatronic, animatronics } from './animatronics';
 
 /* Time related variables */
@@ -56,7 +72,7 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
 const cameraButton: HTMLButtonElement = document.querySelector('#camera-display button')!;
-const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status');
+const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status')!;
 
 /* Player choosable variables */
 let camerasOn: boolean = false;
@@ -105,7 +121,7 @@ const updateTime = () => {
   if (currentSecond === 539) {
     clearInterval(timeUpdate);
     clearInterval(frameUpdate);
-    // clearInterval(freddyInterval);
+    // clearInterval(freddyInssterval);
   }
 };
 
@@ -138,6 +154,7 @@ const generateAnimatronics = () => {
     animatronicReport.innerHTML = `
       ${animatronic.name}<br>
       Starting AI level: ${animatronic.aiLevels[nightToSimulate]}
+      <div class="report-item-container"></div>
     `;
     sidebar.querySelector('#animatronic-report')!.appendChild(animatronicReport);
   });
@@ -180,9 +197,9 @@ const moveFreddy = () => {
 
     addReport(
       'Freddy',
-      `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(
-        waitingTime / 60
-      ).toFixed(2)} seconds`,
+      `Freddy has passed his AI check and will move from ${startingPosition} (${
+        cameraNames[startingPosition]
+      }) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds`,
       success
     );
 
@@ -195,13 +212,17 @@ const moveFreddy = () => {
       freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
     }, (waitingTime / 60) * secondLength);
   } else {
-    addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
+    addReport(
+      'Freddy',
+      `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]})`,
+      success
+    );
   }
 };
 
-const moveAnimatronic = (animatronic: Animatronic, startingPosition: string, endPosition: string) => {
+const moveAnimatronic = (animatronic: Animatronic, startingPosition: Camera, endPosition: Camera) => {
   animatronic.currentPosition = endPosition;
-  addReport(animatronic.name, `${animatronic.name} has moved from ${startingPosition} to ${endPosition}`, true);
+  addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} to cam ${endPosition}`, true);
   document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', endPosition);
 };
 
@@ -210,7 +231,9 @@ const moveAnimatronic = (animatronic: Animatronic, startingPosition: string, end
 // ========================================================================== //
 
 const addReport = (animatronicName: string, message: string, success: boolean) => {
-  let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
+  let reportToAddTo = document.querySelector(
+    `.animatronic-report[animatronic="${animatronicName}"] .report-item-container`
+  );
   const InGameTime = calculateInGameTime();
 
   if (reportToAddTo) {

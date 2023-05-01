@@ -1,6 +1,7 @@
+"use strict";
 // TESTING VARIABLES
 const nightToSimulate = 3;
-let secondLength = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const Freddy = {
     name: 'Freddy',
     possibleLocations: ['1A'],
@@ -24,6 +25,19 @@ const Bonnie = {
     currentPosition: '1A',
     movementOpportunityInterval: 4.98,
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
+};
+const cameraNames = {
+    '1A': 'Show stage',
+    '1B': 'Dining area',
+    '1C': 'Pirate cove',
+    '2A': 'West hall',
+    '2B': 'W. hall corner',
+    '3': 'Supply closet',
+    '4A': 'East hall',
+    '4B': 'E. hall corner',
+    '5': 'Backstage',
+    '6': 'Kitchen',
+    '7': 'Restrooms',
 };
 // import { Animatronic, animatronics } from './animatronics';
 /* Time related variables */
@@ -75,7 +89,7 @@ const updateTime = () => {
     if (currentSecond === 539) {
         clearInterval(timeUpdate);
         clearInterval(frameUpdate);
-        // clearInterval(freddyInterval);
+        // clearInterval(freddyInssterval);
     }
 };
 const calculateInGameTime = () => {
@@ -103,6 +117,7 @@ const generateAnimatronics = () => {
         animatronicReport.innerHTML = `
       ${animatronic.name}<br>
       Starting AI level: ${animatronic.aiLevels[nightToSimulate]}
+      <div class="report-item-container"></div>
     `;
         sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
     });
@@ -140,7 +155,7 @@ const moveFreddy = () => {
                 break;
             // TODO - outside/inside office?
         }
-        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(waitingTime / 60).toFixed(2)} seconds`, success);
+        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]}) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds`, success);
         clearInterval(freddyInterval);
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
@@ -150,13 +165,13 @@ const moveFreddy = () => {
         }, (waitingTime / 60) * secondLength);
     }
     else {
-        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
+        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]})`, success);
     }
 };
 const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
     var _a;
     animatronic.currentPosition = endPosition;
-    addReport(animatronic.name, `${animatronic.name} has moved from ${startingPosition} to ${endPosition}`, true);
+    addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} to cam ${endPosition}`, true);
     (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
 };
 // ========================================================================== //
@@ -164,7 +179,7 @@ const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
 // ========================================================================== //
 const addReport = (animatronicName, message, success) => {
     var _a;
-    let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
+    let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"] .report-item-container`);
     const InGameTime = calculateInGameTime();
     if (reportToAddTo) {
         reportToAddTo.innerHTML = `
@@ -195,4 +210,3 @@ let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.moveme
 // }, 1000);
 generateAnimatronics();
 cameraButton.addEventListener('click', toggleCameras);
-export {};
