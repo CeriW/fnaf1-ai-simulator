@@ -52,7 +52,9 @@ const framesDisplay: HTMLDivElement = document.querySelector('#frames')!;
 const secondsDisplay: HTMLDivElement = document.querySelector('#real-time')!;
 const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time')!;
 
+// General page elements
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
+const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
 
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -109,12 +111,22 @@ const updateTime = () => {
 
 const generateAnimatronics = () => {
   [Freddy, Bonnie, Chica].forEach((animatronic: Animatronic) => {
-    let animatronicDisplay = document.createElement('span');
-    animatronicDisplay.innerHTML = `
-      <span class="animatronic" id=${animatronic.name} position="${animatronic.startingPosition}">
-      </span>
+    // Create the icons
+    let icon = document.createElement('span');
+    icon.classList.add('animatronic');
+    icon.setAttribute('id', animatronic.name);
+    icon.setAttribute('position', animatronic.startingPosition);
+    simulator.appendChild(icon);
+
+    // Create the report
+    let animatronicReport = document.createElement('div');
+    animatronicReport.classList.add('animatronic-report');
+    animatronicReport.setAttribute('animatronic', animatronic.name);
+    animatronicReport.innerHTML = `
+      ${animatronic.name}<br>
+      Starting AI level: ${animatronic.aiLevels[nightToSimulate]}
     `;
-    simulator.appendChild(animatronicDisplay);
+    sidebar.querySelector('#animatronic-report')!.appendChild(animatronicReport);
   });
 };
 
@@ -126,12 +138,30 @@ const moveFreddy = () => {
     if (Freddy.currentPosition === '1A') {
       Freddy.currentPosition = '1B';
       moveAnimatronic('Freddy', '1B');
+      addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B');
     }
+  } else {
+    addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`);
   }
 };
 
 const moveAnimatronic = (name: string, position: string) => {
   document.querySelector(`.animatronic#${name}`)?.setAttribute('position', position);
+};
+
+// ========================================================================== //
+// REPORTING
+// ========================================================================== //
+
+const addReport = (animatronicName: string, message: string) => {
+  let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
+
+  if (reportToAddTo) {
+    reportToAddTo.innerHTML = `
+    ${reportToAddTo?.innerHTML ?? ''} <br>
+    ${message}
+  `;
+  }
 };
 
 // ========================================================================== //

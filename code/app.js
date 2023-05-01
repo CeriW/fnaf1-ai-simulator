@@ -34,7 +34,9 @@ let framesPerSecond = 60;
 const framesDisplay = document.querySelector('#frames');
 const secondsDisplay = document.querySelector('#real-time');
 const inGameHourDisplay = document.querySelector('#in-game-time');
+// General page elements
 const simulator = document.querySelector('#simulator');
+const sidebar = document.querySelector('#sidebar');
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
 // These are split off separately as they each need to update at
@@ -79,12 +81,21 @@ const updateTime = () => {
 // ========================================================================== //
 const generateAnimatronics = () => {
     [Freddy, Bonnie, Chica].forEach((animatronic) => {
-        let animatronicDisplay = document.createElement('span');
-        animatronicDisplay.innerHTML = `
-      <span class="animatronic" id=${animatronic.name} position="${animatronic.startingPosition}">
-      </span>
+        // Create the icons
+        let icon = document.createElement('span');
+        icon.classList.add('animatronic');
+        icon.setAttribute('id', animatronic.name);
+        icon.setAttribute('position', animatronic.startingPosition);
+        simulator.appendChild(icon);
+        // Create the report
+        let animatronicReport = document.createElement('div');
+        animatronicReport.classList.add('animatronic-report');
+        animatronicReport.setAttribute('animatronic', animatronic.name);
+        animatronicReport.innerHTML = `
+      ${animatronic.name}<br>
+      Starting AI level: ${animatronic.aiLevels[nightToSimulate]}
     `;
-        simulator.appendChild(animatronicDisplay);
+        sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
     });
 };
 const moveFreddy = () => {
@@ -94,12 +105,29 @@ const moveFreddy = () => {
         if (Freddy.currentPosition === '1A') {
             Freddy.currentPosition = '1B';
             moveAnimatronic('Freddy', '1B');
+            addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B');
         }
+    }
+    else {
+        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`);
     }
 };
 const moveAnimatronic = (name, position) => {
     var _a;
     (_a = document.querySelector(`.animatronic#${name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', position);
+};
+// ========================================================================== //
+// REPORTING
+// ========================================================================== //
+const addReport = (animatronicName, message) => {
+    var _a;
+    let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
+    if (reportToAddTo) {
+        reportToAddTo.innerHTML = `
+    ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''} <br>
+    ${message}
+  `;
+    }
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
