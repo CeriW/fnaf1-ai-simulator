@@ -125,6 +125,15 @@ This effectively means that he waits this amount of time at each AI level before
 
 If he is already in a countdown and you put the cameras back up this countdown will not be affected - he will take it as soon as you put the cameras down.
 
+### Freddy's path
+There is no element of randomness to Freddy's movements - he always follows a set path.
+* Cam 1A
+* Cam 1B
+* Cam 7
+* Cam 6
+* Cam 4A
+* Cam 4B
+
 ### Freddy at camera 4B
 Freddy's behaviour changes when he's at camera 4B - the one immediately outside your office.
 * He will no longer automatically fail his movement opportunities when the cameras are up.
