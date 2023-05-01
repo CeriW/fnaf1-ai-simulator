@@ -170,7 +170,13 @@ const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
 
   if (camerasOn) {
-    addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+    let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
+    if (
+      !firstReport ||
+      firstReport.innerHTML?.indexOf('Freddy will automatically fail all movement checks while the cameras are up') < 0
+    ) {
+      addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+    }
   } else if (success) {
     let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
     waitingTime = waitingTime >= 0 ? waitingTime : 0;

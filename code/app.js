@@ -127,10 +127,15 @@ const generateAnimatronics = () => {
 };
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
+    var _a;
     const comparisonNumber = Math.random() * 20;
     const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
     if (camerasOn) {
-        addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+        let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
+        if (!firstReport ||
+            ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy will automatically fail all movement checks while the cameras are up')) < 0) {
+            addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+        }
     }
     else if (success) {
         let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
