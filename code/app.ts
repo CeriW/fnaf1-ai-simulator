@@ -141,6 +141,7 @@ const generateAnimatronics = () => {
   });
 };
 
+// Freddy always follows a set path, and waist a certain amount of time before actually moving.
 const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
   Freddy.canMove = !success;
@@ -148,12 +149,18 @@ const moveFreddy = () => {
   if (success) {
     let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
     waitingTime = waitingTime >= 0 ? waitingTime : 0;
+    let startingPosition = Freddy.currentPosition;
+    let endingPosition = startingPosition;
 
+    // Show stage
     if (Freddy.currentPosition === '1A') {
-      Freddy.currentPosition = '1B';
+      endingPosition = '1B';
+
       addReport(
         'Freddy',
-        `Freddy has passed his AI check and will move from 1A to 1B in ${(waitingTime / 60).toFixed(2)} seconds`,
+        `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(
+          waitingTime / 60
+        ).toFixed(2)} seconds`,
         success
       );
 
@@ -163,12 +170,14 @@ const moveFreddy = () => {
       // The amount of time is dependent on his AI level.
       window.setTimeout(() => {
         Freddy.canMove = true;
-        moveAnimatronic('Freddy', '1B');
-        addReport('Freddy', `Freddy has moved from 1A to  1B`, success);
+        Freddy.currentPosition = '1B';
+        moveAnimatronic('Freddy', endingPosition);
+        addReport('Freddy', `Freddy has moved from ${startingPosition} to ${endingPosition}`, success);
         freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
       }, (waitingTime / 60) * secondLength);
-
-      console.log((waitingTime / 60) * secondLength);
+    }
+    // Dining area
+    else if (Freddy.currentPosition === '1B') {
     }
   } else {
     addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
