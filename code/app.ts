@@ -212,7 +212,7 @@ const moveFreddy = () => {
     addReport(
       'Freddy',
       `
-        Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]})
+        Freddy has passed his movement check and will move from ${startingPosition} (${cameraNames[startingPosition]})
         to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
         ${generateCalculationText(Freddy, comparisonNumber)}
       `,
@@ -250,7 +250,7 @@ const moveFreddy = () => {
   } else {
     addReport(
       'Freddy',
-      `Freddy has failed his AI check and remains at cam ${Freddy.currentPosition} (${
+      `Freddy has failed his movement check and remains at cam ${Freddy.currentPosition} (${
         cameraNames[Freddy.currentPosition]
       }) ${generateCalculationText(Freddy, comparisonNumber)}`,
       success
