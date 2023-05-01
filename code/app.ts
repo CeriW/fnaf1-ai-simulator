@@ -1,7 +1,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 5;
 // let secondMultiplier: number = 1;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
@@ -152,23 +152,35 @@ const moveFreddy = () => {
     let startingPosition = Freddy.currentPosition;
     let endingPosition = startingPosition;
 
-    // Show stage
-    if (Freddy.currentPosition === '1A') {
-      endingPosition = '1B';
-
-      addReport(
-        'Freddy',
-        `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(
-          waitingTime / 60
-        ).toFixed(2)} seconds`,
-        success
-      );
-
-      clearInterval(freddyInterval);
+    // Freddy always follows a set path
+    switch (Freddy.currentPosition) {
+      case '1A': // Show stage
+        endingPosition = '1B';
+        break;
+      case '1B': // Dining area
+        endingPosition = '7';
+        break;
+      case '7': // Restrooms
+        endingPosition = '6';
+        break;
+      case '6': // Kitchen
+        endingPosition = '4A';
+        break;
+      case '4A': // East hall
+        endingPosition = '4B';
+        break;
+      // TODO - outside/inside office?
     }
-    // Dining area
-    else if (Freddy.currentPosition === '1B') {
-    }
+
+    addReport(
+      'Freddy',
+      `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(
+        waitingTime / 60
+      ).toFixed(2)} seconds`,
+      success
+    );
+
+    clearInterval(freddyInterval);
 
     // Freddy waits a certain amount of time between passing his movement check and actually moving.
     // The amount of time is dependent on his AI level.
