@@ -166,7 +166,8 @@ const generateAnimatronics = () => {
 
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
-  const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
+  const comparisonNumber = Math.random() * 20;
+  const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
 
   if (camerasOn) {
     addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
@@ -203,7 +204,9 @@ const moveFreddy = () => {
       'Freddy',
       `Freddy has passed his AI check and will move from ${startingPosition} (${
         cameraNames[startingPosition]
-      }) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds`,
+      }) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds
+        ${generateCalculationText(Freddy, comparisonNumber)}
+      `,
       success
     );
 
@@ -211,9 +214,7 @@ const moveFreddy = () => {
 
     // Freddy waits a certain amount of time between passing his movement check and actually moving.
     // The amount of time is dependent on his AI level.
-
     Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
-    console.log(Freddy.currentCountdown);
 
     // Freddy will not move while the cameras are up. If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
     let freddyCountdown = window.setInterval(() => {
@@ -223,6 +224,8 @@ const moveFreddy = () => {
         freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
         clearInterval(freddyCountdown);
       } else if (Freddy.currentCountdown <= 0 && camerasOn) {
+        // We don't want to flood the report with the same message every millisecond.
+        // Do this check so the message only appears once.
         let firstReportItem = document.querySelector(
           '.animatronic-report[animatronic="Freddy"] .report-item-container .report-item'
         );
@@ -235,20 +238,12 @@ const moveFreddy = () => {
         }
       }
     }, secondLength / framesPerSecond);
-
-    // window.setTimeout(() => {
-    //   moveAnimatronic(Freddy, startingPosition, endingPosition);
-    //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-    // }, (waitingTime / framesPerSecond) * secondLength);
-
-    // const moveAndResetFreddy = () => {
-    //   moveAnimatronic(Freddy, startingPosition, endingPosition);
-    //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-    // };
   } else {
     addReport(
       'Freddy',
-      `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]})`,
+      `Freddy has failed to move and remains at ${Freddy.currentPosition} (${
+        cameraNames[Freddy.currentPosition]
+      }) ${generateCalculationText(Freddy, comparisonNumber)}`,
       success
     );
   }
@@ -276,11 +271,16 @@ const addReport = (animatronicName: string, message: string, success: boolean | 
     
     <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${
       InGameTime.minute
-    }AM</span> ${message}</div>
+    }AM</span> <div class="report-description">${message}</div></div>
     ${reportToAddTo?.innerHTML ?? ''}
   `;
   }
 };
+
+const generateCalculationText = (animatronic: Animatronic, scoreToBeat: number) =>
+  `<div class="report-calculation">Score to beat:${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level:${
+    animatronic.aiLevels[nightToSimulate]
+  }</div>`;
 
 // ========================================================================== //
 // PLAYER INTERACTION

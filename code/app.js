@@ -127,7 +127,8 @@ const generateAnimatronics = () => {
 };
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
-    const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
+    const comparisonNumber = Math.random() * 20;
+    const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
     if (camerasOn) {
         addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
     }
@@ -158,12 +159,13 @@ const moveFreddy = () => {
                 break;
             // TODO - outside/inside office?
         }
-        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]}) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds`, success);
+        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]}) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds
+        ${generateCalculationText(Freddy, comparisonNumber)}
+      `, success);
         clearInterval(freddyInterval);
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
         Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
-        console.log(Freddy.currentCountdown);
         // Freddy will not move while the cameras are up. If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
         let freddyCountdown = window.setInterval(() => {
             var _a;
@@ -174,6 +176,8 @@ const moveFreddy = () => {
                 clearInterval(freddyCountdown);
             }
             else if (Freddy.currentCountdown <= 0 && camerasOn) {
+                // We don't want to flood the report with the same message every millisecond.
+                // Do this check so the message only appears once.
                 let firstReportItem = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item-container .report-item');
                 if (firstReportItem &&
                     ((_a = firstReportItem === null || firstReportItem === void 0 ? void 0 : firstReportItem.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy is ready to move but is waiting for the cameras to go down')) < 0) {
@@ -181,17 +185,9 @@ const moveFreddy = () => {
                 }
             }
         }, secondLength / framesPerSecond);
-        // window.setTimeout(() => {
-        //   moveAnimatronic(Freddy, startingPosition, endingPosition);
-        //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-        // }, (waitingTime / framesPerSecond) * secondLength);
-        // const moveAndResetFreddy = () => {
-        //   moveAnimatronic(Freddy, startingPosition, endingPosition);
-        //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-        // };
     }
     else {
-        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]})`, success);
+        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(Freddy, comparisonNumber)}`, success);
     }
 };
 const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
@@ -211,11 +207,12 @@ const addReport = (animatronicName, message, success) => {
         reportToAddTo.innerHTML = `
 
     
-    <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span> ${message}</div>
+    <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span> <div class="report-description">${message}</div></div>
     ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''}
   `;
     }
 };
+const generateCalculationText = (animatronic, scoreToBeat) => `<div class="report-calculation">Score to beat:${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level:${animatronic.aiLevels[nightToSimulate]}</div>`;
 // ========================================================================== //
 // PLAYER INTERACTION
 // ========================================================================== //
