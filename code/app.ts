@@ -36,8 +36,7 @@ export const animatronics: Animatronic[] = [
 
 /* Time related variables */
 let currentFrame: number = 0;
-let currentSecond: number = -3; // We start at -1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
-let currentGameHour: 12;
+let currentSecond: number = -1; // We start at -1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
 let framesPerSecond: number = 60;
 let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
