@@ -119,27 +119,27 @@ const moveFreddy = () => {
             endingPosition = '1B';
             addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(waitingTime / 60).toFixed(2)} seconds`, success);
             clearInterval(freddyInterval);
-            // Freddy waits a certain amount of time between passing his movement check and actually moving.
-            // The amount of time is dependent on his AI level.
-            window.setTimeout(() => {
-                Freddy.canMove = true;
-                Freddy.currentPosition = '1B';
-                moveAnimatronic('Freddy', endingPosition);
-                addReport('Freddy', `Freddy has moved from ${startingPosition} to ${endingPosition}`, success);
-                freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-            }, (waitingTime / 60) * secondLength);
         }
         // Dining area
         else if (Freddy.currentPosition === '1B') {
         }
+        // Freddy waits a certain amount of time between passing his movement check and actually moving.
+        // The amount of time is dependent on his AI level.
+        window.setTimeout(() => {
+            Freddy.canMove = true;
+            moveAnimatronic(Freddy, startingPosition, endingPosition);
+            freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+        }, (waitingTime / 60) * secondLength);
     }
     else {
         addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
     }
 };
-const moveAnimatronic = (name, position) => {
+const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
     var _a;
-    (_a = document.querySelector(`.animatronic#${name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', position);
+    animatronic.currentPosition = endPosition;
+    addReport(animatronic.name, `${animatronic.name} has moved from ${startingPosition} to ${endPosition}`, true);
+    (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
 };
 // ========================================================================== //
 // REPORTING

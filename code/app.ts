@@ -165,27 +165,27 @@ const moveFreddy = () => {
       );
 
       clearInterval(freddyInterval);
-
-      // Freddy waits a certain amount of time between passing his movement check and actually moving.
-      // The amount of time is dependent on his AI level.
-      window.setTimeout(() => {
-        Freddy.canMove = true;
-        Freddy.currentPosition = '1B';
-        moveAnimatronic('Freddy', endingPosition);
-        addReport('Freddy', `Freddy has moved from ${startingPosition} to ${endingPosition}`, success);
-        freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-      }, (waitingTime / 60) * secondLength);
     }
     // Dining area
     else if (Freddy.currentPosition === '1B') {
     }
+
+    // Freddy waits a certain amount of time between passing his movement check and actually moving.
+    // The amount of time is dependent on his AI level.
+    window.setTimeout(() => {
+      Freddy.canMove = true;
+      moveAnimatronic(Freddy, startingPosition, endingPosition);
+      freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+    }, (waitingTime / 60) * secondLength);
   } else {
     addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
   }
 };
 
-const moveAnimatronic = (name: string, position: string) => {
-  document.querySelector(`.animatronic#${name}`)?.setAttribute('position', position);
+const moveAnimatronic = (animatronic: Animatronic, startingPosition: string, endPosition: string) => {
+  animatronic.currentPosition = endPosition;
+  addReport(animatronic.name, `${animatronic.name} has moved from ${startingPosition} to ${endPosition}`, true);
+  document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', endPosition);
 };
 
 // ========================================================================== //
