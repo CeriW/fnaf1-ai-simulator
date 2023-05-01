@@ -110,7 +110,10 @@ const generateAnimatronics = () => {
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
     const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
-    if (success) {
+    if (camerasOn) {
+        addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+    }
+    else if (success) {
         let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
         waitingTime = waitingTime >= 0 ? waitingTime : 0;
         let startingPosition = Freddy.currentPosition;
