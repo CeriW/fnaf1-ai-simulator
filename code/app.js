@@ -193,7 +193,7 @@ const moveFreddy = () => {
 const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
     var _a;
     animatronic.currentPosition = endPosition;
-    addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} to cam ${endPosition}`, true);
+    addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} (${cameraNames[startingPosition]}) to cam ${endPosition} (${cameraNames[endPosition]})`, true);
     (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
 };
 // ========================================================================== //
