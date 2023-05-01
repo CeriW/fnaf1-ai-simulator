@@ -11,6 +11,7 @@
     "time calculation"
     / 80px 1fr
   ;
+  margin-bottom: 10px;
 }
 
 .report-item[type="true"]{
@@ -31,5 +32,6 @@
 }
 
 .report-calculation{
+  color: rgba(white, 0.4);
   grid-area: calculation;
 }

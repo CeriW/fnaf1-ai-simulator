@@ -187,7 +187,7 @@ const moveFreddy = () => {
         }, secondLength / framesPerSecond);
     }
     else {
-        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(Freddy, comparisonNumber)}`, success);
+        addReport('Freddy', `Freddy has failed to move and remains at cam ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(Freddy, comparisonNumber)}`, success);
     }
 };
 const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
@@ -212,7 +212,7 @@ const addReport = (animatronicName, message, success) => {
   `;
     }
 };
-const generateCalculationText = (animatronic, scoreToBeat) => `<div class="report-calculation">Score to beat:${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level:${animatronic.aiLevels[nightToSimulate]}</div>`;
+const generateCalculationText = (animatronic, scoreToBeat) => `<div class="report-calculation">Score to beat: ${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level: ${animatronic.aiLevels[nightToSimulate]}</div>`;
 // ========================================================================== //
 // PLAYER INTERACTION
 // ========================================================================== //

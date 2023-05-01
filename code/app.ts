@@ -241,7 +241,7 @@ const moveFreddy = () => {
   } else {
     addReport(
       'Freddy',
-      `Freddy has failed to move and remains at ${Freddy.currentPosition} (${
+      `Freddy has failed to move and remains at cam ${Freddy.currentPosition} (${
         cameraNames[Freddy.currentPosition]
       }) ${generateCalculationText(Freddy, comparisonNumber)}`,
       success
@@ -278,7 +278,7 @@ const addReport = (animatronicName: string, message: string, success: boolean | 
 };
 
 const generateCalculationText = (animatronic: Animatronic, scoreToBeat: number) =>
-  `<div class="report-calculation">Score to beat:${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level:${
+  `<div class="report-calculation">Score to beat: ${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level: ${
     animatronic.aiLevels[nightToSimulate]
   }</div>`;
 
