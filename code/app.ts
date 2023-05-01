@@ -211,9 +211,9 @@ const moveFreddy = () => {
 
     addReport(
       'Freddy',
-      `Freddy has passed his AI check and will move from ${startingPosition} (${
-        cameraNames[startingPosition]
-      }) to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
+      `
+        Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]})
+        to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
         ${generateCalculationText(Freddy, comparisonNumber)}
       `,
       success

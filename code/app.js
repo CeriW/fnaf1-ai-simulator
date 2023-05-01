@@ -166,7 +166,9 @@ const moveFreddy = () => {
         }
         // Round to a reasonable number of decimal points for the report, only if it's not an integer.
         let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
-        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]}) to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
+        addReport('Freddy', `
+        Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]})
+        to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
         ${generateCalculationText(Freddy, comparisonNumber)}
       `, success);
         clearInterval(freddyInterval);
