@@ -1,5 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 5;
+// let secondMultiplier: number = 1;
 let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
@@ -11,6 +12,7 @@ export type Animatronic = {
   currentPosition: string; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
+  canMove?: boolean;
 };
 
 const Freddy: Animatronic = {
@@ -20,6 +22,7 @@ const Freddy: Animatronic = {
   currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+  canMove: true, // Freddy waits a certain amount of time once he's passed a movement opportunity check before he actually moves. This boolean stores whether he's currently in the middle of a countdown and therefore can't make any additional checks
 };
 
 const Chica: Animatronic = {
@@ -140,13 +143,32 @@ const generateAnimatronics = () => {
 
 const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
-  // console.log(success);
+  Freddy.canMove = !success;
 
   if (success) {
+    let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
+    waitingTime = waitingTime >= 0 ? waitingTime : 0;
+
     if (Freddy.currentPosition === '1A') {
       Freddy.currentPosition = '1B';
-      moveAnimatronic('Freddy', '1B');
-      addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B', success);
+      addReport(
+        'Freddy',
+        `Freddy has passed his AI check and will move from 1A to 1B in ${(waitingTime / 60).toFixed(2)} seconds`,
+        success
+      );
+
+      clearInterval(freddyInterval);
+
+      // Freddy waits a certain amount of time between passing his movement check and actually moving.
+      // The amount of time is dependent on his AI level.
+      window.setTimeout(() => {
+        Freddy.canMove = true;
+        moveAnimatronic('Freddy', '1B');
+        addReport('Freddy', `Freddy has moved from 1A to  1B`, success);
+        freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+      }, (waitingTime / 60) * secondLength);
+
+      console.log((waitingTime / 60) * secondLength);
     }
   } else {
     addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
@@ -182,11 +204,11 @@ const addReport = (animatronicName: string, message: string, success: boolean) =
 
 const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
-let freddyInterval;
+let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 
 // Since we're starting the time at -1 to accommodate 12AM being 89 seconds long, wait 1 second before starting the movement calculations
-window.setTimeout(() => {
-  freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-}, 1000);
+// window.setTimeout(() => {
+//   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+// }, 1000);
 
 generateAnimatronics();
