@@ -1,6 +1,6 @@
 // TESTING VARIABLES
-const nightToSimulate = 3;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const nightToSimulate = 6;
+let secondLength: number = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
@@ -11,6 +11,7 @@ type Animatronic = {
   currentPosition: Camera; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
+  currentCountdown: number; // How many milliseconds they've got left before a special move
 };
 
 type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '3' | '4A' | '4B' | '5' | '6' | '7';
@@ -22,6 +23,7 @@ const Freddy: Animatronic = {
   currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+  currentCountdown: 0,
 };
 
 const Chica: Animatronic = {
@@ -31,6 +33,7 @@ const Chica: Animatronic = {
   currentPosition: '1A',
   movementOpportunityInterval: 4.97,
   aiLevels: [null, 0, 3, 0, 2, 5, 10],
+  currentCountdown: 0,
 };
 
 const Bonnie: Animatronic = {
@@ -40,6 +43,7 @@ const Bonnie: Animatronic = {
   currentPosition: '1A',
   movementOpportunityInterval: 4.98,
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
+  currentCountdown: 0,
 };
 
 const cameraNames = {
@@ -207,10 +211,40 @@ const moveFreddy = () => {
 
     // Freddy waits a certain amount of time between passing his movement check and actually moving.
     // The amount of time is dependent on his AI level.
-    window.setTimeout(() => {
-      moveAnimatronic(Freddy, startingPosition, endingPosition);
-      freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-    }, (waitingTime / 60) * secondLength);
+
+    Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
+    console.log(Freddy.currentCountdown);
+
+    // Freddy will not move while the cameras are up. If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
+    let freddyCountdown = window.setInterval(() => {
+      Freddy.currentCountdown--;
+      if (Freddy.currentCountdown <= 0 && !camerasOn) {
+        moveAnimatronic(Freddy, startingPosition, endingPosition);
+        freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+        clearInterval(freddyCountdown);
+      } else if (Freddy.currentCountdown <= 0 && camerasOn) {
+        let firstReportItem = document.querySelector(
+          '.animatronic-report[animatronic="Freddy"] .report-item-container .report-item'
+        );
+
+        if (
+          firstReportItem &&
+          firstReportItem?.innerHTML?.indexOf('Freddy is ready to move but is waiting for the cameras to go down') < 0
+        ) {
+          addReport('Freddy', 'Freddy is ready to move but is waiting for the cameras to go down', null);
+        }
+      }
+    }, secondLength / framesPerSecond);
+
+    // window.setTimeout(() => {
+    //   moveAnimatronic(Freddy, startingPosition, endingPosition);
+    //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+    // }, (waitingTime / framesPerSecond) * secondLength);
+
+    // const moveAndResetFreddy = () => {
+    //   moveAnimatronic(Freddy, startingPosition, endingPosition);
+    //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+    // };
   } else {
     addReport(
       'Freddy',
@@ -230,7 +264,7 @@ const moveAnimatronic = (animatronic: Animatronic, startingPosition: Camera, end
 // REPORTING
 // ========================================================================== //
 
-const addReport = (animatronicName: string, message: string, success: boolean) => {
+const addReport = (animatronicName: string, message: string, success: boolean | null) => {
   let reportToAddTo = document.querySelector(
     `.animatronic-report[animatronic="${animatronicName}"] .report-item-container`
   );

@@ -1,14 +1,15 @@
 "use strict";
 // TESTING VARIABLES
-const nightToSimulate = 3;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const nightToSimulate = 6;
+let secondLength = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const Freddy = {
     name: 'Freddy',
     possibleLocations: ['1A'],
     startingPosition: '1A',
     currentPosition: '1A',
     movementOpportunityInterval: 3.02,
-    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4],
+    currentCountdown: 0,
 };
 const Chica = {
     name: 'Bonnie',
@@ -17,6 +18,7 @@ const Chica = {
     currentPosition: '1A',
     movementOpportunityInterval: 4.97,
     aiLevels: [null, 0, 3, 0, 2, 5, 10],
+    currentCountdown: 0,
 };
 const Bonnie = {
     name: 'Chica',
@@ -25,6 +27,7 @@ const Bonnie = {
     currentPosition: '1A',
     movementOpportunityInterval: 4.98,
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
+    currentCountdown: 0,
 };
 const cameraNames = {
     '1A': 'Show stage',
@@ -159,10 +162,33 @@ const moveFreddy = () => {
         clearInterval(freddyInterval);
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
-        window.setTimeout(() => {
-            moveAnimatronic(Freddy, startingPosition, endingPosition);
-            freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-        }, (waitingTime / 60) * secondLength);
+        Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
+        console.log(Freddy.currentCountdown);
+        // Freddy will not move while the cameras are up. If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
+        let freddyCountdown = window.setInterval(() => {
+            var _a;
+            Freddy.currentCountdown--;
+            if (Freddy.currentCountdown <= 0 && !camerasOn) {
+                moveAnimatronic(Freddy, startingPosition, endingPosition);
+                freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+                clearInterval(freddyCountdown);
+            }
+            else if (Freddy.currentCountdown <= 0 && camerasOn) {
+                let firstReportItem = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item-container .report-item');
+                if (firstReportItem &&
+                    ((_a = firstReportItem === null || firstReportItem === void 0 ? void 0 : firstReportItem.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy is ready to move but is waiting for the cameras to go down')) < 0) {
+                    addReport('Freddy', 'Freddy is ready to move but is waiting for the cameras to go down', null);
+                }
+            }
+        }, secondLength / framesPerSecond);
+        // window.setTimeout(() => {
+        //   moveAnimatronic(Freddy, startingPosition, endingPosition);
+        //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+        // }, (waitingTime / framesPerSecond) * secondLength);
+        // const moveAndResetFreddy = () => {
+        //   moveAnimatronic(Freddy, startingPosition, endingPosition);
+        //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+        // };
     }
     else {
         addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]})`, success);
