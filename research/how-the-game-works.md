@@ -143,6 +143,8 @@ He will attack when both of these conditions are met:
 * He succeeds a movement opportunity
 * The cameras are up and you are looking at a camera that isn't 4B
 
+## TODO - DOES FREDDY ONLY MOVE ONCE BONNIE AND CHICA ARE GONE? WHAT IF THEY'RE AT 0?
+
 ### How Freddy differs to Bonnie and Chica
 
 * Freddy cannot enter your office when your camera is down. He can only enter while you are looking at a camera that isn't 4B while the doors are open.
