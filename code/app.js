@@ -1,6 +1,5 @@
 // TESTING VARIABLES
-const nightToSimulate = 5;
-// let secondMultiplier: number = 1;
+const nightToSimulate = 3;
 let secondLength = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const Freddy = {
     name: 'Freddy',
@@ -8,8 +7,7 @@ const Freddy = {
     startingPosition: '1A',
     currentPosition: '1A',
     movementOpportunityInterval: 3.02,
-    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4],
-    canMove: true, // Freddy waits a certain amount of time once he's passed a movement opportunity check before he actually moves. This boolean stores whether he's currently in the middle of a countdown and therefore can't make any additional checks
+    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
 };
 const Chica = {
     name: 'Bonnie',
@@ -39,6 +37,10 @@ const inGameHourDisplay = document.querySelector('#in-game-time');
 // General page elements
 const simulator = document.querySelector('#simulator');
 const sidebar = document.querySelector('#sidebar');
+const cameraButton = document.querySelector('#camera-display button');
+const cameraStatusText = document.querySelector('#camera-status');
+/* Player choosable variables */
+let camerasOn = false;
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
 // These are split off separately as they each need to update at
@@ -105,10 +107,9 @@ const generateAnimatronics = () => {
         sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
     });
 };
-// Freddy always follows a set path, and waist a certain amount of time before actually moving.
+// Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
     const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
-    Freddy.canMove = !success;
     if (success) {
         let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
         waitingTime = waitingTime >= 0 ? waitingTime : 0;
@@ -131,6 +132,9 @@ const moveFreddy = () => {
             case '4A': // East hall
                 endingPosition = '4B';
                 break;
+            case '4B': // East hall corner
+                endingPosition = '4A';
+                break;
             // TODO - outside/inside office?
         }
         addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} to ${endingPosition} in ${(waitingTime / 60).toFixed(2)} seconds`, success);
@@ -138,7 +142,6 @@ const moveFreddy = () => {
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
         window.setTimeout(() => {
-            Freddy.canMove = true;
             moveAnimatronic(Freddy, startingPosition, endingPosition);
             freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
         }, (waitingTime / 60) * secondLength);
@@ -163,10 +166,19 @@ const addReport = (animatronicName, message, success) => {
     if (reportToAddTo) {
         reportToAddTo.innerHTML = `
 
-    ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''}
+    
     <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span> ${message}</div>
+    ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''}
   `;
     }
+};
+// ========================================================================== //
+// PLAYER INTERACTION
+// ========================================================================== //
+const toggleCameras = () => {
+    camerasOn = !camerasOn;
+    cameraButton.setAttribute('active', String(camerasOn));
+    cameraStatusText.textContent = camerasOn ? 'CAMERAS ON' : 'CAMERAS OFF';
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
@@ -179,4 +191,5 @@ let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.moveme
 //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 // }, 1000);
 generateAnimatronics();
+cameraButton.addEventListener('click', toggleCameras);
 export {};

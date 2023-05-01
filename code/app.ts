@@ -1,6 +1,5 @@
 // TESTING VARIABLES
-const nightToSimulate = 5;
-// let secondMultiplier: number = 1;
+const nightToSimulate = 3;
 let secondLength: number = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
@@ -12,7 +11,6 @@ export type Animatronic = {
   currentPosition: string; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
-  canMove?: boolean;
 };
 
 const Freddy: Animatronic = {
@@ -22,7 +20,6 @@ const Freddy: Animatronic = {
   currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
-  canMove: true, // Freddy waits a certain amount of time once he's passed a movement opportunity check before he actually moves. This boolean stores whether he's currently in the middle of a countdown and therefore can't make any additional checks
 };
 
 const Chica: Animatronic = {
@@ -58,6 +55,11 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 // General page elements
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
+const cameraButton: HTMLButtonElement = document.querySelector('#camera-display button')!;
+const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status');
+
+/* Player choosable variables */
+let camerasOn: boolean = false;
 
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -141,10 +143,9 @@ const generateAnimatronics = () => {
   });
 };
 
-// Freddy always follows a set path, and waist a certain amount of time before actually moving.
+// Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
-  Freddy.canMove = !success;
 
   if (success) {
     let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
@@ -169,6 +170,9 @@ const moveFreddy = () => {
       case '4A': // East hall
         endingPosition = '4B';
         break;
+      case '4B': // East hall corner
+        endingPosition = '4A';
+        break;
       // TODO - outside/inside office?
     }
 
@@ -185,7 +189,6 @@ const moveFreddy = () => {
     // Freddy waits a certain amount of time between passing his movement check and actually moving.
     // The amount of time is dependent on his AI level.
     window.setTimeout(() => {
-      Freddy.canMove = true;
       moveAnimatronic(Freddy, startingPosition, endingPosition);
       freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
     }, (waitingTime / 60) * secondLength);
@@ -211,12 +214,23 @@ const addReport = (animatronicName: string, message: string, success: boolean) =
   if (reportToAddTo) {
     reportToAddTo.innerHTML = `
 
-    ${reportToAddTo?.innerHTML ?? ''}
+    
     <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${
       InGameTime.minute
     }AM</span> ${message}</div>
+    ${reportToAddTo?.innerHTML ?? ''}
   `;
   }
+};
+
+// ========================================================================== //
+// PLAYER INTERACTION
+// ========================================================================== //
+
+const toggleCameras = () => {
+  camerasOn = !camerasOn;
+  cameraButton.setAttribute('active', String(camerasOn));
+  cameraStatusText.textContent = camerasOn ? 'CAMERAS ON' : 'CAMERAS OFF';
 };
 
 // ========================================================================== //
@@ -233,3 +247,5 @@ let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.moveme
 // }, 1000);
 
 generateAnimatronics();
+
+cameraButton.addEventListener('click', toggleCameras);
