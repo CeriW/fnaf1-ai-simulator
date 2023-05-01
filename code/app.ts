@@ -175,7 +175,7 @@ const moveFreddy = () => {
       !firstReport ||
       firstReport.innerHTML?.indexOf('Freddy will automatically fail all movement checks while the cameras are up') < 0
     ) {
-      addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+      addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, null);
     }
   } else if (success) {
     let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
@@ -206,11 +206,14 @@ const moveFreddy = () => {
       // TODO - outside/inside office?
     }
 
+    // Round to a reasonable number of decimal points for the report, only if it's not an integer.
+    let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
+
     addReport(
       'Freddy',
       `Freddy has passed his AI check and will move from ${startingPosition} (${
         cameraNames[startingPosition]
-      }) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds
+      }) to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
         ${generateCalculationText(Freddy, comparisonNumber)}
       `,
       success
@@ -275,13 +278,25 @@ const addReport = (animatronicName: string, message: string, success: boolean | 
   );
   const InGameTime = calculateInGameTime();
 
+  let reportType;
   if (reportToAddTo) {
+    switch (success) {
+      case true:
+        reportType = 'success';
+        break;
+      case false:
+        reportType = 'failure';
+        break;
+      default:
+        reportType = 'info';
+    }
+
     reportToAddTo.innerHTML = `
 
     
-    <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${
-      InGameTime.minute
-    }AM</span> <div class="report-description">${message}</div></div>
+    <div class="report-item" type="${reportType}">
+    <span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span>
+    <div class="report-description">${message}</div></div>
     ${reportToAddTo?.innerHTML ?? ''}
   `;
   }

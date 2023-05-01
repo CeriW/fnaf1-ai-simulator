@@ -14,11 +14,11 @@
   margin-bottom: 15px;
 }
 
-.report-item[type="true"]{
+.report-item[type="success"] .report-description{
   color: green;
 }
 
-.report-item[type="false"]{
+.report-item[type="failure"] .report-description{
   color: red;
 }
 

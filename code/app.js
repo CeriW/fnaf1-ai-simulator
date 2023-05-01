@@ -134,7 +134,7 @@ const moveFreddy = () => {
         let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
         if (!firstReport ||
             ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy will automatically fail all movement checks while the cameras are up')) < 0) {
-            addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, false);
+            addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, null);
         }
     }
     else if (success) {
@@ -164,7 +164,9 @@ const moveFreddy = () => {
                 break;
             // TODO - outside/inside office?
         }
-        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]}) to ${endingPosition} (${cameraNames[endingPosition]}) in ${(waitingTime / 60).toFixed(2)} seconds
+        // Round to a reasonable number of decimal points for the report, only if it's not an integer.
+        let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
+        addReport('Freddy', `Freddy has passed his AI check and will move from ${startingPosition} (${cameraNames[startingPosition]}) to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
         ${generateCalculationText(Freddy, comparisonNumber)}
       `, success);
         clearInterval(freddyInterval);
@@ -208,11 +210,24 @@ const addReport = (animatronicName, message, success) => {
     var _a;
     let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"] .report-item-container`);
     const InGameTime = calculateInGameTime();
+    let reportType;
     if (reportToAddTo) {
+        switch (success) {
+            case true:
+                reportType = 'success';
+                break;
+            case false:
+                reportType = 'failure';
+                break;
+            default:
+                reportType = 'info';
+        }
         reportToAddTo.innerHTML = `
 
     
-    <div class="report-item" type="${success}"><span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span> <div class="report-description">${message}</div></div>
+    <div class="report-item" type="${reportType}">
+    <span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span>
+    <div class="report-description">${message}</div></div>
     ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''}
   `;
     }
