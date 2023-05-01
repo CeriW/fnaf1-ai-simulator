@@ -1,0 +1,11 @@
+.report-item{
+  color: white;
+}
+
+.report-item[type="true"]{
+  color: green;
+}
+
+.report-item[type="false"]{
+  color: red;
+}

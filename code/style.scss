@@ -2,11 +2,11 @@
 $black: #000;
 $white: #fff;
 
-@use 'css-modules/_var.scss';
+// @use 'css-modules/_var.scss';
 @use 'css-modules/_timer.scss';
 @use 'css-modules/_animatronics.scss';
 @use 'css-modules/_simulator.scss';
-
+@use 'css-modules/_reports.scss';
 
 body{
   background: $black;
@@ -41,6 +41,8 @@ details{
 
 /* Pizzeria layout ---------------------------------------------------------- */
 
+
+
 #pizzeria-layout{
   max-width: 750px;
 
@@ -56,5 +58,6 @@ details{
     stroke: #333333;
   }
 }
+
 
 

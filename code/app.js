@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 5;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const Freddy = {
     name: 'Freddy',
     possibleLocations: ['1A'],
@@ -74,6 +74,7 @@ const updateTime = () => {
     if (currentSecond === 539) {
         clearInterval(timeUpdate);
         clearInterval(frameUpdate);
+        clearInterval(freddyInterval);
     }
 };
 // ========================================================================== //
@@ -99,17 +100,17 @@ const generateAnimatronics = () => {
     });
 };
 const moveFreddy = () => {
-    const success = Freddy.aiLevels[nightToSimulate] > Math.random() * 20;
+    const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
     // console.log(success);
     if (success) {
         if (Freddy.currentPosition === '1A') {
             Freddy.currentPosition = '1B';
             moveAnimatronic('Freddy', '1B');
-            addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B');
+            addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B', success);
         }
     }
     else {
-        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`);
+        addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
     }
 };
 const moveAnimatronic = (name, position) => {
@@ -119,13 +120,14 @@ const moveAnimatronic = (name, position) => {
 // ========================================================================== //
 // REPORTING
 // ========================================================================== //
-const addReport = (animatronicName, message) => {
+const addReport = (animatronicName, message, success) => {
     var _a;
     let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
     if (reportToAddTo) {
         reportToAddTo.innerHTML = `
-    ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''} <br>
-    ${message}
+
+    ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''}
+    <div class="report-item" type="${success}">${message}</div>
   `;
     }
 };

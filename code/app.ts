@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 5;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
@@ -102,6 +102,7 @@ const updateTime = () => {
   if (currentSecond === 539) {
     clearInterval(timeUpdate);
     clearInterval(frameUpdate);
+    clearInterval(freddyInterval);
   }
 };
 
@@ -131,17 +132,17 @@ const generateAnimatronics = () => {
 };
 
 const moveFreddy = () => {
-  const success = Freddy.aiLevels[nightToSimulate] > Math.random() * 20;
+  const success = Freddy.aiLevels[nightToSimulate] >= Math.random() * 20;
   // console.log(success);
 
   if (success) {
     if (Freddy.currentPosition === '1A') {
       Freddy.currentPosition = '1B';
       moveAnimatronic('Freddy', '1B');
-      addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B');
+      addReport('Freddy', 'Freddy has passed his AI check and has moved from 1A to 1B', success);
     }
   } else {
-    addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`);
+    addReport('Freddy', `Freddy has failed to move and remains at ${Freddy.currentPosition}`, success);
   }
 };
 
@@ -153,13 +154,14 @@ const moveAnimatronic = (name: string, position: string) => {
 // REPORTING
 // ========================================================================== //
 
-const addReport = (animatronicName: string, message: string) => {
+const addReport = (animatronicName: string, message: string, success: boolean) => {
   let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"]`);
 
   if (reportToAddTo) {
     reportToAddTo.innerHTML = `
-    ${reportToAddTo?.innerHTML ?? ''} <br>
-    ${message}
+
+    ${reportToAddTo?.innerHTML ?? ''}
+    <div class="report-item" type="${success}">${message}</div>
   `;
   }
 };
