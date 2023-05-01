@@ -232,7 +232,7 @@ const addReport = (animatronicName: string, message: string, success: boolean) =
 const toggleCameras = () => {
   camerasOn = !camerasOn;
   cameraButton.setAttribute('active', String(camerasOn));
-  cameraStatusText.textContent = camerasOn ? 'CAMERAS ON' : 'CAMERAS OFF';
+  cameraStatusText.textContent = camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 };
 
 // ========================================================================== //
