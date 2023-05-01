@@ -10,6 +10,7 @@
   border-radius: 50%;
 }
 
+/* Camera 1A -----------------------------------------------------------------*/
 
 .animatronic[position="1A"]{
   top: 6.7%;
@@ -22,6 +23,13 @@
 
 .animatronic#Freddy[position="1A"]{
   left: 51%;
+}
+
+/* Camera 1B ----------------------------------z-------------------------------*/
+
+.animatronic[position="1B"]{
+  top: 17%;
+  left: 23%;
 }
 
 

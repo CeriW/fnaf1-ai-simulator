@@ -175,3 +175,12 @@ Everything else stops. You cannot use lights or cameras, and the doors are open.
 This means it can theoretically be 40+ seconds between the time the power runs out and you actually being jumpscared - long enough that you could pass 6AM in the meantime.
 
 Despite common belief, not moving does not slow down the time you have before Freddy attacks you.
+
+
+
+
+
+
+
+# QUESTIONS
+Can more than one animatronic be on the same camera at the same time?
