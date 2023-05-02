@@ -1,24 +1,78 @@
-
-body[cameras-on="false"]{
-  img#camera-screen{
+body[cameras-on="false"] {
+  img#camera-screen {
     display: none;
   }
 
-  .camera-button{
+  .camera-button {
     pointer-events: none;
     opacity: 0.3;
   }
 }
 
-.camera-button{
-  border: 2px solid #fff;
+.camera-button {
+  border: 3px solid $white;
   background: #424242;
-  color: #fff;
+  color: $white;
   font-family: 'VT323', monospace;
   font-size: 1.5em;
   width: min-content;
   text-align: left;
   line-height: 0.8;
   padding: 2px 20px 2px 5px;
+  position: absolute;
+  z-index: 2;
 }
 
+
+
+/* Camera button placement -------------------------------------------------- */
+
+.camera-button[camera="1A"] {
+  top: 0;
+  left: 27%;
+}
+
+.camera-button[camera="1B"] {
+  top: 15.3%;
+  left: 22%;
+}
+
+.camera-button[camera="1C"] {
+  top: 37%;
+  left: 14.5%;
+}
+
+.camera-button[camera="2A"] {
+  top: 76%;
+  left: 28.4%;
+}
+
+.camera-button[camera="2B"] {
+  top: calc(76% + 54px);
+  left: 28.4%;
+}
+
+.camera-button[camera="4A"] {
+  top: 76%;
+  left: 54.4%;
+}
+
+.camera-button[camera="4B"] {
+  top: calc(76% + 54px);
+  left: 54.4%;
+}
+
+.camera-button[camera="5"] {
+  top: 26%;
+  left: 0;
+}
+
+.camera-button[camera="6"] {
+  top: 60%;
+  left: 83%;
+}
+
+.camera-button[camera="7"] {
+  top: 19%;
+  left: 82%;
+}
