@@ -64,7 +64,7 @@ const cameraNames = {
 
 /* Time related variables */
 let currentFrame: number = 0;
-let currentSecond: number = 0; // We start at 1 as 12AM is 90 real seconds long whereas all the others are 89 seconds
+let currentSecond: number = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
 let framesPerSecond: number = 60;
 
 /* Time related page elements */
@@ -307,7 +307,7 @@ const generateCalculationText = (animatronic: Animatronic, scoreToBeat: number) 
   }</div>`;
 
 // ========================================================================== //
-// PLAYER INTERACTION
+// CAMERAS
 // ========================================================================== //
 
 const toggleCameras = () => {
