@@ -8,7 +8,17 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
+
+  @media(max-width: $l-screens){
+    transform: scale(0.9) translate(-10%, -10%);
+  }
+
+  @media(max-width: $m-screens){
+    transform: scale(0.8) translate(-20%, -20%);
+  }
 }
+
+
 
 /* Camera 1A -----------------------------------------------------------------*/
 

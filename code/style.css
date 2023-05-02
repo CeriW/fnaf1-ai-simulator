@@ -67,6 +67,16 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%; }
+  @media (max-width: 1400px) {
+    .animatronic {
+      -webkit-transform: scale(0.9) translate(-10%, -10%);
+      -ms-transform: scale(0.9) translate(-10%, -10%);
+      transform: scale(0.9) translate(-10%, -10%); } }
+  @media (max-width: 1000px) {
+    .animatronic {
+      -webkit-transform: scale(0.8) translate(-20%, -20%);
+      -ms-transform: scale(0.8) translate(-20%, -20%);
+      transform: scale(0.8) translate(-20%, -20%); } }
 
 /* Camera 1A -----------------------------------------------------------------*/
 .animatronic[position="1A"] {
