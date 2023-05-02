@@ -205,7 +205,7 @@ const moveFreddy = () => {
         }
         // Round to a reasonable number of decimal points for the report, only if it's not an integer.
         let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
-        if (Freddy.currentPosition === '4B') {
+        if (Freddy.currentPosition === '4B' && user.rightDoorIsClosed) {
             addReport('Freddy', `
           Freddy has passed his movement check but the right door is closed.
           He will move from 4A (${cameraNames[startingPosition]})
