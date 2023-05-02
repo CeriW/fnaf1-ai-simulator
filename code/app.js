@@ -163,6 +163,7 @@ const moveFreddy = () => {
             Freddy.currentPosition = '4A';
             moveAnimatronic(Freddy, '4B', '4A');
             // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY
+            // TODO - MAKE HIM WAIT
         }
         // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS OPEN!!!!
         else if (success) {
