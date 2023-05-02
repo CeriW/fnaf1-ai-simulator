@@ -186,17 +186,6 @@ const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
   let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
 
-  // FREDDY'S CAM 4B LOGIC
-  // You have the cameras off
-  // You have the cameras on and on Cam 4B.
-  // XXXXX  You have the cameras on and on any cam except Cam 4B. The right door is not closed.
-  // You have the cameras on and on any cam except Cam 4B. The right door is closed.
-
-  // !user.camerasOn -------> fail
-  // user.camerasOn && user.currentCamera === "4B" -------> fail
-  // user.camerasOn && user.currentCamera !== "4B" && user.rightDoorIsClosed -------> fail
-  // user.camerasOn && user.currentCamera !== "4B" && !user.rightDoorIsClosed -------> SUCCESS
-
   if (user.camerasOn) {
     let reportText = null;
 
@@ -220,7 +209,7 @@ const moveFreddy = () => {
       reportText = `Freddy was ready to enter the office but the right door is closed. He will return to Cam 4A (${cameraNames['4A']})`;
       Freddy.currentPosition = '4A';
       moveAnimatronic(Freddy, '4B', '4A');
-      // QUESTION - DOES HE IMMEDIATELY RETURN TO 4A OR DOES HE DO A COUNTDOWN?
+      // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY
     }
 
     // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS OPEN!!!!
