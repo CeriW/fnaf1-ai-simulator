@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4B' as Position;
 
 // TODO - PUT THIS IN A MODULE
@@ -23,8 +23,8 @@ const Freddy: Animatronic = {
   startingPosition: '4A',
   currentPosition: '4A',
   movementOpportunityInterval: 3.02,
-  // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
-  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 10], // Freddy randomly starts at 1 or 2 on night 4
+  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+  // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 10], // Freddy randomly starts at 1 or 2 on night 4
 
   currentCountdown: 0,
 };
@@ -266,15 +266,28 @@ const moveFreddy = () => {
     // Round to a reasonable number of decimal points for the report, only if it's not an integer.
     let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
 
-    addReport(
-      'Freddy',
-      `
-        Freddy has passed his movement check and will move from ${startingPosition} (${cameraNames[startingPosition]})
-        to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
-        ${generateCalculationText(Freddy, comparisonNumber)}
-      `,
-      success
-    );
+    if (Freddy.currentPosition === '4B') {
+      addReport(
+        'Freddy',
+        `
+          Freddy has passed his movement check but the right door is closed.
+          He will move from 4A (${cameraNames[startingPosition]})
+          to 4B (${cameraNames[endingPosition]})
+          in ${formattedWaitingTime} seconds 
+        `
+        //  QUESTION - I'M ASSUMING HE ACTUALLY WAITS ON THIS OCCASION AND DOESN'T MOVE IMMEDIATELY?
+      );
+    } else {
+      addReport(
+        'Freddy',
+        `
+          Freddy has passed his movement check and will move from ${startingPosition} (${cameraNames[startingPosition]})
+          to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
+          ${generateCalculationText(Freddy, comparisonNumber)}
+        `,
+        success
+      );
+    }
 
     clearInterval(freddyInterval);
 
