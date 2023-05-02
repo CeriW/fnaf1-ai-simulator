@@ -179,30 +179,21 @@ const moveFreddy = () => {
   let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
 
   if (camerasOn) {
+    let reportText = null;
+
     // Freddy fails all movement checks if the cameras are on and he's not at 4B
     if (Freddy.currentPosition !== '4B') {
-      if (
-        !firstReport ||
-        firstReport.innerHTML?.indexOf('Freddy will automatically fail all movement checks while the cameras are up') <
-          0
-      ) {
-        addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`);
-      }
+      reportText = 'Freddy will automatically fail all movement checks while the cameras are up';
     }
 
     // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
     else if (currentCamera === '4B') {
-      if (
-        !firstReport ||
-        firstReport.innerHTML?.indexOf(
-          'Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also'
-        ) < 0
-      ) {
-        addReport(
-          'Freddy',
-          `Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also.`
-        );
-      }
+      reportText = 'Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also';
+    }
+
+    // We don't want to flood the report feed. Only report if the top message isn't already this message.
+    if (reportText && (!firstReport || firstReport.innerHTML?.indexOf(reportText) < 0)) {
+      addReport('Freddy', reportText);
     }
   } else if (success) {
     let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving

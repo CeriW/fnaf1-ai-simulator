@@ -132,25 +132,23 @@ const generateAnimatronics = () => {
 };
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
-    var _a, _b;
+    var _a;
     const comparisonNumber = Math.random() * 20;
     const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
     let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
     if (camerasOn) {
+        let reportText = null;
         // Freddy fails all movement checks if the cameras are on and he's not at 4B
         if (Freddy.currentPosition !== '4B') {
-            if (!firstReport ||
-                ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy will automatically fail all movement checks while the cameras are up')) <
-                    0) {
-                addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`);
-            }
+            reportText = 'Freddy will automatically fail all movement checks while the cameras are up';
         }
         // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
         else if (currentCamera === '4B') {
-            if (!firstReport ||
-                ((_b = firstReport.innerHTML) === null || _b === void 0 ? void 0 : _b.indexOf('Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also')) < 0) {
-                addReport('Freddy', `Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also.`);
-            }
+            reportText = 'Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also';
+        }
+        // We don't want to flood the report feed. Only report if the top message isn't already this message.
+        if (reportText && (!firstReport || ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf(reportText)) < 0)) {
+            addReport('Freddy', reportText);
         }
     }
     else if (success) {
