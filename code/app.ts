@@ -366,14 +366,33 @@ generateCameraButtons();
 // ========================================================================== //
 
 const initialiseDoors = () => {
-  document.querySelectorAll('.door-button').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      btn.classList.toggle('active');
-    });
+  // <!-- <button class="door-button" door="left">Close left door</button>
+  // <button class="door-button" door="right">Close right door</button>
 
-    console.log(btn);
+  ['left', 'right'].forEach((direction) => {
+    let myButton = document.createElement('button');
+    myButton.classList.add('door-button');
+    myButton.textContent = `Close ${direction} door`;
+    myButton.setAttribute('door', direction);
+    myButton.addEventListener('click', () => {
+      myButton.classList.toggle('active');
+      console.log(simulator.querySelector(`g#${direction}-door-close-icon`));
+      simulator.querySelector(`g#${direction}-door-close-icon`)?.classList.toggle('hidden');
+    });
+    document.querySelector('#door-controls')?.append(myButton);
   });
+
+  // document.querySelectorAll('.door-button').forEach((btn) => {
+  //   btn.addEventListener('click', () => {
+  //     btn.classList.toggle('active');
+  //     toggleDoor(btn.getAttribute('door'));
+  //   });
+
+  //   console.log(btn);
+  // });
 };
+
+const toggleDoor = (side: 'left' | 'right') => {};
 
 // ========================================================================== //
 // INITIALISE THE PAGE
