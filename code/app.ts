@@ -186,38 +186,47 @@ const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
   let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
 
+  // FREDDY'S CAM 4B LOGIC
   // You have the cameras off
   // You have the cameras on and on Cam 4B.
   // XXXXX  You have the cameras on and on any cam except Cam 4B. The right door is not closed.
   // You have the cameras on and on any cam except Cam 4B. The right door is closed.
 
-  // FREDDY'S CAM 4B LOGIC
   // !camerasOn -------> fail
   // camerasOn && currentCamera === "4B" -------> fail
   // camerasOn && currentCamera !== "4B" && doors.rightIsClosed -------> fail
   // camerasOn && currentCamera !== "4B" && !doors.rightIsClosed -------> SUCCESS
 
-  // Freddy will never get you while the cameras are up.
   if (camerasOn) {
     let reportText = null;
 
-    // NOT AT 4B, CAMERAS ARE UP
+    console.log(doors);
+
+    // NOT AT 4B, CAMERAS ARE UP, FAIL
     // Freddy fails all movement checks if the cameras are on and he's not at 4B
     if (Freddy.currentPosition !== '4B') {
       reportText = 'Freddy will automatically fail all movement checks while the cameras are up';
     }
 
+    // AT 4B, CAMERAS ARE UP, WE'RE LOOKING AT 4B, FAIL
     // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
-
-    // AT 4B, CAMERAS UP
     else if (currentCamera === '4B') {
       reportText =
         'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.';
-    } else {
-      gameOver();
     }
 
-    console.log(reportText);
+    // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS CLOSED
+    // Freddy can't get you when the right door is closed regardless of what camera you're looking at
+    else if (doors.rightIsClosed) {
+      reportText = 'Freddy was ready to enter the office but the right door is closed';
+      // TODO - RETURN TO 4A?
+    }
+
+    // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS OPEN!!!!
+    else {
+      // gameOver();
+      // TODO - He doesn't actually get you right away
+    }
 
     // We don't want to flood the report feed. Only report if the top message isn't already this message.
     if (reportText && (!firstReport || firstReport.innerHTML?.indexOf(reportText) < 0)) {
@@ -415,7 +424,7 @@ const initialiseDoors = () => {
       }
 
       if (direction === 'right') {
-        doors.leftIsClosed = !doors.leftIsClosed;
+        doors.rightIsClosed = !doors.rightIsClosed;
       }
     });
   });
