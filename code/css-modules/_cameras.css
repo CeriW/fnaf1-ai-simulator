@@ -1,1 +1,1 @@
-body[cameras-on=false] img#camera-screen{display:none}
+body[cameras-on=false] img#camera-screen{display:none}body[cameras-on=false] .camera-button{pointer-events:none;opacity:.3}.camera-button{border:2px solid #fff;background:#424242;color:#fff;font-family:"VT323",monospace;font-size:1.5em;width:-moz-min-content;width:min-content;text-align:left;line-height:.8;padding:2px 20px 2px 5px}

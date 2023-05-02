@@ -248,16 +248,15 @@ const toggleCameras = () => {
     cameraStatusText.textContent = camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 };
 const generateCameraButtons = () => {
-    // The for loop below doesn't run in the order you'd think it should run, hence this array to force it to
-    const cameraOrder = ['1A', '1B', '1C', '2A', '2B', '3', '4A', '4B', '5', '6', '7'];
-    for (const key of cameraOrder) {
-        console.log(key);
+    for (const key in cameraNames) {
         const myCameraButton = document.createElement('button');
+        myCameraButton.classList.add('camera-button');
         myCameraButton.textContent = `CAM ${key}`;
+        myCameraButton.setAttribute('camera', key);
         myCameraButton.addEventListener('click', () => {
             cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
         });
-        cameraArea.appendChild(myCameraButton);
+        simulator.appendChild(myCameraButton);
     }
 };
 generateCameraButtons();
@@ -267,6 +266,8 @@ generateCameraButtons();
 const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+// document.body.setAttribute('cameras-on', String(camerasOn));
+document.body.setAttribute('cameras-on', 'false');
 // Since we're starting the time at -1 to accommodate 12AM being 89 seconds long, wait 1 second before starting the movement calculations
 // window.setTimeout(() => {
 //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
