@@ -2,12 +2,18 @@
 $black: #000;
 $white: #fff;
 
+$l-screens: 1400px;
+$m-screens: 1000px;
+$s-screens: 700px;
+
+
+
 // @use 'css-modules/_var.scss';
-@use 'css-modules/_timer.scss';
-@use 'css-modules/_animatronics.scss';
-@use 'css-modules/_simulator.scss';
-@use 'css-modules/_reports.scss';
-@use 'css-modules/_cameras.scss';
+@import 'css-modules/_timer.scss';
+@import 'css-modules/_animatronics.scss';
+@import 'css-modules/_simulator.scss';
+@import 'css-modules/_reports.scss';
+@import 'css-modules/_cameras.scss';
 
 body{
   background: $black;
@@ -32,6 +38,30 @@ main{
     / 750px 1fr;
     gap: 0 100px;
 }
+
+@media(max-width: $l-screens){
+  main{
+    grid-template: 
+    ". ." auto
+    / 600px 1fr;
+    gap: 0 50px;
+  }
+}
+
+@media(max-width: $m-screens){
+  main{
+    grid-template: 
+    ". ." auto
+    / 500px 1fr;
+    gap: 0 50px;
+  }
+}
+
+
+
+
+
+
 
 details{
   width: 100%;

@@ -1,8 +1,225 @@
-@use 'css-modules/_timer.scss';
-@use 'css-modules/_animatronics.scss';
-@use 'css-modules/_simulator.scss';
-@use 'css-modules/_reports.scss';
-@use 'css-modules/_cameras.scss';
+/* Timer -------------------------------------------------------------------- */
+#in-game-time,
+#real-time {
+  font-family: 'VT323', monospace; }
+
+#timer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 10px 50px;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
+
+/* IN GAME TIME ------------------------------------------------------------- */
+#in-game-time {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: -webkit-min-content 0 -webkit-min-content;
+  -ms-grid-rows: min-content 0 min-content;
+  -ms-grid-columns: 1fr 10px -webkit-min-content;
+  -ms-grid-columns: 1fr 10px min-content;
+  grid-template: "hour minutes" -webkit-min-content "hour am" -webkit-min-content / 1fr -webkit-min-content;
+  grid-template: "hour minutes" min-content "hour am" min-content / 1fr min-content;
+  gap: 0 10px;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: end; }
+
+#in-game-time > span {
+  line-height: 0.6;
+  text-align: right; }
+
+.in-game-hour {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 3;
+  -ms-grid-column: 1;
+  font-size: 10em;
+  grid-area: hour;
+  -ms-grid-column-align: start;
+  justify-self: start; }
+
+.in-game-minutes {
+  font-size: 2em; }
+
+.am-marker {
+  font-size: 3em; }
+
+/* REAL TIME ---------------------------------------------------------------- */
+#supplementary-time-info {
+  border: 1px solid #fff;
+  padding: 10px;
+  margin-top: 20px;
+  min-width: 175px; }
+
+#real-time {
+  font-size: 2em;
+  margin: 10px 0; }
+
+.animatronic {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%; }
+
+/* Camera 1A -----------------------------------------------------------------*/
+.animatronic[position="1A"] {
+  top: 6.7%;
+  left: 33.5%; }
+
+.animatronic#Chica[position="1A"] {
+  left: 42.5%; }
+
+.animatronic#Freddy[position="1A"] {
+  left: 51%; }
+
+/* Camera 1B ------------------------------------------------------------------*/
+.animatronic[position="1B"] {
+  top: 17%;
+  left: 23%; }
+
+/* Camera 7 ------------------------------------------------------------------*/
+.animatronic[position="7"] {
+  top: 23.5%;
+  left: 78.65%; }
+
+/* Camera 6 ------------------------------------------------------------------*/
+.animatronic[position="6"] {
+  top: 63.5%;
+  left: 78.65%; }
+
+/* Camera 4A ------------------------------------------------------------------*/
+.animatronic[position="4A"] {
+  top: 63.5%;
+  left: 55.2%; }
+
+/* Camera 4B ------------------------------------------------------------------*/
+.animatronic[position="4B"] {
+  top: 84%;
+  left: 55.2%; }
+
+/* Individual animatronic styling ------------------------------------------- */
+#Bonnie {
+  background-color: purple;
+  background-image: url("../../assets/Bonnie.svg"); }
+
+#Chica {
+  background-color: yellow;
+  background-image: url("../../assets/Chica.svg"); }
+
+#Freddy {
+  background-color: brown;
+  background-image: url("../../assets/Freddy.svg"); }
+
+#simulator {
+  position: relative; }
+
+.animatronic-report {
+  max-height: 300px;
+  overflow-y: auto; }
+
+.report-item {
+  color: white;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: auto auto;
+  -ms-grid-columns: 80px 1fr;
+  grid-template: "time description" "time calculation" / 80px 1fr;
+  margin-bottom: 15px; }
+
+.report-item[type="success"] .report-description {
+  color: green; }
+
+.report-item[type="failure"] .report-description {
+  color: red; }
+
+.report-time {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 2;
+  -ms-grid-column: 1;
+  color: rgba(255, 255, 255, 0.4);
+  grid-area: time; }
+
+.report-description {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: description; }
+
+.report-calculation {
+  -ms-grid-row: 2;
+  -ms-grid-column: 2;
+  color: rgba(255, 255, 255, 0.4);
+  grid-area: calculation; }
+
+body[cameras-on="false"] img#camera-screen {
+  display: none; }
+
+body[cameras-on="false"] .camera-button {
+  pointer-events: none;
+  opacity: 0.3; }
+
+.camera-button {
+  border: 3px solid #fff;
+  background: #424242;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 1.5em;
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+  text-align: left;
+  line-height: 0.8;
+  padding: 2px 20px 2px 5px;
+  position: absolute;
+  z-index: 2; }
+
+/* Camera button placement -------------------------------------------------- */
+.camera-button[camera="1A"] {
+  top: 0;
+  left: 27%; }
+
+.camera-button[camera="1B"] {
+  top: 15.3%;
+  left: 22%; }
+
+.camera-button[camera="1C"] {
+  top: 37%;
+  left: 14.5%; }
+
+.camera-button[camera="2A"] {
+  top: 76%;
+  left: 28.4%; }
+
+.camera-button[camera="2B"] {
+  top: calc(76% + 54px);
+  left: 28.4%; }
+
+.camera-button[camera="4A"] {
+  top: 76%;
+  left: 54.4%; }
+
+.camera-button[camera="4B"] {
+  top: calc(76% + 54px);
+  left: 54.4%; }
+
+.camera-button[camera="5"] {
+  top: 26%;
+  left: 0; }
+
+.camera-button[camera="6"] {
+  top: 60%;
+  left: 83%; }
+
+.camera-button[camera="7"] {
+  top: 19%;
+  left: 82%; }
+
 body {
   background: #000;
   color: #fff;
@@ -32,6 +249,20 @@ main {
   -ms-grid-columns: 750px 100px 1fr;
   grid-template: ". ." auto / 750px 1fr;
   gap: 0 100px; }
+
+@media (max-width: 1400px) {
+  main {
+    -ms-grid-rows: auto;
+    -ms-grid-columns: 600px 50px 1fr;
+    grid-template: ". ." auto / 600px 1fr;
+    gap: 0 50px; } }
+
+@media (max-width: 1000px) {
+  main {
+    -ms-grid-rows: auto;
+    -ms-grid-columns: 500px 50px 1fr;
+    grid-template: ". ." auto / 500px 1fr;
+    gap: 0 50px; } }
 
 details {
   width: 100%;
