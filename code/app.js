@@ -144,7 +144,8 @@ const moveFreddy = () => {
         }
         // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
         else if (currentCamera === '4B') {
-            reportText = 'Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also';
+            reportText =
+                'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.';
         }
         // We don't want to flood the report feed. Only report if the top message isn't already this message.
         if (reportText && (!firstReport || ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf(reportText)) < 0)) {
