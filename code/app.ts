@@ -88,6 +88,7 @@ const cameraScreen: HTMLImageElement = cameraArea.querySelector('img#camera-scre
 
 /* Player choosable variables */
 let camerasOn: boolean = false;
+let currentCamera: Camera | null = '1A'; // The camera the user is currently looking at. Will be null when the cameras are off.
 
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -320,6 +321,7 @@ const generateCalculationText = (animatronic: Animatronic, scoreToBeat: number) 
 
 const toggleCameras = () => {
   camerasOn = !camerasOn;
+  document.body.setAttribute('cameras-on', String(camerasOn));
   cameraButton.setAttribute('active', String(camerasOn));
   cameraStatusText.textContent = camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 };
