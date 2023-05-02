@@ -283,6 +283,17 @@ const generateCameraButtons = () => {
 };
 generateCameraButtons();
 // ========================================================================== //
+// DOORS
+// ========================================================================== //
+const initialiseDoors = () => {
+    document.querySelectorAll('.door-button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            btn.classList.toggle('active');
+        });
+        console.log(btn);
+    });
+};
+// ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
 const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
@@ -290,6 +301,7 @@ const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSec
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 // document.body.setAttribute('cameras-on', String(camerasOn));
 document.body.setAttribute('cameras-on', 'false');
+initialiseDoors();
 // Since we're starting the time at -1 to accommodate 12AM being 89 seconds long, wait 1 second before starting the movement calculations
 // window.setTimeout(() => {
 //   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);

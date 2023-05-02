@@ -15,14 +15,8 @@ body[cameras-on="false"] {
 }
 
 .camera-button {
-  border: 3px solid $white;
-  background: #424242;
-  color: $white;
-  font-family: 'VT323', monospace;
-  font-size: 1.5em;
+  @include buttonStyle;
   width: min-content;
-  text-align: left;
-  line-height: 0.8;
   padding: 2px 20px 2px 5px;
   position: absolute;
   z-index: 2;

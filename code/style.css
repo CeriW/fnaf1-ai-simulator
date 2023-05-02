@@ -132,6 +132,28 @@
 #simulator {
   position: relative; }
 
+#door-controls {
+  padding-right: 8%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  gap: 10px; }
+
+.door-button {
+  border: 3px solid #fff;
+  background: #424242;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 1.5em;
+  padding: 5px;
+  text-align: left;
+  line-height: 0.8; }
+  .door-button.active {
+    background: #7FB000; }
+
 .animatronic-report {
   max-height: 300px;
   overflow-y: auto; }
@@ -185,14 +207,17 @@ body[cameras-on="false"] .camera-button {
   color: #fff;
   font-family: 'VT323', monospace;
   font-size: 1.5em;
+  padding: 5px;
+  text-align: left;
+  line-height: 0.8;
   width: -webkit-min-content;
   width: -moz-min-content;
   width: min-content;
-  text-align: left;
-  line-height: 0.8;
   padding: 2px 20px 2px 5px;
   position: absolute;
   z-index: 2; }
+  .camera-button.active {
+    background: #7FB000; }
   .camera-button.active {
     background: #7FB000; }
 

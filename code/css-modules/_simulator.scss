@@ -1,3 +1,14 @@
 #simulator{
   position: relative;
 }
+
+#door-controls{
+  padding-right: 8%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.door-button{
+  @include buttonStyle;
+}

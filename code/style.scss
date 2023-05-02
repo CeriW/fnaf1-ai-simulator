@@ -8,6 +8,22 @@ $m-screens: 1000px;
 $s-screens: 700px;
 
 
+@mixin buttonStyle {
+  border: 3px solid $white;
+  background: #424242;
+  color: $white;
+  font-family: 'VT323', monospace;
+  font-size: 1.5em;
+  padding: 5px;
+  text-align: left;
+  line-height: 0.8;
+
+  &.active{
+    background: $green;
+  }
+
+}
+
 
 // @use 'css-modules/_var.scss';
 @import 'css-modules/_timer.scss';
