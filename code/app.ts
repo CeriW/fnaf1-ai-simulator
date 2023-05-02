@@ -1,28 +1,31 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const defaultCamera: Position = '4B';
 
 // TODO - PUT THIS IN A MODULE
 
 type Animatronic = {
   name: string;
   possibleLocations: string[]; // The cameras where they can be
-  startingPosition: Camera; // The camera where they start
-  currentPosition: Camera; // The camera the animatronic is currently at
+  startingPosition: Position; // The camera where they start
+  currentPosition: Position; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
 };
 
-type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '3' | '4A' | '4B' | '5' | '6' | '7';
+type Position = '1A' | '1B' | '1C' | '2A' | '2B' | '3' | '4A' | '4B' | '5' | '6' | '7' | 'Office';
 
 const Freddy: Animatronic = {
   name: 'Freddy',
   possibleLocations: ['1A'],
-  startingPosition: '1A',
-  currentPosition: '1A',
+  startingPosition: '4A',
+  currentPosition: '4A',
   movementOpportunityInterval: 3.02,
-  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+  // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 10], // Freddy randomly starts at 1 or 2 on night 4
+
   currentCountdown: 0,
 };
 
@@ -93,7 +96,7 @@ const cameraScreen: HTMLImageElement = cameraArea.querySelector('img#camera-scre
 
 /* Player choosable variables */
 let camerasOn: boolean = false;
-let currentCamera: Camera | null = '1A'; // The camera the user is currently looking at. Will be null when the cameras are off.
+let currentCamera: Position | null = defaultCamera;
 
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -183,19 +186,38 @@ const moveFreddy = () => {
   const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
   let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
 
+  // You have the cameras off
+  // You have the cameras on and on Cam 4B.
+  // XXXXX  You have the cameras on and on any cam except Cam 4B. The right door is not closed.
+  // You have the cameras on and on any cam except Cam 4B. The right door is closed.
+
+  // FREDDY'S CAM 4B LOGIC
+  // !camerasOn -------> fail
+  // camerasOn && currentCamera === "4B" -------> fail
+  // camerasOn && currentCamera !== "4B" && doors.rightIsClosed -------> fail
+  // camerasOn && currentCamera !== "4B" && !doors.rightIsClosed -------> SUCCESS
+
+  // Freddy will never get you while the cameras are up.
   if (camerasOn) {
     let reportText = null;
 
+    // NOT AT 4B, CAMERAS ARE UP
     // Freddy fails all movement checks if the cameras are on and he's not at 4B
     if (Freddy.currentPosition !== '4B') {
       reportText = 'Freddy will automatically fail all movement checks while the cameras are up';
     }
 
     // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
+
+    // AT 4B, CAMERAS UP
     else if (currentCamera === '4B') {
       reportText =
         'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.';
+    } else {
+      gameOver();
     }
+
+    console.log(reportText);
 
     // We don't want to flood the report feed. Only report if the top message isn't already this message.
     if (reportText && (!firstReport || firstReport.innerHTML?.indexOf(reportText) < 0)) {
@@ -283,7 +305,7 @@ const moveFreddy = () => {
   }
 };
 
-const moveAnimatronic = (animatronic: Animatronic, startingPosition: Camera, endPosition: Camera) => {
+const moveAnimatronic = (animatronic: Animatronic, startingPosition: Position, endPosition: Position) => {
   animatronic.currentPosition = endPosition;
   addReport(
     animatronic.name,
@@ -359,10 +381,12 @@ const generateCameraButtons = () => {
         btn.classList.remove('active');
       });
       myCameraButton.classList.add('active');
-      currentCamera = key as Camera;
+      currentCamera = key as Position;
     });
     simulator.appendChild(myCameraButton);
   }
+
+  cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
 };
 generateCameraButtons();
 
@@ -395,6 +419,14 @@ const initialiseDoors = () => {
       }
     });
   });
+};
+
+// ========================================================================== //
+// DEATH
+// ========================================================================== //
+
+const gameOver = () => {
+  alert('You got jumpscared');
 };
 
 // ========================================================================== //

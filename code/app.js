@@ -1,14 +1,16 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const defaultCamera = '4B';
 const Freddy = {
     name: 'Freddy',
     possibleLocations: ['1A'],
-    startingPosition: '1A',
-    currentPosition: '1A',
+    startingPosition: '4A',
+    currentPosition: '4A',
     movementOpportunityInterval: 3.02,
-    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4],
+    // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
+    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 10],
     currentCountdown: 0,
 };
 const Chica = {
@@ -68,7 +70,7 @@ const cameraStatusText = cameraArea.querySelector('#camera-status');
 const cameraScreen = cameraArea.querySelector('img#camera-screen');
 /* Player choosable variables */
 let camerasOn = false;
-let currentCamera = '1A'; // The camera the user is currently looking at. Will be null when the cameras are off.
+let currentCamera = defaultCamera;
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
 // These are split off separately as they each need to update at
@@ -140,17 +142,33 @@ const moveFreddy = () => {
     const comparisonNumber = Math.random() * 20;
     const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
     let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
+    // You have the cameras off
+    // You have the cameras on and on Cam 4B.
+    // XXXXX  You have the cameras on and on any cam except Cam 4B. The right door is not closed.
+    // You have the cameras on and on any cam except Cam 4B. The right door is closed.
+    // FREDDY'S CAM 4B LOGIC
+    // !camerasOn -------> fail
+    // camerasOn && currentCamera === "4B" -------> fail
+    // camerasOn && currentCamera !== "4B" && doors.rightIsClosed -------> fail
+    // camerasOn && currentCamera !== "4B" && !doors.rightIsClosed -------> SUCCESS
+    // Freddy will never get you while the cameras are up.
     if (camerasOn) {
         let reportText = null;
+        // NOT AT 4B, CAMERAS ARE UP
         // Freddy fails all movement checks if the cameras are on and he's not at 4B
         if (Freddy.currentPosition !== '4B') {
             reportText = 'Freddy will automatically fail all movement checks while the cameras are up';
         }
         // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
+        // AT 4B, CAMERAS UP
         else if (currentCamera === '4B') {
             reportText =
                 'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.';
         }
+        else {
+            gameOver();
+        }
+        console.log(reportText);
         // We don't want to flood the report feed. Only report if the top message isn't already this message.
         if (reportText && (!firstReport || ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf(reportText)) < 0)) {
             addReport('Freddy', reportText);
@@ -284,6 +302,7 @@ const generateCameraButtons = () => {
         });
         simulator.appendChild(myCameraButton);
     }
+    cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
 };
 generateCameraButtons();
 // ========================================================================== //
@@ -313,6 +332,12 @@ const initialiseDoors = () => {
             }
         });
     });
+};
+// ========================================================================== //
+// DEATH
+// ========================================================================== //
+const gameOver = () => {
+    alert('You got jumpscared');
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
