@@ -188,6 +188,8 @@ body[cameras-on="false"] .camera-button {
   padding: 2px 20px 2px 5px;
   position: absolute;
   z-index: 2; }
+  .camera-button.active {
+    background: #7FB000; }
 
 /* Camera button placement -------------------------------------------------- */
 .camera-button[camera="1A"] {

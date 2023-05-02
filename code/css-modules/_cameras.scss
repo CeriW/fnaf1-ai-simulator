@@ -21,6 +21,10 @@ body[cameras-on="false"] {
   padding: 2px 20px 2px 5px;
   position: absolute;
   z-index: 2;
+
+  &.active{
+    background: $green;
+  }
 }
 
 

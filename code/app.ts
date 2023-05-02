@@ -330,10 +330,18 @@ const generateCameraButtons = () => {
   for (const key in cameraNames) {
     const myCameraButton = document.createElement('button');
     myCameraButton.classList.add('camera-button');
+    if (key === '1A') {
+      // 1A is the default camera
+      myCameraButton.classList.add('active');
+    }
     myCameraButton.textContent = `CAM ${key}`;
     myCameraButton.setAttribute('camera', key);
     myCameraButton.addEventListener('click', () => {
       cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
+      document.querySelectorAll('.camera-button').forEach((btn) => {
+        btn.classList.remove('active');
+      });
+      myCameraButton.classList.add('active');
     });
     simulator.appendChild(myCameraButton);
   }
