@@ -42,6 +42,10 @@ const cameraNames = {
     '6': 'Kitchen',
     '7': 'Restrooms',
 };
+const doors = {
+    leftIsClosed: false,
+    rightIsClosed: false,
+};
 const paths = {
     assets: '../assets',
 };
@@ -286,31 +290,30 @@ generateCameraButtons();
 // DOORS
 // ========================================================================== //
 const initialiseDoors = () => {
-    // <!-- <button class="door-button" door="left">Close left door</button>
-    // <button class="door-button" door="right">Close right door</button>
     ['left', 'right'].forEach((direction) => {
         var _a;
+        // Create door buttons
         let myButton = document.createElement('button');
         myButton.classList.add('door-button');
         myButton.textContent = `Close ${direction} door`;
         myButton.setAttribute('door', direction);
+        (_a = document.querySelector('#door-controls')) === null || _a === void 0 ? void 0 : _a.append(myButton);
+        // Make the door buttons toggle the doors
         myButton.addEventListener('click', () => {
             var _a;
             myButton.classList.toggle('active');
-            console.log(simulator.querySelector(`g#${direction}-door-close-icon`));
             (_a = simulator.querySelector(`g#${direction}-door-close-icon`)) === null || _a === void 0 ? void 0 : _a.classList.toggle('hidden');
+            // Note - I could simplify this using else, but I'm leaving it like this to future proof it
+            // Other FNAF games have doors in directions other than left and right.
+            if (direction === 'left') {
+                doors.leftIsClosed = !doors.leftIsClosed;
+            }
+            if (direction === 'right') {
+                doors.leftIsClosed = !doors.leftIsClosed;
+            }
         });
-        (_a = document.querySelector('#door-controls')) === null || _a === void 0 ? void 0 : _a.append(myButton);
     });
-    // document.querySelectorAll('.door-button').forEach((btn) => {
-    //   btn.addEventListener('click', () => {
-    //     btn.classList.toggle('active');
-    //     toggleDoor(btn.getAttribute('door'));
-    //   });
-    //   console.log(btn);
-    // });
 };
-const toggleDoor = (side) => { };
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //

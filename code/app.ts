@@ -60,6 +60,11 @@ const cameraNames = {
   '7': 'Restrooms',
 };
 
+const doors = {
+  leftIsClosed: false,
+  rightIsClosed: false,
+};
+
 const paths = {
   assets: '../assets',
 };
@@ -366,33 +371,31 @@ generateCameraButtons();
 // ========================================================================== //
 
 const initialiseDoors = () => {
-  // <!-- <button class="door-button" door="left">Close left door</button>
-  // <button class="door-button" door="right">Close right door</button>
-
   ['left', 'right'].forEach((direction) => {
+    // Create door buttons
     let myButton = document.createElement('button');
     myButton.classList.add('door-button');
     myButton.textContent = `Close ${direction} door`;
     myButton.setAttribute('door', direction);
+    document.querySelector('#door-controls')?.append(myButton);
+
+    // Make the door buttons toggle the doors
     myButton.addEventListener('click', () => {
       myButton.classList.toggle('active');
-      console.log(simulator.querySelector(`g#${direction}-door-close-icon`));
       simulator.querySelector(`g#${direction}-door-close-icon`)?.classList.toggle('hidden');
+
+      // Note - I could simplify this using else, but I'm leaving it like this to future proof it
+      // Other FNAF games have doors in directions other than left and right.
+      if (direction === 'left') {
+        doors.leftIsClosed = !doors.leftIsClosed;
+      }
+
+      if (direction === 'right') {
+        doors.leftIsClosed = !doors.leftIsClosed;
+      }
     });
-    document.querySelector('#door-controls')?.append(myButton);
   });
-
-  // document.querySelectorAll('.door-button').forEach((btn) => {
-  //   btn.addEventListener('click', () => {
-  //     btn.classList.toggle('active');
-  //     toggleDoor(btn.getAttribute('door'));
-  //   });
-
-  //   console.log(btn);
-  // });
 };
-
-const toggleDoor = (side: 'left' | 'right') => {};
 
 // ========================================================================== //
 // INITIALISE THE PAGE
