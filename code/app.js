@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const Freddy = {
     name: 'Freddy',
     possibleLocations: ['1A'],
@@ -90,7 +90,9 @@ const updateTime = () => {
     <span class="in-game-minutes">${String(gameTime.minute).padStart(2, '0')}</span>
     <span class="am-marker">AM</span>
   `;
-    console.log(`${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`);
+    // console.log(
+    //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
+    // );
     updateFrames();
     if (currentSecond === 535) {
         clearInterval(timeUpdate);
@@ -130,14 +132,25 @@ const generateAnimatronics = () => {
 };
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
-    var _a;
+    var _a, _b;
     const comparisonNumber = Math.random() * 20;
     const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
+    let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
     if (camerasOn) {
-        let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
-        if (!firstReport ||
-            ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy will automatically fail all movement checks while the cameras are up')) < 0) {
-            addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, null);
+        // Freddy fails all movement checks if the cameras are on and he's not at 4B
+        if (Freddy.currentPosition !== '4B') {
+            if (!firstReport ||
+                ((_a = firstReport.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy will automatically fail all movement checks while the cameras are up')) <
+                    0) {
+                addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`);
+            }
+        }
+        // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
+        else if (currentCamera === '4B') {
+            if (!firstReport ||
+                ((_b = firstReport.innerHTML) === null || _b === void 0 ? void 0 : _b.indexOf('Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also')) < 0) {
+                addReport('Freddy', `Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also.`);
+            }
         }
     }
     else if (success) {
@@ -178,7 +191,8 @@ const moveFreddy = () => {
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
         Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
-        // Freddy will not move while the cameras are up. If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
+        // Freddy will not move while the cameras are up.
+        // If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
         let freddyCountdown = window.setInterval(() => {
             var _a;
             Freddy.currentCountdown--;
@@ -211,7 +225,7 @@ const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
 // ========================================================================== //
 // REPORTING
 // ========================================================================== //
-const addReport = (animatronicName, message, success) => {
+const addReport = (animatronicName, message, success = null) => {
     var _a;
     let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"] .report-item-container`);
     const InGameTime = calculateInGameTime();
@@ -263,6 +277,7 @@ const generateCameraButtons = () => {
                 btn.classList.remove('active');
             });
             myCameraButton.classList.add('active');
+            currentCamera = key;
         });
         simulator.appendChild(myCameraButton);
     }

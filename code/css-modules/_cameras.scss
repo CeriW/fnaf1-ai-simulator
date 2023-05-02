@@ -3,6 +3,11 @@ img#camera-screen{
 }
 
 body[cameras-on="false"] {
+
+  #camera-screen{
+    opacity: 0.1;
+  }
+
   .camera-button {
     pointer-events: none;
     opacity: 0.3;

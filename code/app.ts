@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
@@ -123,9 +123,9 @@ const updateTime = () => {
     <span class="am-marker">AM</span>
   `;
 
-  console.log(
-    `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
-  );
+  // console.log(
+  //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
+  // );
 
   updateFrames();
 
@@ -176,14 +176,33 @@ const generateAnimatronics = () => {
 const moveFreddy = () => {
   const comparisonNumber = Math.random() * 20;
   const success = Freddy.aiLevels[nightToSimulate] >= comparisonNumber;
+  let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
 
   if (camerasOn) {
-    let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
-    if (
-      !firstReport ||
-      firstReport.innerHTML?.indexOf('Freddy will automatically fail all movement checks while the cameras are up') < 0
-    ) {
-      addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`, null);
+    // Freddy fails all movement checks if the cameras are on and he's not at 4B
+    if (Freddy.currentPosition !== '4B') {
+      if (
+        !firstReport ||
+        firstReport.innerHTML?.indexOf('Freddy will automatically fail all movement checks while the cameras are up') <
+          0
+      ) {
+        addReport('Freddy', `Freddy will automatically fail all movement checks while the cameras are up`);
+      }
+    }
+
+    // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
+    else if (currentCamera === '4B') {
+      if (
+        !firstReport ||
+        firstReport.innerHTML?.indexOf(
+          'Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also'
+        ) < 0
+      ) {
+        addReport(
+          'Freddy',
+          `Freddy is at camera 4B, and will fail all movement checks while the camera is on 4B also.`
+        );
+      }
     }
   } else if (success) {
     let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
@@ -233,7 +252,8 @@ const moveFreddy = () => {
     // The amount of time is dependent on his AI level.
     Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
 
-    // Freddy will not move while the cameras are up. If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
+    // Freddy will not move while the cameras are up.
+    // If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
     let freddyCountdown = window.setInterval(() => {
       Freddy.currentCountdown--;
       if (Freddy.currentCountdown <= 0 && !camerasOn) {
@@ -280,7 +300,7 @@ const moveAnimatronic = (animatronic: Animatronic, startingPosition: Camera, end
 // REPORTING
 // ========================================================================== //
 
-const addReport = (animatronicName: string, message: string, success: boolean | null) => {
+const addReport = (animatronicName: string, message: string, success: boolean | null = null) => {
   let reportToAddTo = document.querySelector(
     `.animatronic-report[animatronic="${animatronicName}"] .report-item-container`
   );
@@ -342,6 +362,7 @@ const generateCameraButtons = () => {
         btn.classList.remove('active');
       });
       myCameraButton.classList.add('active');
+      currentCamera = key as Camera;
     });
     simulator.appendChild(myCameraButton);
   }

@@ -8,6 +8,8 @@
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
 
   @media(max-width: $l-screens){
     transform: scale(0.9) translate(-10%, -10%);
