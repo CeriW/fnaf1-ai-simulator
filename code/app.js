@@ -5,7 +5,7 @@ let secondLength = 500; // How long we want a real life 'second' to be in millis
 const defaultCamera = '4B';
 const Freddy = {
     name: 'Freddy',
-    possibleLocations: ['1A'],
+    // possibleLocations: ['1A'],
     startingPosition: '4A',
     currentPosition: '4A',
     movementOpportunityInterval: 3.02,
@@ -15,7 +15,7 @@ const Freddy = {
 };
 const Chica = {
     name: 'Bonnie',
-    possibleLocations: ['1A'],
+    // possibleLocations: ['1A'],
     startingPosition: '1A',
     currentPosition: '1A',
     movementOpportunityInterval: 4.97,
@@ -24,7 +24,7 @@ const Chica = {
 };
 const Bonnie = {
     name: 'Chica',
-    possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
+    // possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
     startingPosition: '1A',
     currentPosition: '1A',
     movementOpportunityInterval: 4.98,
@@ -43,10 +43,6 @@ const cameraNames = {
     '5': 'Backstage',
     '6': 'Kitchen',
     '7': 'Restrooms',
-};
-const doors = {
-    leftIsClosed: false,
-    rightIsClosed: false,
 };
 const paths = {
     assets: '../assets',
@@ -69,8 +65,12 @@ const cameraButton = cameraArea.querySelector('#camera-display button');
 const cameraStatusText = cameraArea.querySelector('#camera-status');
 const cameraScreen = cameraArea.querySelector('img#camera-screen');
 /* Player choosable variables */
-let camerasOn = false;
-let currentCamera = defaultCamera;
+let user = {
+    camerasOn: false,
+    currentCamera: defaultCamera,
+    leftDoorIsClosed: false,
+    rightDoorIsClosed: false,
+};
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
 // These are split off separately as they each need to update at
@@ -147,32 +147,35 @@ const moveFreddy = () => {
     // You have the cameras on and on Cam 4B.
     // XXXXX  You have the cameras on and on any cam except Cam 4B. The right door is not closed.
     // You have the cameras on and on any cam except Cam 4B. The right door is closed.
-    // !camerasOn -------> fail
-    // camerasOn && currentCamera === "4B" -------> fail
-    // camerasOn && currentCamera !== "4B" && doors.rightIsClosed -------> fail
-    // camerasOn && currentCamera !== "4B" && !doors.rightIsClosed -------> SUCCESS
-    if (camerasOn) {
+    // !user.camerasOn -------> fail
+    // user.camerasOn && user.currentCamera === "4B" -------> fail
+    // user.camerasOn && user.currentCamera !== "4B" && user.rightDoorIsClosed -------> fail
+    // user.camerasOn && user.currentCamera !== "4B" && !user.rightDoorIsClosed -------> SUCCESS
+    if (user.camerasOn) {
         let reportText = null;
-        console.log(doors);
-        // NOT AT 4B, CAMERAS ARE UP, FAIL
+        // NOT AT 4B, CAMERAS ARE UP
         // Freddy fails all movement checks if the cameras are on and he's not at 4B
         if (Freddy.currentPosition !== '4B') {
             reportText = 'Freddy will automatically fail all movement checks while the cameras are up';
         }
-        // AT 4B, CAMERAS ARE UP, WE'RE LOOKING AT 4B, FAIL
+        // AT 4B, CAMERAS ARE UP, WE'RE LOOKING AT 4B
         // If Freddy is at 4B, he will only fail camera-related movement checks if you're looking at cam 4B. Other cameras no longer count.
-        else if (currentCamera === '4B') {
+        else if (user.currentCamera === '4B') {
             reportText =
                 'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.';
         }
-        // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS CLOSED
-        // Freddy can't get you when the right door is closed regardless of what camera you're looking at
-        else if (doors.rightIsClosed) {
-            reportText = 'Freddy was ready to enter the office but the right door is closed';
-            // TODO - RETURN TO 4A?
+        // AT 4B, CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS CLOSED
+        // Freddy can't get you when the right door is closed regardless of what camera you're looking at.
+        // He will return to 4A when this is the case
+        else if (user.rightDoorIsClosed) {
+            reportText = `Freddy was ready to enter the office but the right door is closed. He will return to Cam 4A (${cameraNames['4A']})`;
+            Freddy.currentPosition = '4A';
+            moveAnimatronic(Freddy, '4B', '4A');
+            // QUESTION - DOES HE IMMEDIATELY RETURN TO 4A OR DOES HE DO A COUNTDOWN?
         }
         // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS OPEN!!!!
-        else {
+        else if (success) {
+            addReport('Freddy', 'FREDDY IS IN THE OFFICE');
             // gameOver();
             // TODO - He doesn't actually get you right away
         }
@@ -224,12 +227,12 @@ const moveFreddy = () => {
         let freddyCountdown = window.setInterval(() => {
             var _a;
             Freddy.currentCountdown--;
-            if (Freddy.currentCountdown <= 0 && !camerasOn) {
+            if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
                 moveAnimatronic(Freddy, startingPosition, endingPosition);
                 freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
                 clearInterval(freddyCountdown);
             }
-            else if (Freddy.currentCountdown <= 0 && camerasOn) {
+            else if (Freddy.currentCountdown <= 0 && user.camerasOn) {
                 // We don't want to flood the report with the same message every millisecond.
                 // Do this check so the message only appears once.
                 let firstReportItem = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item-container .report-item');
@@ -284,10 +287,10 @@ const generateCalculationText = (animatronic, scoreToBeat) => `<div class="repor
 // CAMERAS
 // ========================================================================== //
 const toggleCameras = () => {
-    camerasOn = !camerasOn;
-    document.body.setAttribute('cameras-on', String(camerasOn));
-    cameraButton.setAttribute('active', String(camerasOn));
-    cameraStatusText.textContent = camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
+    user.camerasOn = !user.camerasOn;
+    document.body.setAttribute('cameras-on', String(user.camerasOn));
+    cameraButton.setAttribute('active', String(user.camerasOn));
+    cameraStatusText.textContent = user.camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 };
 const generateCameraButtons = () => {
     for (const key in cameraNames) {
@@ -305,7 +308,7 @@ const generateCameraButtons = () => {
                 btn.classList.remove('active');
             });
             myCameraButton.classList.add('active');
-            currentCamera = key;
+            user.currentCamera = key;
         });
         simulator.appendChild(myCameraButton);
     }
@@ -332,10 +335,10 @@ const initialiseDoors = () => {
             // Note - I could simplify this using else, but I'm leaving it like this to future proof it
             // Other FNAF games have doors in directions other than left and right.
             if (direction === 'left') {
-                doors.leftIsClosed = !doors.leftIsClosed;
+                user.leftDoorIsClosed = !user.leftDoorIsClosed;
             }
             if (direction === 'right') {
-                doors.rightIsClosed = !doors.rightIsClosed;
+                user.rightDoorIsClosed = !user.rightDoorIsClosed;
             }
         });
     });
@@ -352,7 +355,7 @@ const gameOver = () => {
 const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-// document.body.setAttribute('cameras-on', String(camerasOn));
+// document.body.setAttribute('cameras-on', String(user.camerasOn));
 document.body.setAttribute('cameras-on', 'false');
 initialiseDoors();
 // Since we're starting the time at -1 to accommodate 12AM being 89 seconds long, wait 1 second before starting the movement calculations
