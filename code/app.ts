@@ -64,7 +64,7 @@ const cameraNames = {
 
 /* Time related variables */
 let currentFrame: number = 0;
-let currentSecond: number = -1; // We start at -1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
+let currentSecond: number = 0; // We start at 1 as 12AM is 90 real seconds long whereas all the others are 89 seconds
 let framesPerSecond: number = 60;
 
 /* Time related page elements */
@@ -114,15 +114,13 @@ const updateTime = () => {
     <span class="am-marker">AM</span>
   `;
 
-  // console.log(
-  //   `Real time: ${realMinutes}:${realRemainingSeconds} (${currentSecond})     In-game time: ${inGameHours}:${String(
-  //     inGameRemainingMinutes
-  //   ).padStart(2, '0')}`
-  // );
+  console.log(
+    `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
+  );
 
   updateFrames();
 
-  if (currentSecond === 539) {
+  if (currentSecond === 535) {
     clearInterval(timeUpdate);
     clearInterval(frameUpdate);
     // clearInterval(freddyInssterval);
@@ -130,7 +128,8 @@ const updateTime = () => {
 };
 
 const calculateInGameTime = () => {
-  let inGameMinutes = Math.ceil(currentSecond * 0.666666666667) > 0 ? Math.ceil(currentSecond * 0.666666666667) : 0;
+  let inGameMinutes =
+    Math.floor(currentSecond * 0.6741573033707866) > 0 ? Math.floor(currentSecond * 0.6741573033707866) : 0;
 
   return {
     hour: String(Math.floor(inGameMinutes / 60) > 0 ? Math.floor(inGameMinutes / 60) : 12),

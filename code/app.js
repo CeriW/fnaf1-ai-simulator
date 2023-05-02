@@ -45,7 +45,7 @@ const cameraNames = {
 // import { Animatronic, animatronics } from './animatronics';
 /* Time related variables */
 let currentFrame = 0;
-let currentSecond = -1; // We start at -1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
+let currentSecond = 0; // We start at 1 as 12AM is 90 real seconds long whereas all the others are 89 seconds
 let framesPerSecond = 60;
 /* Time related page elements */
 const framesDisplay = document.querySelector('#frames');
@@ -83,20 +83,16 @@ const updateTime = () => {
     <span class="in-game-minutes">${String(gameTime.minute).padStart(2, '0')}</span>
     <span class="am-marker">AM</span>
   `;
-    // console.log(
-    //   `Real time: ${realMinutes}:${realRemainingSeconds} (${currentSecond})     In-game time: ${inGameHours}:${String(
-    //     inGameRemainingMinutes
-    //   ).padStart(2, '0')}`
-    // );
+    console.log(`${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`);
     updateFrames();
-    if (currentSecond === 539) {
+    if (currentSecond === 535) {
         clearInterval(timeUpdate);
         clearInterval(frameUpdate);
         // clearInterval(freddyInssterval);
     }
 };
 const calculateInGameTime = () => {
-    let inGameMinutes = Math.ceil(currentSecond * 0.666666666667) > 0 ? Math.ceil(currentSecond * 0.666666666667) : 0;
+    let inGameMinutes = Math.floor(currentSecond * 0.6741573033707866) > 0 ? Math.floor(currentSecond * 0.6741573033707866) : 0;
     return {
         hour: String(Math.floor(inGameMinutes / 60) > 0 ? Math.floor(inGameMinutes / 60) : 12),
         minute: String(inGameMinutes % 60).padStart(2, '0'),
