@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const Freddy = {
     name: 'Freddy',
     possibleLocations: ['1A'],
@@ -42,10 +42,13 @@ const cameraNames = {
     '6': 'Kitchen',
     '7': 'Restrooms',
 };
+const paths = {
+    assets: '../assets',
+};
 // import { Animatronic, animatronics } from './animatronics';
 /* Time related variables */
 let currentFrame = 0;
-let currentSecond = 0; // We start at 1 as 12AM is 90 real seconds long whereas all the others are 89 seconds
+let currentSecond = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
 let framesPerSecond = 60;
 /* Time related page elements */
 const framesDisplay = document.querySelector('#frames');
@@ -54,8 +57,11 @@ const inGameHourDisplay = document.querySelector('#in-game-time');
 // General page elements
 const simulator = document.querySelector('#simulator');
 const sidebar = document.querySelector('#sidebar');
-const cameraButton = document.querySelector('#camera-display button');
-const cameraStatusText = document.querySelector('#camera-status');
+// Camera related page elements
+const cameraArea = document.querySelector('#camera-display');
+const cameraButton = cameraArea.querySelector('#camera-display button');
+const cameraStatusText = cameraArea.querySelector('#camera-status');
+const cameraScreen = cameraArea.querySelector('img#camera-screen');
 /* Player choosable variables */
 let camerasOn = false;
 // ========================================================================== //
@@ -232,13 +238,27 @@ const addReport = (animatronicName, message, success) => {
 };
 const generateCalculationText = (animatronic, scoreToBeat) => `<div class="report-calculation">Score to beat: ${Math.ceil(scoreToBeat)} ${animatronic.name}'s AI level: ${animatronic.aiLevels[nightToSimulate]}</div>`;
 // ========================================================================== //
-// PLAYER INTERACTION
+// CAMERAS
 // ========================================================================== //
 const toggleCameras = () => {
     camerasOn = !camerasOn;
     cameraButton.setAttribute('active', String(camerasOn));
     cameraStatusText.textContent = camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 };
+const generateCameraButtons = () => {
+    // The for loop below doesn't run in the order you'd think it should run, hence this array to force it to
+    const cameraOrder = ['1A', '1B', '1C', '2A', '2B', '3', '4A', '4B', '5', '6', '7'];
+    for (const key of cameraOrder) {
+        console.log(key);
+        const myCameraButton = document.createElement('button');
+        myCameraButton.textContent = `CAM ${key}`;
+        myCameraButton.addEventListener('click', () => {
+            cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
+        });
+        cameraArea.appendChild(myCameraButton);
+    }
+};
+generateCameraButtons();
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //

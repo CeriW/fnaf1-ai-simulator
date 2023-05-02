@@ -7,6 +7,7 @@ $white: #fff;
 @use 'css-modules/_animatronics.scss';
 @use 'css-modules/_simulator.scss';
 @use 'css-modules/_reports.scss';
+@use 'css-modules/_cameras.scss';
 
 body{
   background: $black;
@@ -35,6 +36,10 @@ main{
 details{
   width: 100%;
   cursor: pointer;
+}
+
+img{
+  max-width: 100%;
 }
 
 

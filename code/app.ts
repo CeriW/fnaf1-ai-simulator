@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 
 // TODO - PUT THIS IN A MODULE
 
@@ -60,6 +60,10 @@ const cameraNames = {
   '7': 'Restrooms',
 };
 
+const paths = {
+  assets: '../assets',
+};
+
 // import { Animatronic, animatronics } from './animatronics';
 
 /* Time related variables */
@@ -75,8 +79,12 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 // General page elements
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
-const cameraButton: HTMLButtonElement = document.querySelector('#camera-display button')!;
-const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status')!;
+
+// Camera related page elements
+const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
+const cameraButton: HTMLButtonElement = cameraArea.querySelector('#camera-display button')!;
+const cameraStatusText: HTMLDivElement = cameraArea.querySelector('#camera-status')!;
+const cameraScreen: HTMLImageElement = cameraArea.querySelector('img#camera-screen')!;
 
 /* Player choosable variables */
 let camerasOn: boolean = false;
@@ -315,6 +323,23 @@ const toggleCameras = () => {
   cameraButton.setAttribute('active', String(camerasOn));
   cameraStatusText.textContent = camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 };
+
+const generateCameraButtons = () => {
+  // The for loop below doesn't run in the order you'd think it should run, hence this array to force it to
+  const cameraOrder = ['1A', '1B', '1C', '2A', '2B', '3', '4A', '4B', '5', '6', '7'];
+
+  for (const key of cameraOrder) {
+    console.log(key);
+
+    const myCameraButton = document.createElement('button');
+    myCameraButton.textContent = `CAM ${key}`;
+    myCameraButton.addEventListener('click', () => {
+      cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
+    });
+    cameraArea.appendChild(myCameraButton);
+  }
+};
+generateCameraButtons();
 
 // ========================================================================== //
 // INITIALISE THE PAGE
