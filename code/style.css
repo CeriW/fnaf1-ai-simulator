@@ -91,7 +91,7 @@
 
 /* Camera 1B ------------------------------------------------------------------*/
 .animatronic[position="1B"] {
-  top: 17%;
+  top: 24%;
   left: 23%; }
 
 /* Camera 7 ------------------------------------------------------------------*/
@@ -167,8 +167,8 @@
   color: rgba(255, 255, 255, 0.4);
   grid-area: calculation; }
 
-body[cameras-on="false"] img#camera-screen {
-  display: none; }
+img#camera-screen {
+  width: 300px; }
 
 body[cameras-on="false"] .camera-button {
   pointer-events: none;
@@ -209,6 +209,10 @@ body[cameras-on="false"] .camera-button {
 .camera-button[camera="2B"] {
   top: calc(76% + 54px);
   left: 28.4%; }
+
+.camera-button[camera="3"] {
+  top: 64%;
+  left: 9%; }
 
 .camera-button[camera="4A"] {
   top: 76%;

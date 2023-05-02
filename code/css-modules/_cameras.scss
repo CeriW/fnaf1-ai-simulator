@@ -1,8 +1,8 @@
-body[cameras-on="false"] {
-  img#camera-screen {
-    display: none;
-  }
+img#camera-screen{
+  width: 300px;
+}
 
+body[cameras-on="false"] {
   .camera-button {
     pointer-events: none;
     opacity: 0.3;
@@ -50,6 +50,11 @@ body[cameras-on="false"] {
 .camera-button[camera="2B"] {
   top: calc(76% + 54px);
   left: 28.4%;
+}
+
+.camera-button[camera="3"] {
+  top: 64%;
+  left: 9%;
 }
 
 .camera-button[camera="4A"] {
