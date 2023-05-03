@@ -9,7 +9,7 @@ type Animatronic = {
   name: string;
   // possibleLocations: string[]; // The cameras where they can be
   startingPosition: Camera; // The camera where they start
-  currentPosition: Camera; // The camera the animatronic is currently at
+  currentPosition: Position; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
@@ -17,6 +17,8 @@ type Animatronic = {
 
 type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '2C' | '3' | '4A' | '4B' | '4C' | '5' | '6' | '7';
 // Cameras 2C and 4C do not actually exist. I will use these names to denote the areas between cameras 2B/4B and the office.
+
+type Position = Camera | 'office';
 
 const Freddy: Animatronic = {
   name: 'Freddy',
@@ -251,7 +253,7 @@ const moveFreddy = () => {
         endingPosition = '4B';
         break;
       case '4B': // East hall corner
-        endingPosition = '4A';
+        endingPosition = 'office';
         break;
       // TODO - outside/inside office?
     }
@@ -264,8 +266,8 @@ const moveFreddy = () => {
         'Freddy',
         `
           Freddy has passed his movement check but the right door is closed.
-          He will move from 4A (${cameraNames[startingPosition]})
-          to 4B (${cameraNames[endingPosition]})
+          He will move from 4A (${cameraNames[startingPosition as Camera]})
+          to 4B (${cameraNames[endingPosition as Camera]})
           in ${formattedWaitingTime} seconds 
         `
         //  QUESTION - I'M ASSUMING HE ACTUALLY WAITS ON THIS OCCASION AND DOESN'T MOVE IMMEDIATELY?
@@ -274,8 +276,10 @@ const moveFreddy = () => {
       addReport(
         'Freddy',
         `
-          Freddy has passed his movement check and will move from ${startingPosition} (${cameraNames[startingPosition]})
-          to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
+          Freddy has passed his movement check and will move from ${startingPosition} (${
+          cameraNames[startingPosition as Camera]
+        })
+          to ${endingPosition} (${cameraNames[endingPosition as Camera]}) in ${formattedWaitingTime} seconds
           ${generateCalculationText(Freddy, comparisonNumber)}
         `,
         success
@@ -315,18 +319,20 @@ const moveFreddy = () => {
     addReport(
       'Freddy',
       `Freddy has failed his movement check and remains at cam ${Freddy.currentPosition} (${
-        cameraNames[Freddy.currentPosition]
+        cameraNames[Freddy.currentPosition as Camera]
       }) ${generateCalculationText(Freddy, comparisonNumber)}`,
       success
     );
   }
 };
 
-const moveAnimatronic = (animatronic: Animatronic, startingPosition: Camera, endPosition: Camera) => {
+const moveAnimatronic = (animatronic: Animatronic, startingPosition: Position, endPosition: Position) => {
   animatronic.currentPosition = endPosition;
   addReport(
     animatronic.name,
-    `${animatronic.name} has moved from cam ${startingPosition} (${cameraNames[startingPosition]}) to cam ${endPosition} (${cameraNames[endPosition]})`,
+    `${animatronic.name} has moved from cam ${startingPosition} (${
+      cameraNames[startingPosition as Camera]
+    }) to cam ${endPosition} (${cameraNames[endPosition as Camera]})`,
     true
   );
   document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', endPosition);

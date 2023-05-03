@@ -3,7 +3,6 @@
 const nightToSimulate = 6;
 let secondLength = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4B';
-// Cameras 2C and 4C do not actually exist. I will use these names to denote the areas between cameras 2B/4B and the office.
 const Freddy = {
     name: 'Freddy',
     // possibleLocations: ['1A'],
@@ -202,7 +201,7 @@ const moveFreddy = () => {
                 endingPosition = '4B';
                 break;
             case '4B': // East hall corner
-                endingPosition = '4A';
+                endingPosition = 'office';
                 break;
             // TODO - outside/inside office?
         }
