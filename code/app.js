@@ -162,7 +162,7 @@ const makeFreddyJumpscareCheck = () => {
         else {
             addReport('Freddy', `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
           <div class="report-calculation">
-          Score to beat: ${0.75 * 100}   Freddy's score: ${Math.floor(comparisonNumber * 100)}
+          Score to beat: ${0.75 * 100}/100   Freddy's score: ${Math.floor(comparisonNumber * 100)}
           </div>
         `, false);
         }
