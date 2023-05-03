@@ -147,29 +147,30 @@ const makeMovementCheck = (animatronic) => {
         aiLevel: animatronic.aiLevels[nightToSimulate],
     };
 };
+// Once Freddy is in the office he has a 25% chance of getting you every 1 second while the cameras are down
 const makeFreddyJumpscareCheck = () => {
-    console.log('hes checking and in the office');
     clearInterval(freddyInterval);
     window.setInterval(() => {
-        let jumpscare = makeMovementCheck(Freddy);
+        let comparisonNumber = Math.random();
+        let jumpscare = {
+            canMove: comparisonNumber > 0.75,
+        };
         if (jumpscare.canMove && !user.camerasOn) {
             // gameOver();
-            console.log('jumpscare');
             addReport('Freddy', `JUMPSCARE`, jumpscare.canMove);
         }
         else {
-            addReport('Freddy', `Freddy is in your office but failed his movement check and was unable to jumpscare you. ${generateCalculationText}`, jumpscare.canMove);
+            addReport('Freddy', `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
+          <div class="report-calculation">
+          Score to beat: ${0.75 * 100}   Freddy's score: ${Math.floor(comparisonNumber * 100)}
+          </div>
+        `, false);
         }
     }, secondLength);
 };
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
     const movementCheck = makeMovementCheck(Freddy);
-    // let firstReport = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item');
-    // let reportText = null;
-    console.log(Freddy);
-    console.log(user);
-    console.log(movementCheck);
     /*
       Developer note - I originally wrote this with nested if statements, but it got out of hand quite quickly
       trying to keep track of which combinations of factors where going on with each one.
@@ -202,18 +203,19 @@ const moveFreddy = () => {
     else if (user.camerasOn &&
         Freddy.currentPosition === '4B' &&
         user.currentCamera !== '4B' &&
+        !user.rightDoorIsClosed &&
         !movementCheck.canMove) {
         // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
-        addReport('Freddy', `Freddy could have entered the office but he failed his movement check. He will continue to wait at 4B ${generateCalculationText(movementCheck)}`, false);
+        addReport('Freddy', `Freddy could have entered the office but he failed his movement check. He will continue to wait at Cam 4B (${cameraNames['4B']}) ${generateCalculationText(movementCheck)}`, false);
     }
     else if (!user.camerasOn && Freddy.currentPosition === '4B' && movementCheck.canMove) {
         // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
-        addReport('Freddy', `Freddy passed the check to enter your office, but the cameras were off. He will continue to wait at 4B ${generateCalculationText(movementCheck)}`, false);
+        addReport('Freddy', `Freddy passed the check to enter your office, but the cameras were off. He will continue to wait at Cam 4B (${cameraNames['4B']}) ${generateCalculationText(movementCheck)}`, false);
         // THE CAMERAS ARE ON, HE'S AT 4B, THE RIGHT DOOR IS OPEN, HE CAN GET INTO THE OFFICE!!!!!
     }
     else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
         addReport('Freddy', 'FREDDY IS IN THE OFFICE');
-        moveAnimatronic(Freddy, '4B', 'office');
+        moveAnimatronic(Freddy, '4B', 'office', false);
     }
     else if (Freddy.currentPosition === 'office') {
         makeFreddyJumpscareCheck();
@@ -243,11 +245,11 @@ const moveFreddy = () => {
         }
         // Round to a reasonable number of decimal points for the report, only if it's not an integer.
         let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
-        addReport('Freddy', `
-          Freddy has passed his movement check and will move from ${startingPosition} (${cameraNames[startingPosition]})
-          to ${endingPosition} (${cameraNames[endingPosition]}) in ${formattedWaitingTime} seconds
-          ${generateCalculationText(movementCheck)}
-        `, movementCheck.canMove);
+        addReport('Freddy', `Freddy has passed his movement check and will move from
+        ${startingPosition} (${cameraNames[startingPosition]})
+        to ${endingPosition} (${cameraNames[endingPosition]})
+        in ${formattedWaitingTime} seconds
+        ${generateCalculationText(movementCheck)}`, movementCheck.canMove);
         clearInterval(freddyInterval);
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
@@ -277,10 +279,12 @@ const moveFreddy = () => {
         addReport('Freddy', `Freddy has failed his movement check and remains at cam ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(movementCheck)}`, movementCheck.canMove);
     }
 };
-const moveAnimatronic = (animatronic, startingPosition, endPosition) => {
+const moveAnimatronic = (animatronic, startingPosition, endPosition, logThis = true) => {
     var _a;
     animatronic.currentPosition = endPosition;
-    addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} (${cameraNames[startingPosition]}) to cam ${endPosition} (${cameraNames[endPosition]})`, true);
+    if (logThis) {
+        addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} (${cameraNames[startingPosition]}) to cam ${endPosition} (${cameraNames[endPosition]})`, true);
+    }
     (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
 };
 // ========================================================================== //
