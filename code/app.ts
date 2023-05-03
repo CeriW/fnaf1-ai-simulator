@@ -383,7 +383,7 @@ const generateCameraButtons = () => {
   for (const key in cameraNames) {
     const myCameraButton = document.createElement('button');
     myCameraButton.classList.add('camera-button');
-    if (key === '1A') {
+    if (key === defaultCamera) {
       // 1A is the default camera
       myCameraButton.classList.add('active');
     }
