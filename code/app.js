@@ -3,6 +3,7 @@
 const nightToSimulate = 6;
 let secondLength = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4B';
+// Cameras 2C and 4C do not actually exist. I will use these names to denote the areas between cameras 2B/4B and the office.
 const Freddy = {
     name: 'Freddy',
     // possibleLocations: ['1A'],
@@ -37,9 +38,11 @@ const cameraNames = {
     '1C': 'Pirate cove',
     '2A': 'West hall',
     '2B': 'W. hall corner',
+    '2C': 'Between 2B and office',
     '3': 'Supply closet',
     '4A': 'East hall',
     '4B': 'E. hall corner',
+    '4C': 'Between 4B and office',
     '5': 'Backstage',
     '6': 'Kitchen',
     '7': 'Restrooms',
@@ -300,7 +303,7 @@ const generateCameraButtons = () => {
     for (const key in cameraNames) {
         const myCameraButton = document.createElement('button');
         myCameraButton.classList.add('camera-button');
-        if (key === '1A') {
+        if (key === defaultCamera) {
             // 1A is the default camera
             myCameraButton.classList.add('active');
         }

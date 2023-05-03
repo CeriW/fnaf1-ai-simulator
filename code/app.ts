@@ -1,21 +1,22 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
 let secondLength: number = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '4B' as Position;
+const defaultCamera = '4B' as Camera;
 
 // TODO - PUT THIS IN A MODULE
 
 type Animatronic = {
   name: string;
   // possibleLocations: string[]; // The cameras where they can be
-  startingPosition: Position; // The camera where they start
-  currentPosition: Position; // The camera the animatronic is currently at
+  startingPosition: Camera; // The camera where they start
+  currentPosition: Camera; // The camera the animatronic is currently at
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
 };
 
-type Position = '1A' | '1B' | '1C' | '2A' | '2B' | '3' | '4A' | '4B' | '5' | '6' | '7';
+type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '2C' | '3' | '4A' | '4B' | '4C' | '5' | '6' | '7';
+// Cameras 2C and 4C do not actually exist. I will use these names to denote the areas between cameras 2B/4B and the office.
 
 const Freddy: Animatronic = {
   name: 'Freddy',
@@ -55,9 +56,11 @@ const cameraNames = {
   '1C': 'Pirate cove',
   '2A': 'West hall',
   '2B': 'W. hall corner',
+  '2C': 'Between 2B and office',
   '3': 'Supply closet',
   '4A': 'East hall',
   '4B': 'E. hall corner',
+  '4C': 'Between 4B and office',
   '5': 'Backstage',
   '6': 'Kitchen',
   '7': 'Restrooms',
@@ -319,7 +322,7 @@ const moveFreddy = () => {
   }
 };
 
-const moveAnimatronic = (animatronic: Animatronic, startingPosition: Position, endPosition: Position) => {
+const moveAnimatronic = (animatronic: Animatronic, startingPosition: Camera, endPosition: Camera) => {
   animatronic.currentPosition = endPosition;
   addReport(
     animatronic.name,
@@ -395,7 +398,7 @@ const generateCameraButtons = () => {
         btn.classList.remove('active');
       });
       myCameraButton.classList.add('active');
-      user.currentCamera = key as Position;
+      user.currentCamera = key as Camera;
     });
     simulator.appendChild(myCameraButton);
   }
