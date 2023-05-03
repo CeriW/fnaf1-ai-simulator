@@ -170,6 +170,7 @@ const moveFreddy = () => {
         // CAMERAS ARE UP, WE'RE NOT LOOKING AT 4B, RIGHT DOOR IS OPEN!!!!
         else if (success) {
             addReport('Freddy', 'FREDDY IS IN THE OFFICE');
+            moveAnimatronic(Freddy, '4B', 'office');
             // gameOver();
             // TODO - He doesn't actually get you right away
         }

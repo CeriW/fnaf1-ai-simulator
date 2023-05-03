@@ -116,6 +116,11 @@
   top: 84%;
   left: 55.2%; }
 
+/* Office ------------------------------------------------------------------*/
+.animatronic[position="office"] {
+  top: 74%;
+  left: 42.09%; }
+
 /* Individual animatronic styling ------------------------------------------- */
 #Bonnie {
   background-color: purple;
