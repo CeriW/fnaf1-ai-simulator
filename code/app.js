@@ -405,7 +405,9 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             type = 'success';
             break;
         case 'foxy successful pirate cove movement check':
-            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${4 - Foxy.subPosition} steps away from attempting to attack`;
+            const stepsRemaining = 4 - Foxy.subPosition;
+            let stepsPlural = stepsRemaining > 1 ? 'steps' : 'step';
+            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${stepsPlural} away from attempting to attack`;
             type = 'success';
             break;
         case 'foxy failed pirate cove movement check':
