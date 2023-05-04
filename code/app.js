@@ -6,8 +6,8 @@ const defaultCamera = '4B';
 const Freddy = {
     name: 'Freddy',
     // possibleLocations: ['1A'],
-    startingPosition: '4B',
-    currentPosition: '4B',
+    startingPosition: '1A',
+    currentPosition: '1A',
     movementOpportunityInterval: 3.02,
     // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
     aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9],
@@ -35,6 +35,7 @@ const Foxy = {
     name: 'Foxy',
     startingPosition: '1C',
     currentPosition: '1C',
+    subPosition: 1,
     movementOpportunityInterval: 5.01,
     aiLevels: [null, 0, 1, 2, 6, 5, 16],
     currentCountdown: 0,
@@ -127,7 +128,7 @@ const calculateInGameTime = () => {
 // ANIMATRONIC BASED FUNCTIONS
 // ========================================================================== //
 const generateAnimatronics = () => {
-    [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
+    [Foxy, Freddy, Bonnie, Chica].forEach((animatronic) => {
         // Create the icons
         let icon = document.createElement('span');
         icon.classList.add('animatronic');
@@ -155,11 +156,25 @@ const makeMovementCheck = (animatronic) => {
         aiLevel: animatronic.aiLevels[nightToSimulate],
     };
 };
+const generateReportMessage = (animatronic, reason) => {
+    let message = '';
+    switch (reason) {
+        case 'camera auto fail':
+            message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
+            break;
+    }
+    return message;
+};
 // ========================================================================== //
 // FOXY
 // ========================================================================== //
 const moveFoxy = () => {
-    addReport('Foxy', 'hi foxy');
+    const movementCheck = makeMovementCheck(Foxy);
+    if (user.camerasOn) {
+        // Foxy will fail all movement checks while the cameras are on
+        addReport('Foxy', generateReportMessage(Foxy, 'camera auto fail'));
+    }
+    // addReport('Foxy', 'hi foxy' + JSON.stringify(movementCheck));
 };
 // ========================================================================== //
 // FREDDY
@@ -195,8 +210,9 @@ const moveFreddy = () => {
       it much easier to keep track on each one exactly what Freddy should be doing.
     */
     // CAMERAS ON, HE'S NOT AT 4B
+    // Freddy will automatically fail all movement checks while the cameras are up
     if (user.camerasOn && Freddy.currentPosition !== '4B') {
-        addReport('Freddy', 'Freddy will automatically fail all movement checks while the cameras are up', null, true);
+        addReport('Freddy', generateReportMessage(Freddy, 'camera auto fail'), null, true);
         // CAMERAS ON, HE'S AT 4B, USER IS LOOKING AT 4B. DOORS DON'T MATTER HERE
     }
     else if (user.camerasOn && user.currentCamera === '4B') {

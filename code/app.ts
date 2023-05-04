@@ -17,6 +17,7 @@ type Animatronic = {
   // possibleLocations: string[]; // The cameras where they can be
   startingPosition: Camera; // The camera where they start
   currentPosition: Position; // The camera the animatronic is currently at
+  subPosition?: number; // Used for Foxy. He will almost always be in 1C, but he goes through multiple steps before he's able to leave.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
@@ -30,8 +31,8 @@ type Position = Camera | 'office';
 const Freddy: Animatronic = {
   name: 'Freddy',
   // possibleLocations: ['1A'],
-  startingPosition: '4B',
-  currentPosition: '4B',
+  startingPosition: '1A',
+  currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9], // Freddy randomly starts at 1 or 2 on night 4
@@ -63,6 +64,7 @@ const Foxy: Animatronic = {
   name: 'Foxy',
   startingPosition: '1C',
   currentPosition: '1C',
+  subPosition: 1,
   movementOpportunityInterval: 5.01,
   aiLevels: [null, 0, 1, 2, 6, 5, 16],
   currentCountdown: 0,
@@ -180,7 +182,7 @@ const calculateInGameTime = () => {
 // ========================================================================== //
 
 const generateAnimatronics = () => {
-  [Freddy, Bonnie, Chica, Foxy].forEach((animatronic: Animatronic) => {
+  [Foxy, Freddy, Bonnie, Chica].forEach((animatronic: Animatronic) => {
     // Create the icons
     let icon = document.createElement('span');
     icon.classList.add('animatronic');
@@ -211,12 +213,33 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
   };
 };
 
+type messagingType = 'camera auto fail';
+
+const generateReportMessage = (animatronic: Animatronic, reason: messagingType) => {
+  let message = '';
+
+  switch (reason) {
+    case 'camera auto fail':
+      message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
+      break;
+  }
+
+  return message;
+};
+
 // ========================================================================== //
 // FOXY
 // ========================================================================== //
 
 const moveFoxy = () => {
-  addReport('Foxy', 'hi foxy');
+  const movementCheck = makeMovementCheck(Foxy);
+
+  if (user.camerasOn) {
+    // Foxy will fail all movement checks while the cameras are on
+    addReport('Foxy', generateReportMessage(Foxy, 'camera auto fail'));
+  }
+
+  // addReport('Foxy', 'hi foxy' + JSON.stringify(movementCheck));
 };
 
 // ========================================================================== //
@@ -261,8 +284,9 @@ const moveFreddy = () => {
   */
 
   // CAMERAS ON, HE'S NOT AT 4B
+  // Freddy will automatically fail all movement checks while the cameras are up
   if (user.camerasOn && Freddy.currentPosition !== '4B') {
-    addReport('Freddy', 'Freddy will automatically fail all movement checks while the cameras are up', null, true);
+    addReport('Freddy', generateReportMessage(Freddy, 'camera auto fail'), null, true);
 
     // CAMERAS ON, HE'S AT 4B, USER IS LOOKING AT 4B. DOORS DON'T MATTER HERE
   } else if (user.camerasOn && user.currentCamera === '4B') {
