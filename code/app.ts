@@ -1,7 +1,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
 let secondLength: number = 600; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '4B' as Camera;
+const defaultCamera = '1C' as Camera;
 
 // TODO - PUT THIS IN A MODULE
 
@@ -22,7 +22,7 @@ type Animatronic = {
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
-  pronouns: ['he' | 'she', 'his' | 'her']; // For FNAF 1 this is relatively simple. In other FNAF games the genders of some animatronics are complicated (I'm looking at you, Mangle and 'Trash and the gang'), so this makes for easier forwards compatibility than just checking whether we're dealing with Chica (the only female animatronic in FNAF 1)
+  pronouns: ['he' | 'she', 'his' | 'her']; // For FNAF 1 this is simple. In other FNAF games the genders of some animatronics are complicated, so this makes for easier forwards compatibility than just checking whether we're dealing with Chica (the only female animatronic in FNAF 1)
 };
 
 type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '2C' | '3' | '4A' | '4B' | '4C' | '5' | '6' | '7';
@@ -249,15 +249,21 @@ const moveFoxy = () => {
   }
 };
 
-// Every time the cameras come down, Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
+// When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
+// QUESTION - does this countdown renew every time you put the cameras down?
 const pauseFoxy = () => {
   if (Foxy.currentPosition === '1C') {
     let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
+    Foxy.currentCountdown = cooldownInSeconds * secondLength;
     addReport(Foxy, 'foxy paused', null, cooldownInSeconds);
     clearInterval(foxyInterval);
-    window.setTimeout(() => {
-      foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-    }, cooldownInSeconds * secondLength);
+
+    window.setInterval(() => {
+      Foxy.currentCountdown--;
+      if (Foxy.currentCountdown === 0) {
+        foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+      }
+    }, 1);
   }
 };
 
@@ -549,15 +555,16 @@ const addReport = (
 
     case 'foxy successful pirate cove movement check':
       const stepsRemaining = 4 - Foxy.subPosition;
-      let stepsPlural = stepsRemaining > 1 ? 'steps' : 'step';
       message = `Foxy has made a successful movement check while at 1C (${
         cameraNames['1C']
-      }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'steps')} away from attempting to attack`;
+      }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack`;
       type = 'success';
       break;
 
     case 'foxy paused':
-      message = `The cameras have just been turned off. Foxy will be unable to make any more movement checks for ${additionalInfo.toFixed()} seconds`;
+      message = `The cameras have just been turned off. Foxy will be unable to make any more movement checks for ${additionalInfo.toFixed(
+        2
+      )} seconds`;
       break;
 
     case 'jumpscare':
@@ -604,10 +611,6 @@ const toggleCameras = () => {
     window.dispatchEvent(camerasOff);
   }
 };
-
-window.addEventListener('cameras-off', (e) => {
-  console.log(e);
-});
 
 const generateCameraButtons = () => {
   for (const key in cameraNames) {

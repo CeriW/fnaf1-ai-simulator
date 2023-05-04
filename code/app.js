@@ -2,7 +2,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
 let secondLength = 600; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '4B';
+const defaultCamera = '1C';
 const Freddy = {
     name: 'Freddy',
     // possibleLocations: ['1A'],
@@ -191,15 +191,20 @@ const moveFoxy = () => {
         addReport(Foxy, 'debug', movementCheck);
     }
 };
-// Every time the cameras come down, Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
+// When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
+// QUESTION - does this countdown renew every time you put the cameras down?
 const pauseFoxy = () => {
     if (Foxy.currentPosition === '1C') {
         let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
+        Foxy.currentCountdown = cooldownInSeconds * secondLength;
         addReport(Foxy, 'foxy paused', null, cooldownInSeconds);
         clearInterval(foxyInterval);
-        window.setTimeout(() => {
-            foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-        }, cooldownInSeconds * secondLength);
+        window.setInterval(() => {
+            Foxy.currentCountdown--;
+            if (Foxy.currentCountdown === 0) {
+                foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+            }
+        }, 1);
     }
 };
 // ========================================================================== //
@@ -415,12 +420,11 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'foxy successful pirate cove movement check':
             const stepsRemaining = 4 - Foxy.subPosition;
-            let stepsPlural = stepsRemaining > 1 ? 'steps' : 'step';
-            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'steps')} away from attempting to attack`;
+            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack`;
             type = 'success';
             break;
         case 'foxy paused':
-            message = `The cameras have just been turned off. Foxy will be unable to make any more movement checks for ${additionalInfo.toFixed()} seconds`;
+            message = `The cameras have just been turned off. Foxy will be unable to make any more movement checks for ${additionalInfo.toFixed(2)} seconds`;
             break;
         case 'jumpscare':
             message = `${animatronic.name} successfully jumpscared you`;
@@ -458,9 +462,6 @@ const toggleCameras = () => {
         window.dispatchEvent(camerasOff);
     }
 };
-window.addEventListener('cameras-off', (e) => {
-    console.log(e);
-});
 const generateCameraButtons = () => {
     for (const key in cameraNames) {
         const myCameraButton = document.createElement('button');
