@@ -12,6 +12,7 @@ const Freddy = {
     // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
     aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9],
     currentCountdown: 0,
+    pronouns: ['he', 'his'],
 };
 const Chica = {
     name: 'Bonnie',
@@ -21,6 +22,7 @@ const Chica = {
     movementOpportunityInterval: 4.97,
     aiLevels: [null, 0, 3, 0, 2, 5, 10],
     currentCountdown: 0,
+    pronouns: ['she', 'her'],
 };
 const Bonnie = {
     name: 'Chica',
@@ -30,6 +32,7 @@ const Bonnie = {
     movementOpportunityInterval: 4.98,
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
     currentCountdown: 0,
+    pronouns: ['he', 'his'],
 };
 const Foxy = {
     name: 'Foxy',
@@ -39,6 +42,7 @@ const Foxy = {
     movementOpportunityInterval: 5.01,
     aiLevels: [null, 0, 1, 2, 6, 5, 16],
     currentCountdown: 0,
+    pronouns: ['he', 'his'],
 };
 const cameraNames = {
     '1A': 'Show stage',
@@ -58,7 +62,6 @@ const cameraNames = {
 const paths = {
     assets: '../assets',
 };
-// import { Animatronic, animatronics } from './animatronics';
 /* Time related variables */
 let currentFrame = 0;
 let currentSecond = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
@@ -156,15 +159,6 @@ const makeMovementCheck = (animatronic) => {
         aiLevel: animatronic.aiLevels[nightToSimulate],
     };
 };
-const generateReportMessage = (animatronic, reason) => {
-    let message = '';
-    switch (reason) {
-        case 'camera auto fail':
-            message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
-            break;
-    }
-    return message;
-};
 // ========================================================================== //
 // FOXY
 // ========================================================================== //
@@ -172,7 +166,10 @@ const moveFoxy = () => {
     const movementCheck = makeMovementCheck(Foxy);
     if (user.camerasOn) {
         // Foxy will fail all movement checks while the cameras are on
-        addReport('Foxy', generateReportMessage(Foxy, 'camera auto fail'));
+        addReport(Foxy, 'camera auto fail');
+    }
+    else if (!movementCheck.canMove) {
+        addReport(Foxy, 'failed movement check', movementCheck);
     }
     // addReport('Foxy', 'hi foxy' + JSON.stringify(movementCheck));
 };
@@ -189,14 +186,16 @@ const makeFreddyJumpscareCheck = () => {
         };
         if (jumpscare.canMove && !user.camerasOn) {
             // gameOver();
-            addReport('Freddy', `JUMPSCARE`, jumpscare.canMove);
+            addReport(Freddy, 'jumpscare');
         }
         else {
-            addReport('Freddy', `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
-          <div class="report-calculation">
-          Score to beat: ${0.75 * 100}/100   Freddy's score: ${Math.floor(comparisonNumber * 100)}
-          </div>
-        `, false);
+            // Freddy is in your office but failed his movement check and was unable to jumpscare you.
+            addReport(Freddy, 'freddy office failed movement check', {
+                animatronicName: 'Freddy',
+                canMove: true,
+                scoreToBeat: 0.75 * 100,
+                aiLevel: Math.floor(comparisonNumber * 100),
+            });
         }
     }, secondLength);
 };
@@ -212,11 +211,12 @@ const moveFreddy = () => {
     // CAMERAS ON, HE'S NOT AT 4B
     // Freddy will automatically fail all movement checks while the cameras are up
     if (user.camerasOn && Freddy.currentPosition !== '4B') {
-        addReport('Freddy', generateReportMessage(Freddy, 'camera auto fail'), null, true);
+        addReport(Freddy, 'camera auto fail');
         // CAMERAS ON, HE'S AT 4B, USER IS LOOKING AT 4B. DOORS DON'T MATTER HERE
+        // Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.
     }
     else if (user.camerasOn && user.currentCamera === '4B') {
-        addReport('Freddy', 'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.', null, true);
+        addReport(Freddy, 'freddy and camera at 4B');
         // ✓ CAMERAS ON    ✓ HE'S AT 4B    ✓ USER IS NOT LOOKING AT 4B    ✓ HE WANTS TO ENTER THE OFFICE     X THE RIGHT DOOR IS CLOSED
     }
     else if (user.camerasOn &&
@@ -228,7 +228,7 @@ const moveFreddy = () => {
         // QUESTION - I HAVE ASSUMED HE RETURNS TO 4A WHEN THIS IS THE CASE?
         // QUESTION - DOES HE HAVE TO PASS A MOVEMENT CHECK BEFORE HE MOVES BACK TO 4A?
         // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY? Because that's not happening right here with this code
-        addReport('Freddy', `Freddy was ready to enter the office but the right door is closed. He will return to Cam 4A (${cameraNames['4A']})`);
+        addReport(Freddy, 'freddy right door closed');
         Freddy.currentPosition = '4A';
         moveAnimatronic(Freddy, '4B', '4A');
         // CAMERAS ON, HE'S AT 4B, USER IS NOT LOOKING AT 4B BUT HE'S FAILED HIS MOVEMENT CHECK
@@ -239,15 +239,16 @@ const moveFreddy = () => {
         !user.rightDoorIsClosed &&
         !movementCheck.canMove) {
         // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
-        addReport('Freddy', `Freddy could have entered the office but he failed his movement check. He will continue to wait at Cam 4B (${cameraNames['4B']}) ${generateCalculationText(movementCheck)}`, false);
+        // Freddy could have entered the office but he failed his movement check. He will continue to wait at Cam 4B
+        addReport(Freddy, 'enter office failed movement check', movementCheck);
     }
     else if (!user.camerasOn && Freddy.currentPosition === '4B' && movementCheck.canMove) {
         // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
-        addReport('Freddy', `Freddy passed the check to enter your office, but the cameras were off. He will continue to wait at Cam 4B (${cameraNames['4B']}) ${generateCalculationText(movementCheck)}`, false);
+        addReport(Freddy, 'enter office cameras off');
         // THE CAMERAS ARE ON, HE'S AT 4B, THE RIGHT DOOR IS OPEN, HE CAN GET INTO THE OFFICE!!!!!
     }
     else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
-        addReport('Freddy', 'FREDDY IS IN THE OFFICE');
+        addReport(Freddy, 'in the office');
         moveAnimatronic(Freddy, '4B', 'office', false);
     }
     else if (Freddy.currentPosition === 'office') {
@@ -278,11 +279,11 @@ const moveFreddy = () => {
         }
         // Round to a reasonable number of decimal points for the report, only if it's not an integer.
         let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
-        addReport('Freddy', `Freddy has passed his movement check and will move from
-        ${startingPosition} (${cameraNames[startingPosition]})
-        to ${endingPosition} (${cameraNames[endingPosition]})
-        in ${formattedWaitingTime} seconds
-        ${generateCalculationText(movementCheck)}`, movementCheck.canMove);
+        addReport(Freddy, 'freddy successful movement check', movementCheck, {
+            formattedWaitingTime,
+            startingPosition,
+            endingPosition,
+        });
         clearInterval(freddyInterval);
         // Freddy waits a certain amount of time between passing his movement check and actually moving.
         // The amount of time is dependent on his AI level.
@@ -290,7 +291,6 @@ const moveFreddy = () => {
         // Freddy will not move while the cameras are up.
         // If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
         let freddyCountdown = window.setInterval(() => {
-            var _a;
             Freddy.currentCountdown--;
             if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
                 moveAnimatronic(Freddy, startingPosition, endingPosition);
@@ -298,62 +298,106 @@ const moveFreddy = () => {
                 clearInterval(freddyCountdown);
             }
             else if (Freddy.currentCountdown <= 0 && user.camerasOn) {
-                // We don't want to flood the report with the same message every millisecond.
-                // Do this check so the message only appears once.
-                let firstReportItem = document.querySelector('.animatronic-report[animatronic="Freddy"] .report-item-container .report-item');
-                if (firstReportItem &&
-                    ((_a = firstReportItem === null || firstReportItem === void 0 ? void 0 : firstReportItem.innerHTML) === null || _a === void 0 ? void 0 : _a.indexOf('Freddy is ready to move but is waiting for the cameras to go down')) < 0) {
-                    addReport('Freddy', 'Freddy is ready to move but is waiting for the cameras to go down', null);
-                }
+                addReport(Freddy, 'waiting for cameras down');
             }
         }, secondLength / framesPerSecond);
     }
     else {
-        addReport('Freddy', `Freddy has failed his movement check and remains at cam ${Freddy.currentPosition} (${cameraNames[Freddy.currentPosition]}) ${generateCalculationText(movementCheck)}`, movementCheck.canMove);
+        addReport(Freddy, 'failed movement check', movementCheck);
     }
 };
 const moveAnimatronic = (animatronic, startingPosition, endPosition, logThis = true) => {
     var _a;
     animatronic.currentPosition = endPosition;
     if (logThis) {
-        addReport(animatronic.name, `${animatronic.name} has moved from cam ${startingPosition} (${cameraNames[startingPosition]}) to cam ${endPosition} (${cameraNames[endPosition]})`, true);
+        addReport(animatronic, 'has moved', null, { startingPosition, endPosition });
     }
     (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
 };
-// ========================================================================== //
-// REPORTING
-// ========================================================================== //
-const addReport = (animatronicName, message, success = null, preventDuplicates = false) => {
+const addReport = (animatronic, reason, movementCheck = null, additionalInfo = null // Some reports need to pass in some additional info. This can take different formats so is allowed to be an 'any' type
+) => {
     var _a;
-    let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronicName}"] .report-item-container`);
-    const InGameTime = calculateInGameTime();
-    let reportType;
-    if (reportToAddTo) {
-        switch (success) {
-            case true:
-                reportType = 'success';
-                break;
-            case false:
-                reportType = 'failure';
-                break;
-            default:
-                reportType = 'info';
-        }
-        let firstReport = reportToAddTo.querySelector('.report-item');
-        if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
-            return;
-        }
+    // Figuring out what the message actually should be
+    let message = '';
+    let type = 'info';
+    let preventDuplicates = false;
+    const stats = movementCheck
+        ? `<div class="report-calculation">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${animatronic.name}'s AI level: ${movementCheck.aiLevel}</div>`
+        : '';
+    switch (reason) {
+        case 'camera auto fail':
+            message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
+            type = 'info';
+            preventDuplicates = true;
+            break;
+        case 'failed movement check':
+            message = `${animatronic.name} has failed ${animatronic.pronouns[1]} movement check and will remain at ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+            type = 'fail';
+            break;
+        case 'freddy and camera at 4B':
+            message = `Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.`;
+            preventDuplicates = true;
+        case 'freddy right door closed':
+            `Freddy was ready to enter your office but the right door was closed. He will return to cam 4A (${cameraNames['4A']})`;
+            type = 'fail';
+            break;
+        case 'freddy office failed movement check':
+            message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
+          <div class="report-calculation">
+          Score to beat: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat}/100   Freddy's score: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel}
+          </div>`;
+            type = 'fail';
+            break;
+        case 'enter office failed movement check':
+            message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+            break;
+        case 'enter office cameras off':
+            message = `${animatronic.name} passed ${animatronic.pronouns[1]} movement check to enter the office but couldn't because the cameras were off. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+            break;
+        case 'in the office':
+            message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
+            type = 'success';
+            preventDuplicates = true;
+            break;
+        case 'waiting for cameras down':
+            message = `${animatronic.name} is ready to move but is waiting for the cameras to go down`;
+            preventDuplicates = true;
+            break;
+        case 'freddy successful movement check':
+            message = `Freddy has passed his movement check and will move from
+      ${additionalInfo.startingPosition} (${cameraNames[additionalInfo.startingPosition]})
+      to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition]})
+      in ${additionalInfo.formattedWaitingTime} seconds
+      ${stats}`;
+            type = 'success';
+            break;
+        case 'has moved':
+            message = `${animatronic.name} has moved from cam ${additionalInfo.startingPosition} (${cameraNames[additionalInfo.startingPosition]}) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition]})`;
+            type = 'success';
+            break;
+        case 'jumpscare':
+            message = `${animatronic.name} successfully jumpscared you`;
+            type = 'success';
+            break;
+    }
+    // return { message, type, preventDuplicates };
+    let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .report-item-container`);
+    let firstReport = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.querySelector('.report-item');
+    if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
+        return;
+        // Don't do anything here
+    }
+    else if (reportToAddTo) {
+        const InGameTime = calculateInGameTime();
         reportToAddTo.innerHTML = `
 
-    
-    <div class="report-item" type="${reportType}">
+    <div class="report-item" type="${type}">
     <span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span>
     <div class="report-description">${message}</div></div>
     ${(_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _a !== void 0 ? _a : ''}
   `;
     }
 };
-const generateCalculationText = ({ animatronicName, scoreToBeat, aiLevel }) => `<div class="report-calculation">Score to beat: ${Math.ceil(scoreToBeat)} ${animatronicName}'s AI level: ${aiLevel}</div>`;
 // ========================================================================== //
 // CAMERAS
 // ========================================================================== //
