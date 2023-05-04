@@ -258,10 +258,11 @@ const pauseFoxy = () => {
     addReport(Foxy, 'foxy paused', null, cooldownInSeconds);
     clearInterval(foxyInterval);
 
-    window.setInterval(() => {
+    let foxyCooldown = window.setInterval(() => {
       Foxy.currentCountdown--;
-      if (Foxy.currentCountdown === 0) {
+      if (Foxy.currentCountdown <= 0) {
         foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+        clearInterval(foxyCooldown);
       }
     }, 1);
   }
