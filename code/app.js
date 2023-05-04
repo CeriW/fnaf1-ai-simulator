@@ -39,6 +39,7 @@ const Foxy = {
     startingPosition: '1C',
     currentPosition: '1C',
     subPosition: 1,
+    startingSubPosition: 1,
     movementOpportunityInterval: 5.01,
     aiLevels: [null, 0, 1, 2, 6, 5, 16],
     currentCountdown: 0,
@@ -132,11 +133,13 @@ const calculateInGameTime = () => {
 // ========================================================================== //
 const generateAnimatronics = () => {
     [Foxy, Freddy, Bonnie, Chica].forEach((animatronic) => {
+        var _a, _b;
         // Create the icons
         let icon = document.createElement('span');
         icon.classList.add('animatronic');
         icon.setAttribute('id', animatronic.name);
         icon.setAttribute('position', animatronic.startingPosition);
+        icon.setAttribute('sub-position', (_b = (_a = animatronic.startingSubPosition) === null || _a === void 0 ? void 0 : _a.toString()) !== null && _b !== void 0 ? _b : 'none');
         simulator.appendChild(icon);
         // Create the report
         let animatronicReport = document.createElement('div');
@@ -249,7 +252,7 @@ const moveFreddy = () => {
     }
     else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
         addReport(Freddy, 'in the office');
-        moveAnimatronic(Freddy, '4B', 'office', false);
+        moveAnimatronic(Freddy, '4B', 'office', null, false);
     }
     else if (Freddy.currentPosition === 'office') {
         makeFreddyJumpscareCheck();
@@ -306,13 +309,14 @@ const moveFreddy = () => {
         addReport(Freddy, 'failed movement check', movementCheck);
     }
 };
-const moveAnimatronic = (animatronic, startingPosition, endPosition, logThis = true) => {
-    var _a;
+const moveAnimatronic = (animatronic, startingPosition, endPosition, subPosition = null, logThis = true) => {
+    var _a, _b;
     animatronic.currentPosition = endPosition;
     if (logThis) {
         addReport(animatronic, 'has moved', null, { startingPosition, endPosition });
     }
     (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
+    (_b = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('sub-position', subPosition !== null && subPosition !== void 0 ? subPosition : 'none');
 };
 const addReport = (animatronic, reason, movementCheck = null, additionalInfo = null // Some reports need to pass in some additional info. This can take different formats so is allowed to be an 'any' type
 ) => {

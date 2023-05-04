@@ -18,6 +18,7 @@ type Animatronic = {
   startingPosition: Camera; // The camera where they start
   currentPosition: Position; // The camera the animatronic is currently at
   subPosition?: number; // Used for Foxy. He will almost always be in 1C, but he goes through multiple steps before he's able to leave.
+  startingSubPosition?: number; // Used for Foxy. The subposition he starts at.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
@@ -68,6 +69,7 @@ const Foxy: Animatronic = {
   startingPosition: '1C',
   currentPosition: '1C',
   subPosition: 1,
+  startingSubPosition: 1,
   movementOpportunityInterval: 5.01,
   aiLevels: [null, 0, 1, 2, 6, 5, 16],
   currentCountdown: 0,
@@ -190,6 +192,7 @@ const generateAnimatronics = () => {
     icon.classList.add('animatronic');
     icon.setAttribute('id', animatronic.name);
     icon.setAttribute('position', animatronic.startingPosition);
+    icon.setAttribute('sub-position', animatronic.startingSubPosition?.toString() ?? 'none');
     simulator.appendChild(icon);
 
     // Create the report
@@ -316,7 +319,7 @@ const moveFreddy = () => {
     // THE CAMERAS ARE ON, HE'S AT 4B, THE RIGHT DOOR IS OPEN, HE CAN GET INTO THE OFFICE!!!!!
   } else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
     addReport(Freddy, 'in the office');
-    moveAnimatronic(Freddy, '4B', 'office', false);
+    moveAnimatronic(Freddy, '4B', 'office', null, false);
   } else if (Freddy.currentPosition === 'office') {
     makeFreddyJumpscareCheck();
   } else if (movementCheck.canMove) {
@@ -380,6 +383,7 @@ const moveAnimatronic = (
   animatronic: Animatronic,
   startingPosition: Position,
   endPosition: Position,
+  subPosition: Position | null = null,
   logThis: boolean = true
 ) => {
   animatronic.currentPosition = endPosition;
@@ -389,6 +393,7 @@ const moveAnimatronic = (
   }
 
   document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', endPosition);
+  document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('sub-position', subPosition ?? 'none');
 };
 
 // ========================================================================== //
