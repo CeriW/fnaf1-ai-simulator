@@ -237,21 +237,27 @@ const moveFoxy = () => {
     addReport(Foxy, 'camera auto fail');
 
     // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
-  } else if (!movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
-    let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
-    addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck, cooldownInSeconds);
-    clearInterval(foxyInterval);
-    window.setTimeout(() => {
-      foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-    }, cooldownInSeconds * secondLength);
+  } else if (!movementCheck.canMove) {
+    addReport(Foxy, 'failed movement check', movementCheck);
   } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
     // Foxy needs to make 3 successful movement checks before he is able to leave 1C
-    // addReport(Foxy, 'jumpscare');
     Foxy.subPosition++;
     addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
     moveAnimatronic(Foxy, '1C', '1C', Foxy.subPosition, false);
   } else {
     addReport(Foxy, 'debug', movementCheck);
+  }
+};
+
+// Every time the cameras come down, Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
+const pauseFoxy = () => {
+  if (Foxy.currentPosition === '1C') {
+    let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
+    addReport(Foxy, 'foxy paused', null, cooldownInSeconds);
+    clearInterval(foxyInterval);
+    window.setTimeout(() => {
+      foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+    }, cooldownInSeconds * secondLength);
   }
 };
 
@@ -436,8 +442,13 @@ type messagingType =
   | 'jumpscare' // Animatronic successfully achieved a jumpscare
   | 'has moved' // Animatronic is moving
   | 'freddy successful movement check' // Freddy has passed a movement check
-  | 'foxy failed pirate cove movement check'
+  | 'foxy paused'
   | 'foxy successful pirate cove movement check'; // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
+
+const pluralise = (number: number, word: string) => {
+  let plural = number > 0 ? 's' : '';
+  return word + plural;
+};
 
 const addReport = (
   animatronic: Animatronic,
@@ -539,13 +550,14 @@ const addReport = (
     case 'foxy successful pirate cove movement check':
       const stepsRemaining = 4 - Foxy.subPosition;
       let stepsPlural = stepsRemaining > 1 ? 'steps' : 'step';
-      message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${stepsPlural} away from attempting to attack`;
+      message = `Foxy has made a successful movement check while at 1C (${
+        cameraNames['1C']
+      }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'steps')} away from attempting to attack`;
       type = 'success';
       break;
 
-    case 'foxy failed pirate cove movement check':
-      message = `Foxy has failed his movement check and will remain inactive for ${additionalInfo.toFixed(2)} seconds`;
-      type = 'fail';
+    case 'foxy paused':
+      message = `The cameras have just been turned off. Foxy will be unable to make any more movement checks for ${additionalInfo.toFixed()} seconds`;
       break;
 
     case 'jumpscare':
@@ -669,17 +681,10 @@ const timeUpdate = window.setInterval(updateTime, secondLength); // Update the f
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-// document.body.setAttribute('cameras-on', String(user.camerasOn));
 
 document.body.setAttribute('cameras-on', 'false');
-
 initialiseDoors();
-
-// Since we're starting the time at -1 to accommodate 12AM being 89 seconds long, wait 1 second before starting the movement calculations
-// window.setTimeout(() => {
-//   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-// }, 1000);
-
 generateAnimatronics();
 
 cameraButton.addEventListener('click', toggleCameras);
+window.addEventListener('cameras-off', pauseFoxy);
