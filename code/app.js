@@ -155,6 +155,15 @@ const makeMovementCheck = (animatronic) => {
         aiLevel: animatronic.aiLevels[nightToSimulate],
     };
 };
+// ========================================================================== //
+// FOXY
+// ========================================================================== //
+const moveFoxy = () => {
+    addReport('Foxy', 'hi foxy');
+};
+// ========================================================================== //
+// FREDDY
+// ========================================================================== //
 // Once Freddy is in the office he has a 25% chance of getting you every 1 second while the cameras are down
 const makeFreddyJumpscareCheck = () => {
     clearInterval(freddyInterval);
@@ -401,6 +410,7 @@ const gameOver = () => {
 const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
 // document.body.setAttribute('cameras-on', String(user.camerasOn));
 document.body.setAttribute('cameras-on', 'false');
 initialiseDoors();
