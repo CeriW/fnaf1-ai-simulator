@@ -8,7 +8,7 @@
   display: grid;
   grid-template: 
     "time description"
-    "time calculation"
+    "time extra-info"
     / 80px 1fr
   ;
   margin-bottom: 15px;
@@ -31,7 +31,7 @@
   grid-area: description;
 }
 
-.report-calculation{
+.report-extra-info{
   color: rgba(white, 0.4);
-  grid-area: calculation;
+  grid-area: extra-info;
 }

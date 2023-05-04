@@ -199,8 +199,10 @@ const moveFoxy = () => {
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
         moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
     }
-    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 4) {
-        moveAnimatronic(Foxy, { start: '1C', end: '4A' });
+    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) {
+        // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
+        moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
+        addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
     }
     else {
         addReport(Foxy, 'debug', movementCheck);
@@ -365,7 +367,7 @@ const moveAnimatronic = (animatronic, position, logThis = true) => {
         .querySelector(`.animatronic#${animatronic.name}`)) === null || _c === void 0 ? void 0 : _c.setAttribute('sub-position', (_e = (_d = position.sub) === null || _d === void 0 ? void 0 : _d.toString()) !== null && _e !== void 0 ? _e : 'none');
 };
 const pluralise = (number, word) => {
-    let plural = number > 0 ? 's' : '';
+    let plural = number > 1 ? 's' : '';
     return word + plural;
 };
 const addReport = (animatronic, reason, movementCheck = null, additionalInfo = null // Some reports need to pass in some additional info. This can take different formats so is allowed to be an 'any' type
@@ -376,7 +378,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
     let type = 'info';
     let preventDuplicates = false;
     const stats = movementCheck
-        ? `<div class="report-calculation">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${animatronic.name}'s AI level: ${movementCheck.aiLevel}</div>`
+        ? `<div class="report-extra-info">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${animatronic.name}'s AI level: ${movementCheck.aiLevel}</div>`
         : '';
     switch (reason) {
         case 'debug':
@@ -400,7 +402,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'freddy office failed movement check':
             message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
-          <div class="report-calculation">
+          <div class="report-extra-info">
           Score to beat: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat}/100   Freddy's score: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel}
           </div>`;
             type = 'fail';
@@ -434,19 +436,22 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'foxy successful pirate cove movement check':
             const stepsRemaining = 4 - Foxy.subPosition;
-            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack`;
+            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
             type = 'success';
             break;
         case 'foxy paused':
-            message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(2)} seconds <div class="report-calculation">Random number between 0.83 and 16.67</div>`;
+            message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(2)} seconds <div class="report-extra-info">Random number between 0.83 and 16.67</div>`;
             break;
         case 'foxy failed pirate cove movement check':
-            message = `Foxy has failed his movement check. He is no closer to leaving 1C (${cameraNames['1C']}) ${stats}`;
+            let stepsRemainingB = 4 - Foxy.subPosition;
+            message = `Foxy has failed his movement check. He is still ${stepsRemainingB} ${pluralise(stepsRemainingB, 'step')} away from leaving 1C (${cameraNames['1C']}) ${stats}`;
             type = 'fail';
             break;
         case 'foxy leaving pirate cove':
-            message = 'FOXY IS LEAVING PIRATE COVE';
+            message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
+      <div class="report-extra-info">He will attempt to jumpscare you in either 25 seconds or when you next look at cam 4A</div>`;
             type = 'success';
+            break;
         case 'jumpscare':
             message = `${animatronic.name} successfully jumpscared you`;
             type = 'success';

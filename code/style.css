@@ -208,7 +208,7 @@
   display: grid;
   -ms-grid-rows: auto auto;
   -ms-grid-columns: 80px 1fr;
-  grid-template: "time description" "time calculation" / 80px 1fr;
+  grid-template: "time description" "time extra-info" / 80px 1fr;
   margin-bottom: 15px; }
 
 .report-item[type="success"] .report-description {
@@ -229,11 +229,11 @@
   -ms-grid-column: 2;
   grid-area: description; }
 
-.report-calculation {
+.report-extra-info {
   -ms-grid-row: 2;
   -ms-grid-column: 2;
   color: rgba(255, 255, 255, 0.4);
-  grid-area: calculation; }
+  grid-area: extra-info; }
 
 img#camera-screen {
   width: 300px; }
