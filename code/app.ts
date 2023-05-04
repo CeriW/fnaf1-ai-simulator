@@ -255,8 +255,9 @@ const moveFoxy = () => {
     // Foxy needs to make 3 successful movement checks before he is able to leave 1C
     Foxy.subPosition++;
     addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-    moveAnimatronic(Foxy, '1C', '1C', Foxy.subPosition, false);
+    moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
   } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 4) {
+    moveAnimatronic(Foxy, { start: '1C', end: '4A' });
   } else {
     addReport(Foxy, 'debug', movementCheck);
   }
@@ -337,7 +338,7 @@ const moveFreddy = () => {
     // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY? Because that's not happening right here with this code
     addReport(Freddy, 'freddy right door closed');
     Freddy.currentPosition = '4A';
-    moveAnimatronic(Freddy, '4B', '4A');
+    moveAnimatronic(Freddy, { start: '4B', end: '4A' });
 
     // CAMERAS ON, HE'S AT 4B, USER IS NOT LOOKING AT 4B BUT HE'S FAILED HIS MOVEMENT CHECK
   } else if (
@@ -358,7 +359,7 @@ const moveFreddy = () => {
     // THE CAMERAS ARE ON, HE'S AT 4B, THE RIGHT DOOR IS OPEN, HE CAN GET INTO THE OFFICE!!!!!
   } else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
     addReport(Freddy, 'in the office');
-    moveAnimatronic(Freddy, '4B', 'office', null, false);
+    moveAnimatronic(Freddy, { start: '4B', end: 'office' }, false);
   } else if (Freddy.currentPosition === 'office') {
     makeFreddyJumpscareCheck();
   } else if (movementCheck.canMove) {
@@ -406,7 +407,7 @@ const moveFreddy = () => {
     let freddyCountdown = window.setInterval(() => {
       Freddy.currentCountdown--;
       if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
-        moveAnimatronic(Freddy, startingPosition, endingPosition);
+        moveAnimatronic(Freddy, { start: startingPosition, end: endingPosition });
         freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
         clearInterval(freddyCountdown);
       } else if (Freddy.currentCountdown <= 0 && user.camerasOn) {
@@ -420,21 +421,27 @@ const moveFreddy = () => {
 
 const moveAnimatronic = (
   animatronic: Animatronic,
-  startingPosition: Position,
-  endPosition: Position,
-  subPosition: number | null = null,
+  position: {
+    start: Position;
+    end: Position;
+    sub?: number;
+  },
   logThis: boolean = true
 ) => {
-  animatronic.currentPosition = endPosition;
+  animatronic.currentPosition = position.start;
+  animatronic.subPosition = position.sub ?? -1;
 
   if (logThis) {
-    addReport(animatronic, 'has moved', null, { startingPosition, endPosition });
+    addReport(animatronic, 'has moved', null, {
+      startingPosition: position.start,
+      endPosition: position.end,
+    });
   }
 
-  document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', endPosition);
+  document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', position.end);
   document
     .querySelector(`.animatronic#${animatronic.name}`)
-    ?.setAttribute('sub-position', subPosition?.toString() ?? 'none');
+    ?.setAttribute('sub-position', position.sub?.toString() ?? 'none');
 };
 
 // ========================================================================== //

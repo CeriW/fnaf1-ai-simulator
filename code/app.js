@@ -197,9 +197,10 @@ const moveFoxy = () => {
         // Foxy needs to make 3 successful movement checks before he is able to leave 1C
         Foxy.subPosition++;
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-        moveAnimatronic(Foxy, '1C', '1C', Foxy.subPosition, false);
+        moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
     }
     else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 4) {
+        moveAnimatronic(Foxy, { start: '1C', end: '4A' });
     }
     else {
         addReport(Foxy, 'debug', movementCheck);
@@ -273,7 +274,7 @@ const moveFreddy = () => {
         // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY? Because that's not happening right here with this code
         addReport(Freddy, 'freddy right door closed');
         Freddy.currentPosition = '4A';
-        moveAnimatronic(Freddy, '4B', '4A');
+        moveAnimatronic(Freddy, { start: '4B', end: '4A' });
         // CAMERAS ON, HE'S AT 4B, USER IS NOT LOOKING AT 4B BUT HE'S FAILED HIS MOVEMENT CHECK
     }
     else if (user.camerasOn &&
@@ -292,7 +293,7 @@ const moveFreddy = () => {
     }
     else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
         addReport(Freddy, 'in the office');
-        moveAnimatronic(Freddy, '4B', 'office', null, false);
+        moveAnimatronic(Freddy, { start: '4B', end: 'office' }, false);
     }
     else if (Freddy.currentPosition === 'office') {
         makeFreddyJumpscareCheck();
@@ -336,7 +337,7 @@ const moveFreddy = () => {
         let freddyCountdown = window.setInterval(() => {
             Freddy.currentCountdown--;
             if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
-                moveAnimatronic(Freddy, startingPosition, endingPosition);
+                moveAnimatronic(Freddy, { start: startingPosition, end: endingPosition });
                 freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
                 clearInterval(freddyCountdown);
             }
@@ -349,15 +350,19 @@ const moveFreddy = () => {
         addReport(Freddy, 'failed movement check', movementCheck);
     }
 };
-const moveAnimatronic = (animatronic, startingPosition, endPosition, subPosition = null, logThis = true) => {
-    var _a, _b, _c;
-    animatronic.currentPosition = endPosition;
+const moveAnimatronic = (animatronic, position, logThis = true) => {
+    var _a, _b, _c, _d, _e;
+    animatronic.currentPosition = position.start;
+    animatronic.subPosition = (_a = position.sub) !== null && _a !== void 0 ? _a : -1;
     if (logThis) {
-        addReport(animatronic, 'has moved', null, { startingPosition, endPosition });
+        addReport(animatronic, 'has moved', null, {
+            startingPosition: position.start,
+            endPosition: position.end,
+        });
     }
-    (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
-    (_b = document
-        .querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('sub-position', (_c = subPosition === null || subPosition === void 0 ? void 0 : subPosition.toString()) !== null && _c !== void 0 ? _c : 'none');
+    (_b = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('position', position.end);
+    (_c = document
+        .querySelector(`.animatronic#${animatronic.name}`)) === null || _c === void 0 ? void 0 : _c.setAttribute('sub-position', (_e = (_d = position.sub) === null || _d === void 0 ? void 0 : _d.toString()) !== null && _e !== void 0 ? _e : 'none');
 };
 const pluralise = (number, word) => {
     let plural = number > 0 ? 's' : '';
