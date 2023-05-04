@@ -445,7 +445,14 @@ const toggleCameras = () => {
     document.body.setAttribute('cameras-on', String(user.camerasOn));
     cameraButton.setAttribute('active', String(user.camerasOn));
     cameraStatusText.textContent = user.camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
+    let camerasOff = new Event('cameras-off');
+    if (!user.camerasOn) {
+        window.dispatchEvent(camerasOff);
+    }
 };
+window.addEventListener('cameras-off', (e) => {
+    console.log(e);
+});
 const generateCameraButtons = () => {
     for (const key in cameraNames) {
         const myCameraButton = document.createElement('button');
