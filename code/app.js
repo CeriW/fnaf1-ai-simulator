@@ -168,9 +168,21 @@ const makeMovementCheck = (animatronic) => {
         aiLevel: animatronic.aiLevels[nightToSimulate],
     };
 };
+/* ========================================================================== //
+DEVELOPER NOTE
+
+Some of the if statements for the animatronics are quite verbose.
+I originally wrote these with nested if statements, but it got out of hand
+quite quickly trying to keep track of which combinations of factors where
+going on with each one.
+
+The if statements below all seem to have a lot of factors, many of which are
+shared, but this makes it much easier to keep track on each one exactly what
+the animatronics should be doing for any given statement.
+
 // ========================================================================== //
 // FOXY
-// ========================================================================== //
+// ========================================================================== */
 const moveFoxy = () => {
     const movementCheck = makeMovementCheck(Foxy);
     // Foxy will fail all movement checks while the cameras are on
@@ -186,6 +198,8 @@ const moveFoxy = () => {
         Foxy.subPosition++;
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
         moveAnimatronic(Foxy, '1C', '1C', Foxy.subPosition, false);
+    }
+    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 4) {
     }
     else {
         addReport(Foxy, 'debug', movementCheck);
@@ -237,12 +251,6 @@ const makeFreddyJumpscareCheck = () => {
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
     const movementCheck = makeMovementCheck(Freddy);
-    /*
-      Developer note - I originally wrote this with nested if statements, but it got out of hand quite quickly
-      trying to keep track of which combinations of factors where going on with each one.
-      The if statements below all seem to have a lot of factors, many of which are shared, but this makes
-      it much easier to keep track on each one exactly what Freddy should be doing.
-    */
     // CAMERAS ON, HE'S NOT AT 4B
     // Freddy will automatically fail all movement checks while the cameras are up
     if (user.camerasOn && Freddy.currentPosition !== '4B') {
@@ -428,15 +436,17 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(2)} seconds <div class="report-calculation">Random number between 0.83 and 16.67</div>`;
             break;
         case 'foxy failed pirate cove movement check':
-            message = `Foxy has failed his movement check. He is no closer to leaving 1C ${cameraNames['1C']}`;
+            message = `Foxy has failed his movement check. He is no closer to leaving 1C (${cameraNames['1C']}) ${stats}`;
             type = 'fail';
             break;
+        case 'foxy leaving pirate cove':
+            message = 'FOXY IS LEAVING PIRATE COVE';
+            type = 'success';
         case 'jumpscare':
             message = `${animatronic.name} successfully jumpscared you`;
             type = 'success';
             break;
     }
-    // return { message, type, preventDuplicates };
     let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .report-item-container`);
     let firstReport = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.querySelector('.report-item');
     if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
