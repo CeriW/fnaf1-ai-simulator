@@ -487,9 +487,8 @@ const toggleCameras = () => {
         lookAtCamera(user.currentCamera);
     }
     if (!user.camerasOn) {
-        const camOffEvent = new Event('cameras-off');
-        window.dispatchEvent(camOffEvent);
-        console.log(camOffEvent);
+        window.dispatchEvent(new Event('cameras-off'));
+        console.log('Cameras off');
     }
 };
 const generateCameraButtons = () => {
@@ -520,9 +519,8 @@ generateCameraButtons();
 // We need to listen for certain cameras in certain situations.
 // This will publish an event when a given camera is being looked at
 const lookAtCamera = (camera) => {
-    const camEvent = new Event(`cam-on-${camera}`);
-    window.dispatchEvent(camEvent);
-    console.log(camEvent);
+    window.dispatchEvent(new Event(`cam-on-${camera}`));
+    console.log(`Cameras on ${camera}`);
 };
 // ========================================================================== //
 // DOORS
