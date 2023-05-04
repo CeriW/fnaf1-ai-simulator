@@ -17,8 +17,8 @@ type Animatronic = {
   // possibleLocations: string[]; // The cameras where they can be
   startingPosition: Camera; // The camera where they start
   currentPosition: Position; // The camera the animatronic is currently at
-  subPosition?: number; // Used for Foxy. He will almost always be in 1C, but he goes through multiple steps before he's able to leave.
-  startingSubPosition?: number; // Used for Foxy. The subposition he starts at.
+  subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes through multiple steps before he's able to leave. -1 is the equivalent of null.
+  startingSubPosition: number; // Used for Foxy. The subposition he starts at.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentCountdown: number; // How many milliseconds they've got left before a special move
@@ -40,6 +40,8 @@ const Freddy: Animatronic = {
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9], // Freddy randomly starts at 1 or 2 on night 4
   currentCountdown: 0,
   pronouns: ['he', 'his'],
+  subPosition: -1,
+  startingSubPosition: -1,
 };
 
 const Chica: Animatronic = {
@@ -51,6 +53,8 @@ const Chica: Animatronic = {
   aiLevels: [null, 0, 3, 0, 2, 5, 10],
   currentCountdown: 0,
   pronouns: ['she', 'her'],
+  subPosition: -1,
+  startingSubPosition: -1,
 };
 
 const Bonnie: Animatronic = {
@@ -62,13 +66,15 @@ const Bonnie: Animatronic = {
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
   currentCountdown: 0,
   pronouns: ['he', 'his'],
+  subPosition: -1,
+  startingSubPosition: -1,
 };
 
 const Foxy: Animatronic = {
   name: 'Foxy',
   startingPosition: '1C',
   currentPosition: '1C',
-  subPosition: 1,
+  subPosition: 0,
   startingSubPosition: 0,
   movementOpportunityInterval: 5.01,
   aiLevels: [null, 0, 1, 2, 6, 5, 16],
@@ -192,7 +198,8 @@ const generateAnimatronics = () => {
     icon.classList.add('animatronic');
     icon.setAttribute('id', animatronic.name);
     icon.setAttribute('position', animatronic.startingPosition);
-    icon.setAttribute('sub-position', animatronic.startingSubPosition?.toString() ?? 'none');
+
+    icon.setAttribute('sub-position', animatronic.startingSubPosition.toString() ?? 'none');
     simulator.appendChild(icon);
 
     // Create the report
@@ -212,7 +219,7 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
   const comparisonNumber = Math.random() * 20;
   return {
     animatronicName: animatronic.name,
-    canMove: animatronic.aiLevels[nightToSimulate] >= Math.random() * 20,
+    canMove: animatronic.aiLevels[nightToSimulate] >= comparisonNumber,
     scoreToBeat: comparisonNumber,
     aiLevel: animatronic.aiLevels[nightToSimulate],
   };
@@ -224,15 +231,22 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
 
 const moveFoxy = () => {
   const movementCheck = makeMovementCheck(Foxy);
+  console.log(Foxy);
+  console.log(`${movementCheck.canMove}${Foxy.currentPosition === '1C'}${Foxy.subPosition < 3}`);
 
   if (user.camerasOn) {
     // Foxy will fail all movement checks while the cameras are on
     addReport(Foxy, 'camera auto fail');
   } else if (!movementCheck.canMove) {
     addReport(Foxy, 'failed movement check', movementCheck);
+  } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+    // addReport(Foxy, 'jumpscare');
+    Foxy.subPosition++;
+    addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
+    moveAnimatronic(Foxy, '1C', '1C', Foxy.subPosition, false);
+  } else {
+    addReport(Foxy, 'debug', movementCheck);
   }
-
-  // addReport('Foxy', 'hi foxy' + JSON.stringify(movementCheck));
 };
 
 // ========================================================================== //
@@ -383,7 +397,7 @@ const moveAnimatronic = (
   animatronic: Animatronic,
   startingPosition: Position,
   endPosition: Position,
-  subPosition: Position | null = null,
+  subPosition: number | null = null,
   logThis: boolean = true
 ) => {
   animatronic.currentPosition = endPosition;
@@ -393,7 +407,9 @@ const moveAnimatronic = (
   }
 
   document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', endPosition);
-  document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('sub-position', subPosition ?? 'none');
+  document
+    .querySelector(`.animatronic#${animatronic.name}`)
+    ?.setAttribute('sub-position', subPosition?.toString() ?? 'none');
 };
 
 // ========================================================================== //
@@ -401,6 +417,7 @@ const moveAnimatronic = (
 // ========================================================================== //
 
 type messagingType =
+  | 'debug' // Used for debugging purposes to report something, anything
   | 'camera auto fail' // The animatronic automatically fails movement checks when cameras are on
   | 'failed movement check' // Generic failed movement check
   | 'freddy office failed movement check' // Failed movement check while animatronic is in the office
@@ -412,7 +429,8 @@ type messagingType =
   | 'waiting for cameras down' // Animatronic is ready to move but waiting for the cameras to go down
   | 'jumpscare' // Animatronic successfully achieved a jumpscare
   | 'has moved' // Animatronic is moving
-  | 'freddy successful movement check'; // Freddy has passed a movement check
+  | 'freddy successful movement check' // Freddy has passed a movement check
+  | 'foxy successful pirate cove movement check'; // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
 
 const addReport = (
   animatronic: Animatronic,
@@ -431,6 +449,9 @@ const addReport = (
     : '';
 
   switch (reason) {
+    case 'debug':
+      message = `Something happened`;
+      break;
     case 'camera auto fail':
       message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
       type = 'info';
@@ -505,6 +526,13 @@ const addReport = (
       message = `${animatronic.name} has moved from cam ${additionalInfo.startingPosition} (${
         cameraNames[additionalInfo.startingPosition as Camera]
       }) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition as Camera]})`;
+      type = 'success';
+      break;
+
+    case 'foxy successful pirate cove movement check':
+      message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${
+        4 - Foxy.subPosition
+      } steps away from attempting to attack`;
       type = 'success';
       break;
 

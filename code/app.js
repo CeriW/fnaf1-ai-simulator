@@ -13,6 +13,8 @@ const Freddy = {
     aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9],
     currentCountdown: 0,
     pronouns: ['he', 'his'],
+    subPosition: -1,
+    startingSubPosition: -1,
 };
 const Chica = {
     name: 'Bonnie',
@@ -23,6 +25,8 @@ const Chica = {
     aiLevels: [null, 0, 3, 0, 2, 5, 10],
     currentCountdown: 0,
     pronouns: ['she', 'her'],
+    subPosition: -1,
+    startingSubPosition: -1,
 };
 const Bonnie = {
     name: 'Chica',
@@ -33,12 +37,14 @@ const Bonnie = {
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
     currentCountdown: 0,
     pronouns: ['he', 'his'],
+    subPosition: -1,
+    startingSubPosition: -1,
 };
 const Foxy = {
     name: 'Foxy',
     startingPosition: '1C',
     currentPosition: '1C',
-    subPosition: 1,
+    subPosition: 0,
     startingSubPosition: 0,
     movementOpportunityInterval: 5.01,
     aiLevels: [null, 0, 1, 2, 6, 5, 16],
@@ -133,13 +139,13 @@ const calculateInGameTime = () => {
 // ========================================================================== //
 const generateAnimatronics = () => {
     [Foxy, Freddy, Bonnie, Chica].forEach((animatronic) => {
-        var _a, _b;
+        var _a;
         // Create the icons
         let icon = document.createElement('span');
         icon.classList.add('animatronic');
         icon.setAttribute('id', animatronic.name);
         icon.setAttribute('position', animatronic.startingPosition);
-        icon.setAttribute('sub-position', (_b = (_a = animatronic.startingSubPosition) === null || _a === void 0 ? void 0 : _a.toString()) !== null && _b !== void 0 ? _b : 'none');
+        icon.setAttribute('sub-position', (_a = animatronic.startingSubPosition.toString()) !== null && _a !== void 0 ? _a : 'none');
         simulator.appendChild(icon);
         // Create the report
         let animatronicReport = document.createElement('div');
@@ -157,7 +163,7 @@ const makeMovementCheck = (animatronic) => {
     const comparisonNumber = Math.random() * 20;
     return {
         animatronicName: animatronic.name,
-        canMove: animatronic.aiLevels[nightToSimulate] >= Math.random() * 20,
+        canMove: animatronic.aiLevels[nightToSimulate] >= comparisonNumber,
         scoreToBeat: comparisonNumber,
         aiLevel: animatronic.aiLevels[nightToSimulate],
     };
@@ -167,6 +173,8 @@ const makeMovementCheck = (animatronic) => {
 // ========================================================================== //
 const moveFoxy = () => {
     const movementCheck = makeMovementCheck(Foxy);
+    console.log(Foxy);
+    console.log(`${movementCheck.canMove}${Foxy.currentPosition === '1C'}${Foxy.subPosition < 3}`);
     if (user.camerasOn) {
         // Foxy will fail all movement checks while the cameras are on
         addReport(Foxy, 'camera auto fail');
@@ -174,7 +182,15 @@ const moveFoxy = () => {
     else if (!movementCheck.canMove) {
         addReport(Foxy, 'failed movement check', movementCheck);
     }
-    // addReport('Foxy', 'hi foxy' + JSON.stringify(movementCheck));
+    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+        // addReport(Foxy, 'jumpscare');
+        Foxy.subPosition++;
+        addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
+        moveAnimatronic(Foxy, '1C', '1C', Foxy.subPosition, false);
+    }
+    else {
+        addReport(Foxy, 'debug', movementCheck);
+    }
 };
 // ========================================================================== //
 // FREDDY
@@ -310,13 +326,14 @@ const moveFreddy = () => {
     }
 };
 const moveAnimatronic = (animatronic, startingPosition, endPosition, subPosition = null, logThis = true) => {
-    var _a, _b;
+    var _a, _b, _c;
     animatronic.currentPosition = endPosition;
     if (logThis) {
         addReport(animatronic, 'has moved', null, { startingPosition, endPosition });
     }
     (_a = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _a === void 0 ? void 0 : _a.setAttribute('position', endPosition);
-    (_b = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('sub-position', subPosition !== null && subPosition !== void 0 ? subPosition : 'none');
+    (_b = document
+        .querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('sub-position', (_c = subPosition === null || subPosition === void 0 ? void 0 : subPosition.toString()) !== null && _c !== void 0 ? _c : 'none');
 };
 const addReport = (animatronic, reason, movementCheck = null, additionalInfo = null // Some reports need to pass in some additional info. This can take different formats so is allowed to be an 'any' type
 ) => {
@@ -329,6 +346,9 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
         ? `<div class="report-calculation">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${animatronic.name}'s AI level: ${movementCheck.aiLevel}</div>`
         : '';
     switch (reason) {
+        case 'debug':
+            message = `Something happened`;
+            break;
         case 'camera auto fail':
             message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
             type = 'info';
@@ -377,6 +397,10 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'has moved':
             message = `${animatronic.name} has moved from cam ${additionalInfo.startingPosition} (${cameraNames[additionalInfo.startingPosition]}) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition]})`;
+            type = 'success';
+            break;
+        case 'foxy successful pirate cove movement check':
+            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${4 - Foxy.subPosition} steps away from attempting to attack`;
             type = 'success';
             break;
         case 'jumpscare':
