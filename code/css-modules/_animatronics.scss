@@ -44,6 +44,13 @@
   left: 23%;
 }
 
+/* Camera 1C ------------------------------------------------------------------*/
+
+.animatronic[position="1C"]{
+  top: 42%;
+  left: 8.3%;
+}
+
 /* Camera 7 ------------------------------------------------------------------*/
 
 .animatronic[position="7"]{
@@ -96,4 +103,9 @@
 #Freddy{
   background-color: brown;
   background-image: url('../../assets/Freddy.svg');
+}
+
+#Foxy{
+  background-color: red;
+  background-image: url('../../assets/Foxy.svg');
 }

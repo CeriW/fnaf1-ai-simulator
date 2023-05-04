@@ -59,6 +59,15 @@ const Bonnie: Animatronic = {
   currentCountdown: 0,
 };
 
+const Foxy: Animatronic = {
+  name: 'Foxy',
+  startingPosition: '1C',
+  currentPosition: '1C',
+  movementOpportunityInterval: 5.01,
+  aiLevels: [null, 0, 1, 2, 6, 5, 16],
+  currentCountdown: 0,
+};
+
 const cameraNames = {
   '1A': 'Show stage',
   '1B': 'Dining area',
@@ -171,7 +180,7 @@ const calculateInGameTime = () => {
 // ========================================================================== //
 
 const generateAnimatronics = () => {
-  [Freddy, Bonnie, Chica].forEach((animatronic: Animatronic) => {
+  [Freddy, Bonnie, Chica, Foxy].forEach((animatronic: Animatronic) => {
     // Create the icons
     let icon = document.createElement('span');
     icon.classList.add('animatronic');
