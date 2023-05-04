@@ -179,7 +179,7 @@ const moveFoxy = () => {
         // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
     }
     else if (!movementCheck.canMove) {
-        addReport(Foxy, 'failed movement check', movementCheck);
+        addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck);
     }
     else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
         // Foxy needs to make 3 successful movement checks before he is able to leave 1C
@@ -425,7 +425,11 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             type = 'success';
             break;
         case 'foxy paused':
-            message = `The cameras have just been turned off. Foxy will be unable to make any more movement checks for ${additionalInfo.toFixed(2)} seconds`;
+            message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(2)} seconds <div class="report-calculation">Random number between 0.83 and 16.67</div>`;
+            break;
+        case 'foxy failed pirate cove movement check':
+            message = `Foxy has failed his movement check. He is no closer to leaving 1C ${cameraNames['1C']}`;
+            type = 'fail';
             break;
         case 'jumpscare':
             message = `${animatronic.name} successfully jumpscared you`;
