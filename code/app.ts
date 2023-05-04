@@ -17,7 +17,7 @@ type Animatronic = {
   // possibleLocations: string[]; // The cameras where they can be
   startingPosition: Camera; // The camera where they start
   currentPosition: Position; // The camera the animatronic is currently at
-  subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes through multiple steps before he's able to leave. -1 is the equivalent of null.
+  subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
   startingSubPosition: number; // Used for Foxy. The subposition he starts at.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
@@ -231,15 +231,21 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
 
 const moveFoxy = () => {
   const movementCheck = makeMovementCheck(Foxy);
-  console.log(Foxy);
-  console.log(`${movementCheck.canMove}${Foxy.currentPosition === '1C'}${Foxy.subPosition < 3}`);
 
+  // Foxy will fail all movement checks while the cameras are on
   if (user.camerasOn) {
-    // Foxy will fail all movement checks while the cameras are on
     addReport(Foxy, 'camera auto fail');
-  } else if (!movementCheck.canMove) {
-    addReport(Foxy, 'failed movement check', movementCheck);
+
+    // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
+  } else if (!movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+    let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
+    addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck, cooldownInSeconds);
+    clearInterval(foxyInterval);
+    window.setTimeout(() => {
+      foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+    }, cooldownInSeconds * secondLength);
   } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+    // Foxy needs to make 3 successful movement checks before he is able to leave 1C
     // addReport(Foxy, 'jumpscare');
     Foxy.subPosition++;
     addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
@@ -430,6 +436,7 @@ type messagingType =
   | 'jumpscare' // Animatronic successfully achieved a jumpscare
   | 'has moved' // Animatronic is moving
   | 'freddy successful movement check' // Freddy has passed a movement check
+  | 'foxy failed pirate cove movement check'
   | 'foxy successful pirate cove movement check'; // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
 
 const addReport = (
@@ -534,6 +541,11 @@ const addReport = (
         4 - Foxy.subPosition
       } steps away from attempting to attack`;
       type = 'success';
+      break;
+
+    case 'foxy failed pirate cove movement check':
+      message = `Foxy has failed his movement check and will remain inactive for ${additionalInfo.toFixed(2)} seconds`;
+      type = 'fail';
       break;
 
     case 'jumpscare':

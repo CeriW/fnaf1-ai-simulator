@@ -173,16 +173,21 @@ const makeMovementCheck = (animatronic) => {
 // ========================================================================== //
 const moveFoxy = () => {
     const movementCheck = makeMovementCheck(Foxy);
-    console.log(Foxy);
-    console.log(`${movementCheck.canMove}${Foxy.currentPosition === '1C'}${Foxy.subPosition < 3}`);
+    // Foxy will fail all movement checks while the cameras are on
     if (user.camerasOn) {
-        // Foxy will fail all movement checks while the cameras are on
         addReport(Foxy, 'camera auto fail');
+        // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
     }
-    else if (!movementCheck.canMove) {
-        addReport(Foxy, 'failed movement check', movementCheck);
+    else if (!movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+        let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
+        addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck, cooldownInSeconds);
+        clearInterval(foxyInterval);
+        window.setTimeout(() => {
+            foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+        }, cooldownInSeconds * secondLength);
     }
     else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+        // Foxy needs to make 3 successful movement checks before he is able to leave 1C
         // addReport(Foxy, 'jumpscare');
         Foxy.subPosition++;
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
@@ -402,6 +407,10 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
         case 'foxy successful pirate cove movement check':
             message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${4 - Foxy.subPosition} steps away from attempting to attack`;
             type = 'success';
+            break;
+        case 'foxy failed pirate cove movement check':
+            message = `Foxy has failed his movement check and will remain inactive for ${additionalInfo.toFixed(2)} seconds`;
+            type = 'fail';
             break;
         case 'jumpscare':
             message = `${animatronic.name} successfully jumpscared you`;
