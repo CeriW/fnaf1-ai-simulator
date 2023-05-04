@@ -265,8 +265,10 @@ const moveFoxy = () => {
   }
 };
 
+const prepareFoxyAttack = () => {};
+
 // When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
-// QUESTION - does this countdown renew every time you put the cameras down?
+// QUESTION - I am assuming the countdown doesn't renew if another cameras-off event happens during his cooldown.
 const pauseFoxy = () => {
   if (Foxy.currentPosition === '1C') {
     let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
@@ -637,9 +639,13 @@ const toggleCameras = () => {
   cameraButton.setAttribute('active', String(user.camerasOn));
   cameraStatusText.textContent = user.camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
 
-  let camerasOff = new Event('cameras-off');
+  if (user.camerasOn) {
+    lookAtCamera(user.currentCamera);
+  }
   if (!user.camerasOn) {
-    window.dispatchEvent(camerasOff);
+    const camOffEvent = new Event('cameras-off');
+    window.dispatchEvent(camOffEvent);
+    console.log(camOffEvent);
   }
 };
 
@@ -648,11 +654,12 @@ const generateCameraButtons = () => {
     const myCameraButton = document.createElement('button');
     myCameraButton.classList.add('camera-button');
     if (key === defaultCamera) {
-      // 1A is the default camera
       myCameraButton.classList.add('active');
     }
     myCameraButton.textContent = `CAM ${key}`;
     myCameraButton.setAttribute('camera', key);
+    simulator.appendChild(myCameraButton);
+
     myCameraButton.addEventListener('click', () => {
       cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
       document.querySelectorAll('.camera-button').forEach((btn) => {
@@ -660,13 +667,24 @@ const generateCameraButtons = () => {
       });
       myCameraButton.classList.add('active');
       user.currentCamera = key as Camera;
+
+      if (user.camerasOn) {
+        lookAtCamera(user.currentCamera);
+      }
     });
-    simulator.appendChild(myCameraButton);
   }
 
   cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
 };
 generateCameraButtons();
+
+// We need to listen for certain cameras in certain situations.
+// This will publish an event when a given camera is being looked at
+const lookAtCamera = (camera: Camera) => {
+  const camEvent = new Event(`cam-on-${camera}`);
+  window.dispatchEvent(camEvent);
+  console.log(camEvent);
+};
 
 // ========================================================================== //
 // DOORS
