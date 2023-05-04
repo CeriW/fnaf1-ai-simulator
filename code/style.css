@@ -173,6 +173,9 @@
   -webkit-clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%);
   clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%); }
 
+#Foxy[position="4A"] {
+  opacity: 0.2; }
+
 #simulator {
   position: relative; }
 

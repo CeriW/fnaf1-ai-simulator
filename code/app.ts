@@ -260,6 +260,9 @@ const moveFoxy = () => {
     // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
     moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
     addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
+
+    // Once he has left Pirate Cove, he will attack in 25 seconds or 1.87 seconds after the player looks at cam 4A
+    clearInterval(foxyInterval);
   } else {
     addReport(Foxy, 'debug', movementCheck);
   }
@@ -598,7 +601,7 @@ const addReport = (
 
     case 'foxy leaving pirate cove':
       message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
-      <div class="report-extra-info">He will attempt to jumpscare you in either 25 seconds or when you next look at cam 4A</div>`;
+      <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 4A, whichever comes sooner</div>`;
       type = 'success';
       break;
 
