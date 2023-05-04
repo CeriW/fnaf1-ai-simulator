@@ -2,7 +2,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
 let secondLength = 600; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '1C';
+const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
     // possibleLocations: ['1A'],
@@ -42,8 +42,10 @@ const Bonnie = {
 };
 const Foxy = {
     name: 'Foxy',
-    startingPosition: '1C',
-    currentPosition: '1C',
+    // startingPosition: '1C',
+    // currentPosition: '1C',
+    startingPosition: '4A',
+    currentPosition: '4A',
     subPosition: 0,
     startingSubPosition: 0,
     movementOpportunityInterval: 5.01,
@@ -199,18 +201,30 @@ const moveFoxy = () => {
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
         moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
     }
-    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) {
+    else if ((movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) ||
+        Foxy.currentPosition === '4A') {
         // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
         moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
         addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
-        // Once he has left Pirate Cove, he will attack in 25 seconds or 1.87 seconds after the player looks at cam 4A
+        // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
         clearInterval(foxyInterval);
+        Foxy.currentCountdown = 25;
+        window.addEventListener('cam-on-4A', attemptFoxyJumpscare);
+        foxyInterval = window.setInterval(() => {
+            Foxy.currentCountdown--;
+            if (Foxy.currentCountdown <= 0) {
+                attemptFoxyJumpscare();
+            }
+        }, secondLength);
     }
     else {
-        addReport(Foxy, 'debug', movementCheck);
+        // addReport(Foxy, 'debug', movementCheck);
     }
 };
-const prepareFoxyAttack = () => { };
+const attemptFoxyJumpscare = () => {
+    addReport(Foxy, 'jumpscare');
+    clearInterval(foxyInterval);
+};
 // When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
 // QUESTION - I am assuming the countdown doesn't renew if another cameras-off event happens during his cooldown.
 const pauseFoxy = () => {
@@ -522,7 +536,7 @@ generateCameraButtons();
 // This will publish an event when a given camera is being looked at
 const lookAtCamera = (camera) => {
     window.dispatchEvent(new Event(`cam-on-${camera}`));
-    console.log(`Cameras on ${camera}`);
+    console.log(`cam-on-${camera}`);
 };
 // ========================================================================== //
 // DOORS
