@@ -69,7 +69,7 @@ const Foxy: Animatronic = {
   startingPosition: '1C',
   currentPosition: '1C',
   subPosition: 1,
-  startingSubPosition: 1,
+  startingSubPosition: 0,
   movementOpportunityInterval: 5.01,
   aiLevels: [null, 0, 1, 2, 6, 5, 16],
   currentCountdown: 0,
