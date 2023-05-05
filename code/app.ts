@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 1;
-let secondLength: number = 5; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -504,6 +504,21 @@ const moveFreddy = () => {
   }
 };
 
+// ========================================================================== //
+// BONNIE AND CHICA
+// Bonnie and Chica share many of the same rules so will share a function
+// ========================================================================== //
+
+const moveBonnieOrChica = (animatronic: Animatronic) => {
+  // If you're an animatronic trying to run this function and you're not Bonnie
+  // or Chica, you can just leave. This function is not for you.
+  if (animatronic.name !== 'Bonnie' && animatronic.name !== 'Chica') {
+    return;
+  }
+
+  console.log(animatronic);
+};
+
 const moveAnimatronic = (
   animatronic: Animatronic,
   position: {
@@ -833,6 +848,9 @@ const timeUpdate = window.setInterval(updateTime, secondLength); // Update the f
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+let bonnieInterval = window.setInterval(() => {
+  moveBonnieOrChica(Bonnie);
+}, secondLength * Bonnie.movementOpportunityInterval);
 
 // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
 if (Foxy.currentPosition === '4A') {
