@@ -1,6 +1,6 @@
 // TESTING VARIABLES
-const nightToSimulate = 6;
-let secondLength: number = 20; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const nightToSimulate = 1;
+let secondLength: number = 5; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -46,7 +46,7 @@ const Freddy: Animatronic = {
   startingSubPosition: -1,
 };
 
-const Chica: Animatronic = {
+const Bonnie: Animatronic = {
   name: 'Bonnie',
   // possibleLocations: ['1A'],
   startingPosition: '1A',
@@ -60,7 +60,7 @@ const Chica: Animatronic = {
   startingSubPosition: -1,
 };
 
-const Bonnie: Animatronic = {
+const Chica: Animatronic = {
   name: 'Chica',
   // possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
   startingPosition: '1A',
@@ -259,6 +259,7 @@ const increaseAILevel = (animatronic: Animatronic) => {
   if (aiReport) {
     aiReport.innerHTML = animatronic.currentAIlevel.toString();
   }
+  console.log(animatronic);
 };
 
 /* ========================================================================== //
