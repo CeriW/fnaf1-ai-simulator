@@ -272,15 +272,12 @@ const moveFoxy = () => {
       addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
     }
 
-    console.log('hgey');
-
     // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
     clearInterval(foxyInterval);
     Foxy.currentCountdown = 25;
     window.addEventListener('cam-on-4A', attemptFoxyJumpscare);
     foxyInterval = window.setInterval(() => {
       Foxy.currentCountdown--;
-      console.log(Foxy.currentCountdown);
       if (Foxy.currentCountdown === 0) {
         attemptFoxyJumpscare();
       }
