@@ -1,6 +1,6 @@
 // TESTING VARIABLES
-const nightToSimulate = 1;
-let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const nightToSimulate = 6;
+let secondLength: number = 50000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -215,7 +215,7 @@ const calculateInGameTime = () => {
 // ========================================================================== //
 
 const generateAnimatronics = () => {
-  [Foxy, Freddy, Bonnie, Chica].forEach((animatronic: Animatronic) => {
+  [Bonnie, Foxy, Freddy, Chica].forEach((animatronic: Animatronic) => {
     // Initialise their starting AI level
     animatronic.currentAIlevel = animatronic.aiLevels[nightToSimulate];
 
@@ -516,7 +516,23 @@ const moveBonnieOrChica = (animatronic: Animatronic) => {
     return;
   }
 
+  const movementCheck = makeMovementCheck(animatronic);
+  console.log(movementCheck);
+
+  if (movementCheck.canMove) {
+    moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: calculateNewBonniePosition() });
+  } else {
+    addReport(animatronic, 'failed movement check');
+  }
+
   console.log(animatronic);
+};
+
+// Bonnie does not have to chose adjacent rooms. He can pick at random from a list of approved locations.
+const calculateNewBonniePosition = () => {
+  const possibleLocations = ['1B', '3', '5', '2A', '2B'];
+  const choice = Math.floor(Math.random() * possibleLocations.length);
+  return possibleLocations[choice] as Position;
 };
 
 const moveAnimatronic = (
