@@ -293,6 +293,7 @@ const attemptFoxyJumpscare = (e?: Event) => {
     if (user.rightDoorIsClosed) {
       addReport(Foxy, 'foxy right door closed', null, restartSubPosition);
       moveAnimatronic(Foxy, { start: '4A', end: '1C', sub: restartSubPosition }, false);
+      // TODO - Foxy drains your power if he bashes on the door.
     } else {
       addReport(Foxy, 'jumpscare');
     }
