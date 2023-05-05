@@ -125,6 +125,11 @@ const updateTime = () => {
     //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
     // );
     updateFrames();
+    // 2AM - Bonnie gains 1 AI level
+    if (currentSecond === 179) {
+        Bonnie.currentAIlevel++;
+    }
+    // 6AM - end game
     if (currentSecond === 535) {
         clearInterval(timeUpdate);
         clearInterval(frameUpdate);
@@ -160,6 +165,7 @@ const generateAnimatronics = () => {
         animatronicReport.innerHTML = `
       ${animatronic.name}<br>
       Starting AI level: ${animatronic.currentAIlevel}
+      Current AI level: <span class="current-ai-level">${animatronic.currentAIlevel}</span>
       <div class="report-item-container"></div>
     `;
         sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
@@ -173,6 +179,14 @@ const makeMovementCheck = (animatronic) => {
         scoreToBeat: comparisonNumber,
         aiLevel: animatronic.currentAIlevel,
     };
+};
+const increaseAILevel = (animatronic) => {
+    animatronic.currentAIlevel++;
+    addReport(animatronic, 'increase AI level');
+    let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"]`);
+    if (aiReport) {
+        aiReport.innerHTML = animatronic.currentAIlevel.toString();
+    }
 };
 /* ========================================================================== //
 DEVELOPER NOTE
@@ -429,6 +443,9 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
     switch (reason) {
         case 'debug':
             message = `Something happened`;
+            break;
+        case 'increase AI level':
+            message = `${animatronic.name}'s AI level has increased by 1 to ${animatronic.currentAIlevel}`;
             break;
         case 'camera auto fail':
             message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
