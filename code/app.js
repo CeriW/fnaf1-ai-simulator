@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 400; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 20; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
@@ -125,9 +125,19 @@ const updateTime = () => {
     //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
     // );
     updateFrames();
-    // 2AM - Bonnie gains 1 AI level
+    // 2AM
     if (currentSecond === 179) {
-        Bonnie.currentAIlevel++;
+        increaseAILevel(Bonnie);
+    }
+    // 3AM
+    if (currentSecond === 268) {
+        increaseAILevel(Bonnie);
+        increaseAILevel(Chica);
+        increaseAILevel(Foxy);
+    }
+    // 4AM
+    if (currentSecond === 357) {
+        increaseAILevel(Bonnie);
     }
     // 6AM - end game
     if (currentSecond === 535) {
@@ -183,7 +193,7 @@ const makeMovementCheck = (animatronic) => {
 const increaseAILevel = (animatronic) => {
     animatronic.currentAIlevel++;
     addReport(animatronic, 'increase AI level');
-    let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"]`);
+    let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .current-ai-level`);
     if (aiReport) {
         aiReport.innerHTML = animatronic.currentAIlevel.toString();
     }

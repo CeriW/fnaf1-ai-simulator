@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 400; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 20; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -175,9 +175,21 @@ const updateTime = () => {
 
   updateFrames();
 
-  // 2AM - Bonnie gains 1 AI level
+  // 2AM
   if (currentSecond === 179) {
-    Bonnie.currentAIlevel++;
+    increaseAILevel(Bonnie);
+  }
+
+  // 3AM
+  if (currentSecond === 268) {
+    increaseAILevel(Bonnie);
+    increaseAILevel(Chica);
+    increaseAILevel(Foxy);
+  }
+
+  // 4AM
+  if (currentSecond === 357) {
+    increaseAILevel(Bonnie);
   }
 
   // 6AM - end game
@@ -243,7 +255,7 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
 const increaseAILevel = (animatronic: Animatronic) => {
   animatronic.currentAIlevel++;
   addReport(animatronic, 'increase AI level');
-  let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"]`);
+  let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .current-ai-level`);
   if (aiReport) {
     aiReport.innerHTML = animatronic.currentAIlevel.toString();
   }
