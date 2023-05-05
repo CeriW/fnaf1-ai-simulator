@@ -172,19 +172,22 @@ const makeMovementCheck = (animatronic) => {
 };
 /* ========================================================================== //
 DEVELOPER NOTE
+/* ========================================================================== //
 
-Some of the if statements for the animatronics are quite verbose.
+Some of the if statements for the animatronics are quite lengthly.
 I originally wrote these with nested if statements, but it got out of hand
 quite quickly trying to keep track of which combinations of factors were
 going on with each one.
 
 The if statements below all seem to have a lot of factors, many of which are
-shared, but this makes it much easier to keep track on each one exactly what
+shared, but this makes it much easier to keep track of exactly what
 the animatronics should be doing for any given statement.
+
 // ========================================================================== //
 // FOXY
 // ========================================================================== */
 const moveFoxy = () => {
+    console.log(Foxy);
     const movementCheck = makeMovementCheck(Foxy);
     // Foxy will fail all movement checks while the cameras are on
     if (user.camerasOn && Foxy.currentPosition === '1C') {
@@ -208,19 +211,18 @@ const moveFoxy = () => {
             moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
             addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
         }
+        console.log('hgey');
         // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
         clearInterval(foxyInterval);
         Foxy.currentCountdown = 25;
         window.addEventListener('cam-on-4A', attemptFoxyJumpscare);
         foxyInterval = window.setInterval(() => {
             Foxy.currentCountdown--;
+            console.log(Foxy.currentCountdown);
             if (Foxy.currentCountdown === 0) {
                 attemptFoxyJumpscare();
             }
         }, secondLength);
-    }
-    else {
-        // addReport(Foxy, 'debug', movementCheck);
     }
 };
 const attemptFoxyJumpscare = (e) => {
@@ -610,6 +612,10 @@ const timeUpdate = window.setInterval(updateTime, secondLength); // Update the f
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+// If Foxy is at 4A for testing purposes we need get him working
+if (Foxy.currentPosition === '4A') {
+    moveFoxy();
+}
 document.body.setAttribute('cameras-on', 'false');
 initialiseDoors();
 generateAnimatronics();
