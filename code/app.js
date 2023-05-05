@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 400; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
@@ -11,6 +11,7 @@ const Freddy = {
     movementOpportunityInterval: 3.02,
     // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
     aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9],
+    currentAIlevel: 0,
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     subPosition: -1,
@@ -23,6 +24,7 @@ const Chica = {
     currentPosition: '1A',
     movementOpportunityInterval: 4.97,
     aiLevels: [null, 0, 3, 0, 2, 5, 10],
+    currentAIlevel: 0,
     currentCountdown: 0,
     pronouns: ['she', 'her'],
     subPosition: -1,
@@ -35,6 +37,7 @@ const Bonnie = {
     currentPosition: '1A',
     movementOpportunityInterval: 4.98,
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
+    currentAIlevel: 0,
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     subPosition: -1,
@@ -42,10 +45,9 @@ const Bonnie = {
 };
 const Foxy = {
     name: 'Foxy',
-    // startingPosition: '1C',
-    // currentPosition: '1C',
-    startingPosition: '4A',
-    currentPosition: '4A',
+    startingPosition: '1C',
+    currentPosition: '1C',
+    currentAIlevel: 0,
     subPosition: 0,
     startingSubPosition: 0,
     movementOpportunityInterval: 5.01,
@@ -142,6 +144,8 @@ const calculateInGameTime = () => {
 const generateAnimatronics = () => {
     [Foxy, Freddy, Bonnie, Chica].forEach((animatronic) => {
         var _a;
+        // Initialise their starting AI level
+        animatronic.currentAIlevel = animatronic.aiLevels[nightToSimulate];
         // Create the icons
         let icon = document.createElement('span');
         icon.classList.add('animatronic');
@@ -155,7 +159,7 @@ const generateAnimatronics = () => {
         animatronicReport.setAttribute('animatronic', animatronic.name);
         animatronicReport.innerHTML = `
       ${animatronic.name}<br>
-      Starting AI level: ${animatronic.aiLevels[nightToSimulate]}
+      Starting AI level: ${animatronic.currentAIlevel}
       <div class="report-item-container"></div>
     `;
         sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
@@ -165,9 +169,9 @@ const makeMovementCheck = (animatronic) => {
     const comparisonNumber = Math.random() * 20;
     return {
         animatronicName: animatronic.name,
-        canMove: animatronic.aiLevels[nightToSimulate] >= comparisonNumber,
+        canMove: animatronic.currentAIlevel >= comparisonNumber,
         scoreToBeat: comparisonNumber,
-        aiLevel: animatronic.aiLevels[nightToSimulate],
+        aiLevel: animatronic.currentAIlevel,
     };
 };
 /* ========================================================================== //
@@ -343,7 +347,7 @@ const moveFreddy = () => {
         makeFreddyJumpscareCheck();
     }
     else if (movementCheck.canMove) {
-        let waitingTime = 1000 - Freddy.aiLevels[nightToSimulate] * 100; // How many FRAMES to wait before moving
+        let waitingTime = 1000 - Freddy.currentAIlevel * 100; // How many FRAMES to wait before moving
         waitingTime = waitingTime >= 0 ? waitingTime : 0;
         let startingPosition = Freddy.currentPosition;
         let endingPosition = startingPosition;
@@ -613,7 +617,7 @@ const timeUpdate = window.setInterval(updateTime, secondLength); // Update the f
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-// If Foxy is at 4A for testing purposes we need get him working
+// If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
 if (Foxy.currentPosition === '4A') {
     moveFoxy();
 }
