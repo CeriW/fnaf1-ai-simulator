@@ -505,27 +505,20 @@ const moveFreddy = () => {
 };
 
 // ========================================================================== //
-// BONNIE AND CHICA
-// Bonnie and Chica share many of the same rules so will share a function
+// BONNIE
 // ========================================================================== //
 
-const moveBonnieOrChica = (animatronic: Animatronic) => {
-  // If you're an animatronic trying to run this function and you're not Bonnie
-  // or Chica, you can just leave. This function is not for you.
-  if (animatronic.name !== 'Bonnie' && animatronic.name !== 'Chica') {
-    return;
-  }
-
-  const movementCheck = makeMovementCheck(animatronic);
+const moveBonnie = () => {
+  const movementCheck = makeMovementCheck(Bonnie);
   console.log(movementCheck);
 
   if (movementCheck.canMove) {
-    moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: calculateNewBonniePosition() });
+    moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
   } else {
-    addReport(animatronic, 'failed movement check');
+    addReport(Bonnie, 'failed movement check');
   }
 
-  console.log(animatronic);
+  console.log(Bonnie);
 };
 
 // Bonnie does not have to chose adjacent rooms. He can pick at random from a list of approved locations.
@@ -534,6 +527,8 @@ const calculateNewBonniePosition = () => {
   const choice = Math.floor(Math.random() * possibleLocations.length);
   return possibleLocations[choice] as Position;
 };
+
+const calculateNewChicaPosition = () => {};
 
 const moveAnimatronic = (
   animatronic: Animatronic,
@@ -864,9 +859,7 @@ const timeUpdate = window.setInterval(updateTime, secondLength); // Update the f
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-let bonnieInterval = window.setInterval(() => {
-  moveBonnieOrChica(Bonnie);
-}, secondLength * Bonnie.movementOpportunityInterval);
+let bonnieInterval = window.setInterval(moveBonnie, secondLength * Bonnie.movementOpportunityInterval);
 
 // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
 if (Foxy.currentPosition === '4A') {
