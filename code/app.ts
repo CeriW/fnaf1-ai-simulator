@@ -248,11 +248,11 @@ const moveFoxy = () => {
   const movementCheck = makeMovementCheck(Foxy);
 
   // Foxy will fail all movement checks while the cameras are on
-  if (user.camerasOn) {
+  if (user.camerasOn && Foxy.currentPosition === '1C') {
     addReport(Foxy, 'camera auto fail');
 
     // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
-  } else if (!movementCheck.canMove) {
+  } else if (!movementCheck.canMove && Foxy.currentPosition === '1C') {
     addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck);
   } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
     // Foxy needs to make 3 successful movement checks before he is able to leave 1C
@@ -264,8 +264,11 @@ const moveFoxy = () => {
     Foxy.currentPosition === '4A'
   ) {
     // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
-    moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
-    addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
+    if (Foxy.currentPosition === '1C') {
+      // This if statement isn't necessary in normal play, but is necessary during testing when his starting position isn't 1C
+      moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
+      addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
+    }
 
     // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
     clearInterval(foxyInterval);
@@ -307,6 +310,8 @@ const attemptFoxyJumpscare = (e?: Event) => {
 // When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
 // QUESTION - I am assuming the countdown doesn't renew if another cameras-off event happens during his cooldown.
 const pauseFoxy = () => {
+  console.log(Foxy);
+
   if (Foxy.currentPosition === '1C') {
     let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
     Foxy.currentCountdown = cooldownInSeconds * secondLength;
