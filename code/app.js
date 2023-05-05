@@ -240,6 +240,10 @@ const attemptFoxyJumpscare = (e) => {
     // If this is happening as a result of him waiting 25 seconds (in which case there will be no event parameter here) he will attempt to attack immediately.
     if (e) {
         addReport(Foxy, 'foxy coming down hall');
+        const foxyIcon = document.querySelector('.animatronic#Foxy');
+        if (foxyIcon) {
+            foxyIcon.style.animation = `foxyHallAnimation ${(1.87 * secondLength) / 1000}s linear backwards`;
+        }
         window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
     }
     else {

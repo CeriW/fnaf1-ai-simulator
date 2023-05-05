@@ -176,6 +176,18 @@
 #Foxy[position="4A"] {
   opacity: 0.2; }
 
+@-webkit-keyframes foxyHallAnimation {
+  from {
+    top: 63.5%; }
+  to {
+    top: 84%; } }
+
+@keyframes foxyHallAnimation {
+  from {
+    top: 63.5%; }
+  to {
+    top: 84%; } }
+
 #simulator {
   position: relative; }
 
