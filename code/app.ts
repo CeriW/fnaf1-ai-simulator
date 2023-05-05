@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 600; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -234,13 +234,12 @@ DEVELOPER NOTE
 
 Some of the if statements for the animatronics are quite verbose.
 I originally wrote these with nested if statements, but it got out of hand
-quite quickly trying to keep track of which combinations of factors where
+quite quickly trying to keep track of which combinations of factors were
 going on with each one.
 
 The if statements below all seem to have a lot of factors, many of which are
 shared, but this makes it much easier to keep track on each one exactly what
 the animatronics should be doing for any given statement.
-
 // ========================================================================== //
 // FOXY
 // ========================================================================== */
@@ -274,7 +273,7 @@ const moveFoxy = () => {
     window.addEventListener('cam-on-4A', attemptFoxyJumpscare);
     foxyInterval = window.setInterval(() => {
       Foxy.currentCountdown--;
-      if (Foxy.currentCountdown <= 0) {
+      if (Foxy.currentCountdown === 0) {
         attemptFoxyJumpscare();
       }
     }, secondLength);
@@ -283,9 +282,26 @@ const moveFoxy = () => {
   }
 };
 
-const attemptFoxyJumpscare = () => {
-  addReport(Foxy, 'jumpscare');
+const attemptFoxyJumpscare = (e?: Event) => {
   clearInterval(foxyInterval);
+
+  const performFoxyJumpscareCheck = () => {
+    if (user.rightDoorIsClosed) {
+      addReport(Foxy, 'foxy right door closed');
+      moveAnimatronic(Foxy, { start: '4A', end: '1C', sub: Math.floor(Math.random() * 2) }, false);
+    } else {
+      addReport(Foxy, 'jumpscare');
+    }
+  };
+
+  // If this is happening as a result of looking at cam 4A, we need to wait 1.87 seconds before he attempts to attack
+  // If this is happening as a result of him waiting 25 seconds (in which case there will be no event parameter here) he will attempt to attack immediately.
+  if (e) {
+    addReport(Foxy, 'foxy coming down hall');
+    window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
+  } else {
+    performFoxyJumpscareCheck();
+  }
 };
 
 // When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
@@ -490,6 +506,8 @@ type messagingType =
   | 'foxy paused'
   | 'foxy failed pirate cove movement check'
   | 'foxy successful pirate cove movement check' // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
+  | 'foxy right door closed'
+  | 'foxy coming down hall'
   | 'foxy leaving pirate cove'; // Foxy is leaving Pirate cove
 
 const pluralise = (number: number, word: string) => {
@@ -620,6 +638,16 @@ const addReport = (
     case 'foxy leaving pirate cove':
       message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
       <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 4A, whichever comes sooner</div>`;
+      type = 'success';
+      break;
+
+    case 'foxy right door closed':
+      message = `Foxy attempted to enter your office but the right door was closed. He will return to cam 1C (${cameraNames['1C']})`;
+      type = 'fail';
+      break;
+
+    case 'foxy coming down hall':
+      message = 'FOXY IS COMING DOWN THE HALL. HE WILL ATTEMPT TO JUMPSCARE YOU IN 1.87 SECONDS';
       type = 'success';
       break;
 
