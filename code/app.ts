@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 1000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -506,30 +506,44 @@ const moveFreddy = () => {
 };
 
 // ========================================================================== //
-// BONNIE
+// BONNIE AND CHICA
+// Bonnie and Chica share much of the same logic with only minor differences.
 // ========================================================================== //
 
-const moveBonnie = () => {
-  const movementCheck = makeMovementCheck(Bonnie);
+const moveBonnieOrChica = (animatronic: Animatronic) => {
+  // Figure out which set of details we need to use depending on whether it's Bonnie or Chica we're dealing with
+  const name = animatronic.name;
+  const newPosition = name === 'Bonnie' ? calculateNewBonniePosition() : calculateNewChicaPosition();
+  const hallCorner = name === 'Bonnie' ? '2B' : '4B';
+  const doorClosed = name === 'Bonnie' ? user.leftDoorIsClosed : user.rightDoorIsClosed;
+  const doorClosedMessage = name === 'Bonnie' ? 'left door closed' : 'right door closed';
+
+  const movementCheck = makeMovementCheck(animatronic);
 
   // If he can move, but isn't in 2B. He'll pick somewhere at random.
-  if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
-    moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
+  if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
+    moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition });
 
     // If he's at 2B but isn't in your doorway yet, move him into the doorway
-  } else if (movementCheck.canMove && Bonnie.currentPosition === '2B' && Bonnie.subPosition === -1) {
-    moveAnimatronic(Bonnie, { start: '2B', end: '2B', sub: 1 }, false);
-    addReport(Bonnie, 'in the doorway');
+  } else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition === -1) {
+    moveAnimatronic(animatronic, { start: hallCorner, end: hallCorner, sub: 1 }, false);
+    addReport(animatronic, 'in the doorway');
 
     // He's passed a movement check, is already in the doorway and the left door is not closed, he can get into your office!
   } else if (
     movementCheck.canMove &&
-    Bonnie.currentPosition === '2B' &&
-    Bonnie.subPosition !== -1 &&
-    !user.leftDoorIsClosed
+    animatronic.currentPosition === hallCorner &&
+    animatronic.subPosition !== -1 &&
+    !doorClosed
   ) {
-    moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
-    addReport(Bonnie, 'enter office bonnie or chica');
+    moveAnimatronic(animatronic, { start: hallCorner, end: 'office', sub: -1 }, false);
+    addReport(animatronic, 'enter office bonnie or chica');
+
+    if (name === 'Bonnie') {
+      clearInterval(bonnieInterval);
+    } else {
+      clearInterval(chicaInterval);
+    }
 
     // Disable the doors and lights once the animatronic is in the office
     disableOfficeButtons();
@@ -541,30 +555,30 @@ const moveBonnie = () => {
     // He meets all the critera to enter the office but the door is closed. He will return to the dining area
   } else if (
     movementCheck.canMove &&
-    Bonnie.currentPosition === '2B' &&
-    Bonnie.subPosition !== -1 &&
-    user.leftDoorIsClosed
+    animatronic.currentPosition === hallCorner &&
+    animatronic.subPosition !== -1 &&
+    doorClosed
   ) {
-    moveAnimatronic(Bonnie, { start: '2B', end: '1B', sub: -1 }, false);
-    addReport(Bonnie, 'left door closed', movementCheck, '1B');
+    moveAnimatronic(animatronic, { start: hallCorner, end: '1B', sub: -1 }, false);
+    addReport(animatronic, doorClosedMessage, movementCheck, '1B');
 
     // The conditions were right to enter the office but they failed their movement check
   } else if (
     !movementCheck.canMove &&
-    Bonnie.currentPosition === '2B' &&
-    Bonnie.subPosition !== -1 &&
+    animatronic.currentPosition === hallCorner &&
+    animatronic.subPosition !== -1 &&
     !user.leftDoorIsClosed
   ) {
-    addReport(Bonnie, 'enter office failed movement check doorway');
+    addReport(animatronic, 'enter office failed movement check doorway');
 
     // Failed a bog standard movement check with no other fancy conditions
   } else if (!movementCheck.canMove) {
-    addReport(Bonnie, 'failed movement check');
+    addReport(animatronic, 'failed movement check');
   } else {
-    addReport(Bonnie, 'debug');
+    addReport(animatronic, 'debug');
   }
 
-  console.log(Bonnie);
+  console.log(animatronic);
 };
 
 // Bonnie does not have to chose adjacent rooms. He can pick at random from a list of approved locations.
@@ -574,7 +588,7 @@ const calculateNewBonniePosition = () => {
   return possibleLocations[choice] as Position;
 };
 
-const calculateNewChicaPosition = () => {};
+const calculateNewChicaPosition = () => '1A' as Position;
 
 const moveAnimatronic = (
   animatronic: Animatronic,
@@ -950,7 +964,12 @@ const timeUpdate = window.setInterval(updateTime, secondLength); // Update the f
 const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
 let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-let bonnieInterval = window.setInterval(moveBonnie, secondLength * Bonnie.movementOpportunityInterval);
+let bonnieInterval = window.setInterval(() => {
+  moveBonnieOrChica(Bonnie);
+}, secondLength * Bonnie.movementOpportunityInterval);
+let chicaInterval = window.setInterval(() => {
+  moveBonnieOrChica(Chica);
+}, secondLength * Chica.movementOpportunityInterval);
 
 // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
 if (Foxy.currentPosition === '4A') {
