@@ -26,8 +26,7 @@ type Animatronic = {
   pronouns: ['he' | 'she', 'his' | 'her']; // For FNAF 1 this is simple. In other FNAF games the genders of some animatronics are complicated, so this makes for easier forwards compatibility than just checking whether we're dealing with Chica (the only female animatronic in FNAF 1)
 };
 
-type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '2C' | '3' | '4A' | '4B' | '4C' | '5' | '6' | '7';
-// Cameras 2C and 4C do not actually exist. I will use these names to denote the areas between cameras 2B/4B and the office.
+type Camera = '1A' | '1B' | '1C' | '2A' | '2B' | '3' | '4A' | '4B' | '5' | '6' | '7';
 
 type Position = Camera | 'office';
 
@@ -97,11 +96,9 @@ const cameraNames = {
   '1C': 'Pirate cove',
   '2A': 'West hall',
   '2B': 'W. hall corner',
-  '2C': 'Between 2B and office',
   '3': 'Supply closet',
   '4A': 'East hall',
   '4B': 'E. hall corner',
-  '4C': 'Between 4B and office',
   '5': 'Backstage',
   '6': 'Kitchen',
   '7': 'Restrooms',
@@ -514,7 +511,6 @@ const moveFreddy = () => {
 
 const moveBonnie = () => {
   const movementCheck = makeMovementCheck(Bonnie);
-  console.log(movementCheck);
 
   // If he can move, but isn't in 2B. He'll pick somewhere at random.
   if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
@@ -537,8 +533,6 @@ const moveBonnie = () => {
 
     // Disable the doors and lights once the animatronic is in the office
     disableOfficeButtons();
-
-    // TODO - DISABLE BUTTONS
 
     // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
     window.setTimeout(gameOver, secondLength * 30);
@@ -622,6 +616,7 @@ type messagingType =
   | 'freddy and camera at 4B' // Freddy auto fails all movement checks while both he and the camera are at 4B
   | 'left door closed'
   | 'right door closed'
+  | 'enter office bonnie or chica'
   | 'enter office failed movement check' // Animatronic could have entered the office but failed their movement check
   | 'enter office cameras off' // Animatronic passed the check to enter the office but couldn't because the cameras were off
   | 'in the office' // Animatronic is in the office
@@ -640,6 +635,8 @@ const pluralise = (number: number, word: string) => {
   let plural = number > 1 ? 's' : '';
   return word + plural;
 };
+
+const capitalise = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
 
 const addReport = (
   animatronic: Animatronic,
@@ -690,16 +687,17 @@ const addReport = (
       break;
 
     case 'right door closed':
-      message = `${animatronic.name} was ready to enter your office but the right door was closed. ${
-        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
-      } will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
+      message = `${animatronic.name} was ready to enter your office but the right door was closed. ${capitalise(
+        animatronic.pronouns[0]
+      )} will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
       type = 'fail';
       break;
 
     case 'left door closed':
-      message = `${animatronic.name} was ready to enter your office but the left door was closed. ${
-        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
-      } will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
+      message = `${animatronic.name} was ready to enter your office but the left door was closed.
+      ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${
+        cameraNames[additionalInfo as Camera]
+      })`;
       type = 'fail';
       break;
 
@@ -714,11 +712,9 @@ const addReport = (
     case 'enter office failed movement check':
       message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${
         animatronic.pronouns[1]
-      } movement check. ${
-        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
-      } will continue to wait at cam ${animatronic.currentPosition} (${
-        cameraNames[animatronic.currentPosition as Camera]
-      }) ${stats}`;
+      } movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${
+        animatronic.currentPosition
+      } (${cameraNames[animatronic.currentPosition as Camera]}) ${stats}`;
       break;
 
     case 'enter office failed movement check doorway':
@@ -726,18 +722,16 @@ const addReport = (
 
       message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${
         animatronic.pronouns[1]
-      } movement check. ${
-        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
-      } will continue to wait in the ${doorSide} doorway ${stats}`;
+      } movement check.
+      ${capitalise(animatronic.pronouns[0])} will continue to wait in the ${doorSide} doorway ${stats}`;
       type = 'fail';
       break;
 
     case 'enter office cameras off':
       message = `${animatronic.name} passed ${
         animatronic.pronouns[1]
-      } movement check to enter the office but couldn't because the cameras were off. ${
-        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
-      } will continue to wait at cam ${animatronic.currentPosition} (${
+      } movement check to enter the office but couldn't because the cameras were off.
+      ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${
         cameraNames[animatronic.currentPosition as Camera]
       }) ${stats}`;
       break;

@@ -63,11 +63,9 @@ const cameraNames = {
     '1C': 'Pirate cove',
     '2A': 'West hall',
     '2B': 'W. hall corner',
-    '2C': 'Between 2B and office',
     '3': 'Supply closet',
     '4A': 'East hall',
     '4B': 'E. hall corner',
-    '4C': 'Between 4B and office',
     '5': 'Backstage',
     '6': 'Kitchen',
     '7': 'Restrooms',
@@ -430,7 +428,6 @@ const moveFreddy = () => {
 // ========================================================================== //
 const moveBonnie = () => {
     const movementCheck = makeMovementCheck(Bonnie);
-    console.log(movementCheck);
     // If he can move, but isn't in 2B. He'll pick somewhere at random.
     if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
         moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
@@ -449,7 +446,6 @@ const moveBonnie = () => {
         addReport(Bonnie, 'in the office');
         // Disable the doors and lights once the animatronic is in the office
         disableOfficeButtons();
-        // TODO - DISABLE BUTTONS
         // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
         window.setTimeout(gameOver, secondLength * 30);
         window.addEventListener('cameras-off', gameOver);
@@ -503,6 +499,7 @@ const pluralise = (number, word) => {
     let plural = number > 1 ? 's' : '';
     return word + plural;
 };
+const capitalise = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 const addReport = (animatronic, reason, movementCheck = null, additionalInfo = null // Some reports need to pass in some additional info. This can take different formats so is allowed to be an 'any' type
 ) => {
     var _a;
@@ -538,11 +535,12 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             preventDuplicates = true;
             break;
         case 'right door closed':
-            message = `${animatronic.name} was ready to enter your office but the right door was closed. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
+            message = `${animatronic.name} was ready to enter your office but the right door was closed. ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
             type = 'fail';
             break;
         case 'left door closed':
-            message = `${animatronic.name} was ready to enter your office but the left door was closed. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
+            message = `${animatronic.name} was ready to enter your office but the left door was closed.
+      ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
             type = 'fail';
             break;
         case 'freddy office failed movement check':
@@ -553,15 +551,17 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             type = 'fail';
             break;
         case 'enter office failed movement check':
-            message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+            message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
             break;
         case 'enter office failed movement check doorway':
             let doorSide = animatronic.currentPosition === '2B' ? 'left' : 'right';
-            message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait in the ${doorSide} doorway ${stats}`;
+            message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check.
+      ${capitalise(animatronic.pronouns[0])} will continue to wait in the ${doorSide} doorway ${stats}`;
             type = 'fail';
             break;
         case 'enter office cameras off':
-            message = `${animatronic.name} passed ${animatronic.pronouns[1]} movement check to enter the office but couldn't because the cameras were off. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+            message = `${animatronic.name} passed ${animatronic.pronouns[1]} movement check to enter the office but couldn't because the cameras were off.
+      ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
             break;
         case 'in the office':
             message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
