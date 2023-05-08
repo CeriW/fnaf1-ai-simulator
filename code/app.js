@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',

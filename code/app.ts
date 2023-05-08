@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
