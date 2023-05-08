@@ -443,13 +443,19 @@ const moveBonnie = () => {
     else if (movementCheck.canMove && Bonnie.currentPosition === '2B' && Bonnie.subPosition === -1) {
         moveAnimatronic(Bonnie, { start: '2B', end: '2B', sub: 1 }, false);
         addReport(Bonnie, 'in the doorway');
+        // He's passed a movement check, is already in the doorway and the left door is not closed, he can get into your office!
     }
     else if (movementCheck.canMove &&
         Bonnie.currentPosition === '2B' &&
         Bonnie.subPosition === 1 &&
-        !user.rightDoorIsClosed) {
+        !user.leftDoorIsClosed) {
         moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
         addReport(Bonnie, 'in the office');
+    }
+    else if (movementCheck.canMove &&
+        Bonnie.currentPosition === '2B' &&
+        Bonnie.subPosition !== -1 &&
+        user.rightDoorIsClosed) {
     }
     else {
         addReport(Bonnie, 'debug');
