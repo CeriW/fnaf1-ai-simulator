@@ -1,13 +1,13 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 5000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
     // possibleLocations: ['1A'],
-    startingPosition: '1A',
-    currentPosition: '1A',
+    startingPosition: '6',
+    currentPosition: '6',
     movementOpportunityInterval: 3.02,
     // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
     aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9],
@@ -22,8 +22,8 @@ const Bonnie = {
     // possibleLocations: ['1A'],
     // startingPosition: '1A',
     // currentPosition: '1A',
-    startingPosition: '2B',
-    currentPosition: '2B',
+    startingPosition: '6',
+    currentPosition: '6',
     movementOpportunityInterval: 4.97,
     aiLevels: [null, 0, 3, 0, 2, 5, 10],
     currentAIlevel: 0,
@@ -35,8 +35,8 @@ const Bonnie = {
 const Chica = {
     name: 'Chica',
     // possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
-    startingPosition: '1A',
-    currentPosition: '1A',
+    startingPosition: '7',
+    currentPosition: '7',
     movementOpportunityInterval: 4.98,
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
     currentAIlevel: 0,
