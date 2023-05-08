@@ -447,6 +447,10 @@ const moveBonnie = () => {
         !user.leftDoorIsClosed) {
         moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
         addReport(Bonnie, 'in the office');
+        // TODO - DISABLE BUTTONS
+        // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
+        window.setTimeout(gameOver, secondLength * 30);
+        window.addEventListener('cameras-off', gameOver);
         // He meets all the critera to enter the office but the door is closed. He will return to the dining area
     }
     else if (movementCheck.canMove &&
