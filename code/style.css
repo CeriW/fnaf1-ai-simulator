@@ -22,8 +22,12 @@
   -ms-grid-rows: min-content 0 min-content;
   -ms-grid-columns: 1fr 10px -webkit-min-content;
   -ms-grid-columns: 1fr 10px min-content;
-  grid-template: "hour minutes" -webkit-min-content "hour am" -webkit-min-content / 1fr -webkit-min-content;
-  grid-template: "hour minutes" min-content "hour am" min-content / 1fr min-content;
+  grid-template: "hour minutes" -webkit-min-content
+ "hour am" -webkit-min-content
+ / 1fr -webkit-min-content;
+  grid-template: "hour minutes" min-content
+ "hour am" min-content
+ / 1fr min-content;
   gap: 0 10px;
   -webkit-box-align: end;
   -ms-flex-align: end;
@@ -291,7 +295,9 @@ svg#close-icons {
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto auto;
-  grid-template: "time" "description" "extra-info";
+  grid-template: "time"
+ "description"
+ "extra-info";
   margin-bottom: 15px; }
 
 .report-item[type="success"] .report-description {
@@ -323,7 +329,9 @@ svg#close-icons {
   display: grid;
   -ms-grid-rows: auto auto;
   -ms-grid-columns: 1fr 1fr;
-  grid-template: ". ." auto ". ." auto / 1fr 1fr; }
+  grid-template: ". ." auto
+ ". ." auto
+ / 1fr 1fr; }
 
 .animatronic-report {
   display: -ms-grid;
@@ -331,8 +339,16 @@ svg#close-icons {
   -ms-grid-rows: -webkit-min-content -webkit-min-content -webkit-min-content auto;
   -ms-grid-rows: min-content min-content min-content auto;
   -ms-grid-columns: 60px auto auto;
-  grid-template: "icon name" -webkit-min-content "icon starting-ai-level" -webkit-min-content "icon current-ai-level" -webkit-min-content "icon reports" auto / 60px auto auto;
-  grid-template: "icon name" min-content "icon starting-ai-level" min-content "icon current-ai-level" min-content "icon reports" auto / 60px auto auto; }
+  grid-template: "icon name" -webkit-min-content
+ "icon starting-ai-level" -webkit-min-content
+ "icon current-ai-level" -webkit-min-content
+ "icon reports" auto
+ / 60px auto auto;
+  grid-template: "icon name" min-content
+ "icon starting-ai-level" min-content
+ "icon current-ai-level" min-content
+ "icon reports" auto
+ / 60px auto auto; }
 
 .animatronic-icon {
   -ms-grid-row: 1;
@@ -463,21 +479,24 @@ main {
   display: grid;
   -ms-grid-rows: auto;
   -ms-grid-columns: 750px 30px 1fr;
-  grid-template: ". ." auto / 750px 1fr;
+  grid-template: ". ." auto
+ / 750px 1fr;
   gap: 0 30px; }
 
 @media (max-width: 1400px) {
   main {
     -ms-grid-rows: auto;
     -ms-grid-columns: 600px 50px 1fr;
-    grid-template: ". ." auto / 600px 1fr;
+    grid-template: ". ." auto
+ / 600px 1fr;
     gap: 0 50px; } }
 
 @media (max-width: 1000px) {
   main {
     -ms-grid-rows: auto;
     -ms-grid-columns: 500px 50px 1fr;
-    grid-template: ". ." auto / 500px 1fr;
+    grid-template: ". ." auto
+ / 500px 1fr;
     gap: 0 50px; } }
 
 details {
