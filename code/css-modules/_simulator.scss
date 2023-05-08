@@ -12,3 +12,10 @@
 .door-button{
   @include buttonStyle;
 }
+
+svg#close-icons{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+}

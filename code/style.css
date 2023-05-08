@@ -106,6 +106,9 @@
   top: 63.5%;
   left: 29.2%; }
 
+.animatronic[position="2A"][subposition="1"] {
+  left: 32.2%; }
+
 /* Camera 2B ------------------------------------------------------------------*/
 .animatronic[position="2B"] {
   top: 84%;
@@ -222,6 +225,12 @@
   line-height: 0.8; }
   .door-button.active {
     background: #7FB000; }
+
+svg#close-icons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4; }
 
 .animatronic-report {
   max-height: 300px;

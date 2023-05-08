@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 50000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -49,13 +49,17 @@ const Freddy: Animatronic = {
 const Bonnie: Animatronic = {
   name: 'Bonnie',
   // possibleLocations: ['1A'],
-  startingPosition: '1A',
-  currentPosition: '1A',
+  // startingPosition: '1A',
+  // currentPosition: '1A',
+
+  startingPosition: '2B',
+  currentPosition: '2B',
+
   movementOpportunityInterval: 4.97,
   aiLevels: [null, 0, 3, 0, 2, 5, 10],
   currentAIlevel: 0,
   currentCountdown: 0,
-  pronouns: ['she', 'her'],
+  pronouns: ['he', 'his'],
   subPosition: -1,
   startingSubPosition: -1,
 };
@@ -69,7 +73,7 @@ const Chica: Animatronic = {
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
   currentAIlevel: 0,
   currentCountdown: 0,
-  pronouns: ['he', 'his'],
+  pronouns: ['she', 'her'],
   subPosition: -1,
   startingSubPosition: -1,
 };
@@ -512,10 +516,15 @@ const moveBonnie = () => {
   const movementCheck = makeMovementCheck(Bonnie);
   console.log(movementCheck);
 
-  if (movementCheck.canMove) {
-    moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
-  } else {
+  if (!movementCheck.canMove) {
     addReport(Bonnie, 'failed movement check');
+  } else if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
+    moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
+  } else if (movementCheck.canMove && Bonnie.currentPosition === '2B' && Bonnie.subPosition === -1) {
+    moveAnimatronic(Bonnie, { start: '2B', end: '2B', sub: 1 }, false);
+    addReport(Bonnie, 'in the doorway');
+  } else {
+    addReport(Bonnie, 'debug');
   }
 
   console.log(Bonnie);
@@ -561,7 +570,8 @@ const moveAnimatronic = (
 
 type messagingType =
   | 'debug' // Used for debugging purposes to report something, anything
-  | 'increase AI level'
+  | 'increase AI level' // Used when animatronics gain their AI level increases throughout the night
+  | 'in the doorway' // The animatronic is in the doorway
   | 'camera auto fail' // The animatronic automatically fails movement checks when cameras are on
   | 'failed movement check' // Generic failed movement check
   | 'freddy office failed movement check' // Failed movement check while animatronic is in the office
@@ -607,13 +617,18 @@ const addReport = (
       message = `Something happened`;
       break;
 
+    case 'in the doorway':
+      const side = animatronic.name === 'Bonnie' ? 'left' : 'right';
+      message = `${animatronic.name} is in your ${side} doorway!`;
+      type = 'success';
+      break;
+
     case 'increase AI level':
       message = `${animatronic.name}'s AI level has increased by 1 to ${animatronic.currentAIlevel}`;
       break;
 
     case 'camera auto fail':
       message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
-      type = 'info';
       preventDuplicates = true;
       break;
 
