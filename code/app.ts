@@ -673,7 +673,7 @@ const addReport = (
 ) => {
   // Figuring out what the message actually should be
   let message = '';
-  let type: 'success' | 'fail' | 'info' = 'info';
+  let type: 'bad' | 'good' | 'info' | 'warning' | 'alert' = 'info';
   let preventDuplicates = false;
   const stats = movementCheck
     ? `<div class="report-extra-info">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${
@@ -689,7 +689,7 @@ const addReport = (
     case 'in the doorway':
       const side = animatronic.name === 'Bonnie' ? 'left' : 'right';
       message = `${animatronic.name} is in your ${side} doorway!`;
-      type = 'success';
+      type = 'warning';
       break;
 
     case 'increase AI level':
@@ -705,7 +705,7 @@ const addReport = (
       message = `${animatronic.name} has failed ${animatronic.pronouns[1]} movement check and will remain at ${
         animatronic.currentPosition
       } (${cameraNames[animatronic.currentPosition as Camera]}) ${stats}`;
-      type = 'fail';
+      type = 'good';
       break;
 
     case 'freddy and camera at 4B':
@@ -717,7 +717,7 @@ const addReport = (
       message = `${animatronic.name} was ready to enter your office but the right door was closed. ${capitalise(
         animatronic.pronouns[0]
       )} will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
-      type = 'fail';
+      type = 'good';
       break;
 
     case 'left door closed':
@@ -725,7 +725,7 @@ const addReport = (
       ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${
         cameraNames[additionalInfo as Camera]
       })`;
-      type = 'fail';
+      type = 'good';
       break;
 
     case 'enter office bonnie or chica':
@@ -734,7 +734,7 @@ const addReport = (
         animatronic.pronouns[0]
       )} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
 
-      type = 'success';
+      type = 'alert';
       preventDuplicates = true;
       break;
 
@@ -743,7 +743,7 @@ const addReport = (
           <div class="report-extra-info">
           Score to beat: ${movementCheck?.scoreToBeat}/100   Freddy's score: ${movementCheck?.aiLevel}
           </div>`;
-      type = 'fail';
+      type = 'alert';
       break;
 
     case 'enter office failed movement check':
@@ -752,6 +752,7 @@ const addReport = (
       } movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${
         animatronic.currentPosition
       } (${cameraNames[animatronic.currentPosition as Camera]}) ${stats}`;
+      type = 'warning';
       break;
 
     case 'enter office failed movement check doorway':
@@ -761,7 +762,7 @@ const addReport = (
         animatronic.pronouns[1]
       } movement check.
       ${capitalise(animatronic.pronouns[0])} will continue to wait in the ${doorSide} doorway ${stats}`;
-      type = 'fail';
+      type = 'warning';
       break;
 
     case 'enter office cameras off':
@@ -771,11 +772,12 @@ const addReport = (
       ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${
         cameraNames[animatronic.currentPosition as Camera]
       }) ${stats}`;
+      type = 'warning';
       break;
 
     case 'in the office':
       message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
-      type = 'success';
+      type = 'alert';
       preventDuplicates = true;
       break;
 
@@ -790,14 +792,14 @@ const addReport = (
       to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition as Camera]})
       in ${additionalInfo.formattedWaitingTime} seconds
       ${stats}`;
-      type = 'success';
+      type = 'bad';
       break;
 
     case 'has moved':
       message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${
         cameraNames[additionalInfo.currentPosition as Camera]
       }) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition as Camera]})`;
-      type = 'success';
+      type = 'bad';
       break;
 
     case 'foxy successful pirate cove movement check':
@@ -805,7 +807,7 @@ const addReport = (
       message = `Foxy has made a successful movement check while at 1C (${
         cameraNames['1C']
       }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
-      type = 'success';
+      type = stepsRemaining === 1 ? 'alert' : 'bad';
       break;
 
     case 'foxy paused':
@@ -820,13 +822,13 @@ const addReport = (
         stepsRemainingB,
         'step'
       )} away from leaving 1C (${cameraNames['1C']}) ${stats}`;
-      type = 'fail';
+      type = 'good';
       break;
 
     case 'foxy leaving pirate cove':
       message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
       <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 4A, whichever comes sooner</div>`;
-      type = 'success';
+      type = 'alert';
       break;
 
     case 'foxy right door closed':
@@ -834,17 +836,17 @@ const addReport = (
         cameraNames['1C']
       }) at step ${additionalInfo + 1}
       <div class="report-extra-info">Restarting step chosen at random from 1 & 2</div>`;
-      type = 'fail';
+      type = 'good';
       break;
 
     case 'foxy coming down hall':
       message = 'FOXY IS COMING DOWN THE HALL. HE WILL ATTEMPT TO JUMPSCARE YOU IN 1.87 SECONDS';
-      type = 'success';
+      type = 'alert';
       break;
 
     case 'jumpscare':
       message = `${animatronic.name} successfully jumpscared you`;
-      type = 'success';
+      type = 'alert';
       break;
   }
 
@@ -992,5 +994,5 @@ initialiseDoors();
 generateAnimatronics();
 
 cameraButton.addEventListener('click', toggleCameras);
-cameraButton.addEventListener('mouseenter', toggleCameras);
+// cameraButton.addEventListener('mouseenter', toggleCameras);
 window.addEventListener('cameras-off', pauseFoxy);

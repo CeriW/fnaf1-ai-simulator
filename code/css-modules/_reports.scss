@@ -1,6 +1,5 @@
 .report-item-container{
-  height: 150px;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 10px;
 }
 
@@ -15,16 +14,29 @@
   margin-bottom: 15px;
 }
 
-.report-item[type="success"] .report-description{
+.report-item[type="bad"] .report-description{
+  color: #f60;
+}
+
+.report-item[type="good"] .report-description{
   color: green;
 }
 
-.report-item[type="fail"] .report-description{
+.report-item[type="warning"] .report-description{
   color: red;
 }
 
+
+.report-item[type="alert"] .report-description{
+  color: red;
+  padding-left: 30px;
+  background: url('../../assets/icons/alert.svg') left top no-repeat;
+  background-size: 25px;
+}
+
+
 .report-time{
-  color: rgba(white, 0.4);
+  color: #646464;
   grid-area: time;
 }
 
@@ -33,7 +45,7 @@
 }
 
 .report-extra-info{
-  color: rgba(white, 0.4);
+  color: #646464;
   grid-area: extra-info;
 }
 
@@ -53,7 +65,7 @@
   display: grid;
   grid-template:
     "icon name name" min-content
-    "icon reports reports" auto
+    "icon reports reports" 150px
     "icon starting-ai-level current-ai-level" min-content
     / 60px auto auto;
   border: 2px solid;

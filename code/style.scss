@@ -149,7 +149,7 @@ button{
   display: grid;
   grid-template:
     ". ." auto
-    " reports reports" auto
+    " reports reports" min-content
     / 1fr 1fr;
     gap: 10px;
 

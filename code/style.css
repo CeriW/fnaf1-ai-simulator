@@ -317,8 +317,7 @@ button#cameras {
   grid-area: camera-button; }
 
 .report-item-container {
-  height: 150px;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding: 10px; }
 
 .report-item {
@@ -329,16 +328,25 @@ button#cameras {
   grid-template: "time" "description" "extra-info";
   margin-bottom: 15px; }
 
-.report-item[type="success"] .report-description {
+.report-item[type="bad"] .report-description {
+  color: #f60; }
+
+.report-item[type="good"] .report-description {
   color: green; }
 
-.report-item[type="fail"] .report-description {
+.report-item[type="warning"] .report-description {
   color: red; }
+
+.report-item[type="alert"] .report-description {
+  color: red;
+  padding-left: 30px;
+  background: url("../../assets/icons/alert.svg") left top no-repeat;
+  background-size: 25px; }
 
 .report-time {
   -ms-grid-row: 1;
   -ms-grid-column: 1;
-  color: rgba(255, 255, 255, 0.4);
+  color: #646464;
   grid-area: time; }
 
 .report-description {
@@ -349,7 +357,7 @@ button#cameras {
 .report-extra-info {
   -ms-grid-row: 3;
   -ms-grid-column: 1;
-  color: rgba(255, 255, 255, 0.4);
+  color: #646464;
   grid-area: extra-info; }
 
 /* General panel ------------------------------------------------------------ */
@@ -372,11 +380,11 @@ button#cameras {
 .animatronic-report {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: -webkit-min-content auto -webkit-min-content;
-  -ms-grid-rows: min-content auto min-content;
+  -ms-grid-rows: -webkit-min-content 150px -webkit-min-content;
+  -ms-grid-rows: min-content 150px min-content;
   -ms-grid-columns: 60px auto auto;
-  grid-template: "icon name name" -webkit-min-content "icon reports reports" auto "icon starting-ai-level current-ai-level" -webkit-min-content / 60px auto auto;
-  grid-template: "icon name name" min-content "icon reports reports" auto "icon starting-ai-level current-ai-level" min-content / 60px auto auto;
+  grid-template: "icon name name" -webkit-min-content "icon reports reports" 150px "icon starting-ai-level current-ai-level" -webkit-min-content / 60px auto auto;
+  grid-template: "icon name name" min-content "icon reports reports" 150px "icon starting-ai-level current-ai-level" min-content / 60px auto auto;
   border: 2px solid; }
 
 .animatronic-icon {
@@ -637,7 +645,9 @@ button {
 #sidebar {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: auto 10px auto;
+  -ms-grid-rows: auto 10px -webkit-min-content;
+  -ms-grid-rows: auto 10px min-content;
   -ms-grid-columns: 1fr 10px 1fr;
-  grid-template: ". ." auto " reports reports" auto / 1fr 1fr;
+  grid-template: ". ." auto " reports reports" -webkit-min-content / 1fr 1fr;
+  grid-template: ". ." auto " reports reports" min-content / 1fr 1fr;
   gap: 10px; }
