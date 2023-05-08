@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 5000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
@@ -15,7 +15,6 @@ type MovementCheck = {
 type Animatronic = {
   name: string;
   // possibleLocations: string[]; // The cameras where they can be
-  startingPosition: Camera; // The camera where they start
   currentPosition: Position; // The camera the animatronic is currently at
   subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
   startingSubPosition: number; // Used for Foxy. The subposition he starts at.
@@ -32,9 +31,7 @@ type Position = Camera | 'office';
 
 const Freddy: Animatronic = {
   name: 'Freddy',
-  // possibleLocations: ['1A'],
-  startingPosition: '6',
-  currentPosition: '6',
+  currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9], // Freddy randomly starts at 1 or 2 on night 4
@@ -47,13 +44,7 @@ const Freddy: Animatronic = {
 
 const Bonnie: Animatronic = {
   name: 'Bonnie',
-  // possibleLocations: ['1A'],
-  // startingPosition: '1A',
-  // currentPosition: '1A',
-
-  startingPosition: '6',
-  currentPosition: '6',
-
+  currentPosition: '1A',
   movementOpportunityInterval: 4.97,
   aiLevels: [null, 0, 3, 0, 2, 5, 10],
   currentAIlevel: 0,
@@ -65,9 +56,8 @@ const Bonnie: Animatronic = {
 
 const Chica: Animatronic = {
   name: 'Chica',
-  // possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
-  startingPosition: '7',
-  currentPosition: '7',
+
+  currentPosition: '1A',
   movementOpportunityInterval: 4.98,
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
   currentAIlevel: 0,
@@ -79,7 +69,6 @@ const Chica: Animatronic = {
 
 const Foxy: Animatronic = {
   name: 'Foxy',
-  startingPosition: '1C',
   currentPosition: '1C',
   currentAIlevel: 0,
   subPosition: 0,
@@ -224,7 +213,7 @@ const generateAnimatronics = () => {
     let icon = document.createElement('span');
     icon.classList.add('animatronic');
     icon.setAttribute('id', animatronic.name);
-    icon.setAttribute('position', animatronic.startingPosition);
+    icon.setAttribute('position', animatronic.currentPosition);
 
     icon.setAttribute('sub-position', animatronic.startingSubPosition.toString() ?? 'none');
     simulator.appendChild(icon);
@@ -232,11 +221,12 @@ const generateAnimatronics = () => {
     // Create the report
     let animatronicReport = document.createElement('div');
     animatronicReport.classList.add('animatronic-report');
-    animatronicReport.setAttribute('animatronic', animatronic.name);
+    animatronicReport.setAttribute('for', animatronic.name);
     animatronicReport.innerHTML = `
-      ${animatronic.name}<br>
-      Starting AI level: ${animatronic.currentAIlevel}
-      Current AI level: <span class="current-ai-level">${animatronic.currentAIlevel}</span>
+      <div class="animatronic-icon"></div>
+      <div class="animatronic-name">${animatronic.name}</div>
+      <div class="starting-ai-level">Starting AI level: ${animatronic.currentAIlevel}</div>
+      <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
       <div class="report-item-container"></div>
     `;
     sidebar.querySelector('#animatronic-report')!.appendChild(animatronicReport);
@@ -256,7 +246,7 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
 const increaseAILevel = (animatronic: Animatronic) => {
   animatronic.currentAIlevel++;
   addReport(animatronic, 'increase AI level');
-  let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .current-ai-level`);
+  let aiReport = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .current-ai-level span`);
   if (aiReport) {
     aiReport.innerHTML = animatronic.currentAIlevel.toString();
   }
@@ -451,8 +441,8 @@ const moveFreddy = () => {
   } else if (movementCheck.canMove) {
     let waitingTime = 1000 - Freddy.currentAIlevel * 100; // How many FRAMES to wait before moving
     waitingTime = waitingTime >= 0 ? waitingTime : 0;
-    let startingPosition = Freddy.currentPosition;
-    let endingPosition = startingPosition;
+    let currentPosition = Freddy.currentPosition;
+    let endingPosition = currentPosition;
 
     // Freddy always follows a set path
     switch (Freddy.currentPosition) {
@@ -478,7 +468,7 @@ const moveFreddy = () => {
 
     addReport(Freddy, 'freddy successful movement check', movementCheck, {
       formattedWaitingTime,
-      startingPosition,
+      currentPosition,
       endingPosition,
     });
 
@@ -493,7 +483,7 @@ const moveFreddy = () => {
     let freddyCountdown = window.setInterval(() => {
       Freddy.currentCountdown--;
       if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
-        moveAnimatronic(Freddy, { start: startingPosition, end: endingPosition });
+        moveAnimatronic(Freddy, { start: currentPosition, end: endingPosition });
         freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
         clearInterval(freddyCountdown);
       } else if (Freddy.currentCountdown <= 0 && user.camerasOn) {
@@ -627,7 +617,7 @@ const moveAnimatronic = (
 
   if (logThis) {
     addReport(animatronic, 'has moved', null, {
-      startingPosition: position.start,
+      currentPosition: position.start,
       endPosition: position.end,
     });
   }
@@ -796,7 +786,7 @@ const addReport = (
 
     case 'freddy successful movement check':
       message = `Freddy has passed his movement check and will move from
-      ${additionalInfo.startingPosition} (${cameraNames[additionalInfo.startingPosition as Camera]})
+      ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition as Camera]})
       to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition as Camera]})
       in ${additionalInfo.formattedWaitingTime} seconds
       ${stats}`;
@@ -804,8 +794,8 @@ const addReport = (
       break;
 
     case 'has moved':
-      message = `${animatronic.name} has moved from cam ${additionalInfo.startingPosition} (${
-        cameraNames[additionalInfo.startingPosition as Camera]
+      message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${
+        cameraNames[additionalInfo.currentPosition as Camera]
       }) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition as Camera]})`;
       type = 'success';
       break;
@@ -858,9 +848,7 @@ const addReport = (
       break;
   }
 
-  let reportToAddTo = document.querySelector(
-    `.animatronic-report[animatronic="${animatronic.name}"] .report-item-container`
-  );
+  let reportToAddTo = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .report-item-container`);
 
   let firstReport = reportToAddTo?.querySelector('.report-item');
   if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
@@ -976,7 +964,7 @@ const disableOfficeButtons = () => {
 // ========================================================================== //
 
 const gameOver = () => {
-  alert('You got jumpscared');
+  // alert('You got jumpscared');
 };
 
 // ========================================================================== //

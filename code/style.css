@@ -22,8 +22,12 @@
   -ms-grid-rows: min-content 0 min-content;
   -ms-grid-columns: 1fr 10px -webkit-min-content;
   -ms-grid-columns: 1fr 10px min-content;
-  grid-template: "hour minutes" -webkit-min-content "hour am" -webkit-min-content / 1fr -webkit-min-content;
-  grid-template: "hour minutes" min-content "hour am" min-content / 1fr min-content;
+  grid-template: "hour minutes" -webkit-min-content
+ "hour am" -webkit-min-content
+ / 1fr -webkit-min-content;
+  grid-template: "hour minutes" min-content
+ "hour am" min-content
+ / 1fr min-content;
   gap: 0 10px;
   -webkit-box-align: end;
   -ms-flex-align: end;
@@ -140,6 +144,10 @@
   top: 84%;
   left: 55.2%; }
 
+.animatronic[position="4B"][sub-position="1"] {
+  top: 84%;
+  left: 51.2%; }
+
 .animatronic[position="4B"] ~ .animatronic[position="4B"] {
   top: calc(84%% + 50px); }
 
@@ -175,19 +183,25 @@
 /* Individual animatronic styling ------------------------------------------- */
 #Bonnie {
   background-color: purple;
-  background-image: url("../../assets/Bonnie.svg"); }
+  background-image: url("../../assets/Bonnie.svg");
+  background-size: cover;
+  background-position: center bottom; }
 
 #Chica {
   background-color: yellow;
-  background-image: url("../../assets/Chica.svg"); }
+  background-image: url("../../assets/Chica.svg");
+  background-size: 80%;
+  background-position: center top; }
 
 #Freddy {
   background-color: brown;
-  background-image: url("../../assets/Freddy.svg"); }
+  background-image: url("../../assets/Freddy.svg");
+  background-size: cover; }
 
 #Foxy {
   background-color: red;
-  background-image: url("../../assets/Foxy.svg"); }
+  background-image: url("../../assets/Foxy.svg");
+  background-size: 120%; }
 
 #Foxy[position="1C"]:before,
 #Foxy[position="1C"]:after {
@@ -262,14 +276,18 @@
     opacity: 0.3;
     cursor: not-allowed; }
 
+#Rooms, #Dead_space {
+  pointer-events: none; }
+
 svg#close-icons {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 4; }
+  z-index: 4;
+  pointer-events: none; }
 
-.animatronic-report {
-  max-height: 300px;
+.report-item-container {
+  height: 200px;
   overflow-y: auto; }
 
 .report-item {
@@ -277,8 +295,9 @@ svg#close-icons {
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto auto;
-  -ms-grid-columns: 80px 1fr;
-  grid-template: "time description" "time extra-info" / 80px 1fr;
+  grid-template: "time"
+ "description"
+ "extra-info";
   margin-bottom: 15px; }
 
 .report-item[type="success"] .report-description {
@@ -289,21 +308,71 @@ svg#close-icons {
 
 .report-time {
   -ms-grid-row: 1;
-  -ms-grid-row-span: 2;
   -ms-grid-column: 1;
   color: rgba(255, 255, 255, 0.4);
   grid-area: time; }
 
 .report-description {
-  -ms-grid-row: 1;
-  -ms-grid-column: 2;
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
   grid-area: description; }
 
 .report-extra-info {
-  -ms-grid-row: 2;
-  -ms-grid-column: 2;
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
   color: rgba(255, 255, 255, 0.4);
   grid-area: extra-info; }
+
+/* General panel ------------------------------------------------------------ */
+#animatronic-report {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: auto auto;
+  -ms-grid-columns: 1fr 1fr;
+  grid-template: ". ." auto
+ ". ." auto
+ / 1fr 1fr; }
+
+.animatronic-report {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: -webkit-min-content -webkit-min-content -webkit-min-content auto;
+  -ms-grid-rows: min-content min-content min-content auto;
+  -ms-grid-columns: 60px auto auto;
+  grid-template: "icon name" -webkit-min-content
+ "icon starting-ai-level" -webkit-min-content
+ "icon current-ai-level" -webkit-min-content
+ "icon reports" auto
+ / 60px auto auto;
+  grid-template: "icon name" min-content
+ "icon starting-ai-level" min-content
+ "icon current-ai-level" min-content
+ "icon reports" auto
+ / 60px auto auto; }
+
+.animatronic-icon {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 4;
+  -ms-grid-column: 1;
+  grid-area: icon; }
+
+.starting-ai-level {
+  -ms-grid-row: 2;
+  -ms-grid-column: 2;
+  grid-area: starting-ai-level; }
+
+.current-ai-level {
+  -ms-grid-row: 3;
+  -ms-grid-column: 2;
+  grid-area: current-ai-level; }
+
+.report-item-container {
+  -ms-grid-row: 4;
+  -ms-grid-column: 2;
+  grid-area: reports; }
+
+.animatronic-report[for="Bonnie"] .animatronic-icon {
+  background: url("../../assets/animatronics/bonnie-icon.png") center/cover; }
 
 img#camera-screen {
   width: 300px; }
@@ -409,22 +478,25 @@ main {
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto;
-  -ms-grid-columns: 750px 100px 1fr;
-  grid-template: ". ." auto / 750px 1fr;
-  gap: 0 100px; }
+  -ms-grid-columns: 750px 30px 1fr;
+  grid-template: ". ." auto
+ / 750px 1fr;
+  gap: 0 30px; }
 
 @media (max-width: 1400px) {
   main {
     -ms-grid-rows: auto;
     -ms-grid-columns: 600px 50px 1fr;
-    grid-template: ". ." auto / 600px 1fr;
+    grid-template: ". ." auto
+ / 600px 1fr;
     gap: 0 50px; } }
 
 @media (max-width: 1000px) {
   main {
     -ms-grid-rows: auto;
     -ms-grid-columns: 500px 50px 1fr;
-    grid-template: ". ." auto / 500px 1fr;
+    grid-template: ". ." auto
+ / 500px 1fr;
     gap: 0 50px; } }
 
 details {

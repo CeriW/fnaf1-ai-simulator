@@ -58,7 +58,7 @@ main{
   grid-template: 
     ". ." auto
     / 750px 1fr;
-    gap: 0 100px;
+    gap: 0 30px;
 }
 
 @media(max-width: $l-screens){

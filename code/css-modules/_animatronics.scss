@@ -45,6 +45,7 @@
 .animatronic#Bonnie[position="1B"]{
   top: 30%;
   left: 50%;
+
 }
 
 .animatronic#Freddy[position="1B"]{
@@ -52,7 +53,10 @@
   left: 40%;
 }
 
-
+.animatronic#Freddy[position="1B"]{
+  top: 22%;
+  left: 40%;
+}
 
 /* Camera 1C ------------------------------------------------------------------*/
 
@@ -103,6 +107,11 @@
 .animatronic[position="4B"]{
   top: 84%;
   left: 55.2%;
+}
+
+.animatronic[position="4B"][sub-position="1"]{
+  top: 84%;
+  left: 51.2%;
 }
 
 .animatronic[position="4B"] ~ .animatronic[position="4B"]{
@@ -159,21 +168,27 @@
 #Bonnie{
   background-color: purple;
   background-image: url('../../assets/Bonnie.svg');
+  background-size: cover;
+  background-position: center bottom;
 }
 
 #Chica{
   background-color: yellow;
   background-image: url('../../assets/Chica.svg');
+  background-size: 80%;
+  background-position: center top;
 }
 
 #Freddy{
   background-color: brown;
   background-image: url('../../assets/Freddy.svg');
+  background-size: cover;
 }
 
 #Foxy{
   background-color: red;
   background-image: url('../../assets/Foxy.svg');
+  background-size: 120%;
 }
 
 #Foxy[position="1C"]:before,
