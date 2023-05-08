@@ -431,15 +431,25 @@ const moveFreddy = () => {
 const moveBonnie = () => {
     const movementCheck = makeMovementCheck(Bonnie);
     console.log(movementCheck);
+    // If he can't move
     if (!movementCheck.canMove) {
         addReport(Bonnie, 'failed movement check');
+        // If he can move, but isn't in 2B. He'll pick somewhere at random.
     }
     else if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
         moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
+        // If he's at 2B but isn't in your doorway yet, move him into the doorway
     }
     else if (movementCheck.canMove && Bonnie.currentPosition === '2B' && Bonnie.subPosition === -1) {
         moveAnimatronic(Bonnie, { start: '2B', end: '2B', sub: 1 }, false);
         addReport(Bonnie, 'in the doorway');
+    }
+    else if (movementCheck.canMove &&
+        Bonnie.currentPosition === '2B' &&
+        Bonnie.subPosition === 1 &&
+        !user.rightDoorIsClosed) {
+        moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
+        addReport(Bonnie, 'in the office');
     }
     else {
         addReport(Bonnie, 'debug');
