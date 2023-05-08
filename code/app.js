@@ -443,7 +443,7 @@ const moveBonnie = () => {
         Bonnie.subPosition !== -1 &&
         !user.leftDoorIsClosed) {
         moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
-        addReport(Bonnie, 'in the office');
+        addReport(Bonnie, 'enter office bonnie or chica');
         // Disable the doors and lights once the animatronic is in the office
         disableOfficeButtons();
         // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
@@ -542,6 +542,12 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             message = `${animatronic.name} was ready to enter your office but the left door was closed.
       ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
             type = 'fail';
+            break;
+        case 'enter office bonnie or chica':
+            message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE
+      <div class="report-extra-info">${capitalise(animatronic.pronouns[0])} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
+            type = 'success';
+            preventDuplicates = true;
             break;
         case 'freddy office failed movement check':
             message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
