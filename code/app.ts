@@ -425,7 +425,7 @@ const moveFreddy = () => {
     // QUESTION - I HAVE ASSUMED HE RETURNS TO 4A WHEN THIS IS THE CASE?
     // QUESTION - DOES HE HAVE TO PASS A MOVEMENT CHECK BEFORE HE MOVES BACK TO 4A?
     // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY? Because that's not happening right here with this code
-    addReport(Freddy, 'freddy right door closed');
+    addReport(Freddy, 'right door closed', null, '4A');
     Freddy.currentPosition = '4A';
     moveAnimatronic(Freddy, { start: '4B', end: '4A' });
 
@@ -597,7 +597,8 @@ type messagingType =
   | 'failed movement check' // Generic failed movement check
   | 'freddy office failed movement check' // Failed movement check while animatronic is in the office
   | 'freddy and camera at 4B' // Freddy auto fails all movement checks while both he and the camera are at 4B
-  | 'freddy right door closed'
+  | 'left door closed'
+  | 'right door closed'
   | 'enter office failed movement check' // Animatronic could have entered the office but failed their movement check
   | 'enter office cameras off' // Animatronic passed the check to enter the office but couldn't because the cameras were off
   | 'in the office' // Animatronic is in the office
@@ -664,10 +665,17 @@ const addReport = (
       message = `Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.`;
       preventDuplicates = true;
 
-    case 'freddy right door closed':
-      `Freddy was ready to enter your office but the right door was closed. He will return to cam 4A (${cameraNames['4A']})`;
+    case 'right door closed':
+      message = `${animatronic.name} was ready to enter your office but the right door was closed. ${
+        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
+      } will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
       type = 'fail';
-      break;
+
+    case 'left door closed':
+      message = `${animatronic.name} was ready to enter your office but the left door was closed. ${
+        animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)
+      } will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
+      type = 'fail';
 
     case 'freddy office failed movement check':
       message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
