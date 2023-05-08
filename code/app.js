@@ -1,12 +1,10 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 1000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 50000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
-    // possibleLocations: ['1A'],
-    startingPosition: '1A',
     currentPosition: '1A',
     movementOpportunityInterval: 3.02,
     // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
@@ -19,11 +17,7 @@ const Freddy = {
 };
 const Bonnie = {
     name: 'Bonnie',
-    // possibleLocations: ['1A'],
-    // startingPosition: '1A',
-    // currentPosition: '1A',
-    startingPosition: '2B',
-    currentPosition: '2B',
+    currentPosition: '1A',
     movementOpportunityInterval: 4.97,
     aiLevels: [null, 0, 3, 0, 2, 5, 10],
     currentAIlevel: 0,
@@ -34,8 +28,6 @@ const Bonnie = {
 };
 const Chica = {
     name: 'Chica',
-    // possibleLocations: ['1A', '1B', '7', '6', '4A', '4B'],
-    startingPosition: '1A',
     currentPosition: '1A',
     movementOpportunityInterval: 4.98,
     aiLevels: [null, 0, 1, 5, 4, 7, 12],
@@ -47,7 +39,6 @@ const Chica = {
 };
 const Foxy = {
     name: 'Foxy',
-    startingPosition: '1C',
     currentPosition: '1C',
     currentAIlevel: 0,
     subPosition: 0,
@@ -165,7 +156,7 @@ const generateAnimatronics = () => {
         let icon = document.createElement('span');
         icon.classList.add('animatronic');
         icon.setAttribute('id', animatronic.name);
-        icon.setAttribute('position', animatronic.startingPosition);
+        icon.setAttribute('position', animatronic.currentPosition);
         icon.setAttribute('sub-position', (_a = animatronic.startingSubPosition.toString()) !== null && _a !== void 0 ? _a : 'none');
         simulator.appendChild(icon);
         // Create the report
@@ -374,8 +365,8 @@ const moveFreddy = () => {
     else if (movementCheck.canMove) {
         let waitingTime = 1000 - Freddy.currentAIlevel * 100; // How many FRAMES to wait before moving
         waitingTime = waitingTime >= 0 ? waitingTime : 0;
-        let startingPosition = Freddy.currentPosition;
-        let endingPosition = startingPosition;
+        let currentPosition = Freddy.currentPosition;
+        let endingPosition = currentPosition;
         // Freddy always follows a set path
         switch (Freddy.currentPosition) {
             case '1A': // Show stage
@@ -398,7 +389,7 @@ const moveFreddy = () => {
         let formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
         addReport(Freddy, 'freddy successful movement check', movementCheck, {
             formattedWaitingTime,
-            startingPosition,
+            currentPosition,
             endingPosition,
         });
         clearInterval(freddyInterval);
@@ -410,7 +401,7 @@ const moveFreddy = () => {
         let freddyCountdown = window.setInterval(() => {
             Freddy.currentCountdown--;
             if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
-                moveAnimatronic(Freddy, { start: startingPosition, end: endingPosition });
+                moveAnimatronic(Freddy, { start: currentPosition, end: endingPosition });
                 freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
                 clearInterval(freddyCountdown);
             }
@@ -487,7 +478,7 @@ const moveAnimatronic = (animatronic, position, logThis = true) => {
     animatronic.subPosition = (_a = position.sub) !== null && _a !== void 0 ? _a : -1;
     if (logThis) {
         addReport(animatronic, 'has moved', null, {
-            startingPosition: position.start,
+            currentPosition: position.start,
             endPosition: position.end,
         });
     }
@@ -580,14 +571,14 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'freddy successful movement check':
             message = `Freddy has passed his movement check and will move from
-      ${additionalInfo.startingPosition} (${cameraNames[additionalInfo.startingPosition]})
+      ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition]})
       to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition]})
       in ${additionalInfo.formattedWaitingTime} seconds
       ${stats}`;
             type = 'success';
             break;
         case 'has moved':
-            message = `${animatronic.name} has moved from cam ${additionalInfo.startingPosition} (${cameraNames[additionalInfo.startingPosition]}) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition]})`;
+            message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition]}) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition]})`;
             type = 'success';
             break;
         case 'foxy successful pirate cove movement check':
