@@ -588,7 +588,30 @@ const calculateNewBonniePosition = () => {
   return possibleLocations[choice] as Position;
 };
 
-const calculateNewChicaPosition = () => '1A' as Position;
+// Chica can only choose cameras adjacent to where she already is.
+const calculateNewChicaPosition = () => {
+  let randomChoice = Math.round(Math.random());
+  let newPosition = '';
+
+  // QUESTION - I AM ASSUMING CHICA CAN'T JUMP BETWEEN THE KITCHEN AND RESTROOMS WITHOUT GOING VIA 1B
+  switch (Chica.currentPosition) {
+    case '1A':
+      newPosition = '1B';
+      break;
+    case '1B':
+      newPosition = randomChoice === 0 ? '6' : '7';
+      break;
+    case '6':
+    case '7':
+      newPosition = '1B';
+      break;
+    case '4A':
+      newPosition = randomChoice === 0 ? '1B' : '4B';
+      break;
+  }
+
+  return newPosition as Camera;
+};
 
 const moveAnimatronic = (
   animatronic: Animatronic,
