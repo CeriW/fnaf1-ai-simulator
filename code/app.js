@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 50000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
@@ -162,11 +162,12 @@ const generateAnimatronics = () => {
         // Create the report
         let animatronicReport = document.createElement('div');
         animatronicReport.classList.add('animatronic-report');
-        animatronicReport.setAttribute('animatronic', animatronic.name);
+        animatronicReport.setAttribute('for', animatronic.name);
         animatronicReport.innerHTML = `
-      ${animatronic.name}<br>
-      Starting AI level: ${animatronic.currentAIlevel}
-      Current AI level: <span class="current-ai-level">${animatronic.currentAIlevel}</span>
+      <div class="animatronic-icon"></div>
+      <div class="animatronic-name">${animatronic.name}</div>
+      <div class="starting-ai-level">Starting AI level: ${animatronic.currentAIlevel}</div>
+      <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
       <div class="report-item-container"></div>
     `;
         sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
@@ -184,7 +185,7 @@ const makeMovementCheck = (animatronic) => {
 const increaseAILevel = (animatronic) => {
     animatronic.currentAIlevel++;
     addReport(animatronic, 'increase AI level');
-    let aiReport = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .current-ai-level`);
+    let aiReport = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .current-ai-level span`);
     if (aiReport) {
         aiReport.innerHTML = animatronic.currentAIlevel.toString();
     }
@@ -613,7 +614,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             type = 'success';
             break;
     }
-    let reportToAddTo = document.querySelector(`.animatronic-report[animatronic="${animatronic.name}"] .report-item-container`);
+    let reportToAddTo = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .report-item-container`);
     let firstReport = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.querySelector('.report-item');
     if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
         return;
@@ -714,7 +715,7 @@ const disableOfficeButtons = () => {
 // DEATH
 // ========================================================================== //
 const gameOver = () => {
-    alert('You got jumpscared');
+    // alert('You got jumpscared');
 };
 // ========================================================================== //
 // INITIALISE THE PAGE

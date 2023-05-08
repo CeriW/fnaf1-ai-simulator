@@ -1,5 +1,5 @@
-.animatronic-report{
-  max-height: 300px;
+.report-item-container{
+  height: 200px;
   overflow-y: auto;
 }
 
@@ -7,9 +7,9 @@
   color: white;
   display: grid;
   grid-template: 
-    "time description"
-    "time extra-info"
-    / 80px 1fr
+    "time"
+    "description"
+    "extra-info"
   ;
   margin-bottom: 15px;
 }
@@ -34,4 +34,37 @@
 .report-extra-info{
   color: rgba(white, 0.4);
   grid-area: extra-info;
+}
+
+/* General panel ------------------------------------------------------------ */
+
+#animatronic-report{
+  display: grid;
+  grid-template:
+  ". ." auto
+  ". ." auto
+  / 1fr 1fr;
+}
+
+.animatronic-report{
+  display: grid;
+  grid-template:
+    "icon name" min-content
+    "icon starting-ai-level" min-content
+    "icon current-ai-level" min-content
+    "icon reports" auto
+    / 60px auto auto;
+}
+
+.animatronic-icon{grid-area: icon;}
+.starting-ai-level{grid-area: starting-ai-level;}
+.current-ai-level{grid-area: current-ai-level;}
+.report-item-container{grid-area: reports;}
+
+
+.animatronic-report[for="Bonnie"]{
+
+  .animatronic-icon{
+    background: url('../../assets/animatronics/bonnie-icon.png') center / cover;
+  }
 }
