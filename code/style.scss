@@ -58,7 +58,6 @@ main{
   grid-template: 
     ". ." auto
     / 750px 1fr;
-    gap: 0 30px;
 }
 
 @media(max-width: $l-screens){
@@ -66,7 +65,6 @@ main{
     grid-template: 
     ". ." auto
     / 600px 1fr;
-    gap: 0 50px;
   }
 }
 
@@ -75,7 +73,6 @@ main{
     grid-template: 
     ". ." auto
     / 500px 1fr;
-    gap: 0 50px;
   }
 }
 
@@ -103,6 +100,27 @@ button{
 }
 
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #111; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999; 
+}
+
+
 /* Pizzeria layout ---------------------------------------------------------- */
 
 
@@ -125,3 +143,14 @@ button{
 
 
 
+
+
+#sidebar{
+  display: grid;
+  grid-template:
+    ". ." auto
+    " reports reports" auto
+    / 1fr 1fr;
+    gap: 10px;
+
+}

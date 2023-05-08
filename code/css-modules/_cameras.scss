@@ -1,16 +1,36 @@
-img#camera-screen{
-  width: 300px;
+#camera-display{
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 2px solid transparent;
+}
+
+#camera-status{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body[cameras-on="false"] {
 
   #camera-screen{
     opacity: 0.1;
+
   }
 
   .camera-button {
     pointer-events: none;
     opacity: 0.3;
+  }
+
+  #camera-display{
+    border-color: #646464;
   }
 }
 

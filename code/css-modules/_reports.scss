@@ -1,6 +1,7 @@
 .report-item-container{
-  height: 200px;
+  height: 150px;
   overflow-y: auto;
+  padding: 10px;
 }
 
 .report-item{
@@ -44,27 +45,89 @@
   ". ." auto
   ". ." auto
   / 1fr 1fr;
+  gap: 10px;
+  grid-area: reports;
 }
 
 .animatronic-report{
   display: grid;
   grid-template:
-    "icon name" min-content
-    "icon starting-ai-level" min-content
-    "icon current-ai-level" min-content
-    "icon reports" auto
+    "icon name name" min-content
+    "icon reports reports" auto
+    "icon starting-ai-level current-ai-level" min-content
     / 60px auto auto;
+  border: 2px solid;
 }
 
-.animatronic-icon{grid-area: icon;}
+.animatronic-icon{grid-area: icon; border-right: inherit;}
 .starting-ai-level{grid-area: starting-ai-level;}
 .current-ai-level{grid-area: current-ai-level;}
 .report-item-container{grid-area: reports;}
 
 
+.animatronic-name{
+  font-size: 1.5em;
+  font-weight: bold;
+  grid-area: name;
+  text-transform: uppercase;
+  padding: 5px;
+}
+
+.animatronic-name, .starting-ai-level, .current-ai-level{
+  padding-left: 10px;
+}
+
 .animatronic-report[for="Bonnie"]{
 
+  border-color: rebeccapurple;
+
   .animatronic-icon{
-    background: url('../../assets/animatronics/bonnie-icon.png') center / cover;
+    background: url('../../assets/animatronics/bonnie.png') center / cover;
+  }
+
+  .animatronic-name, .starting-ai-level, .current-ai-level{
+    background: rebeccapurple;
   }
 }
+
+.animatronic-report[for="Chica"]{
+
+  border-color: yellow;
+
+  .animatronic-icon{
+    background: url('../../assets/animatronics/chica.png') center / cover;
+  }
+
+  .animatronic-name, .starting-ai-level, .current-ai-level{
+    background: yellow;
+    color: black;
+  }
+}
+
+.animatronic-report[for="Foxy"]{
+
+  border-color: red;
+
+  .animatronic-icon{
+    background: url('../../assets/animatronics/foxy.png') center / cover;
+  }
+
+  .animatronic-name, .starting-ai-level, .current-ai-level{
+    background: red;
+  }
+}
+
+.animatronic-report[for="Freddy"]{
+
+  border-color: brown;
+
+  .animatronic-icon{
+    background: url('../../assets/animatronics/freddy.png') center / cover;
+  }
+
+  .animatronic-name, .starting-ai-level, .current-ai-level{
+    background: brown;
+  }
+}
+
+

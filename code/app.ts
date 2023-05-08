@@ -113,9 +113,9 @@ const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
 
 // Camera related page elements
 const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
-const cameraButton: HTMLButtonElement = cameraArea.querySelector('#camera-display button')!;
-const cameraStatusText: HTMLDivElement = cameraArea.querySelector('#camera-status')!;
-const cameraScreen: HTMLImageElement = cameraArea.querySelector('img#camera-screen')!;
+const cameraButton: HTMLButtonElement = document.querySelector('button#cameras')!;
+const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status')!;
+const cameraScreen: HTMLImageElement = document.querySelector('img#camera-screen')!;
 
 /* Player choosable variables */
 
@@ -225,7 +225,7 @@ const generateAnimatronics = () => {
     animatronicReport.innerHTML = `
       <div class="animatronic-icon"></div>
       <div class="animatronic-name">${animatronic.name}</div>
-      <div class="starting-ai-level">Starting AI level: ${animatronic.currentAIlevel}</div>
+      <div class="starting-ai-level">Starting AI level: <span>${animatronic.currentAIlevel}<span></div>
       <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
       <div class="report-item-container"></div>
     `;
@@ -875,7 +875,7 @@ const toggleCameras = () => {
   user.camerasOn = !user.camerasOn;
   document.body.setAttribute('cameras-on', String(user.camerasOn));
   cameraButton.setAttribute('active', String(user.camerasOn));
-  cameraStatusText.textContent = user.camerasOn ? 'CAMERAS ARE ON' : 'CAMERAS ARE OFF';
+  cameraStatusText.textContent = user.camerasOn ? '' : 'CAMERAS ARE OFF';
 
   if (user.camerasOn) {
     lookAtCamera(user.currentCamera);
@@ -992,4 +992,5 @@ initialiseDoors();
 generateAnimatronics();
 
 cameraButton.addEventListener('click', toggleCameras);
+cameraButton.addEventListener('mouseenter', toggleCameras);
 window.addEventListener('cameras-off', pauseFoxy);

@@ -1,8 +1,5 @@
 /* Timer -------------------------------------------------------------------- */
 
-// @use 'var.scss';
-
-
 #in-game-time,
 #real-time{
   font-family: 'VT323', monospace;
@@ -11,6 +8,7 @@
 #timer{
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px 50px;
   flex-wrap: wrap;
 }
