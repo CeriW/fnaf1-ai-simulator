@@ -314,6 +314,7 @@ const makeFreddyJumpscareCheck = () => {
     }, secondLength);
 };
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
+// TODO - FREDDY WILL NOT LEAVE THE STAGE UNTIL BONNIE AND CHICA HAVE GONE
 const moveFreddy = () => {
     const movementCheck = makeMovementCheck(Freddy);
     // CAMERAS ON, HE'S NOT AT 4B
@@ -657,12 +658,13 @@ const generateCameraButtons = () => {
         myCameraButton.setAttribute('camera', key);
         simulator.appendChild(myCameraButton);
         myCameraButton.addEventListener('click', () => {
-            cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
+            // cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
             document.querySelectorAll('.camera-button').forEach((btn) => {
                 btn.classList.remove('active');
             });
             myCameraButton.classList.add('active');
             user.currentCamera = key;
+            cameraScreen.src = deriveCameraState();
             if (user.camerasOn) {
                 lookAtCamera(user.currentCamera);
             }
@@ -671,6 +673,71 @@ const generateCameraButtons = () => {
     cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
 };
 generateCameraButtons();
+/*
+There are some very lengthly if statements here. I wish it were as simple as
+figuring out which animatronics are where and getting the filename based on
+that, but each camera and animatronic has different rules about what they show
+depending on a number of factors. e.g. Freddy will only show if he's the only
+animatronic there, the kitchen never shows anything, some cams have more than
+one image option etc
+*/
+const deriveCameraState = () => {
+    let cameraImage = '';
+    const bonnieIsHere = Bonnie.currentPosition === user.currentCamera;
+    const chicaIsHere = Chica.currentPosition === user.currentCamera;
+    const foxyIsHere = Foxy.currentPosition === user.currentCamera;
+    const freddyIsHere = Freddy.currentPosition === user.currentCamera;
+    const bonnieIsAlone = !freddyIsHere && bonnieIsHere && !chicaIsHere && !foxyIsHere;
+    const chicaIsAlone = !freddyIsHere && !bonnieIsHere && chicaIsHere && !foxyIsHere;
+    const freddyIsAlone = freddyIsHere && !bonnieIsHere && !chicaIsHere && !foxyIsHere; // Freddy will only show on the cameras if he is the only animatronic at that location
+    // Foxy is always the only one shown on his camera
+    // switch (user.currentCamera) {
+    //   // Freddy can be at these locations. He will only show on the cameras if he is alone.
+    //   case '1A':
+    //     if (freddyIsAlone) {
+    //       cameraImage = `freddy-${getRandomNumber(2)}`;
+    //     } else {
+    //       cameraImage = deriveAnimatronicsAtLocation();
+    //     }
+    //     break;
+    //   case '1B':
+    //   case ''
+    //     cameraImage = deriveAnimatronicsAtLocation();
+    // }
+    return `${paths.assets}/cameras/${user.currentCamera}${deriveAnimatronicsAtLocation()}.webp`;
+};
+// Return a number between 1 and a given maximum
+const getRandomNumber = (max) => Math.floor(Math.random() * max) + 1;
+// The code relies on the files being named with the animatronics in alphabetical order.
+// Example file name: 1A-bonnie-chica-freddy
+const deriveAnimatronicsAtLocation = () => {
+    let string = '';
+    // Foxy is always the only one to show at his location
+    if (Bonnie.currentPosition === user.currentCamera && Foxy.currentPosition !== user.currentCamera) {
+        string += '-bonnie';
+    }
+    if (Chica.currentPosition === user.currentCamera && Foxy.currentPosition !== user.currentCamera) {
+        string += '-chica';
+    }
+    if (Foxy.currentPosition === user.currentCamera) {
+        string += '-foxy';
+    }
+    // Freddy only shows if he is the only one at his current location, unless we're at 1A
+    if (Freddy.currentPosition === user.currentCamera &&
+        ((Bonnie.currentPosition !== user.currentCamera &&
+            Chica.currentPosition !== user.currentCamera &&
+            Foxy.currentPosition !== user.currentCamera) ||
+            user.currentCamera === '1A')) {
+        string += '-freddy';
+    }
+    if (Bonnie.currentPosition !== user.currentCamera &&
+        Chica.currentPosition !== user.currentCamera &&
+        Foxy.currentPosition !== user.currentCamera &&
+        Freddy.currentPosition !== user.currentCamera) {
+        string = '-empty';
+    }
+    return string;
+};
 // We need to listen for certain cameras in certain situations.
 // This will publish an event when a given camera is being looked at
 const lookAtCamera = (camera) => {
