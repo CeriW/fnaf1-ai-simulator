@@ -460,7 +460,7 @@ const moveBonnie = () => {
     else if (!movementCheck.canMove &&
         Bonnie.currentPosition === '2B' &&
         Bonnie.subPosition !== -1 &&
-        user.leftDoorIsClosed) {
+        !user.leftDoorIsClosed) {
         addReport(Bonnie, 'enter office failed movement check doorway');
         // Failed a bog standard movement check with no other fancy conditions
     }

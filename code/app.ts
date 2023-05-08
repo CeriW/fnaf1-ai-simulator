@@ -550,7 +550,7 @@ const moveBonnie = () => {
     !movementCheck.canMove &&
     Bonnie.currentPosition === '2B' &&
     Bonnie.subPosition !== -1 &&
-    user.leftDoorIsClosed
+    !user.leftDoorIsClosed
   ) {
     addReport(Bonnie, 'enter office failed movement check doorway');
 
