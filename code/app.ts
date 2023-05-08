@@ -535,6 +535,9 @@ const moveBonnie = () => {
     moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
     addReport(Bonnie, 'in the office');
 
+    // Disable the doors and lights once the animatronic is in the office
+    disableOfficeButtons();
+
     // TODO - DISABLE BUTTONS
 
     // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
@@ -918,6 +921,12 @@ const initialiseDoors = () => {
         user.rightDoorIsClosed = !user.rightDoorIsClosed;
       }
     });
+  });
+};
+
+const disableOfficeButtons = () => {
+  document.querySelectorAll('.door-button').forEach((btn) => {
+    btn.setAttribute('disabled', 'true');
   });
 };
 

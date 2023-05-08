@@ -22,6 +22,11 @@ $s-screens: 700px;
     background: $green;
   }
 
+  &[disabled]{
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
 }
 
 

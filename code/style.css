@@ -225,6 +225,9 @@
   line-height: 0.8; }
   .door-button.active {
     background: #7FB000; }
+  .door-button[disabled] {
+    opacity: 0.3;
+    cursor: not-allowed; }
 
 svg#close-icons {
   position: absolute;
@@ -296,6 +299,9 @@ body[cameras-on="false"] .camera-button {
   z-index: 2; }
   .camera-button.active {
     background: #7FB000; }
+  .camera-button[disabled] {
+    opacity: 0.3;
+    cursor: not-allowed; }
   .camera-button.active {
     background: #7FB000; }
 
