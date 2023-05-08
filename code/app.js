@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 50000000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
@@ -647,32 +647,6 @@ const toggleCameras = () => {
         console.log('Cameras off');
     }
 };
-const generateCameraButtons = () => {
-    for (const key in cameraNames) {
-        const myCameraButton = document.createElement('button');
-        myCameraButton.classList.add('camera-button');
-        if (key === defaultCamera) {
-            myCameraButton.classList.add('active');
-        }
-        myCameraButton.textContent = `CAM ${key}`;
-        myCameraButton.setAttribute('camera', key);
-        simulator.appendChild(myCameraButton);
-        myCameraButton.addEventListener('click', () => {
-            // cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
-            document.querySelectorAll('.camera-button').forEach((btn) => {
-                btn.classList.remove('active');
-            });
-            myCameraButton.classList.add('active');
-            user.currentCamera = key;
-            cameraScreen.src = deriveCameraState();
-            if (user.camerasOn) {
-                lookAtCamera(user.currentCamera);
-            }
-        });
-    }
-    cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
-};
-generateCameraButtons();
 /*
 There are some very lengthly if statements here. I wish it were as simple as
 figuring out which animatronics are where and getting the filename based on
@@ -683,28 +657,40 @@ one image option etc
 */
 const deriveCameraState = () => {
     let cameraImage = '';
+    let cam = user.currentCamera;
     const bonnieIsHere = Bonnie.currentPosition === user.currentCamera;
     const chicaIsHere = Chica.currentPosition === user.currentCamera;
     const foxyIsHere = Foxy.currentPosition === user.currentCamera;
     const freddyIsHere = Freddy.currentPosition === user.currentCamera;
+    const isEmpty = !bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
     const bonnieIsAlone = !freddyIsHere && bonnieIsHere && !chicaIsHere && !foxyIsHere;
     const chicaIsAlone = !freddyIsHere && !bonnieIsHere && chicaIsHere && !foxyIsHere;
     const freddyIsAlone = freddyIsHere && !bonnieIsHere && !chicaIsHere && !foxyIsHere; // Freddy will only show on the cameras if he is the only animatronic at that location
     // Foxy is always the only one shown on his camera
-    // switch (user.currentCamera) {
-    //   // Freddy can be at these locations. He will only show on the cameras if he is alone.
-    //   case '1A':
-    //     if (freddyIsAlone) {
-    //       cameraImage = `freddy-${getRandomNumber(2)}`;
-    //     } else {
-    //       cameraImage = deriveAnimatronicsAtLocation();
-    //     }
-    //     break;
-    //   case '1B':
-    //   case ''
-    //     cameraImage = deriveAnimatronicsAtLocation();
-    // }
-    return `${paths.assets}/cameras/${user.currentCamera}${deriveAnimatronicsAtLocation()}.webp`;
+    cameraImage = `${paths.assets}/cameras/${user.currentCamera}${deriveAnimatronicsAtLocation()}`;
+    console.log(cam);
+    console.log(isEmpty);
+    if ((cam === '1A' && freddyIsAlone) ||
+        (cam === '1B' && bonnieIsAlone) ||
+        (cam === '1B' && chicaIsAlone) ||
+        (cam === '2B' && isEmpty) ||
+        (cam === '2B' && bonnieIsAlone) ||
+        (cam === '2B' && isEmpty) ||
+        (cam === '4A' && chicaIsHere) ||
+        (cam === '5' && bonnieIsHere) ||
+        (cam === '7' && chicaIsHere)) {
+        // There are 2 random options for this combo
+        cameraImage += `-${getRandomNumber(2)}`;
+    }
+    else if ((cam === '4A' && isEmpty) || (cam === '2B' && bonnieIsAlone) || (cam === '4B' && chicaIsAlone)) {
+        // There are 3 random options for this combo
+        cameraImage += `-${getRandomNumber(3)}`;
+    }
+    else if (cam === '4B' && isEmpty) {
+        // There are 5 random options for this combo
+        cameraImage += `-${getRandomNumber(5)}`;
+    }
+    return cameraImage + '.webp';
 };
 // Return a number between 1 and a given maximum
 const getRandomNumber = (max) => Math.floor(Math.random() * max) + 1;
@@ -738,6 +724,33 @@ const deriveAnimatronicsAtLocation = () => {
     }
     return string;
 };
+const generateCameraButtons = () => {
+    cameraScreen.src = deriveCameraState();
+    for (const key in cameraNames) {
+        const myCameraButton = document.createElement('button');
+        myCameraButton.classList.add('camera-button');
+        if (key === defaultCamera) {
+            myCameraButton.classList.add('active');
+        }
+        myCameraButton.textContent = `CAM ${key}`;
+        myCameraButton.setAttribute('camera', key);
+        simulator.appendChild(myCameraButton);
+        myCameraButton.addEventListener('click', () => {
+            // cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
+            document.querySelectorAll('.camera-button').forEach((btn) => {
+                btn.classList.remove('active');
+            });
+            myCameraButton.classList.add('active');
+            user.currentCamera = key;
+            cameraScreen.src = deriveCameraState();
+            if (user.camerasOn) {
+                lookAtCamera(user.currentCamera);
+            }
+        });
+    }
+    // cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
+};
+generateCameraButtons();
 // We need to listen for certain cameras in certain situations.
 // This will publish an event when a given camera is being looked at
 const lookAtCamera = (camera) => {
