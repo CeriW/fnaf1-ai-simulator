@@ -431,12 +431,8 @@ const moveFreddy = () => {
 const moveBonnie = () => {
     const movementCheck = makeMovementCheck(Bonnie);
     console.log(movementCheck);
-    // If he can't move
-    if (!movementCheck.canMove) {
-        addReport(Bonnie, 'failed movement check');
-        // If he can move, but isn't in 2B. He'll pick somewhere at random.
-    }
-    else if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
+    // If he can move, but isn't in 2B. He'll pick somewhere at random.
+    if (movementCheck.canMove && Bonnie.currentPosition !== '2B') {
         moveAnimatronic(Bonnie, { start: Bonnie.currentPosition, end: calculateNewBonniePosition() });
         // If he's at 2B but isn't in your doorway yet, move him into the doorway
     }
@@ -447,15 +443,29 @@ const moveBonnie = () => {
     }
     else if (movementCheck.canMove &&
         Bonnie.currentPosition === '2B' &&
-        Bonnie.subPosition === 1 &&
+        Bonnie.subPosition !== -1 &&
         !user.leftDoorIsClosed) {
         moveAnimatronic(Bonnie, { start: '2B', end: 'office', sub: -1 }, false);
         addReport(Bonnie, 'in the office');
+        // He meets all the critera to enter the office but the door is closed. He will return to the dining area
     }
     else if (movementCheck.canMove &&
         Bonnie.currentPosition === '2B' &&
         Bonnie.subPosition !== -1 &&
-        user.rightDoorIsClosed) {
+        user.leftDoorIsClosed) {
+        moveAnimatronic(Bonnie, { start: '2B', end: '1B', sub: -1 }, false);
+        addReport(Bonnie, 'left door closed', movementCheck, '1B');
+        // The conditions were right to enter the office but they failed their movement check
+    }
+    else if (!movementCheck.canMove &&
+        Bonnie.currentPosition === '2B' &&
+        Bonnie.subPosition !== -1 &&
+        user.leftDoorIsClosed) {
+        addReport(Bonnie, 'enter office failed movement check doorway');
+        // Failed a bog standard movement check with no other fancy conditions
+    }
+    else if (!movementCheck.canMove) {
+        addReport(Bonnie, 'failed movement check');
     }
     else {
         addReport(Bonnie, 'debug');
@@ -520,12 +530,15 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
         case 'freddy and camera at 4B':
             message = `Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.`;
             preventDuplicates = true;
+            break;
         case 'right door closed':
             message = `${animatronic.name} was ready to enter your office but the right door was closed. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
             type = 'fail';
+            break;
         case 'left door closed':
             message = `${animatronic.name} was ready to enter your office but the left door was closed. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
             type = 'fail';
+            break;
         case 'freddy office failed movement check':
             message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
           <div class="report-extra-info">
@@ -535,6 +548,11 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'enter office failed movement check':
             message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+            break;
+        case 'enter office failed movement check doorway':
+            let doorSide = animatronic.currentPosition === '2B' ? 'left' : 'right';
+            message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait in the ${doorSide} doorway ${stats}`;
+            type = 'fail';
             break;
         case 'enter office cameras off':
             message = `${animatronic.name} passed ${animatronic.pronouns[1]} movement check to enter the office but couldn't because the cameras were off. ${animatronic.pronouns[0].charAt(0).toUpperCase() + animatronic.pronouns[0].slice(1)} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
