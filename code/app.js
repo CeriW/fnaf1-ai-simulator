@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '4A';
 const Freddy = {
     name: 'Freddy',
@@ -733,9 +733,13 @@ const getCameraImage = (cam) => {
     let camImageSrc = '';
     switch (cam) {
         case '1A':
-            camImageSrc = `${paths.cameras}/${generateCamImage1A()}`;
+            camImageSrc = generateCamImage1A();
+            break;
+        case '3':
+            camImageSrc = generateCamImage3();
+            break;
     }
-    return camImageSrc;
+    return `${paths.cameras}/${camImageSrc}`;
 };
 const getLocationInfo = (cam) => {
     const bonnieIsHere = Bonnie.currentPosition === cam;
@@ -780,10 +784,11 @@ const generateCamImage1A = () => {
         let randomiser = randomise(8) ? '-2' : '-1';
         return `1A-freddy${randomiser}.webp`;
     }
-    if (info.isEmpty) {
-        return `1A-empty.webp`;
-    }
+    // If we've reached this point it must be empty
+    return `1A-empty.webp`;
 };
+// Bonnie is the only animatronic who can be here, and only has one image :)
+const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
 // ========================================================================== //
 // DOORS
 // ========================================================================== //
