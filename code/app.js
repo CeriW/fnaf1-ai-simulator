@@ -1084,6 +1084,7 @@ const initialiseMenu = () => {
     // Generate the custom night buttons
     [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
         let mySelector = document.createElement('div');
+        mySelector.classList.add('custom-ai-selector');
         mySelector.setAttribute('for', animatronic.name);
         mySelector.innerHTML = `
       <h2>${animatronic.name}</h2>
@@ -1096,7 +1097,7 @@ const initialiseMenu = () => {
         aiDisplay.type = 'number';
         aiDisplay.readOnly = true;
         aiDisplay.value = animatronic.aiLevels[7].toString();
-        mySelector.append(aiDisplay);
+        aiAdjuster.append(aiDisplay);
         let myDecreaseButton = document.createElement('button');
         myDecreaseButton.textContent = '<';
         myDecreaseButton.addEventListener('click', () => {
@@ -1110,7 +1111,7 @@ const initialiseMenu = () => {
                 aiDisplay.value = animatronic.aiLevels[7].toString();
             }
         });
-        mySelector.append(myDecreaseButton);
+        aiAdjuster.append(myDecreaseButton);
         let myIncreaseButton = document.createElement('button');
         myIncreaseButton.textContent = '>';
         myIncreaseButton.addEventListener('click', () => {
@@ -1123,7 +1124,7 @@ const initialiseMenu = () => {
                 aiDisplay.value = animatronic.aiLevels[7].toString();
             }
         });
-        mySelector.append(myIncreaseButton);
+        aiAdjuster.append(myIncreaseButton);
         customNightMenu.append(mySelector);
     });
     // Generate the night selector buttons

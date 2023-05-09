@@ -647,12 +647,57 @@ body[cameras-on="false"] #camera-display {
       background: #7FB000; }
   #game-menu img {
     max-width: 175px; }
+  #game-menu h2 {
+    font-size: 2em;
+    text-align: center; }
+  #game-menu .custom-ai-selector {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
 
 #custom-night-menu {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   gap: 20px; }
+
+.ai-adjuster {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin-top: 20px; }
+  .ai-adjuster button {
+    background: #464664;
+    color: white;
+    font-weight: bold;
+    border: none;
+    font-size: 1.5em;
+    padding: 10px; }
+  .ai-adjuster input {
+    background: transparent;
+    color: white;
+    border: none;
+    text-align: center;
+    font-size: 4em;
+    font-family: monospace;
+    width: 150px; }
+  .ai-adjuster button:nth-child(2) {
+    -webkit-box-ordinal-group: 0;
+    -ms-flex-order: -1;
+    order: -1; }
 
 body {
   background: #000;

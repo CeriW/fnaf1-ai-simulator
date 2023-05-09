@@ -25,9 +25,50 @@
   img{
     max-width: 175px;
   }
+
+  h2{
+    font-size: 2em;
+    text-align: center;
+  }
+
+  .custom-ai-selector{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 #custom-night-menu{
   display: flex;
   gap: 20px;
+}
+
+.ai-adjuster{
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  button{
+    background: #464664;
+    color: white;
+    font-weight: bold;
+    border: none;
+    font-size: 1.5em;
+    padding: 10px;
+  }
+
+  input{
+    background: transparent;
+    color: white;
+    border: none;
+    text-align: center;
+    font-size: 4em;
+    font-family: monospace;
+    width: 150px;
+  }
+
+  button:nth-child(2){
+    order: -1;
+  }
 }
