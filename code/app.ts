@@ -1015,16 +1015,11 @@ const generateCamImage1A = (): string => {
 // Bonnie is the only animatronic who can be here, and only has one image :)
 const generateCamImage3 = (): string => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
 
-// Bonnie is the only animatronic who can be here
+// Bonnie is the only animatronic who can be here. There are 2 options for
+// Bonnie and 2 options for empty
 const generateCamImage5 = () => {
   let randomiser = randomise(8) ? '-2' : '-1';
-
-  if (getLocationInfo('5').bonnieIsHere) {
-    // UNKNOWN - I can't find info on the chances of each image
-    return `5-bonnie${randomiser}.webp`;
-  }
-
-  return `5-empty${randomiser}.webp`;
+  return getLocationInfo('5').bonnieIsHere ? `5-bonnie${randomiser}.webp` : `5-empty${randomiser}.webp`;
 };
 
 // ========================================================================== //
