@@ -1061,7 +1061,7 @@ const generateCamImage4B = (): string => {
     return '4B-freddy.webp';
   }
 
-  if (info.chicaIsHere) {
+  if (info.chicaIsHere && Chica.subPosition === -1) {
     let chicaRandomiser = Math.ceil(Math.random() * 6);
     if (chicaRandomiser === 1) {
       return '4B-chica-3.webp';
@@ -1074,7 +1074,7 @@ const generateCamImage4B = (): string => {
 
   // It must be empty if we've reached this point
   // There are 5 image options here, with one being FAR more likely than the others
-  let emptyRandomiser = Math.ceil(Math.random() * 25);
+  let emptyRandomiser = Math.ceil(Math.random() * 30);
   if (emptyRandomiser === 1) {
     return '4B-empty-4.webp';
   } else if (emptyRandomiser === 2) {
