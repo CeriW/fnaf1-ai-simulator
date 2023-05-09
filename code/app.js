@@ -1101,6 +1101,8 @@ const initialiseMenu = () => {
         let myDecreaseButton = document.createElement('button');
         myDecreaseButton.textContent = '<';
         myDecreaseButton.addEventListener('click', () => {
+            var _a;
+            (_a = nightMenu.querySelector('button.active')) === null || _a === void 0 ? void 0 : _a.classList.remove('active');
             nightToSimulate = 7;
             let newAILevel = parseInt(aiDisplay.value);
             animatronic.aiLevels[7] = newAILevel;
@@ -1115,6 +1117,8 @@ const initialiseMenu = () => {
         let myIncreaseButton = document.createElement('button');
         myIncreaseButton.textContent = '>';
         myIncreaseButton.addEventListener('click', () => {
+            var _a;
+            (_a = nightMenu.querySelector('button.active')) === null || _a === void 0 ? void 0 : _a.classList.remove('active');
             let newAILevel = parseInt(aiDisplay.value);
             animatronic.aiLevels[7] = newAILevel;
             aiDisplay.value = newAILevel.toString();
@@ -1131,11 +1135,22 @@ const initialiseMenu = () => {
     for (let i = 1; i <= 6; i++) {
         let myButton = document.createElement('button');
         myButton.classList.add('simulate-night');
+        myButton.setAttribute('for', i.toString());
         myButton.textContent = `Simulate night ${i}`;
+        if (i === 1) {
+            myButton.classList.add('active');
+        }
         nightMenu.append(myButton);
         myButton.addEventListener('click', () => {
             nightToSimulate = i;
-            // startGame();
+            document.querySelectorAll('button.simulate-night').forEach((btn) => {
+                if (btn.getAttribute('for') === nightToSimulate.toString()) {
+                    btn.classList.add('active');
+                }
+                else {
+                    btn.classList.remove('active');
+                }
+            });
             [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
                 let myInput = customNightMenu.querySelector(`[for="${animatronic.name}"] input`);
                 myInput.value = animatronic.aiLevels[nightToSimulate].toString();
