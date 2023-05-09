@@ -950,6 +950,8 @@ const getCameraImage = (cam: Camera) => {
     case '3':
       camImageSrc = generateCamImage3();
       break;
+    case '5':
+      camImageSrc = generateCamImage5();
   }
 
   return `${paths.cameras}/${camImageSrc}`;
@@ -982,7 +984,7 @@ const getLocationInfo = (cam: Camera) => {
 const randomise = (chance: number): boolean => Math.random() < 1 / chance;
 
 // Note - Foxy can never be here.
-const generateCamImage1A = () => {
+const generateCamImage1A = (): string => {
   const info = getLocationInfo('1A');
 
   // Bonnie, Chica and Freddy are all here
@@ -1001,7 +1003,7 @@ const generateCamImage1A = () => {
   }
 
   if (info.freddyIsAlone) {
-    // QUESTION - I don't know the actual chances of Freddy facing the camera rather than right
+    // UNKNOWN - I can't find info on the chances of Freddy facing right rather than the camera
     let randomiser = randomise(8) ? '-2' : '-1';
     return `1A-freddy${randomiser}.webp`;
   }
@@ -1011,7 +1013,19 @@ const generateCamImage1A = () => {
 };
 
 // Bonnie is the only animatronic who can be here, and only has one image :)
-const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
+const generateCamImage3 = (): string => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
+
+// Bonnie is the only animatronic who can be here
+const generateCamImage5 = () => {
+  let randomiser = randomise(8) ? '-2' : '-1';
+
+  if (getLocationInfo('5').bonnieIsHere) {
+    // UNKNOWN - I can't find info on the chances of each image
+    return `5-bonnie${randomiser}.webp`;
+  }
+
+  return `5-empty${randomiser}.webp`;
+};
 
 // ========================================================================== //
 // DOORS

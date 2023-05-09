@@ -738,6 +738,8 @@ const getCameraImage = (cam) => {
         case '3':
             camImageSrc = generateCamImage3();
             break;
+        case '5':
+            camImageSrc = generateCamImage5();
     }
     return `${paths.cameras}/${camImageSrc}`;
 };
@@ -780,7 +782,7 @@ const generateCamImage1A = () => {
         return `1A-bonnie-freddy.webp`;
     }
     if (info.freddyIsAlone) {
-        // QUESTION - I don't know the actual chances of Freddy facing the camera rather than right
+        // UNKNOWN - I can't find info on the chances of Freddy facing right rather than the camera
         let randomiser = randomise(8) ? '-2' : '-1';
         return `1A-freddy${randomiser}.webp`;
     }
@@ -789,6 +791,15 @@ const generateCamImage1A = () => {
 };
 // Bonnie is the only animatronic who can be here, and only has one image :)
 const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
+// Bonnie is the only animatronic who can be here
+const generateCamImage5 = () => {
+    let randomiser = randomise(8) ? '-2' : '-1';
+    if (getLocationInfo('5').bonnieIsHere) {
+        // UNKNOWN - I can't find info on the chances of each image
+        return `5-bonnie${randomiser}.webp`;
+    }
+    return `5-empty${randomiser}.webp`;
+};
 // ========================================================================== //
 // DOORS
 // ========================================================================== //
