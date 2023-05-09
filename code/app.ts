@@ -642,6 +642,7 @@ const moveAnimatronic = (
 type messagingType =
   | 'debug' // Used for debugging purposes to report something, anything
   | 'increase AI level' // Used when animatronics gain their AI level increases throughout the night
+  | 'increase AI level max' // When animatronics could have gained an AI level boost but they're already at level 20
   | 'enter office failed movement check doorway'
   | 'in the doorway' // The animatronic is in the doorway
   | 'camera auto fail' // The animatronic automatically fails movement checks when cameras are on
@@ -702,6 +703,9 @@ const addReport = (
     case 'increase AI level':
       message = `${animatronic.name}'s AI level has increased by 1 to ${animatronic.currentAIlevel}`;
       break;
+
+    case 'increase AI level max':
+      message = `${animatronic.name} could have increased their AI level but they are already at 20`;
 
     case 'camera auto fail':
       message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;

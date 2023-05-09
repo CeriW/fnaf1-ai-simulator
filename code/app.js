@@ -558,6 +558,8 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
         case 'increase AI level':
             message = `${animatronic.name}'s AI level has increased by 1 to ${animatronic.currentAIlevel}`;
             break;
+        case 'increase AI level max':
+            message = `${animatronic.name} could have increased their AI level but they are already at 20`;
         case 'camera auto fail':
             message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
             preventDuplicates = true;
