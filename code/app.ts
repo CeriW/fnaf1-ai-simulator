@@ -930,6 +930,38 @@ const lookAtCamera = (camera: Camera) => {
 };
 
 // ========================================================================== //
+// IMAGES FOR INDIVIDUAL CAMERAS
+// I wish it were simple as figuring out which animatronics were at the current
+// location and just giving it an image. It isn't.
+// Freddy will only show on a cam if he's the only one at his location.
+// Foxy will always be the only one to show at his location.
+// Some locations and animatronics have more than one image option.
+// ========================================================================== //
+
+const getLocationInfo = (cam: Camera) => {
+  const bonnieIsHere = Bonnie.currentPosition === cam;
+  const chicaIsHere = Chica.currentPosition === cam;
+  const foxyIsHere = Foxy.currentPosition === cam;
+  const freddyIsHere = Freddy.currentPosition === cam;
+  const bonnieIsAlone = bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
+  const chicaIsAlone = !bonnieIsHere && chicaIsHere && !foxyIsHere && !freddyIsHere;
+  // const foxyIsAlone = !bonnieIsHere && !chicaIsHere && foxyIsHere && !freddyIsHere; // Do I ever actually need to know whether Foxy is alone?
+  const freddyIsAlone = !bonnieIsHere && !chicaIsHere && !foxyIsHere && freddyIsHere;
+
+  return {
+    bonnieIsHere,
+    chicaIsHere,
+    foxyIsHere,
+    freddyIsHere,
+    bonnieIsAlone,
+    chicaIsAlone,
+    freddyIsAlone,
+  };
+};
+
+const generateCamImage1A = () => {};
+
+// ========================================================================== //
 // DOORS
 // ========================================================================== //
 
