@@ -735,6 +735,9 @@ const getCameraImage = (cam) => {
         case '1A':
             camImageSrc = generateCamImage1A();
             break;
+        case '2A':
+            camImageSrc = generateCamImage2A();
+            break;
         case '3':
             camImageSrc = generateCamImage3();
             break;
@@ -801,6 +804,16 @@ const generateCamImage1A = () => {
     }
     // If we've reached this point it must be empty
     return `1A-empty.webp`;
+};
+const generateCamImage2A = () => {
+    let info = getLocationInfo('2A');
+    if (info.foxyIsHere) {
+        return '2A-foxy.webp';
+    }
+    if (info.bonnieIsHere) {
+        return '2A-bonnie.webp';
+    }
+    return '2A-empty.webp';
 };
 // Bonnie is the only animatronic who can be here, and only has one image :)
 const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
