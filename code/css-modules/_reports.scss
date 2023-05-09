@@ -12,6 +12,7 @@
     "extra-info"
   ;
   margin-bottom: 10px;
+}
 
 .report-item[type="bad"] .report-description{
   color: #f60;
@@ -26,11 +27,19 @@
 }
 
 
-.report-item[type="alert"] .report-description{
+.report-item[type="alert"] .report-description,
+.report-item[type="death-zone"] .report-description{
   color: red;
   padding-left: 30px;
   background: url('../../assets/icons/alert.svg') left top no-repeat;
   background-size: 25px;
+  text-transform: uppercase;
+}
+
+.report-item[type="death-zone"] .report-description{
+  background-image: url('../../assets/icons/skull.svg');
+  background-size: 18px;
+  background-position: left 2px;
 }
 
 
@@ -46,6 +55,7 @@
 .report-extra-info{
   color: #646464;
   grid-area: extra-info;
+  text-transform: initial;
 }
 
 /* General panel ------------------------------------------------------------ */
@@ -140,5 +150,3 @@
     background: brown;
   }
 }
-
-

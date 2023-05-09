@@ -221,20 +221,25 @@
 #Foxy[position="1C"]:after {
   background: #fff; }
 
+#Foxy[position="1C"][sub-position="0"]:before {
+  border-color: green; }
+
 #Foxy[position="1C"][sub-position="0"]:after {
   display: none; }
 
+#Foxy[position="1C"][sub-position="1"]:before, #Foxy[position="1C"][sub-position="1"]:after {
+  border-color: #f60; }
+
 #Foxy[position="1C"][sub-position="1"]:after {
-  -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%);
-  clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%); }
+  -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%);
+  clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%); }
+
+#Foxy[position="1C"][sub-position="2"]:before, #Foxy[position="1C"][sub-position="2"]:after {
+  border-color: red; }
 
 #Foxy[position="1C"][sub-position="2"]:after {
-  -webkit-clip-path: polygon(50% 0%, 50% 100%, 100% 100%, 100% 0%);
-  clip-path: polygon(50% 0%, 50% 100%, 100% 100%, 100% 0%); }
-
-#Foxy[position="1C"][sub-position="3"]:after {
-  -webkit-clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%);
-  clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%); }
+  -webkit-clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%);
+  clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%); }
 
 #Foxy[position="4A"] {
   opacity: 0.2; }
@@ -326,18 +331,7 @@ button#cameras {
   display: grid;
   -ms-grid-rows: auto auto;
   grid-template: "time" "description" "extra-info";
-  margin-bottom: 15px;
-  min-height: 25px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column; }
+  margin-bottom: 10px; }
 
 .report-item[type="bad"] .report-description {
   color: #f60; }
@@ -348,11 +342,18 @@ button#cameras {
 .report-item[type="warning"] .report-description {
   color: red; }
 
-.report-item[type="alert"] .report-description {
+.report-item[type="alert"] .report-description,
+.report-item[type="death-zone"] .report-description {
   color: red;
   padding-left: 30px;
   background: url("../../assets/icons/alert.svg") left top no-repeat;
-  background-size: 25px; }
+  background-size: 25px;
+  text-transform: uppercase; }
+
+.report-item[type="death-zone"] .report-description {
+  background-image: url("../../assets/icons/skull.svg");
+  background-size: 18px;
+  background-position: left 2px; }
 
 .report-time {
   -ms-grid-row: 1;
@@ -369,7 +370,8 @@ button#cameras {
   -ms-grid-row: 3;
   -ms-grid-column: 1;
   color: #646464;
-  grid-area: extra-info; }
+  grid-area: extra-info;
+  text-transform: initial; }
 
 /* General panel ------------------------------------------------------------ */
 #animatronic-report {
@@ -526,7 +528,7 @@ body[cameras-on="false"] #camera-display {
     opacity: 0.3;
     cursor: not-allowed; }
   .camera-button.active {
-    background: #7FB000; }
+    pointer-events: none; }
 
 /* Camera button placement -------------------------------------------------- */
 .camera-button[camera="1A"] {

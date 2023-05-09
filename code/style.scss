@@ -26,7 +26,6 @@ $s-screens: 700px;
     opacity: 0.3;
     cursor: not-allowed;
   }
-
 }
 
 
@@ -141,10 +140,6 @@ button{
   }
 }
 
-
-
-
-
 #sidebar{
   display: grid;
   grid-template:
@@ -152,5 +147,4 @@ button{
     " reports reports" min-content
     / 1fr 1fr;
     gap: 10px;
-
 }

@@ -1,7 +1,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '4A' as Camera;
+let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const defaultCamera = '1C' as Camera;
 
 // TODO - PUT THIS IN A MODULE
 
@@ -17,7 +17,6 @@ type Animatronic = {
   // possibleLocations: string[]; // The cameras where they can be
   currentPosition: Position; // The camera the animatronic is currently at
   subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
-  startingSubPosition: number; // Used for Foxy. The subposition he starts at.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentAIlevel: number; // Some animatronics increase their AI level as the night goes on. This will be used to store what their current AI level is. It's set to 0 when the animatronics are first declared, then set to the correct value in generateAnimatronics()
@@ -39,7 +38,6 @@ const Freddy: Animatronic = {
   currentCountdown: 0,
   pronouns: ['he', 'his'],
   subPosition: -1,
-  startingSubPosition: -1,
 };
 
 const Bonnie: Animatronic = {
@@ -51,12 +49,10 @@ const Bonnie: Animatronic = {
   currentCountdown: 0,
   pronouns: ['he', 'his'],
   subPosition: -1,
-  startingSubPosition: -1,
 };
 
 const Chica: Animatronic = {
   name: 'Chica',
-
   currentPosition: '1A',
   movementOpportunityInterval: 4.98,
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
@@ -64,7 +60,6 @@ const Chica: Animatronic = {
   currentCountdown: 0,
   pronouns: ['she', 'her'],
   subPosition: -1,
-  startingSubPosition: -1,
 };
 
 const Foxy: Animatronic = {
@@ -72,7 +67,6 @@ const Foxy: Animatronic = {
   currentPosition: '1C',
   currentAIlevel: 0,
   subPosition: 0,
-  startingSubPosition: 0,
   movementOpportunityInterval: 5.01,
   aiLevels: [null, 0, 1, 2, 6, 5, 16],
   currentCountdown: 0,
@@ -95,6 +89,7 @@ const cameraNames = {
 
 const paths = {
   assets: '../assets',
+  cameras: '../assets/cameras',
 };
 
 /* Time related variables */
@@ -215,7 +210,7 @@ const generateAnimatronics = () => {
     icon.setAttribute('id', animatronic.name);
     icon.setAttribute('position', animatronic.currentPosition);
 
-    icon.setAttribute('sub-position', animatronic.startingSubPosition.toString() ?? 'none');
+    icon.setAttribute('sub-position', animatronic.subPosition.toString() ?? 'none');
     simulator.appendChild(icon);
 
     // Create the report
@@ -250,7 +245,6 @@ const increaseAILevel = (animatronic: Animatronic) => {
   if (aiReport) {
     aiReport.innerHTML = animatronic.currentAIlevel.toString();
   }
-  console.log(animatronic);
 };
 
 /* ========================================================================== //
@@ -280,16 +274,16 @@ const moveFoxy = () => {
     // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
   } else if (!movementCheck.canMove && Foxy.currentPosition === '1C') {
     addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck);
-  } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+  } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 2) {
     // Foxy needs to make 3 successful movement checks before he is able to leave 1C
-    Foxy.subPosition++;
+    moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition + 1 }, false);
     addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-    moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
+    console.log(Foxy.subPosition);
   } else if (
-    (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) ||
+    (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 2) ||
     Foxy.currentPosition === '2A'
   ) {
-    // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
+    // Once Foxy has made 3 successful movement checks, he can leave Pirate Cove
     if (Foxy.currentPosition === '1C') {
       // This if statement isn't necessary in normal play, but is necessary during testing when his starting position isn't 1C
       moveAnimatronic(Foxy, { start: '1C', end: '2A', sub: -1 });
@@ -567,8 +561,6 @@ const moveBonnieOrChica = (animatronic: Animatronic) => {
   } else {
     addReport(animatronic, 'debug');
   }
-
-  console.log(animatronic);
 };
 
 // Bonnie does not have to chose adjacent rooms. He can pick at random from a list of approved locations.
@@ -673,7 +665,7 @@ const addReport = (
 ) => {
   // Figuring out what the message actually should be
   let message = '';
-  let type: 'bad' | 'good' | 'info' | 'warning' | 'alert' = 'info';
+  let type: 'bad' | 'good' | 'info' | 'warning' | 'alert' | 'death-zone' = 'info';
   let preventDuplicates = false;
   const stats = movementCheck
     ? `<div class="report-extra-info">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${
@@ -734,7 +726,7 @@ const addReport = (
         animatronic.pronouns[0]
       )} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
 
-      type = 'alert';
+      type = 'death-zone';
       preventDuplicates = true;
       break;
 
@@ -743,7 +735,7 @@ const addReport = (
           <div class="report-extra-info">
           Score to beat: ${movementCheck?.scoreToBeat}/100   Freddy's score: ${movementCheck?.aiLevel}
           </div>`;
-      type = 'alert';
+      type = 'death-zone';
       break;
 
     case 'enter office failed movement check':
@@ -777,7 +769,7 @@ const addReport = (
 
     case 'in the office':
       message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
-      type = 'alert';
+      type = 'death-zone';
       preventDuplicates = true;
       break;
 
@@ -808,10 +800,11 @@ const addReport = (
       break;
 
     case 'foxy successful pirate cove movement check':
-      const stepsRemaining = 4 - Foxy.subPosition;
-      message = `Foxy has made a successful movement check while at 1C (${
-        cameraNames['1C']
-      }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
+      const stepsRemaining = 3 - Foxy.subPosition;
+      message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(
+        stepsRemaining,
+        'step'
+      )} away from leaving Pirate Cove ${stats}`;
       type = stepsRemaining === 1 ? 'warning' : 'bad';
       break;
 
@@ -822,7 +815,7 @@ const addReport = (
       break;
 
     case 'foxy failed pirate cove movement check':
-      let stepsRemainingB = 4 - Foxy.subPosition;
+      let stepsRemainingB = 3 - Foxy.subPosition;
       message = `Foxy has failed his movement check. He is still ${stepsRemainingB} ${pluralise(
         stepsRemainingB,
         'step'
@@ -846,12 +839,12 @@ const addReport = (
 
     case 'foxy coming down hall':
       message = 'FOXY IS COMING DOWN THE HALL. HE WILL ATTEMPT TO JUMPSCARE YOU IN 1.87 SECONDS';
-      type = 'alert';
+      type = 'death-zone';
       break;
 
     case 'jumpscare':
       message = `${animatronic.name} successfully jumpscared you`;
-      type = 'alert';
+      type = 'death-zone';
       break;
   }
 
@@ -875,6 +868,268 @@ const addReport = (
 };
 
 // ========================================================================== //
+// IMAGES FOR INDIVIDUAL CAMERAS
+// I wish it were simple as figuring out which animatronics were at the current
+// location and just giving it an image. It isn't.
+// Freddy will only show on a cam if he's the only one at his location.
+// Foxy will always be the only one to show at his location.
+// Some locations and animatronics have more than one image option.
+// ========================================================================== //
+
+const getCameraImage = (cam: Camera) => {
+  let camImageSrc = '';
+
+  switch (cam) {
+    case '1A':
+      camImageSrc = generateCamImage1A();
+      break;
+    case '1B':
+      camImageSrc = generateCamImage1B();
+      break;
+    case '1C':
+      camImageSrc = generateCamImage1C();
+      break;
+    case '2A':
+      camImageSrc = generateCamImage2A();
+      break;
+    case '2B':
+      camImageSrc = generateCamImage2B();
+      break;
+    case '3':
+      camImageSrc = generateCamImage3();
+      break;
+    case '4A':
+      camImageSrc = generateCamImage4A();
+      break;
+    case '4B':
+      camImageSrc = generateCamImage4B();
+      break;
+    case '5':
+      camImageSrc = generateCamImage5();
+      break;
+    case '6':
+      camImageSrc = '6.webp';
+      break;
+    case '7':
+      camImageSrc = generateCamImage7();
+      break;
+  }
+
+  return `${paths.cameras}/${camImageSrc}`;
+};
+
+const getLocationInfo = (cam: Camera) => {
+  const bonnieIsHere = Bonnie.currentPosition === cam;
+  const chicaIsHere = Chica.currentPosition === cam;
+  const foxyIsHere = Foxy.currentPosition === cam;
+  const freddyIsHere = Freddy.currentPosition === cam;
+  const bonnieIsAlone = bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
+  const chicaIsAlone = !bonnieIsHere && chicaIsHere && !foxyIsHere && !freddyIsHere;
+  // const foxyIsAlone = !bonnieIsHere && !chicaIsHere && foxyIsHere && !freddyIsHere; // Do I ever actually need to know whether Foxy is alone?
+  const freddyIsAlone = !bonnieIsHere && !chicaIsHere && !foxyIsHere && freddyIsHere;
+  const isEmpty = !bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
+
+  return {
+    bonnieIsHere,
+    chicaIsHere,
+    foxyIsHere,
+    freddyIsHere,
+    bonnieIsAlone,
+    chicaIsAlone,
+    freddyIsAlone,
+    isEmpty,
+  };
+};
+
+// Chance should be the 1 in X number chance it has
+const randomise = (chance: number): boolean => Math.random() < 1 / chance;
+
+// Note - Foxy can never be here.
+const generateCamImage1A = (): string => {
+  const info = getLocationInfo('1A');
+
+  // Bonnie, Chica and Freddy are all here
+  if (info.bonnieIsHere && info.chicaIsHere && info.freddyIsHere) {
+    return `1A-bonnie-chica-freddy.webp`;
+  }
+
+  // Chica and Freddy are here
+  if (!info.bonnieIsHere && info.chicaIsHere && info.freddyIsHere) {
+    return `1A-chica-freddy.webp`;
+  }
+
+  // Bonnie and Freddy are here
+  if (info.bonnieIsHere && !info.chicaIsHere && info.freddyIsHere) {
+    return `1A-bonnie-freddy.webp`;
+  }
+
+  if (info.freddyIsAlone) {
+    // UNKNOWN - I can't find info on the chances of Freddy facing right rather than the camera
+    let randomiser = randomise(8) ? '-2' : '-1';
+    return `1A-freddy${randomiser}.webp`;
+  }
+
+  // If we've reached this point it must be empty
+  return `1A-empty.webp`;
+};
+
+// Freddy will only show if he's alone. Bonnnie will only show if Chica isn't there.
+const generateCamImage1B = (): string => {
+  const info = getLocationInfo('1B');
+  const randomiser = randomise(3) ? '-2' : '-1';
+
+  if (info.chicaIsHere) {
+    return `1B-chica${randomiser}.webp`;
+  }
+
+  if (info.bonnieIsHere) {
+    return `1B-bonnie${randomiser}.webp`;
+  }
+
+  if (info.freddyIsAlone) {
+    return '1B-freddy.webp';
+  }
+
+  return '1B-empty.webp';
+};
+
+// Foxy is the only one who can be here. Exactly which image is shown depends
+// on how close he is to leaving Pirate Cove.
+const generateCamImage1C = (): string => {
+  let { foxyIsHere } = getLocationInfo('1C');
+
+  if (foxyIsHere) {
+    return `1C-foxy-${Foxy.subPosition}.webp`;
+  }
+
+  let emptyRandomiser = randomise(10) ? '-its-me' : '-default';
+  return `1C-empty${emptyRandomiser}.webp`;
+};
+
+const generateCamImage2A = () => {
+  let info = getLocationInfo('2A');
+
+  if (info.foxyIsHere) {
+    return '2A-foxy.webp';
+  }
+
+  if (info.bonnieIsHere) {
+    return '2A-bonnie.webp';
+  }
+
+  return '2A-empty.webp';
+};
+
+// Bonnie is the only one who can be here.
+// This code does not currently deal with the unlikely prospect of Golden Freddy
+const generateCamImage2B = (): string => {
+  let info = getLocationInfo('2B');
+
+  // There are 3 different options for Bonnie's images, with some being more
+  // likely than others.
+  if (info.bonnieIsHere) {
+    let bonnieRandomiser = Math.ceil(Math.random() * 8);
+    if (bonnieRandomiser === 1) {
+      return '2B-bonnie-3.webp';
+    } else if (bonnieRandomiser > 6) {
+      return '2B-bonnie-2.webp';
+    } else {
+      return '2B-bonnie-1.webp';
+    }
+  }
+
+  let emptyRandomiser = randomise(4) ? '-2' : '-1';
+  return `2B-empty${emptyRandomiser}.webp`;
+};
+
+// Bonnie is the only animatronic who can be here, and only has one image :)
+const generateCamImage3 = (): string => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
+
+// Freddy or Chica may be here
+const generateCamImage4A = (): string => {
+  const info = getLocationInfo('4A');
+
+  if (info.chicaIsHere) {
+    let randomiser = randomise(3) ? '-2' : '-1';
+    return `4A-chica${randomiser}.webp`;
+  }
+
+  if (info.freddyIsAlone) {
+    return '4A-freddy.webp';
+  }
+
+  // There are 3 image options for empty, with one of them being FAR more likely
+  // than the others
+  let emptyRandomiser = Math.ceil(Math.random() * 10);
+  if (emptyRandomiser === 1) {
+    return `4A-empty-1.webp`;
+  } else if (emptyRandomiser === 2) {
+    return `4A-empty-2.webp`;
+  } else {
+    return '4A-empty-default.webp';
+  }
+};
+
+// Freddy or Chica may be here.
+const generateCamImage4B = (): string => {
+  let info = getLocationInfo('4B');
+
+  if (info.freddyIsAlone) {
+    return '4B-freddy.webp';
+  }
+
+  if (info.chicaIsHere && Chica.subPosition === -1) {
+    let chicaRandomiser = Math.ceil(Math.random() * 6);
+    if (chicaRandomiser === 1) {
+      return '4B-chica-3.webp';
+    } else if (chicaRandomiser === 2) {
+      return '4B-chica-2.webp';
+    } else {
+      return '4B-chica-1.webp';
+    }
+  }
+
+  // It must be empty if we've reached this point
+  // There are 5 image options here, with one being FAR more likely than the others
+  let emptyRandomiser = Math.ceil(Math.random() * 30);
+  if (emptyRandomiser === 1) {
+    return '4B-empty-4.webp';
+  } else if (emptyRandomiser === 2) {
+    return '4B-empty-3.webp';
+  } else if (emptyRandomiser === 3) {
+    return '4B-empty-3.webp';
+  } else if (emptyRandomiser === 4) {
+    return '4B-empty-2.webp';
+  } else if (emptyRandomiser === 5) {
+    return '4B-empty-1.webp';
+  } else {
+    return '4B-empty-default.webp';
+  }
+};
+
+// Bonnie is the only animatronic who can be here. There are 2 options for
+// Bonnie and 2 options for empty
+const generateCamImage5 = (): string => {
+  let randomiser = randomise(8) ? '-2' : '-1';
+  return getLocationInfo('5').bonnieIsHere ? `5-bonnie${randomiser}.webp` : `5-empty${randomiser}.webp`;
+};
+
+const generateCamImage7 = (): string => {
+  let info = getLocationInfo('7');
+
+  if (info.freddyIsAlone) {
+    return '7-freddy.webp';
+  }
+
+  if (info.chicaIsHere) {
+    let randomiser = randomise(8) ? '-2' : '-1';
+    return `7-chica${randomiser}.webp`;
+  }
+
+  return '7-empty.webp';
+};
+
+// ========================================================================== //
 // CAMERAS
 // ========================================================================== //
 
@@ -894,6 +1149,7 @@ const toggleCameras = () => {
 };
 
 const generateCameraButtons = () => {
+  cameraScreen.src = getCameraImage(defaultCamera);
   for (const key in cameraNames) {
     const myCameraButton = document.createElement('button');
     myCameraButton.classList.add('camera-button');
@@ -905,7 +1161,6 @@ const generateCameraButtons = () => {
     simulator.appendChild(myCameraButton);
 
     myCameraButton.addEventListener('click', () => {
-      cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
       document.querySelectorAll('.camera-button').forEach((btn) => {
         btn.classList.remove('active');
       });
@@ -917,16 +1172,14 @@ const generateCameraButtons = () => {
       }
     });
   }
-
-  cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
 };
-generateCameraButtons();
 
 // We need to listen for certain cameras in certain situations.
 // This will publish an event when a given camera is being looked at
 const lookAtCamera = (camera: Camera) => {
   window.dispatchEvent(new Event(`cam-on-${camera}`));
   console.log(`cam-on-${camera}`);
+  cameraScreen.src = getCameraImage(camera);
 };
 
 // ========================================================================== //
@@ -997,6 +1250,7 @@ if (Foxy.currentPosition === '4A') {
 document.body.setAttribute('cameras-on', 'false');
 initialiseDoors();
 generateAnimatronics();
+generateCameraButtons();
 
 cameraButton.addEventListener('click', toggleCameras);
 // cameraButton.addEventListener('mouseenter', toggleCameras);
