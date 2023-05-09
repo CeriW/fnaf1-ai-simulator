@@ -250,7 +250,7 @@ const attemptFoxyJumpscare = (e) => {
             // TODO - Foxy drains your power if he bashes on the door.
         }
         else {
-            addReport(Foxy, 'jumpscare');
+            gameOverFoxy();
         }
     };
     // If this is happening as a result of looking at cam 4A, we need to wait 1.87 seconds before he attempts to attack
@@ -296,8 +296,7 @@ const makeFreddyJumpscareCheck = () => {
             canMove: comparisonNumber > 0.75,
         };
         if (jumpscare.canMove && !user.camerasOn) {
-            gameOver();
-            addReport(Freddy, 'jumpscare');
+            gameOverFreddy();
         }
         else {
             // Freddy is in your office but failed his movement check and was unable to jumpscare you.
@@ -448,8 +447,14 @@ const moveBonnieOrChica = (animatronic) => {
         // Disable the doors and lights once the animatronic is in the office
         disableOfficeButtons();
         // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
-        window.setTimeout(gameOver, secondLength * 30);
-        window.addEventListener('cameras-off', gameOver);
+        if (name === 'Bonnie') {
+            window.setTimeout(gameOverBonnie, secondLength * 30);
+            window.addEventListener('cameras-off', gameOverBonnie);
+        }
+        else {
+            window.setTimeout(gameOverChica, secondLength * 30);
+            window.addEventListener('cameras-off', gameOverChica);
+        }
         // He meets all the critera to enter the office but the door is closed. He will return to the dining area
     }
     else if (movementCheck.canMove &&
@@ -988,22 +993,47 @@ const disableOfficeButtons = () => {
 // ========================================================================== //
 // DEATH
 // ========================================================================== //
-const gameOver = () => {
-    // alert('You got jumpscared');
-    var _a;
-    [timeUpdate, frameUpdate, bonnieInterval, chicaInterval, foxyInterval, freddyInterval].forEach((int) => {
-        clearInterval(int);
-    });
-    window.removeEventListener('cameras-off', pauseFoxy);
-    cameraButton.removeEventListener('click', toggleCameras);
-    window.removeEventListener('cam-on-2A', attemptFoxyJumpscare);
-    window.removeEventListener('cameras-off', gameOver);
-    let gameOverWindow = document.createElement('div');
-    gameOverWindow.id = 'game-over';
-    gameOverWindow.classList.add('modal');
-    (_a = document.querySelector('#simulator-container')) === null || _a === void 0 ? void 0 : _a.append(gameOverWindow);
-    gameOverWindow.innerHTML = 'dasuighjdknsa';
+const gameOver = (e) => {
+    console.log(e);
 };
+const gameOverBonnie = () => {
+    addReport(Bonnie, 'jumpscare');
+    window.dispatchEvent(new Event('game-over-bonnie'));
+};
+const gameOverChica = () => {
+    addReport(Chica, 'jumpscare');
+    window.dispatchEvent(new Event('game-over-chica'));
+};
+const gameOverFoxy = () => {
+    addReport(Foxy, 'jumpscare');
+    window.dispatchEvent(new Event('game-over-foxy'));
+};
+const gameOverFreddy = () => {
+    addReport(Freddy, 'jumpscare');
+    window.dispatchEvent(new Event('game-over-freddy'));
+};
+window.addEventListener('game-over-bonnie', gameOver);
+window.addEventListener('game-over-chica', gameOver);
+window.addEventListener('game-over-foxy', gameOver);
+window.addEventListener('game-over-freddy', gameOver);
+// const gameOver = (e: Event) => {
+//   // alert('You got jumpscared');
+//   console.log(e);
+//   [timeUpdate, frameUpdate, bonnieInterval, chicaInterval, foxyInterval, freddyInterval].forEach((int) => {
+//     clearInterval(int);
+//   });
+//   window.removeEventListener('cameras-off', pauseFoxy);
+//   cameraButton.removeEventListener('click', toggleCameras);
+//   window.removeEventListener('cam-on-2A', attemptFoxyJumpscare);
+//   window.removeEventListener('cameras-off', gameOver);
+//   let gameOverWindow = document.createElement('div');
+//   gameOverWindow.id = 'game-over';
+//   gameOverWindow.classList.add('modal');
+//   document.querySelector('#simulator-container')?.append(gameOverWindow);
+//   gameOverWindow.innerHTML = `
+//     <h2>GAME OVER</h2>
+//   `;
+// };
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
