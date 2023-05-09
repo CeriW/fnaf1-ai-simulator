@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
-const nightToSimulate = 6;
-let secondLength = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const nightToSimulate = 1;
+let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -171,7 +171,7 @@ const generateAnimatronics = () => {
     });
 };
 const makeMovementCheck = (animatronic) => {
-    const comparisonNumber = Math.round(Math.random() * 20);
+    const comparisonNumber = Math.ceil(Math.random() * 20);
     return {
         animatronicName: animatronic.name,
         canMove: animatronic.currentAIlevel >= comparisonNumber,

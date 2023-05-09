@@ -1,6 +1,6 @@
 // TESTING VARIABLES
-const nightToSimulate = 6;
-let secondLength: number = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+const nightToSimulate = 1;
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -227,7 +227,7 @@ const generateAnimatronics = () => {
 };
 
 const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
-  const comparisonNumber = Math.round(Math.random() * 20);
+  const comparisonNumber = Math.ceil(Math.random() * 20);
   return {
     animatronicName: animatronic.name,
     canMove: animatronic.currentAIlevel >= comparisonNumber,
