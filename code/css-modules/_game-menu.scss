@@ -1,0 +1,14 @@
+#game-menu{
+
+  
+
+
+  button{
+    @include buttonStyle();
+    padding: 10px;
+
+    &:hover{
+      background: $green;
+    }
+  }
+}
