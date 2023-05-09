@@ -874,62 +874,6 @@ const addReport = (
 };
 
 // ========================================================================== //
-// CAMERAS
-// ========================================================================== //
-
-const toggleCameras = () => {
-  user.camerasOn = !user.camerasOn;
-  document.body.setAttribute('cameras-on', String(user.camerasOn));
-  cameraButton.setAttribute('active', String(user.camerasOn));
-  cameraStatusText.textContent = user.camerasOn ? '' : 'CAMERAS ARE OFF';
-
-  if (user.camerasOn) {
-    lookAtCamera(user.currentCamera);
-  }
-  if (!user.camerasOn) {
-    window.dispatchEvent(new Event('cameras-off'));
-    console.log('Cameras off');
-  }
-};
-
-const generateCameraButtons = () => {
-  for (const key in cameraNames) {
-    const myCameraButton = document.createElement('button');
-    myCameraButton.classList.add('camera-button');
-    if (key === defaultCamera) {
-      myCameraButton.classList.add('active');
-    }
-    myCameraButton.textContent = `CAM ${key}`;
-    myCameraButton.setAttribute('camera', key);
-    simulator.appendChild(myCameraButton);
-
-    myCameraButton.addEventListener('click', () => {
-      // cameraScreen.src = `${paths.cameras}/${key}-empty.webp`;
-      document.querySelectorAll('.camera-button').forEach((btn) => {
-        btn.classList.remove('active');
-      });
-      myCameraButton.classList.add('active');
-      user.currentCamera = key as Camera;
-
-      if (user.camerasOn) {
-        lookAtCamera(user.currentCamera);
-      }
-    });
-  }
-
-  cameraScreen.src = `${paths.cameras}/${defaultCamera}-empty.webp`;
-};
-generateCameraButtons();
-
-// We need to listen for certain cameras in certain situations.
-// This will publish an event when a given camera is being looked at
-const lookAtCamera = (camera: Camera) => {
-  window.dispatchEvent(new Event(`cam-on-${camera}`));
-  console.log(`cam-on-${camera}`);
-  cameraScreen.src = getCameraImage(camera);
-};
-
-// ========================================================================== //
 // IMAGES FOR INDIVIDUAL CAMERAS
 // I wish it were simple as figuring out which animatronics were at the current
 // location and just giving it an image. It isn't.
@@ -1169,6 +1113,59 @@ const generateCamImage7 = (): string => {
 };
 
 // ========================================================================== //
+// CAMERAS
+// ========================================================================== //
+
+const toggleCameras = () => {
+  user.camerasOn = !user.camerasOn;
+  document.body.setAttribute('cameras-on', String(user.camerasOn));
+  cameraButton.setAttribute('active', String(user.camerasOn));
+  cameraStatusText.textContent = user.camerasOn ? '' : 'CAMERAS ARE OFF';
+
+  if (user.camerasOn) {
+    lookAtCamera(user.currentCamera);
+  }
+  if (!user.camerasOn) {
+    window.dispatchEvent(new Event('cameras-off'));
+    console.log('Cameras off');
+  }
+};
+
+const generateCameraButtons = () => {
+  cameraScreen.src = getCameraImage(defaultCamera);
+  for (const key in cameraNames) {
+    const myCameraButton = document.createElement('button');
+    myCameraButton.classList.add('camera-button');
+    if (key === defaultCamera) {
+      myCameraButton.classList.add('active');
+    }
+    myCameraButton.textContent = `CAM ${key}`;
+    myCameraButton.setAttribute('camera', key);
+    simulator.appendChild(myCameraButton);
+
+    myCameraButton.addEventListener('click', () => {
+      document.querySelectorAll('.camera-button').forEach((btn) => {
+        btn.classList.remove('active');
+      });
+      myCameraButton.classList.add('active');
+      user.currentCamera = key as Camera;
+
+      if (user.camerasOn) {
+        lookAtCamera(user.currentCamera);
+      }
+    });
+  }
+};
+
+// We need to listen for certain cameras in certain situations.
+// This will publish an event when a given camera is being looked at
+const lookAtCamera = (camera: Camera) => {
+  window.dispatchEvent(new Event(`cam-on-${camera}`));
+  console.log(`cam-on-${camera}`);
+  cameraScreen.src = getCameraImage(camera);
+};
+
+// ========================================================================== //
 // DOORS
 // ========================================================================== //
 
@@ -1236,6 +1233,7 @@ if (Foxy.currentPosition === '4A') {
 document.body.setAttribute('cameras-on', 'false');
 initialiseDoors();
 generateAnimatronics();
+generateCameraButtons();
 
 cameraButton.addEventListener('click', toggleCameras);
 // cameraButton.addEventListener('mouseenter', toggleCameras);
