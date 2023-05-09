@@ -261,7 +261,7 @@ const attemptFoxyJumpscare = (e) => {
         if (foxyIcon) {
             foxyIcon.style.animation = `foxyHallAnimation ${(1.87 * secondLength) / 1000}s linear backwards`;
         }
-        window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
+        foxyJumpscareCountdown = window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
     }
     else {
         performFoxyJumpscareCheck();
@@ -275,7 +275,7 @@ const pauseFoxy = () => {
         Foxy.currentCountdown = cooldownInSeconds * secondLength;
         addReport(Foxy, 'foxy paused', null, cooldownInSeconds);
         clearInterval(foxyInterval);
-        let foxyCooldown = window.setInterval(() => {
+        foxyCooldown = window.setInterval(() => {
             Foxy.currentCountdown--;
             if (Foxy.currentCountdown <= 0) {
                 foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
@@ -290,7 +290,7 @@ const pauseFoxy = () => {
 // Once Freddy is in the office he has a 25% chance of getting you every 1 second while the cameras are down
 const makeFreddyJumpscareCheck = () => {
     clearInterval(freddyInterval);
-    window.setInterval(() => {
+    freddyInterval = window.setInterval(() => {
         let comparisonNumber = Math.random();
         let jumpscare = {
             canMove: comparisonNumber > 0.75,
@@ -448,11 +448,11 @@ const moveBonnieOrChica = (animatronic) => {
         disableOfficeButtons();
         // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
         if (name === 'Bonnie') {
-            window.setTimeout(gameOverBonnie, secondLength * 30);
+            bonnieJumpscareCountdown = window.setTimeout(gameOverBonnie, secondLength * 30);
             window.addEventListener('cameras-off', gameOverBonnie);
         }
         else {
-            window.setTimeout(gameOverChica, secondLength * 30);
+            chicaJumpscareCountdown = window.setTimeout(gameOverChica, secondLength * 30);
             window.addEventListener('cameras-off', gameOverChica);
         }
         // He meets all the critera to enter the office but the door is closed. He will return to the dining area
@@ -995,6 +995,17 @@ const disableOfficeButtons = () => {
 // ========================================================================== //
 const gameOver = (e) => {
     console.log(e);
+    // Clear all the intervals and timeouts so the game stops running
+    clearInterval(timeUpdate);
+    clearInterval(frameUpdate);
+    clearInterval(bonnieInterval);
+    clearInterval(chicaInterval);
+    clearInterval(foxyInterval);
+    clearInterval(freddyInterval);
+    clearInterval(foxyCooldown);
+    clearInterval(foxyJumpscareCountdown);
+    clearInterval(bonnieJumpscareCountdown);
+    clearInterval(chicaJumpscareCountdown);
 };
 const gameOverBonnie = () => {
     addReport(Bonnie, 'jumpscare');
@@ -1037,16 +1048,29 @@ window.addEventListener('game-over-freddy', gameOver);
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
-const timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
-const frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
-let freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-let foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-let bonnieInterval = window.setInterval(() => {
-    moveBonnieOrChica(Bonnie);
-}, secondLength * Bonnie.movementOpportunityInterval);
-let chicaInterval = window.setInterval(() => {
-    moveBonnieOrChica(Chica);
-}, secondLength * Chica.movementOpportunityInterval);
+const startGame = () => {
+    timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
+    frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
+    freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+    foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+    bonnieInterval = window.setInterval(() => {
+        moveBonnieOrChica(Bonnie);
+    }, secondLength * Bonnie.movementOpportunityInterval);
+    chicaInterval = window.setInterval(() => {
+        moveBonnieOrChica(Chica);
+    }, secondLength * Chica.movementOpportunityInterval);
+};
+// All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
+let timeUpdate;
+let frameUpdate;
+let bonnieInterval;
+let chicaInterval;
+let foxyInterval;
+let freddyInterval;
+let foxyCooldown;
+let foxyJumpscareCountdown;
+let bonnieJumpscareCountdown;
+let chicaJumpscareCountdown;
 // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
 if (Foxy.currentPosition === '4A') {
     moveFoxy();
@@ -1058,4 +1082,4 @@ generateCameraButtons();
 cameraButton.addEventListener('click', toggleCameras);
 // cameraButton.addEventListener('mouseenter', toggleCameras);
 window.addEventListener('cameras-off', pauseFoxy);
-let windowEventListeners = [];
+startGame();
