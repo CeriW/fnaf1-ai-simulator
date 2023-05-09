@@ -13,7 +13,6 @@ const Freddy = {
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     subPosition: -1,
-    startingSubPosition: -1,
 };
 const Bonnie = {
     name: 'Bonnie',
@@ -24,7 +23,6 @@ const Bonnie = {
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     subPosition: -1,
-    startingSubPosition: -1,
 };
 const Chica = {
     name: 'Chica',
@@ -35,14 +33,12 @@ const Chica = {
     currentCountdown: 0,
     pronouns: ['she', 'her'],
     subPosition: -1,
-    startingSubPosition: -1,
 };
 const Foxy = {
     name: 'Foxy',
     currentPosition: '1C',
     currentAIlevel: 0,
     subPosition: 0,
-    startingSubPosition: 0,
     movementOpportunityInterval: 5.01,
     aiLevels: [null, 0, 1, 2, 6, 5, 16],
     currentCountdown: 0,
@@ -158,7 +154,7 @@ const generateAnimatronics = () => {
         icon.classList.add('animatronic');
         icon.setAttribute('id', animatronic.name);
         icon.setAttribute('position', animatronic.currentPosition);
-        icon.setAttribute('sub-position', (_a = animatronic.startingSubPosition.toString()) !== null && _a !== void 0 ? _a : 'none');
+        icon.setAttribute('sub-position', (_a = animatronic.subPosition.toString()) !== null && _a !== void 0 ? _a : 'none');
         simulator.appendChild(icon);
         // Create the report
         let animatronicReport = document.createElement('div');
@@ -217,16 +213,15 @@ const moveFoxy = () => {
     else if (!movementCheck.canMove && Foxy.currentPosition === '1C') {
         addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck);
     }
-    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+    else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 2) {
         // Foxy needs to make 3 successful movement checks before he is able to leave 1C
-        Foxy.subPosition++;
-        console.log(Foxy);
+        moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition + 1 }, false);
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-        moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
+        console.log(Foxy.subPosition);
     }
-    else if ((movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) ||
+    else if ((movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 2) ||
         Foxy.currentPosition === '2A') {
-        // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
+        // Once Foxy has made 3 successful movement checks, he can leave Pirate Cove
         if (Foxy.currentPosition === '1C') {
             // This if statement isn't necessary in normal play, but is necessary during testing when his starting position isn't 1C
             moveAnimatronic(Foxy, { start: '1C', end: '2A', sub: -1 });
@@ -625,7 +620,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'foxy successful pirate cove movement check':
             const stepsRemaining = 3 - Foxy.subPosition;
-            message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
+            message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from leaving Pirate Cove ${stats}`;
             type = stepsRemaining === 1 ? 'warning' : 'bad';
             break;
         case 'foxy paused':
@@ -761,6 +756,21 @@ const generateCamImage1A = () => {
     }
     // If we've reached this point it must be empty
     return `1A-empty.webp`;
+};
+// Freddy will only show if he's alone. Bonnnie will only show if Chica isn't there.
+const generateCamImage1B = () => {
+    const info = getLocationInfo('1B');
+    const randomiser = randomise(3) ? '-2' : '-1';
+    if (info.chicaIsHere) {
+        return `1B-chica${randomiser}.webp`;
+    }
+    if (info.bonnieIsHere) {
+        return `1B-bonnie${randomiser}.webp`;
+    }
+    if (info.freddyIsAlone) {
+        return '1B-freddy.webp';
+    }
+    return '1B-empty.webp';
 };
 // Foxy is the only one who can be here. Exactly which image is shown depends
 // on how close he is to leaving Pirate Cove.

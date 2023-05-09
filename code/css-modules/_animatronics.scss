@@ -220,11 +220,11 @@
 
 #Foxy[position="1C"][sub-position="1"]{
   &:before, &:after{
-    border-color: yellow;
+    border-color: #f60;
   }
 
   &:after{
-    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%);
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%);
   }
 }
 
@@ -232,24 +232,14 @@
 
   
   &:before, &:after{
-    border-color: #f60;
-  }
-
-  &:after{
-    clip-path: polygon(50% 0%, 50% 100%, 100% 100%, 100% 0%);
-  }
-}
-
-#Foxy[position="1C"][sub-position="3"]{
-
-  &:before, &:after{
     border-color: red;
   }
 
   &:after{
-    clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%);
+    clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%);
   }
 }
+
 
 #Foxy[position="4A"]{
   opacity: 0.2;

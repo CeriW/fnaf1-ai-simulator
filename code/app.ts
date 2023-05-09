@@ -17,7 +17,6 @@ type Animatronic = {
   // possibleLocations: string[]; // The cameras where they can be
   currentPosition: Position; // The camera the animatronic is currently at
   subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
-  startingSubPosition: number; // Used for Foxy. The subposition he starts at.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentAIlevel: number; // Some animatronics increase their AI level as the night goes on. This will be used to store what their current AI level is. It's set to 0 when the animatronics are first declared, then set to the correct value in generateAnimatronics()
@@ -39,7 +38,6 @@ const Freddy: Animatronic = {
   currentCountdown: 0,
   pronouns: ['he', 'his'],
   subPosition: -1,
-  startingSubPosition: -1,
 };
 
 const Bonnie: Animatronic = {
@@ -51,12 +49,10 @@ const Bonnie: Animatronic = {
   currentCountdown: 0,
   pronouns: ['he', 'his'],
   subPosition: -1,
-  startingSubPosition: -1,
 };
 
 const Chica: Animatronic = {
   name: 'Chica',
-
   currentPosition: '1A',
   movementOpportunityInterval: 4.98,
   aiLevels: [null, 0, 1, 5, 4, 7, 12],
@@ -64,7 +60,6 @@ const Chica: Animatronic = {
   currentCountdown: 0,
   pronouns: ['she', 'her'],
   subPosition: -1,
-  startingSubPosition: -1,
 };
 
 const Foxy: Animatronic = {
@@ -72,7 +67,6 @@ const Foxy: Animatronic = {
   currentPosition: '1C',
   currentAIlevel: 0,
   subPosition: 0,
-  startingSubPosition: 0,
   movementOpportunityInterval: 5.01,
   aiLevels: [null, 0, 1, 2, 6, 5, 16],
   currentCountdown: 0,
@@ -216,7 +210,7 @@ const generateAnimatronics = () => {
     icon.setAttribute('id', animatronic.name);
     icon.setAttribute('position', animatronic.currentPosition);
 
-    icon.setAttribute('sub-position', animatronic.startingSubPosition.toString() ?? 'none');
+    icon.setAttribute('sub-position', animatronic.subPosition.toString() ?? 'none');
     simulator.appendChild(icon);
 
     // Create the report
@@ -280,17 +274,16 @@ const moveFoxy = () => {
     // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
   } else if (!movementCheck.canMove && Foxy.currentPosition === '1C') {
     addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck);
-  } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
+  } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 2) {
     // Foxy needs to make 3 successful movement checks before he is able to leave 1C
-    Foxy.subPosition++;
-    console.log(Foxy);
+    moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition + 1 }, false);
     addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-    moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
+    console.log(Foxy.subPosition);
   } else if (
-    (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) ||
+    (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 2) ||
     Foxy.currentPosition === '2A'
   ) {
-    // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
+    // Once Foxy has made 3 successful movement checks, he can leave Pirate Cove
     if (Foxy.currentPosition === '1C') {
       // This if statement isn't necessary in normal play, but is necessary during testing when his starting position isn't 1C
       moveAnimatronic(Foxy, { start: '1C', end: '2A', sub: -1 });
@@ -808,9 +801,10 @@ const addReport = (
 
     case 'foxy successful pirate cove movement check':
       const stepsRemaining = 3 - Foxy.subPosition;
-      message = `Foxy has made a successful movement check while at 1C (${
-        cameraNames['1C']
-      }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
+      message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(
+        stepsRemaining,
+        'step'
+      )} away from leaving Pirate Cove ${stats}`;
       type = stepsRemaining === 1 ? 'warning' : 'bad';
       break;
 
@@ -974,6 +968,26 @@ const generateCamImage1A = (): string => {
 
   // If we've reached this point it must be empty
   return `1A-empty.webp`;
+};
+
+// Freddy will only show if he's alone. Bonnnie will only show if Chica isn't there.
+const generateCamImage1B = (): string => {
+  const info = getLocationInfo('1B');
+  const randomiser = randomise(3) ? '-2' : '-1';
+
+  if (info.chicaIsHere) {
+    return `1B-chica${randomiser}.webp`;
+  }
+
+  if (info.bonnieIsHere) {
+    return `1B-bonnie${randomiser}.webp`;
+  }
+
+  if (info.freddyIsAlone) {
+    return '1B-freddy.webp';
+  }
+
+  return '1B-empty.webp';
 };
 
 // Foxy is the only one who can be here. Exactly which image is shown depends

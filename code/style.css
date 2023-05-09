@@ -228,25 +228,18 @@
   display: none; }
 
 #Foxy[position="1C"][sub-position="1"]:before, #Foxy[position="1C"][sub-position="1"]:after {
-  border-color: yellow; }
-
-#Foxy[position="1C"][sub-position="1"]:after {
-  -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%);
-  clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%); }
-
-#Foxy[position="1C"][sub-position="2"]:before, #Foxy[position="1C"][sub-position="2"]:after {
   border-color: #f60; }
 
-#Foxy[position="1C"][sub-position="2"]:after {
-  -webkit-clip-path: polygon(50% 0%, 50% 100%, 100% 100%, 100% 0%);
-  clip-path: polygon(50% 0%, 50% 100%, 100% 100%, 100% 0%); }
+#Foxy[position="1C"][sub-position="1"]:after {
+  -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%);
+  clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%); }
 
-#Foxy[position="1C"][sub-position="3"]:before, #Foxy[position="1C"][sub-position="3"]:after {
+#Foxy[position="1C"][sub-position="2"]:before, #Foxy[position="1C"][sub-position="2"]:after {
   border-color: red; }
 
-#Foxy[position="1C"][sub-position="3"]:after {
-  -webkit-clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%);
-  clip-path: polygon(50% 0%, 50% 50%, 0% 50%, 0% 100%, 100% 100%, 100% 0%); }
+#Foxy[position="1C"][sub-position="2"]:after {
+  -webkit-clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%);
+  clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%); }
 
 #Foxy[position="4A"] {
   opacity: 0.2; }
