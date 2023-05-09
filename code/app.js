@@ -740,8 +740,13 @@ const getCameraImage = (cam) => {
             break;
         case '5':
             camImageSrc = generateCamImage5();
+            break;
         case '6':
             camImageSrc = '6.webp';
+            break;
+        case '7':
+            camImageSrc = generateCamImage7();
+            break;
     }
     return `${paths.cameras}/${camImageSrc}`;
 };
@@ -798,6 +803,17 @@ const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.w
 const generateCamImage5 = () => {
     let randomiser = randomise(8) ? '-2' : '-1';
     return getLocationInfo('5').bonnieIsHere ? `5-bonnie${randomiser}.webp` : `5-empty${randomiser}.webp`;
+};
+const generateCamImage7 = () => {
+    let info = getLocationInfo('7');
+    if (info.freddyIsAlone) {
+        return '7-freddy.webp';
+    }
+    if (info.chicaIsHere) {
+        let randomiser = randomise(8) ? '-2' : '-1';
+        return `7-chica${randomiser}.webp`;
+    }
+    return '7-empty.webp';
 };
 // ========================================================================== //
 // DOORS

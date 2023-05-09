@@ -952,8 +952,13 @@ const getCameraImage = (cam: Camera) => {
       break;
     case '5':
       camImageSrc = generateCamImage5();
+      break;
     case '6':
       camImageSrc = '6.webp';
+      break;
+    case '7':
+      camImageSrc = generateCamImage7();
+      break;
   }
 
   return `${paths.cameras}/${camImageSrc}`;
@@ -1019,9 +1024,24 @@ const generateCamImage3 = (): string => (getLocationInfo('3').bonnieIsHere ? '3-
 
 // Bonnie is the only animatronic who can be here. There are 2 options for
 // Bonnie and 2 options for empty
-const generateCamImage5 = () => {
+const generateCamImage5 = (): string => {
   let randomiser = randomise(8) ? '-2' : '-1';
   return getLocationInfo('5').bonnieIsHere ? `5-bonnie${randomiser}.webp` : `5-empty${randomiser}.webp`;
+};
+
+const generateCamImage7 = (): string => {
+  let info = getLocationInfo('7');
+
+  if (info.freddyIsAlone) {
+    return '7-freddy.webp';
+  }
+
+  if (info.chicaIsHere) {
+    let randomiser = randomise(8) ? '-2' : '-1';
+    return `7-chica${randomiser}.webp`;
+  }
+
+  return '7-empty.webp';
 };
 
 // ========================================================================== //
