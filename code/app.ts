@@ -236,11 +236,13 @@ const makeMovementCheck = (animatronic: Animatronic): MovementCheck => {
 };
 
 const increaseAILevel = (animatronic: Animatronic) => {
-  animatronic.currentAIlevel++;
-  addReport(animatronic, 'increase AI level');
-  let aiReport = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .current-ai-level span`);
-  if (aiReport) {
-    aiReport.innerHTML = animatronic.currentAIlevel.toString();
+  if (animatronic.currentAIlevel < 20) {
+    animatronic.currentAIlevel++;
+    addReport(animatronic, 'increase AI level');
+    let aiReport = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .current-ai-level span`);
+    if (aiReport) {
+      aiReport.innerHTML = animatronic.currentAIlevel.toString();
+    }
   }
 };
 
