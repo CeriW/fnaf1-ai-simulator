@@ -287,19 +287,19 @@ const moveFoxy = () => {
     moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
   } else if (
     (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 3) ||
-    Foxy.currentPosition === '4A'
+    Foxy.currentPosition === '2A'
   ) {
     // Once Foxy has made 4 successful movement checks, he can leave Pirate Cove
     if (Foxy.currentPosition === '1C') {
       // This if statement isn't necessary in normal play, but is necessary during testing when his starting position isn't 1C
-      moveAnimatronic(Foxy, { start: '1C', end: '4A', sub: -1 });
+      moveAnimatronic(Foxy, { start: '1C', end: '2A', sub: -1 });
       addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
     }
 
     // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
     clearInterval(foxyInterval);
     Foxy.currentCountdown = 25;
-    window.addEventListener('cam-on-4A', attemptFoxyJumpscare);
+    window.addEventListener('cam-on-2A', attemptFoxyJumpscare);
     foxyInterval = window.setInterval(() => {
       Foxy.currentCountdown--;
       if (Foxy.currentCountdown === 0) {
@@ -316,7 +316,7 @@ const attemptFoxyJumpscare = (e?: Event) => {
     const restartSubPosition = Math.floor(Math.random() * 2);
     if (user.rightDoorIsClosed) {
       addReport(Foxy, 'foxy right door closed', null, restartSubPosition);
-      moveAnimatronic(Foxy, { start: '4A', end: '1C', sub: restartSubPosition }, false);
+      moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
       foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
 
       // TODO - Foxy drains your power if he bashes on the door.
@@ -689,7 +689,7 @@ const addReport = (
     case 'in the doorway':
       const side = animatronic.name === 'Bonnie' ? 'left' : 'right';
       message = `${animatronic.name} is in your ${side} doorway!`;
-      type = 'warning';
+      type = 'alert';
       break;
 
     case 'increase AI level':
@@ -702,7 +702,7 @@ const addReport = (
       break;
 
     case 'failed movement check':
-      message = `${animatronic.name} has failed ${animatronic.pronouns[1]} movement check and will remain at ${
+      message = `${animatronic.name} has failed ${animatronic.pronouns[1]} movement check and will remain at cam ${
         animatronic.currentPosition
       } (${cameraNames[animatronic.currentPosition as Camera]}) ${stats}`;
       type = 'good';
@@ -799,6 +799,11 @@ const addReport = (
       message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${
         cameraNames[additionalInfo.currentPosition as Camera]
       }) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition as Camera]})`;
+      if (movementCheck) {
+        message += `<div class="report-extra-info">
+        Score to beat: ${movementCheck?.scoreToBeat}  ${animatronic.name}'s score: ${movementCheck?.aiLevel}
+        </div>`;
+      }
       type = 'bad';
       break;
 
@@ -807,7 +812,7 @@ const addReport = (
       message = `Foxy has made a successful movement check while at 1C (${
         cameraNames['1C']
       }). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
-      type = stepsRemaining === 1 ? 'alert' : 'bad';
+      type = stepsRemaining === 1 ? 'warning' : 'bad';
       break;
 
     case 'foxy paused':
@@ -827,7 +832,7 @@ const addReport = (
 
     case 'foxy leaving pirate cove':
       message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
-      <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 4A, whichever comes sooner</div>`;
+      <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 2A, whichever comes first</div>`;
       type = 'alert';
       break;
 
