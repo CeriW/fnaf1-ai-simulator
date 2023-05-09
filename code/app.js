@@ -13,6 +13,11 @@ const Freddy = {
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     subPosition: -1,
+    stats: {
+        successfulMovementChecks: 0,
+        failedMovementChecks: 0,
+        officeAttempts: 0,
+    },
 };
 const Bonnie = {
     name: 'Bonnie',
@@ -23,6 +28,11 @@ const Bonnie = {
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     subPosition: -1,
+    stats: {
+        successfulMovementChecks: 0,
+        failedMovementChecks: 0,
+        officeAttempts: 0,
+    },
 };
 const Chica = {
     name: 'Chica',
@@ -33,6 +43,11 @@ const Chica = {
     currentCountdown: 0,
     pronouns: ['she', 'her'],
     subPosition: -1,
+    stats: {
+        successfulMovementChecks: 0,
+        failedMovementChecks: 0,
+        officeAttempts: 0,
+    },
 };
 const Foxy = {
     name: 'Foxy',
@@ -43,6 +58,11 @@ const Foxy = {
     aiLevels: [null, 0, 1, 2, 6, 5, 16, 0],
     currentCountdown: 0,
     pronouns: ['he', 'his'],
+    stats: {
+        successfulMovementChecks: 0,
+        failedMovementChecks: 0,
+        officeAttempts: 0,
+    },
 };
 const cameraNames = {
     '1A': 'Show stage',
@@ -173,9 +193,16 @@ const generateAnimatronics = () => {
 };
 const makeMovementCheck = (animatronic) => {
     const comparisonNumber = Math.ceil(Math.random() * 20);
+    const canMove = animatronic.currentAIlevel >= comparisonNumber;
+    if (canMove) {
+        animatronic.stats.successfulMovementChecks++;
+    }
+    else {
+        animatronic.stats.failedMovementChecks++;
+    }
     return {
         animatronicName: animatronic.name,
-        canMove: animatronic.currentAIlevel >= comparisonNumber,
+        canMove,
         scoreToBeat: comparisonNumber,
         aiLevel: animatronic.currentAIlevel,
     };
@@ -220,7 +247,6 @@ const moveFoxy = () => {
         // Foxy needs to make 3 successful movement checks before he is able to leave 1C
         moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition + 1 }, false);
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-        console.log(Foxy.subPosition);
     }
     else if ((movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 2) ||
         Foxy.currentPosition === '2A') {
@@ -244,6 +270,7 @@ const moveFoxy = () => {
 };
 const attemptFoxyJumpscare = (e) => {
     clearInterval(foxyInterval);
+    Foxy.stats.officeAttempts++;
     const performFoxyJumpscareCheck = () => {
         const restartSubPosition = Math.floor(Math.random() * 2);
         if (user.rightDoorIsClosed) {
@@ -338,6 +365,7 @@ const moveFreddy = () => {
         addReport(Freddy, 'right door closed', null, '4A');
         Freddy.currentPosition = '4A';
         moveAnimatronic(Freddy, { start: '4B', end: '4A' });
+        Freddy.stats.officeAttempts++;
         // CAMERAS ON, HE'S AT 4B, USER IS NOT LOOKING AT 4B BUT HE'S FAILED HIS MOVEMENT CHECK
     }
     else if (user.camerasOn &&
@@ -348,15 +376,18 @@ const moveFreddy = () => {
         // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
         // Freddy could have entered the office but he failed his movement check. He will continue to wait at Cam 4B
         addReport(Freddy, 'enter office failed movement check', movementCheck);
+        Freddy.stats.failedMovementChecks++;
     }
     else if (!user.camerasOn && Freddy.currentPosition === '4B' && movementCheck.canMove) {
         // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
         addReport(Freddy, 'enter office cameras off');
+        Freddy.stats.officeAttempts++;
         // THE CAMERAS ARE ON, HE'S AT 4B, THE RIGHT DOOR IS OPEN, HE CAN GET INTO THE OFFICE!!!!!
     }
     else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
         addReport(Freddy, 'in the office');
         moveAnimatronic(Freddy, { start: '4B', end: 'office' }, false);
+        Freddy.stats.officeAttempts++;
     }
     else if (Freddy.currentPosition === 'office') {
         makeFreddyJumpscareCheck();
@@ -397,7 +428,7 @@ const moveFreddy = () => {
         Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
         // Freddy will not move while the cameras are up.
         // If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
-        let freddyCountdown = window.setInterval(() => {
+        freddyCountdown = window.setInterval(() => {
             Freddy.currentCountdown--;
             if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
                 moveAnimatronic(Freddy, { start: currentPosition, end: endingPosition });
@@ -428,7 +459,7 @@ const moveBonnieOrChica = (animatronic) => {
     // They can move, aren't in their hall corner
     if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
         moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition }, true, movementCheck);
-        // If he's at 2B but isn't in your doorway yet, move him into the doorway
+        // If they're at their hall corner but aren't in your doorway yet, move them into the doorway
     }
     else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition === -1) {
         moveAnimatronic(animatronic, { start: hallCorner, end: hallCorner, sub: 1 }, false);
@@ -441,6 +472,7 @@ const moveBonnieOrChica = (animatronic) => {
         !doorClosed) {
         moveAnimatronic(animatronic, { start: hallCorner, end: 'office', sub: -1 }, false);
         addReport(animatronic, 'enter office bonnie or chica', movementCheck);
+        animatronic.stats.officeAttempts++;
         if (name === 'Bonnie') {
             clearInterval(bonnieInterval);
         }
@@ -999,9 +1031,7 @@ const disableOfficeButtons = () => {
 // DEATH
 // ========================================================================== //
 const gameOver = (animatronic) => {
-    // console.log(e.type);
-    // let animatronicName = '';
-    // e
+    document.body.setAttribute('game-in-progress', 'false');
     // Clear all the intervals and timeouts so the game stops running
     clearInterval(timeUpdate);
     clearInterval(frameUpdate);
@@ -1013,15 +1043,31 @@ const gameOver = (animatronic) => {
     clearInterval(foxyJumpscareCountdown);
     clearInterval(bonnieJumpscareCountdown);
     clearInterval(chicaJumpscareCountdown);
+    clearInterval(freddyCountdown);
     let gameOverWindow = document.querySelector('#game-over-stats');
-    // const regex = /.*-(.*)/;
-    // const match = e.type.match(regex);
-    // console.log(match);
-    // const animatronicName = match ? match[1] : '';
+    const generateStatsTable = (animatronic) => {
+        let myStats = `
+      <div class="stats-report" for="${animatronic.name}">
+        <h3>${animatronic.name}</h3>
+        <div class="animatronic-icon"></div>
+        <div>Successful movement checks: <span>${animatronic.stats.successfulMovementChecks}</span></div>
+        <div>Failed movement checks: <span>${animatronic.stats.failedMovementChecks}</span></div>
+        <div>Attempts to get into office: <span>${animatronic.stats.officeAttempts}</span></div>
+      </div>
+    `;
+        return myStats;
+    };
     gameOverWindow.innerHTML = `
     <h2>GAME OVER</h2>
     <h3>You were jumpscared by ${animatronic.name}</h3>
-  
+    ${generateStatsTable(Freddy)}
+    ${generateStatsTable(Bonnie)}
+    ${generateStatsTable(Chica)}
+    ${generateStatsTable(Foxy)}
+
+
+
+
   `;
 };
 const gameOverBonnie = () => {
@@ -1052,29 +1098,11 @@ window.addEventListener('game-over-foxy', () => {
 window.addEventListener('game-over-freddy', () => {
     gameOver(Freddy);
 });
-// const gameOver = (e: Event) => {
-//   // alert('You got jumpscared');
-//   console.log(e);
-//   [timeUpdate, frameUpdate, bonnieInterval, chicaInterval, foxyInterval, freddyInterval].forEach((int) => {
-//     clearInterval(int);
-//   });
-//   window.removeEventListener('cameras-off', pauseFoxy);
-//   cameraButton.removeEventListener('click', toggleCameras);
-//   window.removeEventListener('cam-on-2A', attemptFoxyJumpscare);
-//   window.removeEventListener('cameras-off', gameOver);
-//   let gameOverWindow = document.createElement('div');
-//   gameOverWindow.id = 'game-over';
-//   gameOverWindow.classList.add('modal');
-//   document.querySelector('#simulator-container')?.append(gameOverWindow);
-//   gameOverWindow.innerHTML = `
-//     <h2>GAME OVER</h2>
-//   `;
-// };
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
 const startGame = () => {
-    document.body.setAttribute('game-has-started', 'true');
+    document.body.setAttribute('game-in-progress', 'true');
     timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
     frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
     freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
@@ -1189,6 +1217,7 @@ let chicaInterval;
 let foxyInterval;
 let freddyInterval;
 let foxyCooldown;
+let freddyCountdown;
 let foxyJumpscareCountdown;
 let bonnieJumpscareCountdown;
 let chicaJumpscareCountdown;

@@ -58,14 +58,14 @@ body{
 }
 
 
-body[game-has-started]{
+body[game-in-progress]{
   #game-menu{
     display: none;
   }
 }
 
 
-body:not([game-has-started]){
+body:not([game-in-progress]){
 
   main{
     display: none;

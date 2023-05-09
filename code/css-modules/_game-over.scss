@@ -9,12 +9,63 @@
   border: 2px solid white;
   padding: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   h2{
     font-family: 'VT323', monospace;
     font-size: 4em;
     margin: 0;
   }
+}
+
+body[game-in-progress="true"] #game-over-stats{
+  display: none;
+}
+
+.stats-report{
+  text-align: left;
+  display: grid;
+  grid-template: 
+    "icon name" 1fr
+    "icon ." auto
+    "icon ." auto
+    "icon ." auto
+    "icon ." auto
+  / 100px 1fr;
+  gap: 0 20px;
+
+
+  h3{
+    margin: 0 0 10px;
+  }
+
+  .animatronic-icon{
+    height: 100px;
+    width: 100px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    grid-area: icon;
+  }
+
+  &[for="Freddy"] .animatronic-icon{
+    background-image: url('../../assets/animatronics/freddy.png');
+  }
+
+  &[for="Bonnie"] .animatronic-icon{
+    background-image: url('../../assets/animatronics/bonnie.png');
+  }
+
+  &[for="Chica"] .animatronic-icon{
+    background-image: url('../../assets/animatronics/chica.png');
+  }
+
+  &[for="Foxy"] .animatronic-icon{
+    background-image: url('../../assets/animatronics/foxy.png');
+  }
+
 
 
 }

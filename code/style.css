@@ -409,6 +409,11 @@ button#cameras {
   grid-area: icon;
   border-right: inherit; }
 
+.stats-report > .animatronic-icon {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 9;
+  -ms-grid-column: 1; }
+
 .starting-ai-level {
   -ms-grid-row: 3;
   -ms-grid-column: 2;
@@ -439,6 +444,11 @@ button#cameras {
   grid-area: name;
   text-transform: uppercase;
   padding: 5px; }
+
+.stats-report > .animatronic-name {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 1; }
 
 .animatronic-name, .starting-ai-level, .current-ai-level {
   padding-left: 10px; }
@@ -605,11 +615,53 @@ body[cameras-on="false"] #camera-display {
   background: black;
   border: 2px solid white;
   padding: 20px;
-  text-align: center; }
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between; }
   #game-over-stats h2 {
     font-family: 'VT323', monospace;
     font-size: 4em;
     margin: 0; }
+
+body[game-in-progress="true"] #game-over-stats {
+  display: none; }
+
+.stats-report {
+  text-align: left;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr 0 auto 0 auto 0 auto 0 auto;
+  -ms-grid-columns: 100px 20px 1fr;
+  grid-template: "icon name" 1fr "icon ." auto "icon ." auto "icon ." auto "icon ." auto / 100px 1fr;
+  gap: 0 20px; }
+  .stats-report h3 {
+    margin: 0 0 10px; }
+  .stats-report .animatronic-icon {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 9;
+    -ms-grid-column: 1;
+    height: 100px;
+    width: 100px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    grid-area: icon; }
+  .stats-report[for="Freddy"] .animatronic-icon {
+    background-image: url("../../assets/animatronics/freddy.png"); }
+  .stats-report[for="Bonnie"] .animatronic-icon {
+    background-image: url("../../assets/animatronics/bonnie.png"); }
+  .stats-report[for="Chica"] .animatronic-icon {
+    background-image: url("../../assets/animatronics/chica.png"); }
+  .stats-report[for="Foxy"] .animatronic-icon {
+    background-image: url("../../assets/animatronics/foxy.png"); }
 
 #game-menu {
   display: -webkit-box;
@@ -770,10 +822,10 @@ body {
   justify-content: center;
   font-size: 16px; }
 
-body[game-has-started] #game-menu {
+body[game-in-progress] #game-menu {
   display: none; }
 
-body:not([game-has-started]) main {
+body:not([game-in-progress]) main {
   display: none; }
 
 main {
