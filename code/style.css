@@ -326,18 +326,7 @@ button#cameras {
   display: grid;
   -ms-grid-rows: auto auto;
   grid-template: "time" "description" "extra-info";
-  margin-bottom: 15px;
-  min-height: 25px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column; }
+  margin-bottom: 10px; }
 
 .report-item[type="bad"] .report-description {
   color: #f60; }
@@ -525,8 +514,6 @@ body[cameras-on="false"] #camera-display {
   .camera-button[disabled] {
     opacity: 0.3;
     cursor: not-allowed; }
-  .camera-button.active {
-    background: #7FB000; }
 
 /* Camera button placement -------------------------------------------------- */
 .camera-button[camera="1A"] {

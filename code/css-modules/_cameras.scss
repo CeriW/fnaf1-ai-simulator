@@ -42,7 +42,7 @@ body[cameras-on="false"] {
   z-index: 2;
 
   &.active{
-    background: $green;
+    // pointer-events: none;
   }
 }
 

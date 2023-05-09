@@ -95,6 +95,7 @@ const cameraNames = {
 
 const paths = {
   assets: '../assets',
+  cameras: '../assets/cameras',
 };
 
 /* Time related variables */
@@ -905,7 +906,7 @@ const generateCameraButtons = () => {
     simulator.appendChild(myCameraButton);
 
     myCameraButton.addEventListener('click', () => {
-      cameraScreen.src = `${paths.assets}/cameras/${key}-empty.webp`;
+      // cameraScreen.src = `${paths.cameras}/${key}-empty.webp`;
       document.querySelectorAll('.camera-button').forEach((btn) => {
         btn.classList.remove('active');
       });
@@ -918,7 +919,7 @@ const generateCameraButtons = () => {
     });
   }
 
-  cameraScreen.src = `${paths.assets}/cameras/${defaultCamera}-empty.webp`;
+  cameraScreen.src = `${paths.cameras}/${defaultCamera}-empty.webp`;
 };
 generateCameraButtons();
 
@@ -927,6 +928,7 @@ generateCameraButtons();
 const lookAtCamera = (camera: Camera) => {
   window.dispatchEvent(new Event(`cam-on-${camera}`));
   console.log(`cam-on-${camera}`);
+  cameraScreen.src = getCameraImage(camera);
 };
 
 // ========================================================================== //
@@ -938,6 +940,17 @@ const lookAtCamera = (camera: Camera) => {
 // Some locations and animatronics have more than one image option.
 // ========================================================================== //
 
+const getCameraImage = (cam: Camera) => {
+  let camImageSrc = '';
+
+  switch (cam) {
+    case '1A':
+      camImageSrc = `${paths.cameras}/${generateCamImage1A()}`;
+  }
+
+  return camImageSrc;
+};
+
 const getLocationInfo = (cam: Camera) => {
   const bonnieIsHere = Bonnie.currentPosition === cam;
   const chicaIsHere = Chica.currentPosition === cam;
@@ -947,6 +960,7 @@ const getLocationInfo = (cam: Camera) => {
   const chicaIsAlone = !bonnieIsHere && chicaIsHere && !foxyIsHere && !freddyIsHere;
   // const foxyIsAlone = !bonnieIsHere && !chicaIsHere && foxyIsHere && !freddyIsHere; // Do I ever actually need to know whether Foxy is alone?
   const freddyIsAlone = !bonnieIsHere && !chicaIsHere && !foxyIsHere && freddyIsHere;
+  const isEmpty = !bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
 
   return {
     bonnieIsHere,
@@ -956,10 +970,42 @@ const getLocationInfo = (cam: Camera) => {
     bonnieIsAlone,
     chicaIsAlone,
     freddyIsAlone,
+    isEmpty,
   };
 };
 
-const generateCamImage1A = () => {};
+// Chance should be the 1 in X number chance it has
+const randomise = (chance: number): boolean => Math.random() < 1 / chance;
+
+// Note - Foxy can never be here.
+const generateCamImage1A = () => {
+  const info = getLocationInfo('1A');
+
+  // Bonnie, Chica and Freddy are all here
+  if (info.bonnieIsHere && info.chicaIsHere && info.freddyIsHere) {
+    return `1A-bonnie-chica-freddy.webp`;
+  }
+
+  // Chica and Freddy are here
+  if (!info.bonnieIsHere && info.chicaIsHere && info.freddyIsHere) {
+    return `1A-chica-freddy.webp`;
+  }
+
+  // Bonnie and Freddy are here
+  if (info.bonnieIsHere && !info.chicaIsHere && info.freddyIsHere) {
+    return `1A-bonnie-freddy.webp`;
+  }
+
+  if (info.freddyIsAlone) {
+    // QUESTION - I don't know the actual chances of Freddy facing the camera rather than right
+    let randomiser = randomise(8) ? '-2' : '-1';
+    return `1A-freddy${randomiser}.webp`;
+  }
+
+  if (info.isEmpty) {
+    return `1A-empty.webp`;
+  }
+};
 
 // ========================================================================== //
 // DOORS
