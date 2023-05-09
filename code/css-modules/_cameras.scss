@@ -18,6 +18,8 @@
   transition: opacity 0.2s;
 }
 
+
+
 #camera-display.updating #static{
   opacity: 1;
 }
@@ -39,7 +41,6 @@ body[cameras-on="false"] {
 
   #camera-screen{
     opacity: 0.1;
-
   }
 
   .camera-button {

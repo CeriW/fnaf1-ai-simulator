@@ -7,6 +7,7 @@ $l-screens: 1400px;
 $m-screens: 1000px;
 $s-screens: 700px;
 
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 @mixin buttonStyle {
   border: 3px solid $white;
@@ -35,6 +36,8 @@ $s-screens: 700px;
 @import 'css-modules/_simulator.scss';
 @import 'css-modules/_reports.scss';
 @import 'css-modules/_cameras.scss';
+@import 'css-modules/_game-over.scss';
+
 
 body{
   background: $black;

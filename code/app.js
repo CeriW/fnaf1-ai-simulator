@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 const nightToSimulate = 6;
-let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 50; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -171,7 +171,7 @@ const generateAnimatronics = () => {
     });
 };
 const makeMovementCheck = (animatronic) => {
-    const comparisonNumber = Math.random() * 20;
+    const comparisonNumber = Math.round(Math.random() * 20);
     return {
         animatronicName: animatronic.name,
         canMove: animatronic.currentAIlevel >= comparisonNumber,
@@ -296,7 +296,7 @@ const makeFreddyJumpscareCheck = () => {
             canMove: comparisonNumber > 0.75,
         };
         if (jumpscare.canMove && !user.camerasOn) {
-            // gameOver();
+            gameOver();
             addReport(Freddy, 'jumpscare');
         }
         else {
@@ -423,22 +423,22 @@ const moveBonnieOrChica = (animatronic) => {
     const doorClosed = name === 'Bonnie' ? user.leftDoorIsClosed : user.rightDoorIsClosed;
     const doorClosedMessage = name === 'Bonnie' ? 'left door closed' : 'right door closed';
     const movementCheck = makeMovementCheck(animatronic);
-    // If he can move, but isn't in 2B. He'll pick somewhere at random.
+    // They can move, aren't in their hall corner
     if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
-        moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition });
+        moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition }, true, movementCheck);
         // If he's at 2B but isn't in your doorway yet, move him into the doorway
     }
     else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition === -1) {
         moveAnimatronic(animatronic, { start: hallCorner, end: hallCorner, sub: 1 }, false);
-        addReport(animatronic, 'in the doorway');
-        // He's passed a movement check, is already in the doorway and the left door is not closed, he can get into your office!
+        addReport(animatronic, 'in the doorway', movementCheck);
+        // Passed a movement check, is already in the doorway and the door is not closed, they can get into your office!
     }
     else if (movementCheck.canMove &&
         animatronic.currentPosition === hallCorner &&
         animatronic.subPosition !== -1 &&
         !doorClosed) {
         moveAnimatronic(animatronic, { start: hallCorner, end: 'office', sub: -1 }, false);
-        addReport(animatronic, 'enter office bonnie or chica');
+        addReport(animatronic, 'enter office bonnie or chica', movementCheck);
         if (name === 'Bonnie') {
             clearInterval(bonnieInterval);
         }
@@ -464,11 +464,11 @@ const moveBonnieOrChica = (animatronic) => {
         animatronic.currentPosition === hallCorner &&
         animatronic.subPosition !== -1 &&
         !user.leftDoorIsClosed) {
-        addReport(animatronic, 'enter office failed movement check doorway');
+        addReport(animatronic, 'enter office failed movement check doorway', movementCheck);
         // Failed a bog standard movement check with no other fancy conditions
     }
     else if (!movementCheck.canMove) {
-        addReport(animatronic, 'failed movement check');
+        addReport(animatronic, 'failed movement check', movementCheck);
     }
     else {
         addReport(animatronic, 'debug');
@@ -502,23 +502,24 @@ const calculateNewChicaPosition = () => {
     }
     return newPosition;
 };
-const moveAnimatronic = (animatronic, position, logThis = true) => {
+const moveAnimatronic = (animatronic, position, logThis = true, movementCheck) => {
     var _a, _b, _c, _d, _e;
     animatronic.currentPosition = position.end;
     animatronic.subPosition = (_a = position.sub) !== null && _a !== void 0 ? _a : -1;
     if (logThis) {
-        addReport(animatronic, 'has moved', null, {
+        addReport(animatronic, 'has moved', movementCheck, {
             currentPosition: position.start,
             endPosition: position.end,
         });
     }
-    if (user.currentCamera === position.start || user.currentCamera === position.end) {
+    // Update the cameras if you're looking at their start or end position
+    if (user.camerasOn && (user.currentCamera === position.start || user.currentCamera === position.end)) {
         cameraArea.classList.add('updating');
-        cameraScreen.src = getCameraImage(user.currentCamera);
     }
     window.setTimeout(() => {
+        cameraScreen.src = getCameraImage(user.currentCamera);
         cameraArea.classList.remove('updating');
-    }, secondLength * 4);
+    }, secondLength * 2.5);
     (_b = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('position', position.end);
     (_c = document
         .querySelector(`.animatronic#${animatronic.name}`)) === null || _c === void 0 ? void 0 : _c.setAttribute('sub-position', (_e = (_d = position.sub) === null || _d === void 0 ? void 0 : _d.toString()) !== null && _e !== void 0 ? _e : 'none');
@@ -586,13 +587,13 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'enter office failed movement check':
             message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
-            type = 'warning';
+            type = 'alert';
             break;
         case 'enter office failed movement check doorway':
             let doorSide = animatronic.currentPosition === '2B' ? 'left' : 'right';
             message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check.
       ${capitalise(animatronic.pronouns[0])} will continue to wait in the ${doorSide} doorway ${stats}`;
-            type = 'warning';
+            type = 'alert';
             break;
         case 'enter office cameras off':
             message = `${animatronic.name} passed ${animatronic.pronouns[1]} movement check to enter the office but couldn't because the cameras were off.
@@ -609,7 +610,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             preventDuplicates = true;
             break;
         case 'freddy successful movement check':
-            message = `Freddy has passed his movement check and will move from
+            message = `Freddy will move from
       ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition]})
       to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition]})
       in ${additionalInfo.formattedWaitingTime} seconds
@@ -627,7 +628,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'foxy successful pirate cove movement check':
             const stepsRemaining = 3 - Foxy.subPosition;
-            message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from leaving Pirate Cove ${stats}`;
+            message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')}&nbsp;away from leaving Pirate Cove ${stats}`;
             type = stepsRemaining === 1 ? 'warning' : 'bad';
             break;
         case 'foxy paused':
@@ -808,7 +809,7 @@ const generateCamImage2B = () => {
     let info = getLocationInfo('2B');
     // There are 3 different options for Bonnie's images, with some being more
     // likely than others.
-    if (info.bonnieIsHere) {
+    if (info.bonnieIsHere && Bonnie.subPosition === -1) {
         let bonnieRandomiser = Math.ceil(Math.random() * 8);
         if (bonnieRandomiser === 1) {
             return '2B-bonnie-3.webp';
@@ -989,6 +990,19 @@ const disableOfficeButtons = () => {
 // ========================================================================== //
 const gameOver = () => {
     // alert('You got jumpscared');
+    var _a;
+    [timeUpdate, frameUpdate, bonnieInterval, chicaInterval, foxyInterval, freddyInterval].forEach((int) => {
+        clearInterval(int);
+    });
+    window.removeEventListener('cameras-off', pauseFoxy);
+    cameraButton.removeEventListener('click', toggleCameras);
+    window.removeEventListener('cam-on-2A', attemptFoxyJumpscare);
+    window.removeEventListener('cameras-off', gameOver);
+    let gameOverWindow = document.createElement('div');
+    gameOverWindow.id = 'game-over';
+    gameOverWindow.classList.add('modal');
+    (_a = document.querySelector('#simulator-container')) === null || _a === void 0 ? void 0 : _a.append(gameOverWindow);
+    gameOverWindow.innerHTML = 'dasuighjdknsa';
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
@@ -1014,3 +1028,4 @@ generateCameraButtons();
 cameraButton.addEventListener('click', toggleCameras);
 // cameraButton.addEventListener('mouseenter', toggleCameras);
 window.addEventListener('cameras-off', pauseFoxy);
+let windowEventListeners = [];

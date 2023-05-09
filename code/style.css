@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 /* Timer -------------------------------------------------------------------- */
 #in-game-time,
 #real-time {
@@ -263,7 +264,8 @@
   -ms-grid-rows: auto auto auto min-content;
   -ms-grid-columns: 1fr;
   grid-template: "." auto "." auto "." auto "camera-button" -webkit-min-content / 1fr;
-  grid-template: "." auto "." auto "." auto "camera-button" min-content / 1fr; }
+  grid-template: "." auto "." auto "." auto "camera-button" min-content / 1fr;
+  position: relative; }
 
 #simulator {
   position: relative; }
@@ -592,6 +594,16 @@ body[cameras-on="false"] #camera-display {
 .camera-button[camera="7"] {
   top: 19%;
   left: 82%; }
+
+#game-over {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 99;
+  background: black;
+  border: 2px solid white; }
 
 body {
   background: #000;
