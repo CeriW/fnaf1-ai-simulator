@@ -883,6 +883,9 @@ const getCameraImage = (cam: Camera) => {
     case '1A':
       camImageSrc = generateCamImage1A();
       break;
+    case '1B':
+      camImageSrc = generateCamImage1B();
+      break;
     case '1C':
       camImageSrc = generateCamImage1C();
       break;
