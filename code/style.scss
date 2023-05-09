@@ -5,7 +5,8 @@ $green: #7FB000;
 
 $l-screens: 1400px;
 $m-screens: 1000px;
-$s-screens: 700px;
+$s-screens: 780px;
+$xs-screens: 500px;
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
@@ -174,10 +175,3 @@ button{
     gap: 10px;
 }
 
-
-
-
-
-h1{
-  font-family: 'VT323', monospace;
-}

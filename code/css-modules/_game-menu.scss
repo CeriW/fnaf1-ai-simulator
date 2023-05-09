@@ -5,6 +5,24 @@
   align-items: center;
   justify-content: space-around;
   min-height: calc(100vh - 60px);
+  text-align: center;
+
+
+  h1{
+    font-family: 'VT323', monospace;
+    font-size: 4em;
+    margin: 0;
+
+    @media (max-width: $l-screens){
+      font-size: 3em;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: $xs-screens){
+      font-size: 2em;
+    }
+    
+  }
 
   button.adjust-ai-level{
     background: #434343;
@@ -13,13 +31,24 @@
   }
 
 
-  button.simulate-night{
+  button.simulate-night,
+  button#start-game{
     @include buttonStyle();
     padding: 10px;
+    font-size: 1.75em;
+
+    @media (max-width: $l-screens){
+      font-size: 1.5em;
+    }
 
     &:hover{
       background: $green;
     }
+  }
+
+  button#start-game{
+    font-size: 3em;
+    padding: 10px 20px;
   }
 
   img{
@@ -36,11 +65,44 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .ai-descriptions{
+    font-size: 1.5em;
+    margin: 20px 0;
+  }
 }
 
 #custom-night-menu{
   display: flex;
   gap: 20px;
+
+  @media (max-width:$s-screens){
+    display: grid;
+    grid-template:
+      ". ."
+      ". ."
+  }
+
+  @media (max-width: $xs-screens){
+    grid-template:
+    "."
+    "."
+    "."
+    "."
+  }
+}
+
+#night-selector-menu{
+  button{
+    margin: 10px;
+  }
+
+  @media(max-width: $xs-screens){
+    button.simulate-night{
+      font-size: 1.25em;
+    }
+  }
+
 }
 
 .ai-adjuster{
@@ -66,6 +128,16 @@
     font-size: 4em;
     font-family: monospace;
     width: 150px;
+    outline: none;
+    
+    &::-webkit-inner-spin-button{
+      display: none;
+    }
+
+    @media(max-width: $m-screens){
+      font-size: 2em;
+      width: 75px;
+    }
   }
 
   button:nth-child(2){
