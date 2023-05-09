@@ -1,10 +1,20 @@
 #game-over{
   position: absolute;
   top: 0;
-  right: 0;
+  right: 20px;
   left: 0;
   bottom: 0;
   z-index: 99;
   background: black;
   border: 2px solid white;
+  padding: 20px;
+  text-align: center;
+
+  h2{
+    font-family: 'VT323', monospace;
+    font-size: 3em;
+  }
+
+
 }
+
