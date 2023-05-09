@@ -953,6 +953,9 @@ const getCameraImage = (cam: Camera) => {
     case '4A':
       camImageSrc = generateCamImage4A();
       break;
+    case '4B':
+      camImageSrc = generateCamImage4B();
+      break;
     case '5':
       camImageSrc = generateCamImage5();
       break;
@@ -1025,6 +1028,7 @@ const generateCamImage1A = (): string => {
 // Bonnie is the only animatronic who can be here, and only has one image :)
 const generateCamImage3 = (): string => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
 
+// Freddy or Chica may be here
 const generateCamImage4A = (): string => {
   const info = getLocationInfo('4A');
 
@@ -1039,13 +1043,50 @@ const generateCamImage4A = (): string => {
 
   // There are 3 image options for empty, with one of them being FAR more likely
   // than the others
-  let emptyRandomiser = Math.random() * 10;
-  if (emptyRandomiser > 9) {
-    return `4A-empty-3.webp`;
-  } else if (emptyRandomiser > 8) {
+  let emptyRandomiser = Math.ceil(Math.random() * 10);
+  if (emptyRandomiser === 1) {
+    return `4A-empty-1.webp`;
+  } else if (emptyRandomiser === 2) {
     return `4A-empty-2.webp`;
   } else {
-    return '4A-empty-1.webp';
+    return '4A-empty-default.webp';
+  }
+};
+
+// Freddy or Chica may be here.
+const generateCamImage4B = (): string => {
+  let info = getLocationInfo('4B');
+
+  if (info.freddyIsAlone) {
+    return '4B-freddy.webp';
+  }
+
+  if (info.chicaIsHere) {
+    let chicaRandomiser = Math.ceil(Math.random() * 6);
+    if (chicaRandomiser === 1) {
+      return '4B-chica-3.webp';
+    } else if (chicaRandomiser === 2) {
+      return '4B-chica-2.webp';
+    } else {
+      return '4B-chica-1.webp';
+    }
+  }
+
+  // It must be empty if we've reached this point
+  // There are 5 image options here, with one being FAR more likely than the others
+  let emptyRandomiser = Math.ceil(Math.random() * 25);
+  if (emptyRandomiser === 1) {
+    return '4B-empty-4.webp';
+  } else if (emptyRandomiser === 2) {
+    return '4B-empty-3.webp';
+  } else if (emptyRandomiser === 3) {
+    return '4B-empty-3.webp';
+  } else if (emptyRandomiser === 4) {
+    return '4B-empty-2.webp';
+  } else if (emptyRandomiser === 5) {
+    return '4B-empty-1.webp';
+  } else {
+    return '4B-empty-default.webp';
   }
 };
 
