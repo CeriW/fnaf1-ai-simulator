@@ -156,7 +156,7 @@ He will attack when both of these conditions are met:
 ## Foxy
 Moves from the stage in Pirate's Cove as a result of poor camera usage. Despite common belief, you don't actually have to look at the cameras specifically in Pirate's Cove - camera usage of any kind is enough to stop Foxy from moving.
 
-If he is able to leave Pirate's Cove, he will rush down the **right** corridor at you.
+If he is able to leave Pirate's Cove, he will rush down the **left** corridor at you.
 * If the door is open at this time, he will jumpscare you.
 * If the door is closed, he will bash on it, causing you to lose power. This power drainage is 1% the first time he does it, and increases by 6% each time after that.
 * Once he has bashed on your door and drained your power he will return to Pirate's Cove and restart his cycle at either step 1 or 2.
@@ -165,7 +165,7 @@ Each successful "movement opportunity" (see *How AI levels are used* below) Foxy
 
 He will continue to fail all of his movement opportunities for a random amount of time after the cameras come down, ranging from 0.83s to 16.67s (calculated on each frame at 60fps).
 
-Once Foxy makes 4 successful movement opportunities he will attack as soon as he can, which will either be when you next check the camera for the right hall (giving you a very short amount of time to shut the door before you get jumpscared), or after 25s has passed.
+Once Foxy makes 3 successful movement opportunities he will attack as soon as he can, which will either be when you next check the camera for the right hall (giving you a very short amount of time to shut the door before you get jumpscared), or after 25s has passed.
 
 ## Golden Freddy
 There is a 0.0001% chance of the Golden Freddy poster appearing every time camera 2B is clicked. This is calculated once per second - reopening camera 2B more than once per second does not increase your chances.

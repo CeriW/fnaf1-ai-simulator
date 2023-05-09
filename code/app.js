@@ -2,7 +2,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
 let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '4A';
+const defaultCamera = '1C';
 const Freddy = {
     name: 'Freddy',
     currentPosition: '1A',
@@ -190,7 +190,6 @@ const increaseAILevel = (animatronic) => {
     if (aiReport) {
         aiReport.innerHTML = animatronic.currentAIlevel.toString();
     }
-    console.log(animatronic);
 };
 /* ========================================================================== //
 DEVELOPER NOTE
@@ -221,6 +220,7 @@ const moveFoxy = () => {
     else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 3) {
         // Foxy needs to make 3 successful movement checks before he is able to leave 1C
         Foxy.subPosition++;
+        console.log(Foxy);
         addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
         moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition }, false);
     }
@@ -478,7 +478,6 @@ const moveBonnieOrChica = (animatronic) => {
     else {
         addReport(animatronic, 'debug');
     }
-    console.log(animatronic);
 };
 // Bonnie does not have to chose adjacent rooms. He can pick at random from a list of approved locations.
 const calculateNewBonniePosition = () => {
@@ -625,7 +624,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             type = 'bad';
             break;
         case 'foxy successful pirate cove movement check':
-            const stepsRemaining = 4 - Foxy.subPosition;
+            const stepsRemaining = 3 - Foxy.subPosition;
             message = `Foxy has made a successful movement check while at 1C (${cameraNames['1C']}). He is ${stepsRemaining} ${pluralise(stepsRemaining, 'step')} away from attempting to attack ${stats}`;
             type = stepsRemaining === 1 ? 'warning' : 'bad';
             break;
@@ -633,7 +632,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(2)} seconds <div class="report-extra-info">Random number between 0.83 and 16.67</div>`;
             break;
         case 'foxy failed pirate cove movement check':
-            let stepsRemainingB = 4 - Foxy.subPosition;
+            let stepsRemainingB = 3 - Foxy.subPosition;
             message = `Foxy has failed his movement check. He is still ${stepsRemainingB} ${pluralise(stepsRemainingB, 'step')} away from leaving 1C (${cameraNames['1C']}) ${stats}`;
             type = 'good';
             break;
@@ -735,8 +734,14 @@ const getCameraImage = (cam) => {
         case '1A':
             camImageSrc = generateCamImage1A();
             break;
+        case '1C':
+            camImageSrc = generateCamImage1C();
+            break;
         case '2A':
             camImageSrc = generateCamImage2A();
+            break;
+        case '2B':
+            camImageSrc = generateCamImage2B();
             break;
         case '3':
             camImageSrc = generateCamImage3();
@@ -805,6 +810,16 @@ const generateCamImage1A = () => {
     // If we've reached this point it must be empty
     return `1A-empty.webp`;
 };
+// Foxy is the only one who can be here. Exactly which image is shown depends
+// on how close he is to leaving Pirate Cove.
+const generateCamImage1C = () => {
+    let { foxyIsHere } = getLocationInfo('1C');
+    if (foxyIsHere) {
+        return `1C-foxy-${Foxy.subPosition}.webp`;
+    }
+    let emptyRandomiser = randomise(10) ? '-its-me' : '-default';
+    return `1C-empty${emptyRandomiser}.webp`;
+};
 const generateCamImage2A = () => {
     let info = getLocationInfo('2A');
     if (info.foxyIsHere) {
@@ -814,6 +829,27 @@ const generateCamImage2A = () => {
         return '2A-bonnie.webp';
     }
     return '2A-empty.webp';
+};
+// Bonnie is the only one who can be here.
+// This code does not currently deal with the unlikely prospect of Golden Freddy
+const generateCamImage2B = () => {
+    let info = getLocationInfo('2B');
+    // There are 3 different options for Bonnie's images, with some being more
+    // likely than others.
+    if (info.bonnieIsHere) {
+        let bonnieRandomiser = Math.ceil(Math.random() * 8);
+        if (bonnieRandomiser === 1) {
+            return '2B-bonnie-3.webp';
+        }
+        else if (bonnieRandomiser > 6) {
+            return '2B-bonnie-2.webp';
+        }
+        else {
+            return '2B-bonnie-1.webp';
+        }
+    }
+    let emptyRandomiser = randomise(4) ? '-2' : '-1';
+    return `2B-empty${emptyRandomiser}.webp`;
 };
 // Bonnie is the only animatronic who can be here, and only has one image :)
 const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
