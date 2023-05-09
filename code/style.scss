@@ -54,6 +54,21 @@ body{
   font-size: 16px;
 }
 
+
+body[game-has-started] #game-menu{
+  display: none;
+}
+
+
+body:not([game-has-started]) main{
+  display: none;
+}
+
+
+
+
+
+
 main{
   width: 100%;
   display: grid;
@@ -150,4 +165,12 @@ button{
     " reports reports" min-content
     / 1fr 1fr;
     gap: 10px;
+}
+
+
+
+
+
+h1{
+  font-family: 'VT323', monospace;
 }

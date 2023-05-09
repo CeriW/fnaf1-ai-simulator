@@ -1,5 +1,5 @@
 // TESTING VARIABLES
-const nightToSimulate = 1;
+let nightToSimulate: number = 1;
 let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
@@ -12,7 +12,6 @@ type MovementCheck = {
 
 type Animatronic = {
   name: string;
-  // possibleLocations: string[]; // The cameras where they can be
   currentPosition: Position; // The camera the animatronic is currently at
   subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
@@ -200,7 +199,7 @@ const calculateInGameTime = () => {
 const generateAnimatronics = () => {
   [Bonnie, Foxy, Freddy, Chica].forEach((animatronic: Animatronic) => {
     // Initialise their starting AI level
-    animatronic.currentAIlevel = animatronic.aiLevels[nightToSimulate];
+    animatronic.currentAIlevel = animatronic.aiLevels[nightToSimulate] ?? 1;
 
     // Create the icons
     let icon = document.createElement('span');
@@ -1308,6 +1307,8 @@ window.addEventListener('game-over-freddy', gameOver);
 // ========================================================================== //
 
 const startGame = () => {
+  document.body.setAttribute('game-has-started', 'true');
+
   timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
   frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
@@ -1318,6 +1319,34 @@ const startGame = () => {
   chicaInterval = window.setInterval(() => {
     moveBonnieOrChica(Chica);
   }, secondLength * Chica.movementOpportunityInterval);
+
+  // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
+  if (Foxy.currentPosition === '4A') {
+    moveFoxy();
+  }
+
+  document.body.setAttribute('cameras-on', 'false');
+  initialiseDoors();
+  generateAnimatronics();
+  generateCameraButtons();
+
+  cameraButton.addEventListener('click', toggleCameras);
+  // cameraButton.addEventListener('mouseenter', toggleCameras);
+  window.addEventListener('cameras-off', pauseFoxy);
+};
+
+const initialiseMenu = () => {
+  let gameMenu = document.querySelector('#game-menu')!;
+
+  for (let i = 1; i <= 6; i++) {
+    let myButton = document.createElement('button');
+    myButton.textContent = `Simulate night ${i}`;
+    myButton.addEventListener('click', () => {
+      nightToSimulate = i;
+      startGame();
+    });
+    gameMenu.append(myButton);
+  }
 };
 
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
@@ -1332,18 +1361,5 @@ let foxyJumpscareCountdown: number;
 let bonnieJumpscareCountdown: number;
 let chicaJumpscareCountdown: number;
 
-// If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
-if (Foxy.currentPosition === '4A') {
-  moveFoxy();
-}
-
-document.body.setAttribute('cameras-on', 'false');
-initialiseDoors();
-generateAnimatronics();
-generateCameraButtons();
-
-cameraButton.addEventListener('click', toggleCameras);
-// cameraButton.addEventListener('mouseenter', toggleCameras);
-window.addEventListener('cameras-off', pauseFoxy);
-
-startGame();
+initialiseMenu();
+// startGame();

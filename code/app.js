@@ -1,6 +1,6 @@
 "use strict";
 // TESTING VARIABLES
-const nightToSimulate = 1;
+let nightToSimulate = 1;
 let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
@@ -146,15 +146,15 @@ const calculateInGameTime = () => {
 // ========================================================================== //
 const generateAnimatronics = () => {
     [Bonnie, Foxy, Freddy, Chica].forEach((animatronic) => {
-        var _a;
+        var _a, _b;
         // Initialise their starting AI level
-        animatronic.currentAIlevel = animatronic.aiLevels[nightToSimulate];
+        animatronic.currentAIlevel = (_a = animatronic.aiLevels[nightToSimulate]) !== null && _a !== void 0 ? _a : 1;
         // Create the icons
         let icon = document.createElement('span');
         icon.classList.add('animatronic');
         icon.setAttribute('id', animatronic.name);
         icon.setAttribute('position', animatronic.currentPosition);
-        icon.setAttribute('sub-position', (_a = animatronic.subPosition.toString()) !== null && _a !== void 0 ? _a : 'none');
+        icon.setAttribute('sub-position', (_b = animatronic.subPosition.toString()) !== null && _b !== void 0 ? _b : 'none');
         simulator.appendChild(icon);
         // Create the report
         let animatronicReport = document.createElement('div');
@@ -1049,6 +1049,7 @@ window.addEventListener('game-over-freddy', gameOver);
 // INITIALISE THE PAGE
 // ========================================================================== //
 const startGame = () => {
+    document.body.setAttribute('game-has-started', 'true');
     timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
     frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
     freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
@@ -1059,6 +1060,29 @@ const startGame = () => {
     chicaInterval = window.setInterval(() => {
         moveBonnieOrChica(Chica);
     }, secondLength * Chica.movementOpportunityInterval);
+    // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
+    if (Foxy.currentPosition === '4A') {
+        moveFoxy();
+    }
+    document.body.setAttribute('cameras-on', 'false');
+    initialiseDoors();
+    generateAnimatronics();
+    generateCameraButtons();
+    cameraButton.addEventListener('click', toggleCameras);
+    // cameraButton.addEventListener('mouseenter', toggleCameras);
+    window.addEventListener('cameras-off', pauseFoxy);
+};
+const initialiseMenu = () => {
+    let gameMenu = document.querySelector('#game-menu');
+    for (let i = 1; i <= 6; i++) {
+        let myButton = document.createElement('button');
+        myButton.textContent = `Simulate night ${i}`;
+        myButton.addEventListener('click', () => {
+            nightToSimulate = i;
+            startGame();
+        });
+        gameMenu.append(myButton);
+    }
 };
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
 let timeUpdate;
@@ -1071,15 +1095,5 @@ let foxyCooldown;
 let foxyJumpscareCountdown;
 let bonnieJumpscareCountdown;
 let chicaJumpscareCountdown;
-// If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
-if (Foxy.currentPosition === '4A') {
-    moveFoxy();
-}
-document.body.setAttribute('cameras-on', 'false');
-initialiseDoors();
-generateAnimatronics();
-generateCameraButtons();
-cameraButton.addEventListener('click', toggleCameras);
-// cameraButton.addEventListener('mouseenter', toggleCameras);
-window.addEventListener('cameras-off', pauseFoxy);
-startGame();
+initialiseMenu();
+// startGame();
