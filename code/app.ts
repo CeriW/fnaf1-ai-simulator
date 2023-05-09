@@ -1,7 +1,7 @@
 // TESTING VARIABLES
 const nightToSimulate = 6;
 let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '1C' as Camera;
+const defaultCamera = '1A' as Camera;
 
 // TODO - PUT THIS IN A MODULE
 
@@ -613,6 +613,15 @@ const moveAnimatronic = (
       endPosition: position.end,
     });
   }
+
+  if (user.currentCamera === position.start || user.currentCamera === position.end) {
+    cameraArea.classList.add('updating');
+    cameraScreen.src = getCameraImage(user.currentCamera);
+  }
+
+  window.setTimeout(() => {
+    cameraArea.classList.remove('updating');
+  }, secondLength * 4);
 
   document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', position.end);
   document
