@@ -1,9 +1,19 @@
 #game-menu{
 
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-height: calc(100vh - 60px);
+
+  button.adjust-ai-level{
+    background: #434343;
+    border: none;
+    color: white;
+  }
 
 
-  button{
+  button.simulate-night{
     @include buttonStyle();
     padding: 10px;
 
@@ -11,4 +21,13 @@
       background: $green;
     }
   }
+
+  img{
+    max-width: 175px;
+  }
+}
+
+#custom-night-menu{
+  display: flex;
+  gap: 20px;
 }

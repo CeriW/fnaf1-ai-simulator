@@ -610,23 +610,49 @@ body[cameras-on="false"] #camera-display {
     font-family: 'VT323', monospace;
     font-size: 3em; }
 
-#game-menu button {
-  border: 3px solid #fff;
-  background: #424242;
-  color: #fff;
-  font-family: 'VT323', monospace;
-  font-size: 1.5em;
-  padding: 5px;
-  text-align: left;
-  line-height: 0.8;
-  padding: 10px; }
-  #game-menu button.active {
-    background: #7FB000; }
-  #game-menu button[disabled] {
-    opacity: 0.3;
-    cursor: not-allowed; }
-  #game-menu button:hover {
-    background: #7FB000; }
+#game-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  min-height: calc(100vh - 60px); }
+  #game-menu button.adjust-ai-level {
+    background: #434343;
+    border: none;
+    color: white; }
+  #game-menu button.simulate-night {
+    border: 3px solid #fff;
+    background: #424242;
+    color: #fff;
+    font-family: 'VT323', monospace;
+    font-size: 1.5em;
+    padding: 5px;
+    text-align: left;
+    line-height: 0.8;
+    padding: 10px; }
+    #game-menu button.simulate-night.active {
+      background: #7FB000; }
+    #game-menu button.simulate-night[disabled] {
+      opacity: 0.3;
+      cursor: not-allowed; }
+    #game-menu button.simulate-night:hover {
+      background: #7FB000; }
+  #game-menu img {
+    max-width: 175px; }
+
+#custom-night-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 20px; }
 
 body {
   background: #000;

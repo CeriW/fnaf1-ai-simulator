@@ -1,3 +1,5 @@
+import { animatronics } from './animatronics';
+
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
 let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
@@ -15,7 +17,7 @@ type Animatronic = {
   currentPosition: Position; // The camera the animatronic is currently at
   subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
-  aiLevels: [null, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
+  aiLevels: [null, number, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentAIlevel: number; // Some animatronics increase their AI level as the night goes on. This will be used to store what their current AI level is. It's set to 0 when the animatronics are first declared, then set to the correct value in generateAnimatronics()
   currentCountdown: number; // How many milliseconds they've got left before a special move
   pronouns: ['he' | 'she', 'his' | 'her']; // For FNAF 1 this is simple. In other FNAF games the genders of some animatronics are complicated, so this makes for easier forwards compatibility than just checking whether we're dealing with Chica (the only female animatronic in FNAF 1)
@@ -30,7 +32,7 @@ const Freddy: Animatronic = {
   currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
-  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9], // Freddy randomly starts at 1 or 2 on night 4
+  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9, 0], // Freddy randomly starts at 1 or 2 on night 4
   currentAIlevel: 0,
   currentCountdown: 0,
   pronouns: ['he', 'his'],
@@ -41,7 +43,7 @@ const Bonnie: Animatronic = {
   name: 'Bonnie',
   currentPosition: '1A',
   movementOpportunityInterval: 4.97,
-  aiLevels: [null, 0, 3, 0, 2, 5, 10],
+  aiLevels: [null, 0, 3, 0, 2, 5, 10, 0],
   currentAIlevel: 0,
   currentCountdown: 0,
   pronouns: ['he', 'his'],
@@ -52,7 +54,7 @@ const Chica: Animatronic = {
   name: 'Chica',
   currentPosition: '1A',
   movementOpportunityInterval: 4.98,
-  aiLevels: [null, 0, 1, 5, 4, 7, 12],
+  aiLevels: [null, 0, 1, 5, 4, 7, 12, 0],
   currentAIlevel: 0,
   currentCountdown: 0,
   pronouns: ['she', 'her'],
@@ -65,7 +67,7 @@ const Foxy: Animatronic = {
   currentAIlevel: 0,
   subPosition: 0,
   movementOpportunityInterval: 5.01,
-  aiLevels: [null, 0, 1, 2, 6, 5, 16],
+  aiLevels: [null, 0, 1, 2, 6, 5, 16, 0],
   currentCountdown: 0,
   pronouns: ['he', 'his'],
 };
@@ -87,6 +89,7 @@ const cameraNames = {
 const paths = {
   assets: '../assets',
   cameras: '../assets/cameras',
+  animatronics: '../assets/animatronics',
 };
 
 /* Time related variables */
@@ -1343,16 +1346,83 @@ const startGame = () => {
 
 const initialiseMenu = () => {
   let gameMenu = document.querySelector('#game-menu')!;
+  let nightMenu = gameMenu.querySelector('#night-selector-menu')!;
+  let customNightMenu = gameMenu.querySelector('#custom-night-menu')!;
 
+  // Generate the custom night buttons
+  [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
+    let mySelector = document.createElement('div');
+    mySelector.setAttribute('for', animatronic.name);
+
+    mySelector.innerHTML = `
+      <h2>${animatronic.name}</h2>
+      <img src="${paths.animatronics}/${animatronic.name.toLowerCase()}.png">
+    `;
+
+    let aiAdjuster = document.createElement('div');
+    aiAdjuster.classList.add('ai-adjuster');
+    mySelector.append(aiAdjuster);
+
+    let aiDisplay = document.createElement('input');
+    aiDisplay.type = 'number';
+    aiDisplay.readOnly = true;
+    aiDisplay.value = animatronic.aiLevels[7].toString();
+    mySelector.append(aiDisplay);
+
+    let myDecreaseButton = document.createElement('button');
+    myDecreaseButton.textContent = '<';
+    myDecreaseButton.addEventListener('click', () => {
+      nightToSimulate = 7;
+      let newAILevel = parseInt(aiDisplay.value);
+      animatronic.aiLevels[7] = newAILevel;
+      aiDisplay.value = newAILevel.toString();
+      nightToSimulate = 7;
+
+      if (animatronic.aiLevels[7] > 0) {
+        animatronic.aiLevels[7]--;
+        aiDisplay.value = animatronic.aiLevels[7].toString();
+      }
+    });
+    mySelector.append(myDecreaseButton);
+
+    let myIncreaseButton = document.createElement('button');
+    myIncreaseButton.textContent = '>';
+    myIncreaseButton.addEventListener('click', () => {
+      let newAILevel = parseInt(aiDisplay.value);
+      animatronic.aiLevels[7] = newAILevel;
+      aiDisplay.value = newAILevel.toString();
+      nightToSimulate = 7;
+
+      if (animatronic.aiLevels[7] < 20) {
+        animatronic.aiLevels[7]++;
+        aiDisplay.value = animatronic.aiLevels[7].toString();
+      }
+    });
+    mySelector.append(myIncreaseButton);
+
+    customNightMenu.append(mySelector);
+  });
+
+  // Generate the night selector buttons
   for (let i = 1; i <= 6; i++) {
     let myButton = document.createElement('button');
+    myButton.classList.add('simulate-night');
     myButton.textContent = `Simulate night ${i}`;
+    nightMenu.append(myButton);
+
     myButton.addEventListener('click', () => {
       nightToSimulate = i;
-      startGame();
+      // startGame();
+
+      [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
+        let myInput = customNightMenu.querySelector(`[for="${animatronic.name}"] input`) as HTMLInputElement;
+        myInput.value = animatronic.aiLevels[nightToSimulate]!.toString();
+        console.log(animatronic);
+      });
     });
-    gameMenu.append(myButton);
   }
+
+  gameMenu.querySelector('#start-game')?.addEventListener('click', startGame);
 };
 
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
