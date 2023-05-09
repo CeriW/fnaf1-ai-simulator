@@ -740,6 +740,8 @@ const getCameraImage = (cam) => {
             break;
         case '5':
             camImageSrc = generateCamImage5();
+        case '6':
+            camImageSrc = '6.webp';
     }
     return `${paths.cameras}/${camImageSrc}`;
 };
