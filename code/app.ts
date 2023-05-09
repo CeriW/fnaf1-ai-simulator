@@ -665,7 +665,7 @@ const addReport = (
 ) => {
   // Figuring out what the message actually should be
   let message = '';
-  let type: 'bad' | 'good' | 'info' | 'warning' | 'alert' = 'info';
+  let type: 'bad' | 'good' | 'info' | 'warning' | 'alert' | 'death-zone' = 'info';
   let preventDuplicates = false;
   const stats = movementCheck
     ? `<div class="report-extra-info">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${
@@ -726,7 +726,7 @@ const addReport = (
         animatronic.pronouns[0]
       )} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
 
-      type = 'alert';
+      type = 'death-zone';
       preventDuplicates = true;
       break;
 
@@ -735,7 +735,7 @@ const addReport = (
           <div class="report-extra-info">
           Score to beat: ${movementCheck?.scoreToBeat}/100   Freddy's score: ${movementCheck?.aiLevel}
           </div>`;
-      type = 'alert';
+      type = 'death-zone';
       break;
 
     case 'enter office failed movement check':
@@ -769,7 +769,7 @@ const addReport = (
 
     case 'in the office':
       message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
-      type = 'alert';
+      type = 'death-zone';
       preventDuplicates = true;
       break;
 
@@ -839,12 +839,12 @@ const addReport = (
 
     case 'foxy coming down hall':
       message = 'FOXY IS COMING DOWN THE HALL. HE WILL ATTEMPT TO JUMPSCARE YOU IN 1.87 SECONDS';
-      type = 'alert';
+      type = 'death-zone';
       break;
 
     case 'jumpscare':
       message = `${animatronic.name} successfully jumpscared you`;
-      type = 'alert';
+      type = 'death-zone';
       break;
   }
 

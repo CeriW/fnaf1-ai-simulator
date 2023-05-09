@@ -567,7 +567,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
         case 'enter office bonnie or chica':
             message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE
       <div class="report-extra-info">${capitalise(animatronic.pronouns[0])} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
-            type = 'alert';
+            type = 'death-zone';
             preventDuplicates = true;
             break;
         case 'freddy office failed movement check':
@@ -575,7 +575,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
           <div class="report-extra-info">
           Score to beat: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat}/100   Freddy's score: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel}
           </div>`;
-            type = 'alert';
+            type = 'death-zone';
             break;
         case 'enter office failed movement check':
             message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${animatronic.pronouns[1]} movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${cameraNames[animatronic.currentPosition]}) ${stats}`;
@@ -594,7 +594,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'in the office':
             message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
-            type = 'alert';
+            type = 'death-zone';
             preventDuplicates = true;
             break;
         case 'waiting for cameras down':
@@ -643,11 +643,11 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             break;
         case 'foxy coming down hall':
             message = 'FOXY IS COMING DOWN THE HALL. HE WILL ATTEMPT TO JUMPSCARE YOU IN 1.87 SECONDS';
-            type = 'alert';
+            type = 'death-zone';
             break;
         case 'jumpscare':
             message = `${animatronic.name} successfully jumpscared you`;
-            type = 'alert';
+            type = 'death-zone';
             break;
     }
     let reportToAddTo = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .report-item-container`);
