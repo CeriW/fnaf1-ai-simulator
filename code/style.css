@@ -519,6 +519,8 @@ body[cameras-on="false"] #camera-display {
   .camera-button[disabled] {
     opacity: 0.3;
     cursor: not-allowed; }
+  .camera-button.active {
+    pointer-events: none; }
 
 /* Camera button placement -------------------------------------------------- */
 .camera-button[camera="1A"] {
