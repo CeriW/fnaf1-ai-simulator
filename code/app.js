@@ -738,6 +738,9 @@ const getCameraImage = (cam) => {
         case '3':
             camImageSrc = generateCamImage3();
             break;
+        case '4A':
+            camImageSrc = generateCamImage4A();
+            break;
         case '5':
             camImageSrc = generateCamImage5();
             break;
@@ -798,6 +801,28 @@ const generateCamImage1A = () => {
 };
 // Bonnie is the only animatronic who can be here, and only has one image :)
 const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
+const generateCamImage4A = () => {
+    const info = getLocationInfo('4A');
+    if (info.chicaIsHere) {
+        let randomiser = randomise(3) ? '-2' : '-1';
+        return `4A-chica${randomiser}.webp`;
+    }
+    if (info.freddyIsAlone) {
+        return '4A-freddy.webp';
+    }
+    // There are 3 image options for empty, with one of them being FAR more likely
+    // than the others
+    let emptyRandomiser = Math.random() * 10;
+    if (emptyRandomiser > 9) {
+        return `4A-empty-3.webp`;
+    }
+    else if (emptyRandomiser > 8) {
+        return `4A-empty-2.webp`;
+    }
+    else {
+        return '4A-empty-1.webp';
+    }
+};
 // Bonnie is the only animatronic who can be here. There are 2 options for
 // Bonnie and 2 options for empty
 const generateCamImage5 = () => {
