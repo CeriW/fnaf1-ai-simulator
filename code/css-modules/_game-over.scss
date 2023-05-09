@@ -1,4 +1,4 @@
-#game-over{
+#game-over-stats{
   position: absolute;
   top: 0;
   right: 20px;
@@ -12,7 +12,8 @@
 
   h2{
     font-family: 'VT323', monospace;
-    font-size: 3em;
+    font-size: 4em;
+    margin: 0;
   }
 
 

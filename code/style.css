@@ -595,7 +595,7 @@ body[cameras-on="false"] #camera-display {
   top: 19%;
   left: 82%; }
 
-#game-over {
+#game-over-stats {
   position: absolute;
   top: 0;
   right: 20px;
@@ -606,9 +606,10 @@ body[cameras-on="false"] #camera-display {
   border: 2px solid white;
   padding: 20px;
   text-align: center; }
-  #game-over h2 {
+  #game-over-stats h2 {
     font-family: 'VT323', monospace;
-    font-size: 3em; }
+    font-size: 4em;
+    margin: 0; }
 
 #game-menu {
   display: -webkit-box;

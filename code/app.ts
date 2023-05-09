@@ -1,8 +1,6 @@
-import { animatronics } from './animatronics';
-
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 10; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -1245,9 +1243,11 @@ const disableOfficeButtons = () => {
 // DEATH
 // ========================================================================== //
 
-const gameOver = (e: Event) => {
-  console.log(e);
+const gameOver = (animatronic: Animatronic) => {
+  // console.log(e.type);
 
+  // let animatronicName = '';
+  // e
   // Clear all the intervals and timeouts so the game stops running
   clearInterval(timeUpdate);
   clearInterval(frameUpdate);
@@ -1259,6 +1259,19 @@ const gameOver = (e: Event) => {
   clearInterval(foxyJumpscareCountdown);
   clearInterval(bonnieJumpscareCountdown);
   clearInterval(chicaJumpscareCountdown);
+
+  let gameOverWindow = document.querySelector('#game-over-stats')!;
+
+  // const regex = /.*-(.*)/;
+  // const match = e.type.match(regex);
+  // console.log(match);
+  // const animatronicName = match ? match[1] : '';
+
+  gameOverWindow.innerHTML = `
+    <h2>GAME OVER</h2>
+    <h3>You were jumpscared by ${animatronic.name}</h3>
+  
+  `;
 };
 
 const gameOverBonnie = () => {
@@ -1281,10 +1294,18 @@ const gameOverFreddy = () => {
   window.dispatchEvent(new Event('game-over-freddy'));
 };
 
-window.addEventListener('game-over-bonnie', gameOver);
-window.addEventListener('game-over-chica', gameOver);
-window.addEventListener('game-over-foxy', gameOver);
-window.addEventListener('game-over-freddy', gameOver);
+window.addEventListener('game-over-bonnie', () => {
+  gameOver(Bonnie);
+});
+window.addEventListener('game-over-chica', () => {
+  gameOver(Chica);
+});
+window.addEventListener('game-over-foxy', () => {
+  gameOver(Foxy);
+});
+window.addEventListener('game-over-freddy', () => {
+  gameOver(Freddy);
+});
 
 // const gameOver = (e: Event) => {
 //   // alert('You got jumpscared');
