@@ -142,6 +142,10 @@ let user = {
   currentCamera: defaultCamera,
   leftDoorIsClosed: false,
   rightDoorIsClosed: false,
+  camerasToggled: 0,
+  camerasLookedAt: 0,
+  leftDoorToggled: 0,
+  rightDoorToggled: 0,
 };
 
 // ========================================================================== //
@@ -1195,6 +1199,7 @@ const toggleCameras = () => {
   document.body.setAttribute('cameras-on', String(user.camerasOn));
   cameraButton.setAttribute('active', String(user.camerasOn));
   cameraStatusText.textContent = user.camerasOn ? '' : 'CAMERAS ARE OFF';
+  user.camerasToggled++;
 
   if (user.camerasOn) {
     lookAtCamera(user.currentCamera);
@@ -1223,6 +1228,7 @@ const generateCameraButtons = () => {
       });
       myCameraButton.classList.add('active');
       user.currentCamera = key as Camera;
+      user.camerasLookedAt++;
 
       if (user.camerasOn) {
         lookAtCamera(user.currentCamera);
@@ -1261,10 +1267,12 @@ const initialiseDoors = () => {
       // Other FNAF games have doors in directions other than left and right.
       if (direction === 'left') {
         user.leftDoorIsClosed = !user.leftDoorIsClosed;
+        user.leftDoorToggled++;
       }
 
       if (direction === 'right') {
         user.rightDoorIsClosed = !user.rightDoorIsClosed;
+        user.rightDoorToggled++;
       }
     });
   });
@@ -1317,6 +1325,14 @@ const gameOver = (reason: Animatronic | '6AM') => {
   gameOverWindow.innerHTML = `
     <h2>GAME OVER</h2>
     <h3>${gameOverMessage}</h3>
+    <div class="stats-report" for="user">
+      <h3>You</h3>
+      <div class="animatronic-icon"></div>
+      <div>Cameras turned on/off </span>${user.camerasToggled}</span> times</div>
+      <div>Cameras looked at: </span>${user.camerasLookedAt}</span></div>
+      <div>Left door toggled <span>${user.leftDoorToggled}</span> times</div>
+      <div>Right door toggled <span>${user.rightDoorToggled}</span> times</div>
+    </div>
     ${generateStatsTable(Freddy)}
     ${generateStatsTable(Bonnie)}
     ${generateStatsTable(Chica)}
