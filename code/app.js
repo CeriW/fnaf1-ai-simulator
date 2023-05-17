@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 10; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -149,10 +149,7 @@ const updateTime = () => {
     }
     // 6AM - end game
     if (currentSecond === 535) {
-        clearInterval(timeUpdate);
-        clearInterval(frameUpdate);
         gameOver('6AM');
-        // clearInterval(freddyInssterval);
     }
 };
 const calculateInGameTime = () => {

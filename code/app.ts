@@ -2,7 +2,7 @@ import { animatronics } from './animatronics';
 
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 10; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -204,10 +204,7 @@ const updateTime = () => {
 
   // 6AM - end game
   if (currentSecond === 535) {
-    clearInterval(timeUpdate);
-    clearInterval(frameUpdate);
     gameOver('6AM');
-    // clearInterval(freddyInssterval);
   }
 };
 
