@@ -53,6 +53,18 @@
   background: -o-linear-gradient(left, #ff2323 0%, #ff2323 75%, #cb0000 75%);
   background: linear-gradient(to right, #ff2323 0%, #ff2323 75%, #cb0000 75%);
 }
+#power-usage[multiplier="1"] div:nth-child(5),
+#power-usage[multiplier="1"] div:nth-child(4),
+#power-usage[multiplier="1"] div:nth-child(3) {
+  opacity: 0;
+}
+#power-usage[multiplier="2"] div:nth-child(5),
+#power-usage[multiplier="2"] div:nth-child(4) {
+  opacity: 0;
+}
+#power-usage[multiplier="3"] div:nth-child(5) {
+  opacity: 0;
+}
 /* Timer -------------------------------------------------------------------- */
 #in-game-time,
 #real-time {
