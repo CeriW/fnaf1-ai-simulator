@@ -236,8 +236,11 @@ the animatronics should be doing for any given statement.
 // ========================================================================== */
 const moveFoxy = () => {
     const movementCheck = makeMovementCheck(Foxy);
-    // Foxy will fail all movement checks while the cameras are on
-    if (user.camerasOn && Foxy.currentPosition === '1C') {
+    if (Foxy.currentAIlevel === 0) {
+        addReport(Foxy, 'AI level 0');
+    }
+    else if (user.camerasOn && Foxy.currentPosition === '1C') {
+        // Foxy will fail all movement checks while the cameras are on
         addReport(Foxy, 'camera auto fail');
         // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
     }
@@ -343,8 +346,11 @@ const makeFreddyJumpscareCheck = () => {
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
     const movementCheck = makeMovementCheck(Freddy);
-    // Freddy cannot move from the stage if Bonnie and/or Chica are also on the stage
-    if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition === '1A') {
+    if (Freddy.currentAIlevel === 0) {
+        addReport(Freddy, 'AI level 0');
+    }
+    else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition === '1A') {
+        // Freddy cannot move from the stage if Bonnie and/or Chica are also on the stage
         addReport(Freddy, 'freddy bonnie and chica on stage');
     }
     else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition !== '1A') {
@@ -467,8 +473,11 @@ const moveBonnieOrChica = (animatronic) => {
     const doorClosed = name === 'Bonnie' ? user.leftDoorIsClosed : user.rightDoorIsClosed;
     const doorClosedMessage = name === 'Bonnie' ? 'left door closed' : 'right door closed';
     const movementCheck = makeMovementCheck(animatronic);
-    // They can move, aren't in their hall corner
-    if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
+    if (animatronic.currentAIlevel === 0) {
+        addReport(animatronic, 'AI level 0');
+        // They can move, aren't in their hall corner
+    }
+    else if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
         moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition }, true, movementCheck);
         // If they're at their hall corner but aren't in your doorway yet, move them into the doorway
     }
@@ -594,6 +603,16 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
     switch (reason) {
         case 'debug':
             message = `Something happened`;
+            break;
+        case 'AI level 0':
+            message = `${animatronic.name}'s AI level is 0 and is unable to move.`;
+            if (animatronic === Bonnie) {
+                message += `<div class="report-extra-info">His AI level will increase at 2AM</div>`;
+            }
+            else if (animatronic === Chica || animatronic === Foxy) {
+                message += `<div class="report-extra-info">${capitalise(animatronic.pronouns[1])} AI level will increase at 3AM</div>`;
+            }
+            preventDuplicates = true;
             break;
         case 'in the doorway':
             const side = animatronic.name === 'Bonnie' ? 'left' : 'right';
