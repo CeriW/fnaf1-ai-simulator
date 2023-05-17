@@ -2,7 +2,7 @@ import { animatronics } from './animatronics';
 
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 10; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -1323,7 +1323,7 @@ const gameOver = (animatronic: Animatronic) => {
     ${generateStatsTable(Bonnie)}
     ${generateStatsTable(Chica)}
     ${generateStatsTable(Foxy)}
-
+    <span>Start a new game</span>
 
 
 
@@ -1372,7 +1372,6 @@ const startGame = () => {
     let animatronicAIinput = document.querySelector(
       `.custom-ai-selector[for="${animatronic.name}"] input`
     ) as HTMLInputElement;
-    console.log(`.custom-ai-selector[for="${animatronic.name}] input`);
     animatronic.aiLevels[7] = parseInt(animatronicAIinput.value) ?? 0;
   });
 
@@ -1426,7 +1425,7 @@ const initialiseMenu = () => {
 
     let aiDisplay = document.createElement('input');
     aiDisplay.type = 'number';
-    aiDisplay.value = animatronic.aiLevels[7].toString();
+    aiDisplay.value = animatronic.aiLevels[1].toString();
     aiAdjuster.append(aiDisplay);
 
     let myDecreaseButton = document.createElement('button');
