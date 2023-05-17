@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 100; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -285,9 +285,15 @@ const attemptFoxyJumpscare = (e) => {
     const performFoxyJumpscareCheck = () => {
         const restartSubPosition = Math.floor(Math.random() * 2);
         if (user.leftDoorIsClosed) {
-            addReport(Foxy, 'foxy left door closed', null, restartSubPosition);
+            // If Foxy bashes on your door, you lose 1% power, plus an additional 6% for every time after that (e.g. 7% the second time, 13% the third etc)
+            // We do -1 as the attempts get incremented before this function is called.
+            const powerDrainage = 1 + (Foxy.stats.officeAttempts - 1) * 6;
+            user.power -= powerDrainage;
+            addReport(Foxy, 'foxy left door closed', null, { restartSubPosition, powerDrainage });
             moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
             foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+            updatePowerDisplay();
+            addReport(Foxy, 'debug');
             // TODO - Foxy drains your power if he bashes on the door.
         }
         else {
@@ -737,7 +743,7 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
             type = 'alert';
             break;
         case 'foxy left door closed':
-            message = `Foxy attempted to enter your office but the left door was closed. He will return to cam 1C (${cameraNames['1C']}) at step ${additionalInfo + 1}
+            message = `Foxy attempted to enter your office but the left door was closed. He has drained ${additionalInfo.powerDrainage}% of your power and returned to cam 1C (${cameraNames['1C']}) at step ${additionalInfo.restartSubPosition + 1}
       <div class="report-extra-info">Restarting step chosen at random from 1 & 2</div>`;
             type = 'good';
             break;
