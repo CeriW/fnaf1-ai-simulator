@@ -9,11 +9,11 @@
   pointer-events: none;
   z-index: 3;
 
-  @media(max-width: $l-screens){
+  @media(max-width: @l-screens){
     transform: scale(0.9) translate(-10%, -10%);
   }
 
-  @media(max-width: $m-screens){
+  @media(max-width: @m-screens){
     transform: scale(0.8) translate(-20%, -20%);
   }
 }
@@ -115,7 +115,7 @@
 }
 
 .animatronic[position="4B"] ~ .animatronic[position="4B"]{
-  top: calc(84%% + 50px);
+  top: calc(84% + 50px);
 }
 
 /* Camera 5 ------------------------------------------------------------------*/
@@ -198,14 +198,14 @@
   height: 25px;
   border-radius: 50%;
   position: absolute;
-  background: $black;
-  border: 2px solid $white;
+  background: @black;
+  border: 2px solid @white;
   right: -10px;
   top: -10px;
 }
 
 #Foxy[position="1C"]:after{
-  background: $white;
+  background: @white;
 }
 
 #Foxy[position="1C"][sub-position="0"]{

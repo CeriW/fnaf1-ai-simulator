@@ -1,19 +1,18 @@
+@black: #000;
+@white: #fff;
+@green: #7FB000;
 
-$black: #000;
-$white: #fff;
-$green: #7FB000;
-
-$l-screens: 1400px;
-$m-screens: 1000px;
-$s-screens: 780px;
-$xs-screens: 500px;
+@l-screens: 1400px;
+@m-screens: 1000px;
+@s-screens: 780px;
+@xs-screens: 500px;
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-@mixin buttonStyle {
-  border: 3px solid $white;
+.buttonStyle {
+  border: 3px solid @white;
   background: #424242;
-  color: $white;
+  color: @white;
   font-family: 'VT323', monospace;
   font-size: 1.5em;
   padding: 5px;
@@ -21,7 +20,7 @@ $xs-screens: 500px;
   line-height: 0.8;
 
   &.active{
-    background: $green;
+    background: @green;
   }
 
   &[disabled]{
@@ -30,21 +29,19 @@ $xs-screens: 500px;
   }
 }
 
-
-// @use 'css-modules/_var.scss';
-@import 'css-modules/_timer.scss';
-@import 'css-modules/_animatronics.scss';
-@import 'css-modules/_simulator.scss';
-@import 'css-modules/_reports.scss';
-@import 'css-modules/_cameras.scss';
-@import 'css-modules/_game-over.scss';
-@import 'css-modules/_game-menu.scss';
+@import 'css-modules/_timer';
+@import 'css-modules/_animatronics';
+@import 'css-modules/_simulator';
+@import 'css-modules/_reports';
+@import 'css-modules/_cameras';
+@import 'css-modules/_game-over';
+@import 'css-modules/_game-menu';
 
 
 
 body{
-  background: $black;
-  color: $white;
+  background: @black;
+  color: @white;
   padding: 30px;
   margin: 0;
   width: 100vw;
@@ -66,14 +63,10 @@ body[game-in-progress]{
 
 
 body:not([game-in-progress]){
-
   main{
     display: none;
   }
 }
-
-
-
 
 
 
@@ -85,7 +78,7 @@ main{
     / 750px 1fr;
 }
 
-@media(max-width: $l-screens){
+@media(max-width: @l-screens){
   main{
     grid-template: 
     ". ." auto
@@ -93,7 +86,7 @@ main{
   }
 }
 
-@media(max-width: $m-screens){
+@media(max-width: @m-screens){
   main{
     grid-template: 
     ". ." auto
@@ -158,7 +151,7 @@ button{
   }
 
   #Rooms *{
-    stroke: $white;
+    stroke: @white;
   }
 
   #Dead_space{

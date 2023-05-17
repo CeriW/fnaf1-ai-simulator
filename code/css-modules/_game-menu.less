@@ -13,12 +13,12 @@
     font-size: 4em;
     margin: 0;
 
-    @media (max-width: $l-screens){
+    @media (max-width: @l-screens){
       font-size: 3em;
       margin-bottom: 30px;
     }
 
-    @media (max-width: $xs-screens){
+    @media (max-width: @xs-screens){
       font-size: 2em;
     }
     
@@ -33,16 +33,16 @@
 
   button.simulate-night,
   button#start-game{
-    @include buttonStyle();
+    .buttonStyle();
     padding: 10px;
     font-size: 1.75em;
 
-    @media (max-width: $l-screens){
+    @media (max-width: @l-screens){
       font-size: 1.5em;
     }
 
     &:hover{
-      background: $green;
+      background: @green;
     }
   }
 
@@ -76,14 +76,14 @@
   display: flex;
   gap: 20px;
 
-  @media (max-width:$s-screens){
+  @media (max-width:@s-screens){
     display: grid;
     grid-template:
       ". ."
       ". ."
   }
 
-  @media (max-width: $xs-screens){
+  @media (max-width: @xs-screens){
     grid-template:
     "."
     "."
@@ -97,7 +97,7 @@
     margin: 10px;
   }
 
-  @media(max-width: $xs-screens){
+  @media(max-width: @xs-screens){
     button.simulate-night{
       font-size: 1.25em;
     }
@@ -134,7 +134,7 @@
       display: none;
     }
 
-    @media(max-width: $m-screens){
+    @media(max-width: @m-screens){
       font-size: 2em;
       width: 75px;
     }
