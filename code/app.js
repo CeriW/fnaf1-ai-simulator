@@ -273,8 +273,8 @@ const attemptFoxyJumpscare = (e) => {
     Foxy.stats.officeAttempts++;
     const performFoxyJumpscareCheck = () => {
         const restartSubPosition = Math.floor(Math.random() * 2);
-        if (user.rightDoorIsClosed) {
-            addReport(Foxy, 'foxy right door closed', null, restartSubPosition);
+        if (user.leftDoorIsClosed) {
+            addReport(Foxy, 'foxy left door closed', null, restartSubPosition);
             moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
             foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
             // TODO - Foxy drains your power if he bashes on the door.
@@ -687,8 +687,8 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
       <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 2A, whichever comes first</div>`;
             type = 'alert';
             break;
-        case 'foxy right door closed':
-            message = `Foxy attempted to enter your office but the right door was closed. He will return to cam 1C (${cameraNames['1C']}) at step ${additionalInfo + 1}
+        case 'foxy left door closed':
+            message = `Foxy attempted to enter your office but the left door was closed. He will return to cam 1C (${cameraNames['1C']}) at step ${additionalInfo + 1}
       <div class="report-extra-info">Restarting step chosen at random from 1 & 2</div>`;
             type = 'good';
             break;

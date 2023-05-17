@@ -341,8 +341,8 @@ const attemptFoxyJumpscare = (e?: Event) => {
 
   const performFoxyJumpscareCheck = () => {
     const restartSubPosition = Math.floor(Math.random() * 2);
-    if (user.rightDoorIsClosed) {
-      addReport(Foxy, 'foxy right door closed', null, restartSubPosition);
+    if (user.leftDoorIsClosed) {
+      addReport(Foxy, 'foxy left door closed', null, restartSubPosition);
       moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
       foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
 
@@ -702,7 +702,7 @@ type messagingType =
   | 'foxy paused'
   | 'foxy failed pirate cove movement check'
   | 'foxy successful pirate cove movement check' // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
-  | 'foxy right door closed'
+  | 'foxy left door closed'
   | 'foxy coming down hall'
   | 'foxy leaving pirate cove'; // Foxy is leaving Pirate cove
 
@@ -888,8 +888,8 @@ const addReport = (
       type = 'alert';
       break;
 
-    case 'foxy right door closed':
-      message = `Foxy attempted to enter your office but the right door was closed. He will return to cam 1C (${
+    case 'foxy left door closed':
+      message = `Foxy attempted to enter your office but the left door was closed. He will return to cam 1C (${
         cameraNames['1C']
       }) at step ${additionalInfo + 1}
       <div class="report-extra-info">Restarting step chosen at random from 1 & 2</div>`;
