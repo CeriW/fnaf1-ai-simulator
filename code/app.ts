@@ -1483,6 +1483,9 @@ const initialiseMenu = () => {
     let aiDisplay = document.createElement('input');
     aiDisplay.type = 'number';
     aiDisplay.value = animatronic.aiLevels[1].toString();
+    aiDisplay.addEventListener('input', () => {
+      nightToSimulate = 7;
+    });
     aiAdjuster.append(aiDisplay);
 
     let myDecreaseButton = document.createElement('button');
