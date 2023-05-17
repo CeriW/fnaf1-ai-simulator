@@ -82,6 +82,9 @@ This means you'd lose:
 
 
 
+
+
+
 # How the animatronics work
 
 Freddy, Chica and Bonnie all move around during the night, generally getting closer to your office. Once they are at their final destination they will not jumpscare you right away, but rather they will wait for you to put up the cameras.

@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 100; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -115,6 +115,10 @@ const paths = {
   animatronics: '../assets/animatronics',
 };
 
+// The number of seconds it takes to drain 1% of power on 1 bar of usage
+// Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
+const defaultPowerDrainage = [0, 9.6, 6, 5, 4, 3, 3, 3];
+
 /* Time related variables */
 let currentFrame: number = 0;
 let currentSecond: number = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
@@ -128,6 +132,7 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 // General page elements
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
+const powerPercentageDisplay: HTMLDivElement = document.querySelector('#power-percentage')!;
 
 // Camera related page elements
 const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
@@ -146,6 +151,7 @@ let user = {
   camerasLookedAt: 0,
   leftDoorToggled: 0,
   rightDoorToggled: 0,
+  power: 99,
 };
 
 // ========================================================================== //
@@ -1421,6 +1427,29 @@ window.addEventListener('game-over-freddy', () => {
 });
 
 // ========================================================================== //
+// POWER
+// ========================================================================== //
+
+// This will run every second
+// TODO - this will eventually need to consider the lights
+const updatePower = () => {
+  // The first item in this is true as the multiplier needs to be at least 1
+  const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
+
+  // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
+  const usageMultiplier = usage > 4 ? 4 : usage;
+
+  user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * usageMultiplier;
+  console.log(user.power);
+
+  powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
+};
+
+window.setInterval(updatePower, secondLength);
+
+// powerUpdate;
+
+// ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
 
@@ -1562,6 +1591,7 @@ const initialiseMenu = () => {
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
 let timeUpdate: number;
 let frameUpdate: number;
+let powerUpdate: number;
 let bonnieInterval: number;
 let chicaInterval: number;
 let foxyInterval: number;

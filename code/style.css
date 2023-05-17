@@ -5,6 +5,9 @@
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2hsY.ttf) format('truetype');
 }
+.customFont {
+  font-family: 'VT323', monospace;
+}
 .buttonStyle {
   border: 3px solid #fff;
   background: #424242;
@@ -21,6 +24,10 @@
 .buttonStyle[disabled] {
   opacity: 0.3;
   cursor: not-allowed;
+}
+/* POWER  ------------------------------------------------------------------- */
+#power {
+  font-family: 'VT323', monospace;
 }
 /* Timer -------------------------------------------------------------------- */
 #in-game-time,
