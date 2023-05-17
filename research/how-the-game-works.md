@@ -28,8 +28,6 @@ This means that, for example, at the end of night 1 the AI levels are 0,3,2,2, a
 
 Freddy does not receive any boosts throughout the night.
 
-TODO - IS THIS STILL THE CASE FOR CUSTOM NIGHT OR DO THEY REMAIN WHERE YOU SET THEM?
-
 ## How AI levels are used
 
 Every so many seconds, each animatronic has a 'movement opportunity'. These AI levels determine whether the animatronic in question will be successful in making the move it wants to make.
@@ -124,6 +122,8 @@ This effectively means that he waits this amount of time at each AI level before
 | 10+  |  0  | 0s |
 
 If he is already in a countdown and you put the cameras back up this countdown will not be affected - he will take it as soon as you put the cameras down.
+
+Freddy is unable to leave the stage while Bonnie and/or Chica are still there. This means that even if you set the AI levels to 20/0/0/0, Freddy wouldn't be able to leave the stage until just after 3AM - when Bonnie and Chica have both had AI boosts and can leave the stage. 
 
 ### Freddy's path
 There is no element of randomness to Freddy's movements - he always follows a set path.
