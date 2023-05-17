@@ -1,3 +1,5 @@
+import { animatronics } from './animatronics';
+
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
 let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
@@ -1366,6 +1368,14 @@ window.addEventListener('game-over-freddy', () => {
 // ========================================================================== //
 
 const startGame = () => {
+  [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
+    let animatronicAIinput = document.querySelector(
+      `.custom-ai-selector[for="${animatronic.name}"] input`
+    ) as HTMLInputElement;
+    console.log(`.custom-ai-selector[for="${animatronic.name}] input`);
+    animatronic.aiLevels[7] = parseInt(animatronicAIinput.value) ?? 0;
+  });
+
   document.body.setAttribute('game-in-progress', 'true');
 
   timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
@@ -1416,7 +1426,6 @@ const initialiseMenu = () => {
 
     let aiDisplay = document.createElement('input');
     aiDisplay.type = 'number';
-    aiDisplay.readOnly = true;
     aiDisplay.value = animatronic.aiLevels[7].toString();
     aiAdjuster.append(aiDisplay);
 
@@ -1435,6 +1444,7 @@ const initialiseMenu = () => {
         aiDisplay.value = animatronic.aiLevels[7].toString();
       }
     });
+
     aiAdjuster.append(myDecreaseButton);
 
     let myIncreaseButton = document.createElement('button');
@@ -1481,7 +1491,6 @@ const initialiseMenu = () => {
       [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
         let myInput = customNightMenu.querySelector(`[for="${animatronic.name}"] input`) as HTMLInputElement;
         myInput.value = animatronic.aiLevels[nightToSimulate]!.toString();
-        console.log(animatronic);
       });
     });
   }
