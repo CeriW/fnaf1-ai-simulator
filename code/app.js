@@ -1,7 +1,7 @@
 "use strict";
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 10; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -530,7 +530,8 @@ const calculateNewChicaPosition = () => {
             newPosition = '1B';
             break;
         case '1B':
-            newPosition = randomChoice === 0 ? '6' : '7';
+            const choices = ['4A', '6', '7'];
+            newPosition = choices[Math.floor(Math.random() * choices.length)];
             break;
         case '6':
         case '7':
