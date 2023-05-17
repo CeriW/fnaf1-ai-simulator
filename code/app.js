@@ -1,7 +1,6 @@
-"use strict";
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 100; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -344,9 +343,19 @@ const makeFreddyJumpscareCheck = () => {
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
 const moveFreddy = () => {
     const movementCheck = makeMovementCheck(Freddy);
-    // CAMERAS ON, HE'S NOT AT 4B
-    // Freddy will automatically fail all movement checks while the cameras are up
-    if (user.camerasOn && Freddy.currentPosition !== '4B') {
+    // Freddy cannot move from the stage if Bonnie and/or Chica are also on the stage
+    if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition === '1A') {
+        addReport(Freddy, 'freddy bonnie and chica on stage');
+    }
+    else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition !== '1A') {
+        addReport(Freddy, 'freddy and bonnie on stage');
+    }
+    else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition !== '1A' && Chica.currentPosition === '1A') {
+        addReport(Freddy, 'freddy and chica on stage');
+    }
+    else if (user.camerasOn && Freddy.currentPosition !== '4B') {
+        // CAMERAS ON, HE'S NOT AT 4B
+        // Freddy will automatically fail all movement checks while the cameras are up
         addReport(Freddy, 'camera auto fail');
         // CAMERAS ON, HE'S AT 4B, USER IS LOOKING AT 4B. DOORS DON'T MATTER HERE
         // Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.
@@ -661,6 +670,18 @@ const addReport = (animatronic, reason, movementCheck = null, additionalInfo = n
       in ${additionalInfo.formattedWaitingTime} seconds
       ${stats}`;
             type = 'bad';
+            break;
+        case 'freddy and bonnie on stage':
+            message = 'Freddy is unable to leave the stage while Bonnie is still there';
+            preventDuplicates = true;
+            break;
+        case 'freddy and chica on stage':
+            message = 'Freddy is unable to leave the stage while Chica is still there';
+            preventDuplicates = true;
+            break;
+        case 'freddy bonnie and chica on stage':
+            message = 'Freddy is unable to leave the stage while Bonnie and Chica are still there';
+            preventDuplicates = true;
             break;
         case 'has moved':
             message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition]}) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition]})`;
@@ -1240,3 +1261,4 @@ let bonnieJumpscareCountdown;
 let chicaJumpscareCountdown;
 initialiseMenu();
 // startGame();
+//# sourceMappingURL=app.js.map

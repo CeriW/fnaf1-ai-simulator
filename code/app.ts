@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 100; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -418,9 +418,16 @@ const makeFreddyJumpscareCheck = () => {
 const moveFreddy = () => {
   const movementCheck = makeMovementCheck(Freddy);
 
-  // CAMERAS ON, HE'S NOT AT 4B
-  // Freddy will automatically fail all movement checks while the cameras are up
-  if (user.camerasOn && Freddy.currentPosition !== '4B') {
+  // Freddy cannot move from the stage if Bonnie and/or Chica are also on the stage
+  if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition === '1A') {
+    addReport(Freddy, 'freddy bonnie and chica on stage');
+  } else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition !== '1A') {
+    addReport(Freddy, 'freddy and bonnie on stage');
+  } else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition !== '1A' && Chica.currentPosition === '1A') {
+    addReport(Freddy, 'freddy and chica on stage');
+  } else if (user.camerasOn && Freddy.currentPosition !== '4B') {
+    // CAMERAS ON, HE'S NOT AT 4B
+    // Freddy will automatically fail all movement checks while the cameras are up
     addReport(Freddy, 'camera auto fail');
 
     // CAMERAS ON, HE'S AT 4B, USER IS LOOKING AT 4B. DOORS DON'T MATTER HERE
@@ -701,6 +708,9 @@ type messagingType =
   | 'jumpscare' // Animatronic successfully achieved a jumpscare
   | 'has moved' // Animatronic is moving
   | 'freddy successful movement check' // Freddy has passed a movement check
+  | 'freddy bonnie and chica on stage' // Freddy can't leave the stage while Bonnie and/or Chica are still there
+  | 'freddy and bonnie on stage' // Freddy can't leave the stage while Bonnie and/or Chica are still there
+  | 'freddy and chica on stage' // Freddy can't leave the stage while Bonnie and/or Chica are still there
   | 'foxy paused'
   | 'foxy failed pirate cove movement check'
   | 'foxy successful pirate cove movement check' // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
@@ -846,6 +856,21 @@ const addReport = (
       in ${additionalInfo.formattedWaitingTime} seconds
       ${stats}`;
       type = 'bad';
+      break;
+
+    case 'freddy and bonnie on stage':
+      message = 'Freddy is unable to leave the stage while Bonnie is still there';
+      preventDuplicates = true;
+      break;
+
+    case 'freddy and chica on stage':
+      message = 'Freddy is unable to leave the stage while Chica is still there';
+      preventDuplicates = true;
+      break;
+
+    case 'freddy bonnie and chica on stage':
+      message = 'Freddy is unable to leave the stage while Bonnie and Chica are still there';
+      preventDuplicates = true;
       break;
 
     case 'has moved':
