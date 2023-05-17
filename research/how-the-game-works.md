@@ -63,6 +63,25 @@ Not taking into account any actions you take which drain additional power (camer
 | 5+, including custom night | 1% every 3 seconds |
 
 
+For each extra thing from this list that is true, this is multiplied up to a maximum of four:
+* left door closed
+* right door closed
+* left light on
+* right light on
+* cameras on
+
+
+This means you'd lose:
+| Night | 1 extra thing (2 bars usage)  | 2 extra things (3 bars usage)   | 3-4 extra things (4 bars/max usage) |
+| ----  | -----                         | -----                           | -----                               |
+| 1 | 1% every 4.8 seconds              | 1% every 3.2 seconds            | 1% every 2.4 seconds                |
+| 2 | 1% every 3 seconds                | 1% every 2 seconds              | 1% every 1.5 seconds                |
+| 3 | 1% every 2.5 seconds              | 1% every 1.666 seconds          | 1% every 1.25 seconds               |
+| 4 | 1% every 2 seconds                | 1% every 3.2 seconds            | 1% every 1 second                   |
+| 5+| 1% every 1.5 seconds              | 1% every 1.333 seconds          | 1% every 0.25 seconds               |
+
+
+
 # How the animatronics work
 
 Freddy, Chica and Bonnie all move around during the night, generally getting closer to your office. Once they are at their final destination they will not jumpscare you right away, but rather they will wait for you to put up the cameras.
