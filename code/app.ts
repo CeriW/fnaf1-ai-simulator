@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 10; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -153,7 +153,7 @@ let user = {
 // We are running at 60fps
 const updateFrames = () => {
   currentFrame++;
-  framesDisplay.textContent = `@{currentFrame} frames at @{framesPerSecond}fps`;
+  framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond}fps`;
 };
 
 const updateTime = () => {
@@ -164,7 +164,7 @@ const updateTime = () => {
   let realRemainingSeconds = currentSecond % 60;
 
   secondsDisplay.textContent = `
-    @{realMinutes} : @{String(realRemainingSeconds).padStart(2, '0')}
+    ${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}
   `;
 
   // IN GAME TIME
@@ -172,13 +172,13 @@ const updateTime = () => {
   const gameTime = calculateInGameTime();
 
   inGameHourDisplay.innerHTML = `
-    <span class="in-game-hour">@{gameTime.hour}</span>
-    <span class="in-game-minutes">@{String(gameTime.minute).padStart(2, '0')}</span>
+    <span class="in-game-hour">${gameTime.hour}</span>
+    <span class="in-game-minutes">${String(gameTime.minute).padStart(2, '0')}</span>
     <span class="am-marker">AM</span>
   `;
 
   // console.log(
-  //   `@{realMinutes} : @{String(realRemainingSeconds).padStart(2, '0')}  @{JSON.stringify(calculateInGameTime())}`
+  //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
   // );
 
   updateFrames();
@@ -242,9 +242,9 @@ const generateAnimatronics = () => {
     animatronicReport.setAttribute('for', animatronic.name);
     animatronicReport.innerHTML = `
       <div class="animatronic-icon"></div>
-      <div class="animatronic-name">@{animatronic.name}</div>
-      <div class="starting-ai-level">Starting AI level: <span>@{animatronic.currentAIlevel}<span></div>
-      <div class="current-ai-level">Current AI level: <span>@{animatronic.currentAIlevel}</span></div>
+      <div class="animatronic-name">${animatronic.name}</div>
+      <div class="starting-ai-level">Starting AI level: <span>${animatronic.currentAIlevel}<span></div>
+      <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
       <div class="report-item-container"></div>
     `;
     sidebar.querySelector('#animatronic-report')!.appendChild(animatronicReport);
@@ -273,7 +273,7 @@ const increaseAILevel = (animatronic: Animatronic) => {
   if (animatronic.currentAIlevel < 20) {
     animatronic.currentAIlevel++;
     addReport(animatronic, 'increase AI level');
-    let aiReport = document.querySelector(`.animatronic-report[for="@{animatronic.name}"] .current-ai-level span`);
+    let aiReport = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .current-ai-level span`);
     if (aiReport) {
       aiReport.innerHTML = animatronic.currentAIlevel.toString();
     }
@@ -358,7 +358,7 @@ const attemptFoxyJumpscare = (e?: Event) => {
     addReport(Foxy, 'foxy coming down hall');
     const foxyIcon = document.querySelector('.animatronic#Foxy') as HTMLSpanElement;
     if (foxyIcon) {
-      foxyIcon.style.animation = `foxyHallAnimation @{(1.87 * secondLength) / 1000}s linear backwards`;
+      foxyIcon.style.animation = `foxyHallAnimation ${(1.87 * secondLength) / 1000}s linear backwards`;
     }
     foxyJumpscareCountdown = window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
   } else {
@@ -665,15 +665,12 @@ const moveAnimatronic = (
 
   window.setTimeout(() => {
     cameraScreen.src = getCameraImage(user.currentCamera);
+    cameraArea.classList.remove('updating');
   }, secondLength * 2.5);
 
-  window.setTimeout(() => {
-    cameraArea.classList.remove('updating');
-  }, secondLength * 2.5 + 300);
-
-  document.querySelector(`.animatronic#@{animatronic.name}`)?.setAttribute('position', position.end);
+  document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', position.end);
   document
-    .querySelector(`.animatronic#@{animatronic.name}`)
+    .querySelector(`.animatronic#${animatronic.name}`)
     ?.setAttribute('sub-position', position.sub?.toString() ?? 'none');
 };
 
@@ -726,9 +723,9 @@ const addReport = (
   let type: 'bad' | 'good' | 'info' | 'warning' | 'alert' | 'death-zone' = 'info';
   let preventDuplicates = false;
   const stats = movementCheck
-    ? `<div class="report-extra-info">Score to beat: @{Math.ceil(movementCheck.scoreToBeat)} @{
+    ? `<div class="report-extra-info">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${
         animatronic.name
-      }'s AI level: @{movementCheck.aiLevel}</div>`
+      }'s AI level: ${movementCheck.aiLevel}</div>`
     : '';
 
   switch (reason) {
@@ -738,26 +735,26 @@ const addReport = (
 
     case 'in the doorway':
       const side = animatronic.name === 'Bonnie' ? 'left' : 'right';
-      message = `@{animatronic.name} is in your @{side} doorway!`;
+      message = `${animatronic.name} is in your ${side} doorway!`;
       type = 'alert';
       break;
 
     case 'increase AI level':
-      message = `@{animatronic.name}'s AI level has increased by 1 to @{animatronic.currentAIlevel}`;
+      message = `${animatronic.name}'s AI level has increased by 1 to ${animatronic.currentAIlevel}`;
       break;
 
     case 'increase AI level max':
-      message = `@{animatronic.name} could have increased their AI level but they are already at 20`;
+      message = `${animatronic.name} could have increased their AI level but they are already at 20`;
 
     case 'camera auto fail':
-      message = `@{animatronic.name} will automatically fail all movement checks while the cameras are on`;
+      message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
       preventDuplicates = true;
       break;
 
     case 'failed movement check':
-      message = `@{animatronic.name} has failed @{animatronic.pronouns[1]} movement check and will remain at cam @{
+      message = `${animatronic.name} has failed ${animatronic.pronouns[1]} movement check and will remain at cam ${
         animatronic.currentPosition
-      } (@{cameraNames[animatronic.currentPosition as Camera]}) @{stats}`;
+      } (${cameraNames[animatronic.currentPosition as Camera]}) ${stats}`;
       type = 'good';
       break;
 
@@ -767,23 +764,23 @@ const addReport = (
       break;
 
     case 'right door closed':
-      message = `@{animatronic.name} was ready to enter your office but the right door was closed. @{capitalise(
+      message = `${animatronic.name} was ready to enter your office but the right door was closed. ${capitalise(
         animatronic.pronouns[0]
-      )} will return to cam @{additionalInfo} (@{cameraNames[additionalInfo as Camera]})`;
+      )} will return to cam ${additionalInfo} (${cameraNames[additionalInfo as Camera]})`;
       type = 'good';
       break;
 
     case 'left door closed':
-      message = `@{animatronic.name} was ready to enter your office but the left door was closed.
-      @{capitalise(animatronic.pronouns[0])} will return to cam @{additionalInfo} (@{
+      message = `${animatronic.name} was ready to enter your office but the left door was closed.
+      ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${
         cameraNames[additionalInfo as Camera]
       })`;
       type = 'good';
       break;
 
     case 'enter office bonnie or chica':
-      message = `@{animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE
-      <div class="report-extra-info">@{capitalise(
+      message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE
+      <div class="report-extra-info">${capitalise(
         animatronic.pronouns[0]
       )} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
 
@@ -794,67 +791,67 @@ const addReport = (
     case 'freddy office failed movement check':
       message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
           <div class="report-extra-info">
-          Score to beat: @{movementCheck?.scoreToBeat}/100   Freddy's score: @{movementCheck?.aiLevel}
+          Score to beat: ${movementCheck?.scoreToBeat}/100   Freddy's score: ${movementCheck?.aiLevel}
           </div>`;
       type = 'death-zone';
       break;
 
     case 'enter office failed movement check':
-      message = `@{animatronic.name} could have entered the office but @{animatronic.pronouns[0]} failed @{
+      message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${
         animatronic.pronouns[1]
-      } movement check. @{capitalise(animatronic.pronouns[0])} will continue to wait at cam @{
+      } movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${
         animatronic.currentPosition
-      } (@{cameraNames[animatronic.currentPosition as Camera]}) @{stats}`;
+      } (${cameraNames[animatronic.currentPosition as Camera]}) ${stats}`;
       type = 'alert';
       break;
 
     case 'enter office failed movement check doorway':
       let doorSide = animatronic.currentPosition === '2B' ? 'left' : 'right';
 
-      message = `@{animatronic.name} could have entered the office but @{animatronic.pronouns[0]} failed @{
+      message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${
         animatronic.pronouns[1]
       } movement check.
-      @{capitalise(animatronic.pronouns[0])} will continue to wait in the @{doorSide} doorway @{stats}`;
+      ${capitalise(animatronic.pronouns[0])} will continue to wait in the ${doorSide} doorway ${stats}`;
       type = 'alert';
       break;
 
     case 'enter office cameras off':
-      message = `@{animatronic.name} passed @{
+      message = `${animatronic.name} passed ${
         animatronic.pronouns[1]
       } movement check to enter the office but couldn't because the cameras were off.
-      @{capitalise(animatronic.pronouns[0])} will continue to wait at cam @{animatronic.currentPosition} (@{
+      ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${
         cameraNames[animatronic.currentPosition as Camera]
-      }) @{stats}`;
+      }) ${stats}`;
       type = 'warning';
       break;
 
     case 'in the office':
-      message = `@{animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
+      message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
       type = 'death-zone';
       preventDuplicates = true;
       break;
 
     case 'waiting for cameras down':
-      message = `@{animatronic.name} is ready to move but is waiting for the cameras to go down`;
+      message = `${animatronic.name} is ready to move but is waiting for the cameras to go down`;
       preventDuplicates = true;
       break;
 
     case 'freddy successful movement check':
       message = `Freddy will move from
-      @{additionalInfo.currentPosition} (@{cameraNames[additionalInfo.currentPosition as Camera]})
-      to @{additionalInfo.endingPosition} (@{cameraNames[additionalInfo.endingPosition as Camera]})
-      in @{additionalInfo.formattedWaitingTime} seconds
-      @{stats}`;
+      ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition as Camera]})
+      to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition as Camera]})
+      in ${additionalInfo.formattedWaitingTime} seconds
+      ${stats}`;
       type = 'bad';
       break;
 
     case 'has moved':
-      message = `@{animatronic.name} has moved from cam @{additionalInfo.currentPosition} (@{
+      message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${
         cameraNames[additionalInfo.currentPosition as Camera]
-      }) to cam @{additionalInfo.endPosition} (@{cameraNames[additionalInfo.endPosition as Camera]})`;
+      }) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition as Camera]})`;
       if (movementCheck) {
         message += `<div class="report-extra-info">
-        Score to beat: @{movementCheck?.scoreToBeat}  @{animatronic.name}'s score: @{movementCheck?.aiLevel}
+        Score to beat: ${movementCheck?.scoreToBeat}  ${animatronic.name}'s score: ${movementCheck?.aiLevel}
         </div>`;
       }
       type = 'bad';
@@ -862,38 +859,38 @@ const addReport = (
 
     case 'foxy successful pirate cove movement check':
       const stepsRemaining = 3 - Foxy.subPosition;
-      message = `Foxy has made a successful movement check. He is @{stepsRemaining} @{pluralise(
+      message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(
         stepsRemaining,
         'step'
-      )}&nbsp;away from leaving Pirate Cove @{stats}`;
+      )}&nbsp;away from leaving Pirate Cove ${stats}`;
       type = stepsRemaining === 1 ? 'warning' : 'bad';
       break;
 
     case 'foxy paused':
-      message = `The cameras have just been turned off. Foxy will be unable to make movement checks for @{additionalInfo.toFixed(
+      message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(
         2
       )} seconds <div class="report-extra-info">Random number between 0.83 and 16.67</div>`;
       break;
 
     case 'foxy failed pirate cove movement check':
       let stepsRemainingB = 3 - Foxy.subPosition;
-      message = `Foxy has failed his movement check. He is still @{stepsRemainingB} @{pluralise(
+      message = `Foxy has failed his movement check. He is still ${stepsRemainingB} ${pluralise(
         stepsRemainingB,
         'step'
-      )} away from leaving 1C (@{cameraNames['1C']}) @{stats}`;
+      )} away from leaving 1C (${cameraNames['1C']}) ${stats}`;
       type = 'good';
       break;
 
     case 'foxy leaving pirate cove':
-      message = `FOXY HAS LEFT @{cameraNames['1C'].toUpperCase()}
+      message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
       <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 2A, whichever comes first</div>`;
       type = 'alert';
       break;
 
     case 'foxy right door closed':
-      message = `Foxy attempted to enter your office but the right door was closed. He will return to cam 1C (@{
+      message = `Foxy attempted to enter your office but the right door was closed. He will return to cam 1C (${
         cameraNames['1C']
-      }) at step @{additionalInfo + 1}
+      }) at step ${additionalInfo + 1}
       <div class="report-extra-info">Restarting step chosen at random from 1 & 2</div>`;
       type = 'good';
       break;
@@ -904,12 +901,12 @@ const addReport = (
       break;
 
     case 'jumpscare':
-      message = `@{animatronic.name} successfully jumpscared you`;
+      message = `${animatronic.name} successfully jumpscared you`;
       type = 'death-zone';
       break;
   }
 
-  let reportToAddTo = document.querySelector(`.animatronic-report[for="@{animatronic.name}"] .report-item-container`);
+  let reportToAddTo = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .report-item-container`);
 
   let firstReport = reportToAddTo?.querySelector('.report-item');
   if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
@@ -920,10 +917,10 @@ const addReport = (
 
     reportToAddTo.innerHTML = `
 
-    <div class="report-item" type="@{type}">
-    <span class="report-time">@{InGameTime.hour}:@{InGameTime.minute}AM</span>
-    <div class="report-description">@{message}</div></div>
-    @{reportToAddTo?.innerHTML ?? ''}
+    <div class="report-item" type="${type}">
+    <span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span>
+    <div class="report-description">${message}</div></div>
+    ${reportToAddTo?.innerHTML ?? ''}
   `;
   }
 };
@@ -976,7 +973,7 @@ const getCameraImage = (cam: Camera) => {
       break;
   }
 
-  return `@{paths.cameras}/@{camImageSrc}`;
+  return `${paths.cameras}/${camImageSrc}`;
 };
 
 const getLocationInfo = (cam: Camera) => {
@@ -1027,7 +1024,7 @@ const generateCamImage1A = (): string => {
   if (info.freddyIsAlone) {
     // UNKNOWN - I can't find info on the chances of Freddy facing right rather than the camera
     let randomiser = randomise(8) ? '-2' : '-1';
-    return `1A-freddy@{randomiser}.webp`;
+    return `1A-freddy${randomiser}.webp`;
   }
 
   // If we've reached this point it must be empty
@@ -1040,11 +1037,11 @@ const generateCamImage1B = (): string => {
   const randomiser = randomise(3) ? '-2' : '-1';
 
   if (info.chicaIsHere) {
-    return `1B-chica@{randomiser}.webp`;
+    return `1B-chica${randomiser}.webp`;
   }
 
   if (info.bonnieIsHere) {
-    return `1B-bonnie@{randomiser}.webp`;
+    return `1B-bonnie${randomiser}.webp`;
   }
 
   if (info.freddyIsAlone) {
@@ -1060,11 +1057,11 @@ const generateCamImage1C = (): string => {
   let { foxyIsHere } = getLocationInfo('1C');
 
   if (foxyIsHere) {
-    return `1C-foxy-@{Foxy.subPosition}.webp`;
+    return `1C-foxy-${Foxy.subPosition}.webp`;
   }
 
   let emptyRandomiser = randomise(10) ? '-its-me' : '-default';
-  return `1C-empty@{emptyRandomiser}.webp`;
+  return `1C-empty${emptyRandomiser}.webp`;
 };
 
 const generateCamImage2A = () => {
@@ -1100,7 +1097,7 @@ const generateCamImage2B = (): string => {
   }
 
   let emptyRandomiser = randomise(4) ? '-2' : '-1';
-  return `2B-empty@{emptyRandomiser}.webp`;
+  return `2B-empty${emptyRandomiser}.webp`;
 };
 
 // Bonnie is the only animatronic who can be here, and only has one image :)
@@ -1112,7 +1109,7 @@ const generateCamImage4A = (): string => {
 
   if (info.chicaIsHere) {
     let randomiser = randomise(3) ? '-2' : '-1';
-    return `4A-chica@{randomiser}.webp`;
+    return `4A-chica${randomiser}.webp`;
   }
 
   if (info.freddyIsAlone) {
@@ -1172,7 +1169,7 @@ const generateCamImage4B = (): string => {
 // Bonnie and 2 options for empty
 const generateCamImage5 = (): string => {
   let randomiser = randomise(8) ? '-2' : '-1';
-  return getLocationInfo('5').bonnieIsHere ? `5-bonnie@{randomiser}.webp` : `5-empty@{randomiser}.webp`;
+  return getLocationInfo('5').bonnieIsHere ? `5-bonnie${randomiser}.webp` : `5-empty${randomiser}.webp`;
 };
 
 const generateCamImage7 = (): string => {
@@ -1184,7 +1181,7 @@ const generateCamImage7 = (): string => {
 
   if (info.chicaIsHere) {
     let randomiser = randomise(8) ? '-2' : '-1';
-    return `7-chica@{randomiser}.webp`;
+    return `7-chica${randomiser}.webp`;
   }
 
   return '7-empty.webp';
@@ -1217,7 +1214,7 @@ const generateCameraButtons = () => {
     if (key === defaultCamera) {
       myCameraButton.classList.add('active');
     }
-    myCameraButton.textContent = `CAM @{key}`;
+    myCameraButton.textContent = `CAM ${key}`;
     myCameraButton.setAttribute('camera', key);
     simulator.appendChild(myCameraButton);
 
@@ -1238,8 +1235,8 @@ const generateCameraButtons = () => {
 // We need to listen for certain cameras in certain situations.
 // This will publish an event when a given camera is being looked at
 const lookAtCamera = (camera: Camera) => {
-  window.dispatchEvent(new Event(`cam-on-@{camera}`));
-  console.log(`cam-on-@{camera}`);
+  window.dispatchEvent(new Event(`cam-on-${camera}`));
+  console.log(`cam-on-${camera}`);
   cameraScreen.src = getCameraImage(camera);
 };
 
@@ -1252,14 +1249,14 @@ const initialiseDoors = () => {
     // Create door buttons
     let myButton = document.createElement('button');
     myButton.classList.add('door-button');
-    myButton.textContent = `Close @{direction} door`;
+    myButton.textContent = `Close ${direction} door`;
     myButton.setAttribute('door', direction);
     document.querySelector('#door-controls')?.append(myButton);
 
     // Make the door buttons toggle the doors
     myButton.addEventListener('click', () => {
       myButton.classList.toggle('active');
-      simulator.querySelector(`g#@{direction}-door-close-icon`)?.classList.toggle('hidden');
+      simulator.querySelector(`g#${direction}-door-close-icon`)?.classList.toggle('hidden');
 
       // Note - I could simplify this using else, but I'm leaving it like this to future proof it
       // Other FNAF games have doors in directions other than left and right.
@@ -1304,12 +1301,12 @@ const gameOver = (animatronic: Animatronic) => {
 
   const generateStatsTable = (animatronic: Animatronic) => {
     let myStats = `
-      <div class="stats-report" for="@{animatronic.name}">
-        <h3>@{animatronic.name}</h3>
+      <div class="stats-report" for="${animatronic.name}">
+        <h3>${animatronic.name}</h3>
         <div class="animatronic-icon"></div>
-        <div>Successful movement checks: <span>@{animatronic.stats.successfulMovementChecks}</span></div>
-        <div>Failed movement checks: <span>@{animatronic.stats.failedMovementChecks}</span></div>
-        <div>Attempts to get into office: <span>@{animatronic.stats.officeAttempts}</span></div>
+        <div>Successful movement checks: <span>${animatronic.stats.successfulMovementChecks}</span></div>
+        <div>Failed movement checks: <span>${animatronic.stats.failedMovementChecks}</span></div>
+        <div>Attempts to get into office: <span>${animatronic.stats.officeAttempts}</span></div>
       </div>
     `;
 
@@ -1318,11 +1315,11 @@ const gameOver = (animatronic: Animatronic) => {
 
   gameOverWindow.innerHTML = `
     <h2>GAME OVER</h2>
-    <h3>You were jumpscared by @{animatronic.name}</h3>
-    @{generateStatsTable(Freddy)}
-    @{generateStatsTable(Bonnie)}
-    @{generateStatsTable(Chica)}
-    @{generateStatsTable(Foxy)}
+    <h3>You were jumpscared by ${animatronic.name}</h3>
+    ${generateStatsTable(Freddy)}
+    ${generateStatsTable(Bonnie)}
+    ${generateStatsTable(Chica)}
+    ${generateStatsTable(Foxy)}
 
 
 
@@ -1408,8 +1405,8 @@ const initialiseMenu = () => {
     mySelector.setAttribute('for', animatronic.name);
 
     mySelector.innerHTML = `
-      <h2>@{animatronic.name}</h2>
-      <img src="@{paths.animatronics}/@{animatronic.name.toLowerCase()}.png">
+      <h2>${animatronic.name}</h2>
+      <img src="${paths.animatronics}/${animatronic.name.toLowerCase()}.png">
     `;
 
     let aiAdjuster = document.createElement('div');
@@ -1463,7 +1460,7 @@ const initialiseMenu = () => {
     let myButton = document.createElement('button');
     myButton.classList.add('simulate-night');
     myButton.setAttribute('for', i.toString());
-    myButton.textContent = `Simulate night @{i}`;
+    myButton.textContent = `Simulate night ${i}`;
     if (i === 1) {
       myButton.classList.add('active');
     }
@@ -1481,7 +1478,7 @@ const initialiseMenu = () => {
       });
 
       [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
-        let myInput = customNightMenu.querySelector(`[for="@{animatronic.name}"] input`) as HTMLInputElement;
+        let myInput = customNightMenu.querySelector(`[for="${animatronic.name}"] input`) as HTMLInputElement;
         myInput.value = animatronic.aiLevels[nightToSimulate]!.toString();
         console.log(animatronic);
       });
