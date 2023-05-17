@@ -1,3 +1,4 @@
+"use strict";
 // TESTING VARIABLES
 let nightToSimulate = 1;
 let secondLength = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
@@ -1222,5 +1223,4 @@ let foxyJumpscareCountdown;
 let bonnieJumpscareCountdown;
 let chicaJumpscareCountdown;
 initialiseMenu();
-export {};
 // startGame();

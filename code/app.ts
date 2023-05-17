@@ -1,5 +1,3 @@
-import { animatronics } from './animatronics';
-
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
 let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
