@@ -7,7 +7,7 @@ const Freddy = {
     currentPosition: '1A',
     movementOpportunityInterval: 3.02,
     // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
-    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9, 0],
+    aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9, 20],
     currentAIlevel: 0,
     currentCountdown: 0,
     pronouns: ['he', 'his'],
@@ -22,7 +22,7 @@ const Bonnie = {
     name: 'Bonnie',
     currentPosition: '1A',
     movementOpportunityInterval: 4.97,
-    aiLevels: [null, 0, 3, 0, 2, 5, 10, 0],
+    aiLevels: [null, 0, 3, 0, 2, 5, 10, 20],
     currentAIlevel: 0,
     currentCountdown: 0,
     pronouns: ['he', 'his'],
@@ -37,7 +37,7 @@ const Chica = {
     name: 'Chica',
     currentPosition: '1A',
     movementOpportunityInterval: 4.98,
-    aiLevels: [null, 0, 1, 5, 4, 7, 12, 0],
+    aiLevels: [null, 0, 1, 5, 4, 7, 12, 20],
     currentAIlevel: 0,
     currentCountdown: 0,
     pronouns: ['she', 'her'],
@@ -54,7 +54,7 @@ const Foxy = {
     currentAIlevel: 0,
     subPosition: 0,
     movementOpportunityInterval: 5.01,
-    aiLevels: [null, 0, 1, 2, 6, 5, 16, 0],
+    aiLevels: [null, 0, 1, 2, 6, 5, 16, 20],
     currentCountdown: 0,
     pronouns: ['he', 'his'],
     stats: {
@@ -1186,17 +1186,18 @@ const initialiseMenu = () => {
         customNightMenu.append(mySelector);
     });
     // Generate the night selector buttons
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 7; i++) {
         let myButton = document.createElement('button');
         myButton.classList.add('simulate-night');
         myButton.setAttribute('for', i.toString());
-        myButton.textContent = `Simulate night ${i}`;
+        myButton.textContent = i < 7 ? `Simulate night ${i}` : `Activate 4/20 mode`;
         if (i === 1) {
             myButton.classList.add('active');
         }
         nightMenu.append(myButton);
         myButton.addEventListener('click', () => {
-            nightToSimulate = i;
+            // I've got separate entries here for night 7 and 4/20 mode, but they should be considered the same thing
+            nightToSimulate = i < 7 ? i : 7;
             document.querySelectorAll('button.simulate-night').forEach((btn) => {
                 if (btn.getAttribute('for') === nightToSimulate.toString()) {
                     btn.classList.add('active');
