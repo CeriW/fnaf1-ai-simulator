@@ -132,13 +132,16 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 // General page elements
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
-const powerPercentageDisplay: HTMLDivElement = document.querySelector('#power-percentage')!;
 
 // Camera related page elements
 const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
 const cameraButton: HTMLButtonElement = document.querySelector('button#cameras')!;
 const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status')!;
 const cameraScreen: HTMLImageElement = document.querySelector('img#camera-screen')!;
+
+// Power related page elements
+const powerPercentageDisplay: HTMLDivElement = document.querySelector('#power-percentage')!;
+const powerUsageDisplay: HTMLDivElement = document.querySelector('#power-usage')!;
 
 /* Player choosable variables */
 
@@ -1433,7 +1436,7 @@ window.addEventListener('game-over-freddy', () => {
 // This will run every second
 // TODO - this will eventually need to consider the lights
 const updatePower = () => {
-  // The first item in this is true as the multiplier needs to be at least 1
+  // The first item in this array is true as the multiplier needs to be at least 1
   const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
 
   // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
@@ -1443,6 +1446,7 @@ const updatePower = () => {
   console.log(user.power);
 
   powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
+  powerUsageDisplay.setAttribute('multiplier', usageMultiplier.toString());
 };
 
 window.setInterval(updatePower, secondLength);

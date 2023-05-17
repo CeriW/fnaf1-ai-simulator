@@ -95,12 +95,14 @@ const inGameHourDisplay = document.querySelector('#in-game-time');
 // General page elements
 const simulator = document.querySelector('#simulator');
 const sidebar = document.querySelector('#sidebar');
-const powerPercentageDisplay = document.querySelector('#power-percentage');
 // Camera related page elements
 const cameraArea = document.querySelector('#camera-display');
 const cameraButton = document.querySelector('button#cameras');
 const cameraStatusText = document.querySelector('#camera-status');
 const cameraScreen = document.querySelector('img#camera-screen');
+// Power related page elements
+const powerPercentageDisplay = document.querySelector('#power-percentage');
+const powerUsageDisplay = document.querySelector('#power-usage');
 /* Player choosable variables */
 let user = {
     camerasOn: false,
@@ -1162,13 +1164,14 @@ window.addEventListener('game-over-freddy', () => {
 // This will run every second
 // TODO - this will eventually need to consider the lights
 const updatePower = () => {
-    // The first item in this is true as the multiplier needs to be at least 1
+    // The first item in this array is true as the multiplier needs to be at least 1
     const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
     // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
     const usageMultiplier = usage > 4 ? 4 : usage;
     user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * usageMultiplier;
     console.log(user.power);
     powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
+    powerUsageDisplay.setAttribute('multiplier', usageMultiplier.toString());
 };
 window.setInterval(updatePower, secondLength);
 // powerUpdate;

@@ -29,6 +29,30 @@
 #power {
   font-family: 'VT323', monospace;
 }
+#power-usage {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 2px 20px 2px 20px 2px 20px 2px 20px;
+  grid-template-columns: 1fr 20px 20px 20px 20px;
+  gap: 2px;
+}
+#power-usage div {
+  width: 20px;
+  height: 30px;
+  background: -webkit-gradient(linear, left top, right top, from(#23eb1f), color-stop(75%, #23eb1f), color-stop(75%, #27b723));
+  background: -o-linear-gradient(left, #23eb1f 0%, #23eb1f 75%, #27b723 75%);
+  background: linear-gradient(to right, #23eb1f 0%, #23eb1f 75%, #27b723 75%);
+}
+#power-usage div:nth-child(4) {
+  background: -webkit-gradient(linear, left top, right top, from(#fff300), color-stop(75%, #fff300), color-stop(75%, #f3870b));
+  background: -o-linear-gradient(left, #fff300 0%, #fff300 75%, #f3870b 75%);
+  background: linear-gradient(to right, #fff300 0%, #fff300 75%, #f3870b 75%);
+}
+#power-usage div:nth-child(5) {
+  background: -webkit-gradient(linear, left top, right top, from(#ff2323), color-stop(75%, #ff2323), color-stop(75%, #cb0000));
+  background: -o-linear-gradient(left, #ff2323 0%, #ff2323 75%, #cb0000 75%);
+  background: linear-gradient(to right, #ff2323 0%, #ff2323 75%, #cb0000 75%);
+}
 /* Timer -------------------------------------------------------------------- */
 #in-game-time,
 #real-time {

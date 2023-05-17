@@ -3,3 +3,28 @@
 #power{
   .customFont();
 }
+
+#power-usage{
+  display: grid;
+  grid-template-columns: 1fr 20px 20px 20px 20px;
+  gap: 2px;
+
+  div{
+    width: 20px;
+    height: 30px;
+    .usage-bar-background(#23eb1f, #27b723);
+  }
+
+  div:nth-child(4){
+    .usage-bar-background(#fff300, #f3870b);
+
+  }
+
+  div:nth-child(5){
+    .usage-bar-background(#ff2323, #cb0000);
+  }
+
+  .usage-bar-background(@left, @right){
+    background: linear-gradient(to right, @left 0%, @left 75%, @right 75%);
+  }
+}
