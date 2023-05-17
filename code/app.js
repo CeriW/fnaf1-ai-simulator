@@ -151,6 +151,7 @@ const updateTime = () => {
     if (currentSecond === 535) {
         clearInterval(timeUpdate);
         clearInterval(frameUpdate);
+        gameOver('6AM');
         // clearInterval(freddyInssterval);
     }
 };
@@ -1030,7 +1031,7 @@ const disableOfficeButtons = () => {
 // ========================================================================== //
 // DEATH
 // ========================================================================== //
-const gameOver = (animatronic) => {
+const gameOver = (reason) => {
     document.body.setAttribute('game-in-progress', 'false');
     // Clear all the intervals and timeouts so the game stops running
     clearInterval(timeUpdate);
@@ -1057,17 +1058,15 @@ const gameOver = (animatronic) => {
     `;
         return myStats;
     };
+    const gameOverMessage = reason === '6AM' ? 'You survived until 6AM' : `You were jumpscared by ${reason.name}`;
     gameOverWindow.innerHTML = `
     <h2>GAME OVER</h2>
-    <h3>You were jumpscared by ${animatronic.name}</h3>
+    <h3>${gameOverMessage}</h3>
     ${generateStatsTable(Freddy)}
     ${generateStatsTable(Bonnie)}
     ${generateStatsTable(Chica)}
     ${generateStatsTable(Foxy)}
-    <span>Start a new game</span>
-
-
-
+    <button id="new-game" onclick="location.reload();">Start a new game</button>
   `;
 };
 const gameOverBonnie = () => {
