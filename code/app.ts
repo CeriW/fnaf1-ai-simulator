@@ -1263,6 +1263,8 @@ const toggleCameras = () => {
     window.dispatchEvent(new Event('cameras-off'));
     console.log('Cameras off');
   }
+
+  updatePowerDisplay();
 };
 
 const generateCameraButtons = () => {
@@ -1329,6 +1331,8 @@ const initialiseDoors = () => {
         user.rightDoorIsClosed = !user.rightDoorIsClosed;
         user.rightDoorToggled++;
       }
+
+      updatePowerDisplay();
     });
   });
 };
@@ -1435,21 +1439,26 @@ window.addEventListener('game-over-freddy', () => {
 
 // This will run every second
 // TODO - this will eventually need to consider the lights
-const updatePower = () => {
-  // The first item in this array is true as the multiplier needs to be at least 1
-  const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
-
-  // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
-  const usageMultiplier = usage > 4 ? 4 : usage;
-
-  user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * usageMultiplier;
+const drainPower = () => {
+  user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * calculatePowerDrainMultiplier();
   console.log(user.power);
 
-  powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
-  powerUsageDisplay.setAttribute('multiplier', usageMultiplier.toString());
+  updatePowerDisplay();
 };
 
-window.setInterval(updatePower, secondLength);
+const calculatePowerDrainMultiplier = () => {
+  // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
+  // The first item in this array is true as the multiplier needs to be at least 1
+  const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
+  return usage > 4 ? 4 : usage;
+};
+
+window.setInterval(drainPower, secondLength);
+
+const updatePowerDisplay = () => {
+  powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
+  powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
+};
 
 // powerUpdate;
 
