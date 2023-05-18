@@ -714,6 +714,17 @@ body[cameras-on="false"] #camera-display {
   right: 0;
   bottom: 0;
   pointer-events: none;
+  background: #000;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  z-index: 3;
 }
 #game-over-stats {
   position: absolute;

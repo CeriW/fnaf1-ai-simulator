@@ -156,7 +156,7 @@ let user = {
   leftDoorToggled: 0,
   rightDoorToggled: 0,
   // power: 99,
-  power: 10,
+  power: 1,
 };
 
 // ========================================================================== //
@@ -736,6 +736,12 @@ type messagingType =
   | 'freddy bonnie and chica on stage' // Freddy can't leave the stage while Bonnie and/or Chica are still there
   | 'freddy and bonnie on stage' // Freddy can't leave the stage while Bonnie and/or Chica are still there
   | 'freddy and chica on stage' // Freddy can't leave the stage while Bonnie and/or Chica are still there
+  | 'power outage - freddy not arrived'
+  | 'power outage - freddy has arrived'
+  | 'power outage - freddy is waiting to jumpscare'
+  | 'power outage - freddy failed to arrive'
+  | "power outage - freddy's song didn't end"
+  | "power outage - freddy didn't jumpscare"
   | 'foxy paused'
   | 'foxy failed pirate cove movement check'
   | 'foxy successful pirate cove movement check' // Foxy has passed a movement check while at Pirate Cove. Not one where he can leave.
@@ -769,6 +775,41 @@ const addReport = (
   switch (reason) {
     case 'debug':
       message = `Something happened`;
+      break;
+
+    case 'power outage - freddy not arrived':
+      message =
+        'Your power has run out. Freddy has a 20% chance of arriving at your office every 5 seconds, up to a maximum of 20 seconds.';
+      type = 'death-zone';
+      break;
+
+    case 'power outage - freddy has arrived':
+      message =
+        'Freddy has arrived at your office. His song has a 20% chance of ending every 5 seconds, up to a maxmimum of 20 seconds';
+      type = 'death-zone';
+      break;
+
+    case 'power outage - freddy is waiting to jumpscare':
+      message = "Now Freddy's song has ended, he has a 20% chance of jumpscaring you every 2 seconds";
+      type = 'death-zone';
+      break;
+
+    case 'power outage - freddy failed to arrive':
+      message = `Freddy failed his check to arrive at the office. He will try up to a maximum of ${additionalInfo} more ${pluralise(
+        additionalInfo,
+        'time'
+      )}<div class="report-extra-info">20% chance every 5 seconds</div>`;
+      break;
+
+    case "power outage - freddy's song didn't end":
+      message = `Freddy failed his check to end his song. He will continue for a maximum of ${additionalInfo} more ${pluralise(
+        additionalInfo,
+        'second'
+      )}<div class="report-extra-info">20% chance every 5 seconds</div>`;
+      break;
+
+    case "power outage - freddy didn't jumpscare":
+      message = `Freddy failed his check to jumpscare you.<div class="report-extra-info">20% chance every 2 seconds</div>`;
       break;
 
     case 'AI level 0':
@@ -1467,7 +1508,6 @@ const drainPower = () => {
 
   if (user.power <= 0) {
     clearAllIntervals(false);
-    console.log('no power');
     powerOutage();
   }
 };
@@ -1488,27 +1528,37 @@ const updatePowerDisplay = () => {
 const powerOutage = () => {
   officeDisplay.src = `${paths.office}/office-no-power.webp`;
   let i = 0;
+  addReport(Freddy, 'power outage - freddy not arrived');
 
-  // You have a 20% chance that Freddy will arrive every 5 seconds, up to a maximum of 20 seconds when he is guaranteed to show up.
   const freddyArrival = () => {
-    i += 5;
-    if (randomise(5) || i >= 20) {
+    i += 1;
+    if (randomise(5) || i >= 4) {
       officeDisplay.src = `${paths.office}/freddy-no-power.webp`;
       clearInterval(powerOutageInterval);
       powerOutageInterval = window.setInterval(freddySong, secondLength * 5);
+      addReport(Freddy, 'power outage - freddy has arrived');
       i = 0;
+    } else {
+      addReport(Freddy, 'power outage - freddy failed to arrive', null, 4 - i);
     }
   };
+
+  // | 'power outage - freddy failed to arrive'
+  // | "power outage - freddy's song didn't end"
+  // | "power outage - freddy didn't jumpscare"
 
   powerOutageInterval = window.setInterval(freddyArrival, secondLength * 5);
 
   // Once Freddy has arrived, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
   const freddySong = () => {
     i += 5;
-    if (randomise(5) || i >= 20) {
+    if (randomise(5) || i >= 4) {
       officeDisplay.src = `${paths.office}/office-dark.webp`;
       clearInterval(powerOutageInterval);
+      addReport(Freddy, 'power outage - freddy is waiting to jumpscare', null, 4 - i);
       powerOutageInterval = window.setInterval(freddyFinalJumpscare, secondLength * 2);
+    } else {
+      addReport(Freddy, "power outage - freddy's song didn't end", null, 4 - i);
     }
   };
 
@@ -1516,6 +1566,8 @@ const powerOutage = () => {
   const freddyFinalJumpscare = () => {
     if (randomise(5)) {
       gameOverFreddy();
+    } else {
+      addReport(Freddy, "power outage - freddy didn't jumpscare", null, 4 - i);
     }
   };
 
