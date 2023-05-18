@@ -1256,7 +1256,7 @@ const powerOutage = () => {
     powerOutageInterval = window.setInterval(awaitFreddyArrival, secondLength * 5);
     // Once Freddy has arrived, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
     const toreadorMarch = () => {
-        i += 5;
+        i += 1;
         if (randomise(5) || i >= 4) {
             officeDisplay.src = `${paths.office}/office-dark.webp`;
             clearInterval(powerOutageInterval);
@@ -1266,7 +1266,7 @@ const powerOutage = () => {
             killAudio('power-outage');
         }
         else {
-            addReport(Freddy, "power outage - freddy's song didn't end", null, 4 - i);
+            addReport(Freddy, "power outage - freddy's song didn't end", null, (4 - i) * 5);
         }
     };
     // Once the lights are out, you have a 20% chance every 2 seconds for him to jumpscare you
