@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 100; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -34,8 +34,7 @@ const Freddy: Animatronic = {
   name: 'Freddy',
   currentPosition: '1A',
   movementOpportunityInterval: 3.02,
-  // aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4], // Freddy randomly starts at 1 or 2 on night 4
-  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 9, 20], // Freddy randomly starts at 1 or 2 on night 4
+  aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4, 20], // Freddy randomly starts at 1 or 2 on night 4
   currentAIlevel: 0,
   currentCountdown: 0,
   pronouns: ['he', 'his'],
