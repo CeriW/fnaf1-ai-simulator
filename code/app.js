@@ -1235,6 +1235,7 @@ const powerOutage = () => {
     officeDisplay.src = `${paths.office}/office-no-power.webp`;
     let i = 0;
     addReport(Freddy, 'power outage - freddy not arrived');
+    playAudio('power-outage');
     const awaitFreddyArrival = () => {
         i += 1;
         if (randomise(5) || i >= 4) {
@@ -1242,6 +1243,7 @@ const powerOutage = () => {
             clearInterval(powerOutageInterval);
             powerOutageInterval = window.setInterval(toreadorMarch, secondLength * 5);
             addReport(Freddy, 'power outage - freddy has arrived');
+            killAudio('power-outage');
             playAudio('toreador-march');
             i = 0;
         }
@@ -1289,6 +1291,12 @@ const playAudio = (audio) => {
             document.body.removeChild(myAudio);
         };
     }
+};
+const killAudio = (audio) => {
+    const matchingAudio = document.querySelectorAll(`audio.${audio}`);
+    matchingAudio.forEach((match) => {
+        match.remove();
+    });
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
