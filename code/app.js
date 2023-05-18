@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -105,6 +105,7 @@ const cameraScreen = document.querySelector('img#camera-screen');
 // Power related page elements
 const powerPercentageDisplay = document.querySelector('#power-percentage');
 const powerUsageDisplay = document.querySelector('#power-usage');
+const powerTimeDisplay = document.querySelector('#power-time');
 /* Player choosable variables */
 let user = {
     camerasOn: false,
@@ -167,8 +168,13 @@ const updateTime = () => {
         gameOver('6AM');
     }
 };
-const calculateInGameTime = () => {
-    let inGameMinutes = Math.floor(currentSecond * 0.6741573033707866) > 0 ? Math.floor(currentSecond * 0.6741573033707866) : 0;
+// Modifier is how much to offset the time by.
+// This is used in the calculations in calculateRemainingPower() to figure out
+// what time you will run out of power based on current usage.
+const calculateInGameTime = (modifier = 0) => {
+    let inGameMinutes = Math.floor((currentSecond + modifier) * 0.6741573033707866) > 0
+        ? Math.floor((currentSecond + modifier) * 0.6741573033707866)
+        : 0;
     return {
         hour: String(Math.floor(inGameMinutes / 60) > 0 ? Math.floor(inGameMinutes / 60) : 12),
         minute: String(inGameMinutes % 60).padStart(2, '0'),
@@ -1236,7 +1242,12 @@ const calculateRemainingPower = () => {
     // Divide current drainage by amount of power left
     // default power drainage is how many seconds it takes to drain 1%
     const secondsOfPowerRemaining = user.power * (defaultPowerDrainage[nightToSimulate] / calculatePowerDrainMultiplier());
-    console.log(secondsOfPowerRemaining);
+    // console.log(secondsOfPowerRemaining);
+    const secondsOfGameRemaining = 535 - currentSecond;
+    console.log('seconds of game remaining: ' + secondsOfGameRemaining + ' Seconds of power remaining: ' + secondsOfPowerRemaining);
+    const timeDueToRunOut = calculateInGameTime(secondsOfPowerRemaining);
+    console.log(timeDueToRunOut);
+    powerTimeDisplay.innerHTML = `Based on current usage, you will run out of power at ${timeDueToRunOut.hour}:${timeDueToRunOut.minute}`;
 };
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
@@ -1319,14 +1330,14 @@ const startGame = () => {
     powerUpdate = window.setInterval(drainPower, secondLength);
     timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
     frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
-    freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-    foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-    bonnieInterval = window.setInterval(() => {
-        moveBonnieOrChica(Bonnie);
-    }, secondLength * Bonnie.movementOpportunityInterval);
-    chicaInterval = window.setInterval(() => {
-        moveBonnieOrChica(Chica);
-    }, secondLength * Chica.movementOpportunityInterval);
+    // freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+    // foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+    // bonnieInterval = window.setInterval(() => {
+    //   moveBonnieOrChica(Bonnie);
+    // }, secondLength * Bonnie.movementOpportunityInterval);
+    // chicaInterval = window.setInterval(() => {
+    //   moveBonnieOrChica(Chica);
+    // }, secondLength * Chica.movementOpportunityInterval);
     // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
     if (Foxy.currentPosition === '4A') {
         moveFoxy();
