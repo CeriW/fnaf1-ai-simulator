@@ -80,6 +80,7 @@ const paths = {
     cameras: '../assets/cameras',
     animatronics: '../assets/animatronics',
     office: '../assets/office',
+    audio: '../assets/sounds',
 };
 // The number of seconds it takes to drain 1% of power on 1 bar of usage
 // Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
@@ -116,6 +117,7 @@ let user = {
     rightDoorToggled: 0,
     // power: 99,
     power: 1,
+    audioOn: true,
 };
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -1233,35 +1235,40 @@ const powerOutage = () => {
     officeDisplay.src = `${paths.office}/office-no-power.webp`;
     let i = 0;
     addReport(Freddy, 'power outage - freddy not arrived');
-    const freddyArrival = () => {
+    const awaitFreddyArrival = () => {
         i += 1;
         if (randomise(5) || i >= 4) {
             officeDisplay.src = `${paths.office}/freddy-no-power.webp`;
             clearInterval(powerOutageInterval);
-            powerOutageInterval = window.setInterval(freddySong, secondLength * 5);
+            powerOutageInterval = window.setInterval(toreadorMarch, secondLength * 5);
             addReport(Freddy, 'power outage - freddy has arrived');
+            playAudio('toreador-march');
             i = 0;
         }
         else {
             addReport(Freddy, 'power outage - freddy failed to arrive', null, 4 - i);
         }
     };
-    powerOutageInterval = window.setInterval(freddyArrival, secondLength * 5);
+    powerOutageInterval = window.setInterval(awaitFreddyArrival, secondLength * 5);
     // Once Freddy has arrived, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
-    const freddySong = () => {
+    const toreadorMarch = () => {
         i += 5;
         if (randomise(5) || i >= 4) {
             officeDisplay.src = `${paths.office}/office-dark.webp`;
             clearInterval(powerOutageInterval);
             addReport(Freddy, 'power outage - freddy is waiting to jumpscare', null, 4 - i);
-            powerOutageInterval = window.setInterval(freddyFinalJumpscare, secondLength * 2);
+            powerOutageInterval = window.setInterval(awaitFreddyFinalJumpscare, secondLength * 2);
+            let toreadorAudio = document.querySelector('audio.toreador-march');
+            if (toreadorAudio) {
+                document.body.removeChild(toreadorAudio);
+            }
         }
         else {
             addReport(Freddy, "power outage - freddy's song didn't end", null, 4 - i);
         }
     };
     // Once the lights are out, you have a 20% chance every 2 seconds for him to jumpscare you
-    const freddyFinalJumpscare = () => {
+    const awaitFreddyFinalJumpscare = () => {
         if (randomise(5)) {
             gameOverFreddy();
         }
@@ -1270,6 +1277,18 @@ const powerOutage = () => {
         }
     };
     // Note - you will still win the night if you reach 6AM after the power has gone out but before Freddy jumpscares you
+};
+const playAudio = (audio) => {
+    if (user.audioOn) {
+        let myAudio = document.createElement('audio');
+        myAudio.classList.add(audio);
+        myAudio.src = `${paths.audio}/${audio}.mp3`;
+        document.body.appendChild(myAudio);
+        myAudio.play();
+        myAudio.onended = () => {
+            document.body.removeChild(myAudio);
+        };
+    }
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
@@ -1405,5 +1424,5 @@ let bonnieJumpscareCountdown;
 let chicaJumpscareCountdown;
 let powerOutageInterval;
 initialiseMenu();
-startGame();
+// startGame();
 //# sourceMappingURL=app.js.map
