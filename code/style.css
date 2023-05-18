@@ -1039,11 +1039,6 @@ body[game-in-progress="true"] #game-over-stats {
 #info-bar {
   background: #000;
   color: #fff;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1053,13 +1048,14 @@ body[game-in-progress="true"] #game-over-stats {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
   font-size: 1.5em;
+  width: 100%;
 }
 body {
   background: #000;
   color: #fff;
-  padding: 30px;
+  padding: 0;
   margin: 0;
   width: 100vw;
   min-height: 100vh;
@@ -1069,12 +1065,16 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   font-size: 16px;
 }
 body[game-in-progress] #game-menu {
