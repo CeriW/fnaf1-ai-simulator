@@ -1582,7 +1582,13 @@ const powerOutage = () => {
 // AUDIO
 // ========================================================================== //
 
-type AvailableAudio = 'door-toggle' | 'doorway-warning' | 'foxy-door-bash' | 'power-outage' | 'toreador-march';
+type AvailableAudio =
+  | 'door-toggle'
+  | 'doorway-warning'
+  | 'foxy-door-bash'
+  | 'game-menu'
+  | 'power-outage'
+  | 'toreador-march';
 
 const playAudio = (audio: AvailableAudio) => {
   if (user.audioOn) {
@@ -1609,6 +1615,8 @@ const killAudio = (audio: AvailableAudio) => {
 // ========================================================================== //
 
 const startGame = () => {
+  killAudio('game-menu');
+
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
       `.custom-ai-selector[for="${animatronic.name}"] input`
@@ -1643,10 +1651,6 @@ const startGame = () => {
   cameraButton.addEventListener('click', toggleCameras);
   // cameraButton.addEventListener('mouseenter', toggleCameras);
   window.addEventListener('cameras-off', pauseFoxy);
-
-  document.querySelector('#audio-toggle input')?.addEventListener('change', () => {
-    user.audioOn = !user.audioOn;
-  });
 };
 
 const initialiseMenu = () => {
@@ -1744,6 +1748,16 @@ const initialiseMenu = () => {
       });
     });
   }
+
+  document.querySelector('#audio-toggle input')?.addEventListener('change', () => {
+    user.audioOn = !user.audioOn;
+
+    if (!document.body.getAttribute('game-in-progress') && user.audioOn) {
+      playAudio('game-menu');
+    } else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
+      killAudio('game-menu');
+    }
+  });
 
   gameMenu.querySelector('#start-game')?.addEventListener('click', startGame);
 };

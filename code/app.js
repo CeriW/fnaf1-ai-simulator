@@ -1301,7 +1301,7 @@ const killAudio = (audio) => {
 // INITIALISE THE PAGE
 // ========================================================================== //
 const startGame = () => {
-    var _a;
+    killAudio('game-menu');
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);
@@ -1330,12 +1330,9 @@ const startGame = () => {
     cameraButton.addEventListener('click', toggleCameras);
     // cameraButton.addEventListener('mouseenter', toggleCameras);
     window.addEventListener('cameras-off', pauseFoxy);
-    (_a = document.querySelector('#audio-toggle input')) === null || _a === void 0 ? void 0 : _a.addEventListener('change', () => {
-        user.audioOn = !user.audioOn;
-    });
 };
 const initialiseMenu = () => {
-    var _a;
+    var _a, _b;
     let gameMenu = document.querySelector('#game-menu');
     let nightMenu = gameMenu.querySelector('#night-selector-menu');
     let customNightMenu = gameMenu.querySelector('#custom-night-menu');
@@ -1418,7 +1415,16 @@ const initialiseMenu = () => {
             });
         });
     }
-    (_a = gameMenu.querySelector('#start-game')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', startGame);
+    (_a = document.querySelector('#audio-toggle input')) === null || _a === void 0 ? void 0 : _a.addEventListener('change', () => {
+        user.audioOn = !user.audioOn;
+        if (!document.body.getAttribute('game-in-progress') && user.audioOn) {
+            playAudio('game-menu');
+        }
+        else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
+            killAudio('game-menu');
+        }
+    });
+    (_b = gameMenu.querySelector('#start-game')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', startGame);
 };
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
 let timeUpdate;
