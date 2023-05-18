@@ -80,6 +80,23 @@ This means you'd lose:
 | 4 | 1% every 2 seconds                | 1% every 3.2 seconds            | 1% every 1 second                   |
 | 5+| 1% every 1.5 seconds              | 1% every 1.333 seconds          | 1% every 0.25 seconds               |
 
+-----------------------------------------------------
+
+-1% every 9.6 seconds, PLUS an additional:
+| Night | Power |
+| ----  | ----- |
+| 2 | 1% every 6 seconds |
+| 3 | 1% every 5 seconds |
+| 4 | 1% every 4 seconds |
+| 5+, including custom night | 1% every 3 seconds |
+
+This is multiplied additionally by how many of the following things are true:
+* left door closed
+* right door closed
+* left light on
+* right light on
+* cameras on
+
 
 
 
@@ -180,7 +197,7 @@ Moves from the stage in Pirate's Cove as a result of poor camera usage. Despite 
 
 If he is able to leave Pirate's Cove, he will rush down the **left** corridor at you.
 * If the door is open at this time, he will jumpscare you.
-* If the door is closed, he will bash on it, causing you to lose power. This power drainage is 1% the first time he does it, and increases by 6% each time after that.
+* If the door is closed, he will bash on it, causing you to lose power. This power drainage is 1% the first time he does it, and increases by 5% each time after that.
 * Once he has bashed on your door and drained your power he will return to Pirate's Cove and restart his cycle at either step 1 or 2.
 
 Each successful "movement opportunity" (see *How AI levels are used* below) Foxy gets means he gets 1 step closer to attacking. However, while the cameras are up (on any camera, not specifically the one in Pirate's Cove), he will automatically fail **all** of his movement opportunities.

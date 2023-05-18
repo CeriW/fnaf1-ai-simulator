@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -116,10 +116,6 @@ const paths = {
   audio: '../assets/sounds',
 };
 
-// The number of seconds it takes to drain 1% of power on 1 bar of usage
-// Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
-const defaultPowerDrainage = [0, 9.6, 6, 5, 4, 3, 3, 3];
-
 /* Time related variables */
 let currentFrame: number = 0;
 let currentSecond: number = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
@@ -145,6 +141,10 @@ const cameraScreen: HTMLImageElement = document.querySelector('img#camera-screen
 const powerPercentageDisplay: HTMLDivElement = document.querySelector('#power-percentage')!;
 const powerUsageDisplay: HTMLDivElement = document.querySelector('#power-usage')!;
 const powerTimeDisplay: HTMLDivElement = document.querySelector('#power-time')!;
+
+// The additional penalties on time - an additional 1% every X seconds
+// Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
+const additionalPowerDrainageIntervalSpacing = [null, null, 6, 5, 4, 3, 3, 3];
 
 /* Player choosable variables */
 
@@ -365,9 +365,9 @@ const attemptFoxyJumpscare = (e?: Event) => {
   const performFoxyJumpscareCheck = () => {
     const restartSubPosition = Math.floor(Math.random() * 2);
     if (user.leftDoorIsClosed) {
-      // If Foxy bashes on your door, you lose 1% power, plus an additional 6% for every time after that (e.g. 7% the second time, 13% the third etc)
+      // If Foxy bashes on your door, you lose 1% power, plus an additional 5% for every time after that (e.g. 7% the second time, 13% the third etc)
       // We do -1 as the attempts get incremented before this function is called.
-      const powerDrainage = 1 + (Foxy.stats.officeAttempts - 1) * 6;
+      const powerDrainage = 1 + (Foxy.stats.officeAttempts - 1) * 5;
       user.power -= powerDrainage;
       addReport(Foxy, 'foxy left door closed', null, { restartSubPosition, powerDrainage });
       moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
@@ -1415,7 +1415,8 @@ const clearAllIntervals = (gameOver = true) => {
     bonnieJumpscareCountdown,
     chicaJumpscareCountdown,
     freddyCountdown,
-    powerUpdate,
+    defaultPowerDrainInterval,
+    additionalPowerDrainInterval,
     powerOutageInterval,
   ];
 
@@ -1509,18 +1510,29 @@ window.addEventListener('game-over-freddy', () => {
 // POWER
 // ========================================================================== //
 
-// This will run every second
-// TODO - this will eventually need to consider the lights
-const drainPower = () => {
-  user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * calculatePowerDrainMultiplier();
-  updatePowerDisplay();
+// This will run every 9.6 seconds and the user will lose the default 1% power
+const defaultDrainPower = () => {
+  user.power--;
 
   if (user.power <= 0) {
     clearAllIntervals(false);
     powerOutage();
   }
 
-  calculateRemainingPower();
+  updatePowerDisplay();
+};
+
+// This will give you additional penalties depending on how many doors/cameras/lights
+// you have, multiplied depending on what night you're on.
+const additionalDrainPower = () => {
+  user.power -= (1 / additionalPowerDrainageIntervalSpacing[nightToSimulate]!) * calculatePowerDrainMultiplier();
+
+  if (user.power <= 0) {
+    clearAllIntervals(false);
+    powerOutage();
+  }
+
+  updatePowerDisplay();
 };
 
 const calculatePowerDrainMultiplier = () => {
@@ -1535,27 +1547,27 @@ const updatePowerDisplay = () => {
   powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
 };
 
-const calculateRemainingPower = () => {
-  // Figure out how many seconds worth of power you have left
-  // Divide current drainage by amount of power left
+// const calculateRemainingPower = () => {
+//   // Figure out how many seconds worth of power you have left
+//   // Divide current drainage by amount of power left
 
-  // default power drainage is how many seconds it takes to drain 1%
-  const secondsOfPowerRemaining =
-    user.power * (defaultPowerDrainage[nightToSimulate] / calculatePowerDrainMultiplier());
-  // console.log(secondsOfPowerRemaining);
+//   // default power drainage is how many seconds it takes to drain 1%
+//   const secondsOfPowerRemaining =
+//     user.power * (additionalPowerDrainageIntervalSpacing[nightToSimulate] / calculatePowerDrainMultiplier());
+//   // console.log(secondsOfPowerRemaining);
 
-  const secondsOfGameRemaining = 535 - currentSecond;
+//   const secondsOfGameRemaining = 535 - currentSecond;
 
-  console.log(
-    'seconds of game remaining: ' + secondsOfGameRemaining + ' Seconds of power remaining: ' + secondsOfPowerRemaining
-  );
+//   console.log(
+//     'seconds of game remaining: ' + secondsOfGameRemaining + ' Seconds of power remaining: ' + secondsOfPowerRemaining
+//   );
 
-  const timeDueToRunOut = calculateInGameTime(secondsOfPowerRemaining);
+//   const timeDueToRunOut = calculateInGameTime(secondsOfPowerRemaining);
 
-  console.log(timeDueToRunOut);
+//   console.log(timeDueToRunOut);
 
-  powerTimeDisplay.innerHTML = `Based on current usage, you will run out of power at ${timeDueToRunOut.hour}:${timeDueToRunOut.minute}`;
-};
+//   powerTimeDisplay.innerHTML = `Based on current usage, you will run out of power at ${timeDueToRunOut.hour}:${timeDueToRunOut.minute}`;
+// };
 
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
@@ -1656,7 +1668,9 @@ const startGame = () => {
 
   document.body.setAttribute('game-in-progress', 'true');
 
-  powerUpdate = window.setInterval(drainPower, secondLength);
+  defaultPowerDrainInterval = window.setInterval(defaultDrainPower, 9.6 * secondLength);
+  additionalPowerDrainInterval = window.setInterval(additionalDrainPower, secondLength);
+
   timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
   frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
 
@@ -1796,7 +1810,8 @@ const initialiseMenu = () => {
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
 let timeUpdate: number;
 let frameUpdate: number;
-let powerUpdate: number;
+let defaultPowerDrainInterval: number;
+let additionalPowerDrainInterval: number;
 let bonnieInterval: number;
 let chicaInterval: number;
 let foxyInterval: number;
