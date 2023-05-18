@@ -1466,6 +1466,14 @@ const updatePowerDisplay = () => {
   powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
 };
 
+// The sequence of events between you running out of power and Freddy jumpscaring you.
+const powerOutage = () => {
+  // You have a 20% chance that Freddy will arrive every 5 seconds, up to a maximum of 20 seconds when he is guaranteed to show up.
+  // From there, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
+  // Once the lights are out, you have a 20% chance every 2 seconds for him to jumpscare you
+  // Note - you will still win the night if you reach 6AM after the power has gone out but Freddy has not yet jumpscared you
+};
+
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
@@ -1621,4 +1629,4 @@ let bonnieJumpscareCountdown: number;
 let chicaJumpscareCountdown: number;
 
 initialiseMenu();
-// startGame();
+startGame();
