@@ -1091,12 +1091,9 @@ const disableOfficeButtons = () => {
 // ========================================================================== //
 // DEATH
 // ========================================================================== //
-const gameOver = (reason) => {
-    document.body.setAttribute('game-in-progress', 'false');
-    // Clear all the intervals and timeouts so the game stops running
-    [
-        timeUpdate,
-        frameUpdate,
+// Clear all the intervals and timeouts so the game stops running
+const clearAllIntervals = (gameOver = true) => {
+    const intervalsToClear = [
         bonnieInterval,
         chicaInterval,
         foxyInterval,
@@ -1107,9 +1104,19 @@ const gameOver = (reason) => {
         chicaJumpscareCountdown,
         freddyCountdown,
         powerUpdate,
-    ].forEach((interval) => {
+    ];
+    // It's possible to reach this function when you've run out of power, so the game isn't over quite yet.
+    // We want to stop the animatronics etc from doing anything, but the timer should still be running in this case.
+    if (gameOver) {
+        intervalsToClear.push(timeUpdate, frameUpdate);
+    }
+    intervalsToClear.forEach((interval) => {
         clearInterval(interval);
     });
+};
+const gameOver = (reason) => {
+    document.body.setAttribute('game-in-progress', 'false');
+    clearAllIntervals();
     let gameOverWindow = document.querySelector('#game-over-stats');
     const generateStatsTable = (animatronic) => {
         let myStats = `
