@@ -156,8 +156,8 @@ let user = {
   camerasLookedAt: 0,
   leftDoorToggled: 0,
   rightDoorToggled: 0,
-  // power: 99,
-  power: 1,
+  power: 99,
+  // power: 1,
   audioOn: true,
 };
 
@@ -366,10 +366,8 @@ const attemptFoxyJumpscare = (e?: Event) => {
       addReport(Foxy, 'foxy left door closed', null, { restartSubPosition, powerDrainage });
       moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
       foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-
+      playAudio('foxy-door-bash');
       updatePowerDisplay();
-      addReport(Foxy, 'debug');
-      // TODO - Foxy drains your power if he bashes on the door.
     } else {
       gameOverFoxy();
     }
@@ -1584,7 +1582,7 @@ const powerOutage = () => {
 // AUDIO
 // ========================================================================== //
 
-type AvailableAudio = 'door-toggle' | 'doorway-warning' | 'power-outage' | 'toreador-march';
+type AvailableAudio = 'door-toggle' | 'doorway-warning' | 'foxy-door-bash' | 'power-outage' | 'toreador-march';
 
 const playAudio = (audio: AvailableAudio) => {
   if (user.audioOn) {
