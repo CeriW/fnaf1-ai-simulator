@@ -1384,6 +1384,7 @@ const initialiseDoors = () => {
       }
 
       updatePowerDisplay();
+      playAudio('door-toggle');
     });
   });
 };
@@ -1582,7 +1583,7 @@ const powerOutage = () => {
 // AUDIO
 // ========================================================================== //
 
-type AvailableAudio = 'toreador-march' | 'power-outage';
+type AvailableAudio = 'door-toggle' | 'doorway-warning' | 'power-outage' | 'toreador-march';
 
 const playAudio = (audio: AvailableAudio) => {
   if (user.audioOn) {

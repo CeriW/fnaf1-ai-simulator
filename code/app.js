@@ -1108,6 +1108,7 @@ const initialiseDoors = () => {
                 user.rightDoorToggled++;
             }
             updatePowerDisplay();
+            playAudio('door-toggle');
         });
     });
 };
