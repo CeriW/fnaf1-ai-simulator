@@ -1461,6 +1461,11 @@ window.addEventListener('game-over-freddy', () => {
 const drainPower = () => {
   user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * calculatePowerDrainMultiplier();
   updatePowerDisplay();
+
+  if (user.power <= 0) {
+    clearAllIntervals(false);
+    console.log('no power');
+  }
 };
 
 const calculatePowerDrainMultiplier = () => {

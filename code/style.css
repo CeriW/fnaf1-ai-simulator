@@ -713,6 +713,7 @@ body[cameras-on="false"] #camera-display {
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none;
 }
 #game-over-stats {
   position: absolute;

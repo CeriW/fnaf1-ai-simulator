@@ -1185,6 +1185,10 @@ window.addEventListener('game-over-freddy', () => {
 const drainPower = () => {
     user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * calculatePowerDrainMultiplier();
     updatePowerDisplay();
+    if (user.power <= 0) {
+        clearAllIntervals(false);
+        console.log('no power');
+    }
 };
 const calculatePowerDrainMultiplier = () => {
     // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
