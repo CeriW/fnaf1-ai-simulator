@@ -797,14 +797,14 @@ const addReport = (
       break;
 
     case 'power outage - freddy failed to arrive':
-      message = `Freddy failed his check to arrive at the office. He will try up to a maximum of ${additionalInfo} more ${pluralise(
+      message = `Freddy failed his check to arrive at the office. He will try up to ${additionalInfo} more ${pluralise(
         additionalInfo,
         'time'
       )}<div class="report-extra-info">20% chance every 5 seconds</div>`;
       break;
 
     case "power outage - freddy's song didn't end":
-      message = `Freddy failed his check to end his song. He will continue for a maximum of ${additionalInfo} more ${pluralise(
+      message = `Freddy failed his check to end his song. He will continue for up to ${additionalInfo} more ${pluralise(
         additionalInfo,
         'second'
       )}<div class="report-extra-info">20% chance every 5 seconds</div>`;
@@ -1542,7 +1542,6 @@ const powerOutage = () => {
       clearInterval(powerOutageInterval);
       powerOutageInterval = window.setInterval(toreadorMarch, secondLength * 5);
       addReport(Freddy, 'power outage - freddy has arrived');
-      killAudio('power-outage');
       playAudio('toreador-march');
       i = 0;
     } else {
@@ -1560,10 +1559,8 @@ const powerOutage = () => {
       clearInterval(powerOutageInterval);
       addReport(Freddy, 'power outage - freddy is waiting to jumpscare', null, 4 - i);
       powerOutageInterval = window.setInterval(awaitFreddyFinalJumpscare, secondLength * 2);
-      let toreadorAudio = document.querySelector('audio.toreador-march');
-      if (toreadorAudio) {
-        document.body.removeChild(toreadorAudio);
-      }
+      killAudio('toreador-march');
+      killAudio('power-outage');
     } else {
       addReport(Freddy, "power outage - freddy's song didn't end", null, 4 - i);
     }
