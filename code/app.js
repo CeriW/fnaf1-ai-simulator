@@ -1130,6 +1130,7 @@ const clearAllIntervals = (gameOver = true) => {
         chicaJumpscareCountdown,
         freddyCountdown,
         powerUpdate,
+        powerOutageInterval,
     ];
     // It's possible to reach this function when you've run out of power, so the game isn't over quite yet.
     // We want to stop the animatronics etc from doing anything, but the timer should still be running in this case.
@@ -1156,9 +1157,10 @@ const gameOver = (reason) => {
     `;
         return myStats;
     };
+    const gameOverTitle = reason === '6AM' ? 'CONGRATULATIONS!' : 'GAME OVER';
     const gameOverMessage = reason === '6AM' ? 'You survived until 6AM' : `You were jumpscared by ${reason.name}`;
     gameOverWindow.innerHTML = `
-    <h2>GAME OVER</h2>
+    <h2>${gameOverTitle}</h2>
     <h3>${gameOverMessage}</h3>
     <div class="stats-report" for="user">
       <h3>You</h3>
@@ -1244,9 +1246,6 @@ const powerOutage = () => {
             addReport(Freddy, 'power outage - freddy failed to arrive', null, 4 - i);
         }
     };
-    // | 'power outage - freddy failed to arrive'
-    // | "power outage - freddy's song didn't end"
-    // | "power outage - freddy didn't jumpscare"
     powerOutageInterval = window.setInterval(freddyArrival, secondLength * 5);
     // Once Freddy has arrived, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
     const freddySong = () => {
