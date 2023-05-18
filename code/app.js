@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 60; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -1094,17 +1094,22 @@ const disableOfficeButtons = () => {
 const gameOver = (reason) => {
     document.body.setAttribute('game-in-progress', 'false');
     // Clear all the intervals and timeouts so the game stops running
-    clearInterval(timeUpdate);
-    clearInterval(frameUpdate);
-    clearInterval(bonnieInterval);
-    clearInterval(chicaInterval);
-    clearInterval(foxyInterval);
-    clearInterval(freddyInterval);
-    clearInterval(foxyCooldown);
-    clearInterval(foxyJumpscareCountdown);
-    clearInterval(bonnieJumpscareCountdown);
-    clearInterval(chicaJumpscareCountdown);
-    clearInterval(freddyCountdown);
+    [
+        timeUpdate,
+        frameUpdate,
+        bonnieInterval,
+        chicaInterval,
+        foxyInterval,
+        foxyCooldown,
+        foxyJumpscareCountdown,
+        freddyInterval,
+        bonnieJumpscareCountdown,
+        chicaJumpscareCountdown,
+        freddyCountdown,
+        powerUpdate,
+    ].forEach((interval) => {
+        clearInterval(interval);
+    });
     let gameOverWindow = document.querySelector('#game-over-stats');
     const generateStatsTable = (animatronic) => {
         let myStats = `
@@ -1172,7 +1177,6 @@ window.addEventListener('game-over-freddy', () => {
 // TODO - this will eventually need to consider the lights
 const drainPower = () => {
     user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * calculatePowerDrainMultiplier();
-    console.log(user.power);
     updatePowerDisplay();
 };
 const calculatePowerDrainMultiplier = () => {
@@ -1181,12 +1185,10 @@ const calculatePowerDrainMultiplier = () => {
     const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
     return usage > 4 ? 4 : usage;
 };
-window.setInterval(drainPower, secondLength);
 const updatePowerDisplay = () => {
     powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
     powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
 };
-// powerUpdate;
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
@@ -1197,6 +1199,7 @@ const startGame = () => {
         animatronic.aiLevels[7] = (_a = parseInt(animatronicAIinput.value)) !== null && _a !== void 0 ? _a : 0;
     });
     document.body.setAttribute('game-in-progress', 'true');
+    powerUpdate = window.setInterval(drainPower, secondLength);
     timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
     frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
     freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);

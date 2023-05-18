@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 60; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -1356,17 +1356,22 @@ const gameOver = (reason: Animatronic | '6AM') => {
   document.body.setAttribute('game-in-progress', 'false');
 
   // Clear all the intervals and timeouts so the game stops running
-  clearInterval(timeUpdate);
-  clearInterval(frameUpdate);
-  clearInterval(bonnieInterval);
-  clearInterval(chicaInterval);
-  clearInterval(foxyInterval);
-  clearInterval(freddyInterval);
-  clearInterval(foxyCooldown);
-  clearInterval(foxyJumpscareCountdown);
-  clearInterval(bonnieJumpscareCountdown);
-  clearInterval(chicaJumpscareCountdown);
-  clearInterval(freddyCountdown);
+  [
+    timeUpdate,
+    frameUpdate,
+    bonnieInterval,
+    chicaInterval,
+    foxyInterval,
+    foxyCooldown,
+    foxyJumpscareCountdown,
+    freddyInterval,
+    bonnieJumpscareCountdown,
+    chicaJumpscareCountdown,
+    freddyCountdown,
+    powerUpdate,
+  ].forEach((interval) => {
+    clearInterval(interval);
+  });
 
   let gameOverWindow = document.querySelector('#game-over-stats')!;
 
@@ -1446,8 +1451,6 @@ window.addEventListener('game-over-freddy', () => {
 // TODO - this will eventually need to consider the lights
 const drainPower = () => {
   user.power -= (1 / defaultPowerDrainage[nightToSimulate]) * calculatePowerDrainMultiplier();
-  console.log(user.power);
-
   updatePowerDisplay();
 };
 
@@ -1458,14 +1461,10 @@ const calculatePowerDrainMultiplier = () => {
   return usage > 4 ? 4 : usage;
 };
 
-window.setInterval(drainPower, secondLength);
-
 const updatePowerDisplay = () => {
   powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
   powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
 };
-
-// powerUpdate;
 
 // ========================================================================== //
 // INITIALISE THE PAGE
@@ -1481,6 +1480,7 @@ const startGame = () => {
 
   document.body.setAttribute('game-in-progress', 'true');
 
+  powerUpdate = window.setInterval(drainPower, secondLength);
   timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
   frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
