@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 60; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -112,6 +112,7 @@ const paths = {
   assets: '../assets',
   cameras: '../assets/cameras',
   animatronics: '../assets/animatronics',
+  office: '../assets/office',
 };
 
 // The number of seconds it takes to drain 1% of power on 1 bar of usage
@@ -131,6 +132,7 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 // General page elements
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
+const officeDisplay: HTMLImageElement = document.querySelector('#office-overlay img')!;
 
 // Camera related page elements
 const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
@@ -153,7 +155,8 @@ let user = {
   camerasLookedAt: 0,
   leftDoorToggled: 0,
   rightDoorToggled: 0,
-  power: 99,
+  // power: 99,
+  power: 10,
 };
 
 // ========================================================================== //
@@ -1465,6 +1468,7 @@ const drainPower = () => {
   if (user.power <= 0) {
     clearAllIntervals(false);
     console.log('no power');
+    powerOutage();
   }
 };
 
@@ -1482,10 +1486,40 @@ const updatePowerDisplay = () => {
 
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
+  officeDisplay.src = `${paths.office}/office-no-power.webp`;
+  let i = 0;
+
   // You have a 20% chance that Freddy will arrive every 5 seconds, up to a maximum of 20 seconds when he is guaranteed to show up.
-  // From there, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
+  const freddyArrival = () => {
+    i += 5;
+    if (randomise(5) || i >= 20) {
+      officeDisplay.src = `${paths.office}/freddy-no-power.webp`;
+      clearInterval(powerOutageInterval);
+      powerOutageInterval = window.setInterval(freddySong, secondLength * 5);
+      i = 0;
+    }
+  };
+
+  powerOutageInterval = window.setInterval(freddyArrival, secondLength * 5);
+
+  // Once Freddy has arrived, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
+  const freddySong = () => {
+    i += 5;
+    if (randomise(5) || i >= 20) {
+      officeDisplay.src = `${paths.office}/office-dark.webp`;
+      clearInterval(powerOutageInterval);
+      powerOutageInterval = window.setInterval(freddyFinalJumpscare, secondLength * 2);
+    }
+  };
+
   // Once the lights are out, you have a 20% chance every 2 seconds for him to jumpscare you
-  // Note - you will still win the night if you reach 6AM after the power has gone out but Freddy has not yet jumpscared you
+  const freddyFinalJumpscare = () => {
+    if (randomise(5)) {
+      gameOverFreddy();
+    }
+  };
+
+  // Note - you will still win the night if you reach 6AM after the power has gone out but before Freddy jumpscares you
 };
 
 // ========================================================================== //
@@ -1641,6 +1675,7 @@ let freddyCountdown: number;
 let foxyJumpscareCountdown: number;
 let bonnieJumpscareCountdown: number;
 let chicaJumpscareCountdown: number;
+let powerOutageInterval: number;
 
 initialiseMenu();
 startGame();
