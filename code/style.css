@@ -1038,7 +1038,7 @@ img {
   max-width: 100%;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 button {
   cursor: pointer;

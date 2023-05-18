@@ -1233,10 +1233,12 @@ const updatePowerDisplay = () => {
 };
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
+    var _a;
     officeDisplay.src = `${paths.office}/office-no-power.webp`;
     let i = 0;
     addReport(Freddy, 'power outage - freddy not arrived');
     playAudio('power-outage');
+    (_a = document.querySelector('#office-overlay')) === null || _a === void 0 ? void 0 : _a.classList.remove('hidden');
     const awaitFreddyArrival = () => {
         i += 1;
         if (randomise(5) || i >= 4) {

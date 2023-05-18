@@ -1535,6 +1535,7 @@ const powerOutage = () => {
   let i = 0;
   addReport(Freddy, 'power outage - freddy not arrived');
   playAudio('power-outage');
+  document.querySelector('#office-overlay')?.classList.remove('hidden');
 
   const awaitFreddyArrival = () => {
     i += 1;
