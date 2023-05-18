@@ -1301,6 +1301,7 @@ const killAudio = (audio) => {
 // INITIALISE THE PAGE
 // ========================================================================== //
 const startGame = () => {
+    var _a;
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);
@@ -1329,6 +1330,9 @@ const startGame = () => {
     cameraButton.addEventListener('click', toggleCameras);
     // cameraButton.addEventListener('mouseenter', toggleCameras);
     window.addEventListener('cameras-off', pauseFoxy);
+    (_a = document.querySelector('#audio-toggle input')) === null || _a === void 0 ? void 0 : _a.addEventListener('change', () => {
+        user.audioOn = !user.audioOn;
+    });
 };
 const initialiseMenu = () => {
     var _a;

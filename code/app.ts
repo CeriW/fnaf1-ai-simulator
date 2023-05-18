@@ -1643,6 +1643,10 @@ const startGame = () => {
   cameraButton.addEventListener('click', toggleCameras);
   // cameraButton.addEventListener('mouseenter', toggleCameras);
   window.addEventListener('cameras-off', pauseFoxy);
+
+  document.querySelector('#audio-toggle input')?.addEventListener('change', () => {
+    user.audioOn = !user.audioOn;
+  });
 };
 
 const initialiseMenu = () => {
