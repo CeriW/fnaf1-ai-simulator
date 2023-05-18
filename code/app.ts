@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -1513,6 +1513,8 @@ const drainPower = () => {
     clearAllIntervals(false);
     powerOutage();
   }
+
+  calculateRemainingPower();
 };
 
 const calculatePowerDrainMultiplier = () => {
@@ -1525,6 +1527,16 @@ const calculatePowerDrainMultiplier = () => {
 const updatePowerDisplay = () => {
   powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
   powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
+};
+
+const calculateRemainingPower = () => {
+  // Figure out how many seconds worth of power you have left
+  // Divide current drainage by amount of power left
+
+  // default power drainage is how many seconds it takes to drain 1%
+  const secondsOfPowerRemaining =
+    user.power * (defaultPowerDrainage[nightToSimulate] / calculatePowerDrainMultiplier());
+  console.log(secondsOfPowerRemaining);
 };
 
 // The sequence of events between you running out of power and Freddy jumpscaring you.

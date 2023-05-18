@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 500; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -1219,6 +1219,7 @@ const drainPower = () => {
         clearAllIntervals(false);
         powerOutage();
     }
+    calculateRemainingPower();
 };
 const calculatePowerDrainMultiplier = () => {
     // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
@@ -1229,6 +1230,13 @@ const calculatePowerDrainMultiplier = () => {
 const updatePowerDisplay = () => {
     powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
     powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
+};
+const calculateRemainingPower = () => {
+    // Figure out how many seconds worth of power you have left
+    // Divide current drainage by amount of power left
+    // default power drainage is how many seconds it takes to drain 1%
+    const secondsOfPowerRemaining = user.power * (defaultPowerDrainage[nightToSimulate] / calculatePowerDrainMultiplier());
+    console.log(secondsOfPowerRemaining);
 };
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
