@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 400; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -137,6 +137,7 @@ const cameraButton: HTMLButtonElement = document.querySelector('button#cameras')
 const cameraStatusText: HTMLDivElement = document.querySelector('#camera-status')!;
 const cameraScreen: HTMLImageElement = document.querySelector('img#camera-screen')!;
 
+// Power related page elements
 const powerDisplay: HTMLDivElement = document.querySelector('#power')!;
 
 /* Player choosable variables */
@@ -152,7 +153,7 @@ let user = {
   rightDoorToggled: 0,
   power: 100,
   // power: 1,
-  audioOn: true,
+  audioOn: false,
 };
 
 // ========================================================================== //
@@ -1529,7 +1530,7 @@ const calculateAdditionalPowerDrain = () => {
   let drainageAmount = 0;
   if (nightToSimulate === 1) {
     // There is no extra buff on night 1 - you only lose additional power if you have stuff on.
-    drainageAmount = calculatePowerDrainMultiplier() === 1 ? 0 : 0.01 * calculatePowerDrainMultiplier();
+    drainageAmount = calculatePowerDrainMultiplier() === 1 ? 0 : 0.01 * (calculatePowerDrainMultiplier() - 1);
   } else {
     // How much it would be per 1s
     drainageAmount = additionalPowerDrainageIntervalSpacing[nightToSimulate]
@@ -1580,17 +1581,19 @@ const updatePowerDisplay = () => {
   let standardLossPerSecond = 1 / 9.6;
   let additionalLossPerSecond = calculateAdditionalPowerDrain() * 10; // x10 as the function is intended to calculate for 0.1s
 
-  console.log(user.power / (standardLossPerSecond + additionalLossPerSecond));
+  // console.log(standardLossPerSecond);
+  console.log(additionalLossPerSecond);
 
-  console.log(calculateInGameTime(user.power / (standardLossPerSecond + additionalLossPerSecond)));
+  const secondsOfPowerRemaining = Math.ceil(user.power / (standardLossPerSecond + additionalLossPerSecond));
 
-  // console.log((standardLossPerSecond + additionalLossPerSecond) * secondsOfGameRemaining);
+  const timeUserWillRunOutOfPower = calculateInGameTime(secondsOfPowerRemaining);
 
   // console.log(secondsOfPowerRemaining);
 
-  // return {
-  //   secondsOfGameRemaining,
-  // };
+  const timeMessaging =
+    parseInt(timeUserWillRunOutOfPower.hour) >= 6
+      ? `you have enough power to last until 6AM`
+      : `you will run out of power at ${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM`;
 
   // console.log(
   //   'Night simulation: ' +
@@ -1620,8 +1623,9 @@ const updatePowerDisplay = () => {
       <div></div>
     </div>
     <div id="power-time">
+      <div>Based on current usage, ${timeMessaging}</div>
       <div>Seconds of game remaining: ${secondsOfGameRemaining}</div>
-      <div>Seconds of power remaining based on current usage: </div>
+      <div>Seconds of power remaining based on current usage: ${secondsOfPowerRemaining}</div>
     </div>
   `;
 
