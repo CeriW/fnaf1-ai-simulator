@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate = 1;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A';
 const Freddy = {
     name: 'Freddy',
@@ -99,13 +99,7 @@ const cameraArea = document.querySelector('#camera-display');
 const cameraButton = document.querySelector('button#cameras');
 const cameraStatusText = document.querySelector('#camera-status');
 const cameraScreen = document.querySelector('img#camera-screen');
-// Power related page elements
-const powerPercentageDisplay = document.querySelector('#power-percentage');
-const powerUsageDisplay = document.querySelector('#power-usage');
-const powerTimeDisplay = document.querySelector('#power-time');
-// The additional penalties on time - an additional 1% every X seconds
-// Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
-const additionalPowerDrainageIntervalSpacing = [null, null, 6, 5, 4, 3, 3, 3];
+const powerDisplay = document.querySelector('#power');
 /* Player choosable variables */
 let user = {
     camerasOn: false,
@@ -116,7 +110,7 @@ let user = {
     camerasLookedAt: 0,
     leftDoorToggled: 0,
     rightDoorToggled: 0,
-    power: 99,
+    power: 100,
     // power: 1,
     audioOn: true,
 };
@@ -1217,19 +1211,43 @@ window.addEventListener('game-over-freddy', () => {
 // ========================================================================== //
 // POWER
 // ========================================================================== //
-// This will run every 9.6 seconds and the user will lose the default 1% power
+// The additional penalties on time - an additional 1% every X seconds
+// Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
+const additionalPowerDrainageIntervalSpacing = [null, 9.6, 6, 5, 4, 3, 3, 3];
+// This will run every 0.1 seconds and cause the user to lose the equivalent of 1% every 9.6 seconds
 const defaultDrainPower = () => {
-    user.power--;
+    let drainageAmount = 1 / 9.6;
+    drainageAmount /= 10;
+    user.power -= drainageAmount;
     if (user.power <= 0) {
         clearAllIntervals(false);
         powerOutage();
     }
     updatePowerDisplay();
 };
-// This will give you additional penalties depending on how many doors/cameras/lights
-// you have, multiplied depending on what night you're on.
-const additionalDrainPower = () => {
-    user.power -= (1 / additionalPowerDrainageIntervalSpacing[nightToSimulate]) * calculatePowerDrainMultiplier();
+// This will run every 0.1 seconds
+// It will drain an equivalent of 0.1% every X seconds, multiplied by how many
+// doors/windows/lights you have on
+const calculateAdditionalPowerDrain = () => {
+    let drainageAmount = 0;
+    if (nightToSimulate === 1) {
+        // There is no extra buff on night 1 - you only lose additional power if you have stuff on.
+        drainageAmount = calculatePowerDrainMultiplier() === 1 ? 0 : 0.01 * calculatePowerDrainMultiplier();
+    }
+    else {
+        // How much it would be per 1s
+        drainageAmount = additionalPowerDrainageIntervalSpacing[nightToSimulate]
+            ? 0.1 / additionalPowerDrainageIntervalSpacing[nightToSimulate]
+            : 0;
+        // How much it would be per 0.1s
+        drainageAmount /= 10;
+        // How much it will be multiplied
+        drainageAmount *= calculatePowerDrainMultiplier();
+    }
+    return drainageAmount;
+};
+const drainAdditionalPower = () => {
+    user.power -= calculateAdditionalPowerDrain();
     if (user.power <= 0) {
         clearAllIntervals(false);
         powerOutage();
@@ -1243,8 +1261,23 @@ const calculatePowerDrainMultiplier = () => {
     return usage > 4 ? 4 : usage;
 };
 const updatePowerDisplay = () => {
-    powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
-    powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
+    powerDisplay.innerHTML = `
+    <div id="power-percentage">
+      Power remaining: ${user.power.toFixed(1).toString()}%
+    </div>
+    <div id="power-usage" multiplier="${calculatePowerDrainMultiplier().toString()}">
+      <span>Power usage: </span>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div id="power-time"></div>
+  `;
+    // powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
+    // powerPercentageDisplay.innerHTML = `${user.power.toFixed(1).toString()}%`;
+    // powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
+    calculateRemainingPower();
 };
 // const calculateRemainingPower = () => {
 //   // Figure out how many seconds worth of power you have left
@@ -1261,6 +1294,32 @@ const updatePowerDisplay = () => {
 //   console.log(timeDueToRunOut);
 //   powerTimeDisplay.innerHTML = `Based on current usage, you will run out of power at ${timeDueToRunOut.hour}:${timeDueToRunOut.minute}`;
 // };
+const calculateRemainingPower = () => {
+    const secondsOfGameRemaining = 535 - currentSecond;
+    // console.log(secondsOfGameRemaining);
+    // How many % we're going to lose through the standard 1% every 9.6 seconds
+    const standardPowerRemaining = secondsOfGameRemaining / 9.6;
+    // How much additional power we're going to lose based on night buffs and current usage
+    let additionalPowerSpend = calculateAdditionalPowerDrain(); // How much power we're due to lose every 0.1s;
+    additionalPowerSpend *= 10; // How much we'd lose every 1s;
+    additionalPowerSpend *= secondsOfGameRemaining; // How much we're due to lose based on the seconds remaining
+    let powerToLose = standardPowerRemaining + additionalPowerSpend;
+    console.log(powerToLose);
+    // return {
+    //   secondsOfGameRemaining,
+    // };
+    console.log('Night simulation: ' +
+        nightToSimulate +
+        '\n' +
+        ' Seconds of game remaining: ' +
+        secondsOfGameRemaining +
+        '\n' +
+        'Normal power drain to lose: ' +
+        standardPowerRemaining +
+        '\n' +
+        'Additional usage power drain per second: ' +
+        additionalPowerSpend);
+};
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
     var _a;
@@ -1339,18 +1398,18 @@ const startGame = () => {
         animatronic.aiLevels[7] = (_a = parseInt(animatronicAIinput.value)) !== null && _a !== void 0 ? _a : 0;
     });
     document.body.setAttribute('game-in-progress', 'true');
-    defaultPowerDrainInterval = window.setInterval(defaultDrainPower, 9.6 * secondLength);
-    additionalPowerDrainInterval = window.setInterval(additionalDrainPower, secondLength);
+    defaultPowerDrainInterval = window.setInterval(defaultDrainPower, secondLength / 10);
+    additionalPowerDrainInterval = window.setInterval(drainAdditionalPower, secondLength / 10);
     timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
     frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
-    // freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
-    // foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-    // bonnieInterval = window.setInterval(() => {
-    //   moveBonnieOrChica(Bonnie);
-    // }, secondLength * Bonnie.movementOpportunityInterval);
-    // chicaInterval = window.setInterval(() => {
-    //   moveBonnieOrChica(Chica);
-    // }, secondLength * Chica.movementOpportunityInterval);
+    freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+    foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
+    bonnieInterval = window.setInterval(() => {
+        moveBonnieOrChica(Bonnie);
+    }, secondLength * Bonnie.movementOpportunityInterval);
+    chicaInterval = window.setInterval(() => {
+        moveBonnieOrChica(Chica);
+    }, secondLength * Chica.movementOpportunityInterval);
     // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
     if (Foxy.currentPosition === '4A') {
         moveFoxy();

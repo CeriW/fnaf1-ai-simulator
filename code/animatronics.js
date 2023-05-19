@@ -5,3 +5,4 @@ export const animatronics = [
         startingPosition: '1A',
     },
 ];
+//# sourceMappingURL=animatronics.js.map
