@@ -1,6 +1,6 @@
 // TESTING VARIABLES
 let nightToSimulate: number = 1;
-let secondLength: number = 200; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+let secondLength: number = 400; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
 type MovementCheck = {
@@ -1565,6 +1565,49 @@ const calculatePowerDrainMultiplier = () => {
 };
 
 const updatePowerDisplay = () => {
+  const secondsOfGameRemaining = 535 - currentSecond;
+
+  // How many % we're going to lose through the standard 1% every 9.6 seconds
+  const standardPowerRemaining = secondsOfGameRemaining / 9.6;
+
+  // How much additional power we're going to lose based on night buffs and current usage
+  let additionalPowerSpend = calculateAdditionalPowerDrain(); // How much power we're due to lose every 0.1s;
+  additionalPowerSpend *= 10; // How much we'd lose every 1s;
+  // additionalPowerSpend *= secondsOfGameRemaining; // How much we're due to lose based on the seconds remaining
+
+  // let secondsOfPowerRemaining = standardPowerRemaining + additionalPowerSpend;
+
+  let standardLossPerSecond = 1 / 9.6;
+  let additionalLossPerSecond = calculateAdditionalPowerDrain() * 10; // x10 as the function is intended to calculate for 0.1s
+
+  console.log(user.power / (standardLossPerSecond + additionalLossPerSecond));
+
+  console.log(calculateInGameTime(user.power / (standardLossPerSecond + additionalLossPerSecond)));
+
+  // console.log((standardLossPerSecond + additionalLossPerSecond) * secondsOfGameRemaining);
+
+  // console.log(secondsOfPowerRemaining);
+
+  // return {
+  //   secondsOfGameRemaining,
+  // };
+
+  // console.log(
+  //   'Night simulation: ' +
+  //     nightToSimulate +
+  //     '\n' +
+  //     ' Seconds of game remaining: ' +
+  //     secondsOfGameRemaining +
+  //     '\n' +
+  //     'Normal power drain to lose: ' +
+  //     standardPowerRemaining +
+  //     '\n' +
+  //     'Additional usage power drain per second: ' +
+  //     additionalPowerSpend
+  // );
+
+  // console.log(calculateInGameTime(535 - secondsOfPowerRemaining));
+
   powerDisplay.innerHTML = `
     <div id="power-percentage">
       Power remaining: ${user.power.toFixed(1).toString()}%
@@ -1576,71 +1619,16 @@ const updatePowerDisplay = () => {
       <div></div>
       <div></div>
     </div>
-    <div id="power-time"></div>
+    <div id="power-time">
+      <div>Seconds of game remaining: ${secondsOfGameRemaining}</div>
+      <div>Seconds of power remaining based on current usage: </div>
+    </div>
   `;
 
   // powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
   // powerPercentageDisplay.innerHTML = `${user.power.toFixed(1).toString()}%`;
 
-  // powerUsageDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
-  calculateRemainingPower();
-};
-
-// const calculateRemainingPower = () => {
-//   // Figure out how many seconds worth of power you have left
-//   // Divide current drainage by amount of power left
-
-//   // default power drainage is how many seconds it takes to drain 1%
-//   const secondsOfPowerRemaining =
-//     user.power * (additionalPowerDrainageIntervalSpacing[nightToSimulate] / calculatePowerDrainMultiplier());
-//   // console.log(secondsOfPowerRemaining);
-
-//   const secondsOfGameRemaining = 535 - currentSecond;
-
-//   console.log(
-//     'seconds of game remaining: ' + secondsOfGameRemaining + ' Seconds of power remaining: ' + secondsOfPowerRemaining
-//   );
-
-//   const timeDueToRunOut = calculateInGameTime(secondsOfPowerRemaining);
-
-//   console.log(timeDueToRunOut);
-
-//   powerTimeDisplay.innerHTML = `Based on current usage, you will run out of power at ${timeDueToRunOut.hour}:${timeDueToRunOut.minute}`;
-// };
-
-const calculateRemainingPower = () => {
-  const secondsOfGameRemaining = 535 - currentSecond;
-  // console.log(secondsOfGameRemaining);
-
-  // How many % we're going to lose through the standard 1% every 9.6 seconds
-  const standardPowerRemaining = secondsOfGameRemaining / 9.6;
-
-  // How much additional power we're going to lose based on night buffs and current usage
-  let additionalPowerSpend = calculateAdditionalPowerDrain(); // How much power we're due to lose every 0.1s;
-  additionalPowerSpend *= 10; // How much we'd lose every 1s;
-  additionalPowerSpend *= secondsOfGameRemaining; // How much we're due to lose based on the seconds remaining
-
-  let powerToLose = standardPowerRemaining + additionalPowerSpend;
-
-  console.log(powerToLose);
-
-  // return {
-  //   secondsOfGameRemaining,
-  // };
-
-  console.log(
-    'Night simulation: ' +
-      nightToSimulate +
-      '\n' +
-      ' Seconds of game remaining: ' +
-      secondsOfGameRemaining +
-      '\n' +
-      'Normal power drain to lose: ' +
-      standardPowerRemaining +
-      '\n' +
-      'Additional usage power drain per second: ' +
-      additionalPowerSpend
-  );
+  // powerUsag6eDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
 };
 
 // The sequence of events between you running out of power and Freddy jumpscaring you.
