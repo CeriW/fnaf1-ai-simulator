@@ -17,6 +17,10 @@
       <input type="checkbox">
       <span class="slider"></span>
     </label>
+
+
+
+
   </aside>
 
   <div id="game-menu">
@@ -24,6 +28,25 @@
     <div id="night-selector-menu"></div>
     <div id="custom-night-menu"></div>
     <div class="ai-descriptions">0&#8209;2(easy) 3&#8209;6(med) 7&#8209;12(hard) 13&#8209;20(extreme)</div>
+
+    <div id="game-speed-selector">
+      <span>Game speed:</span>
+
+      <input type="radio" id="speed1" name="speed" value="0.5">
+      <label for="speed1">x0.5</label>
+
+      <input type="radio" id="speed2" name="speed" value="1" checked>
+      <label for="speed2">x1</label> 
+
+      <input type="radio" id="speed3" name="speed" value="2">
+      <label for="speed3">x2</label>
+
+      <input type="radio" id="speed4" name="speed" value="3">
+      <label for="speed4">x3</label>
+
+    </div>
+
+
     <button id="start-game">START GAME</button>
   </div>
 
@@ -128,15 +151,6 @@
         </div>
 
         <div id="power">
-          <!-- <div id="power-percentage"></div>
-          <div id="power-usage">
-            <span>Power usage: </span>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          <div id="power-time"></div> -->
         </div>
       </div>
     </div>

@@ -1330,6 +1330,8 @@ const killAudio = (audio) => {
 // INITIALISE THE PAGE
 // ========================================================================== //
 const startGame = () => {
+    let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
+    secondLength = selectedRadio ? Math.ceil(1000 / parseInt(selectedRadio.value)) : 1000;
     killAudio('game-menu');
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
