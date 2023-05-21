@@ -1,0 +1,19 @@
+/* Lights ------------------------------------------------------------------- */
+
+@keyframes litAnimatronicAnimation {
+  0%  {    background-color   : @white;  }
+  50% {    background-color   : red;  }
+  100%{    background-color   : @white;  }
+}
+
+
+#simulator[left-light-on="true"] .animatronic[position="2B"][sub-position="1"],
+#simulator[right-light-on="true"] .animatronic[position="4B"][sub-position="1"]{
+  animation: litAnimatronicAnimation 1s linear infinite;
+  opacity: 1 !important;
+}
+
+
+#light-controls button{
+  .buttonStyle();
+}

@@ -1017,6 +1017,52 @@ body[game-mode="playable-game"] .current-ai-level {
   opacity: 0;
   pointer-events: none;
 }
+/* Lights ------------------------------------------------------------------- */
+@-webkit-keyframes litAnimatronicAnimation {
+  0% {
+    background-color: #fff;
+  }
+  50% {
+    background-color: red;
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+@keyframes litAnimatronicAnimation {
+  0% {
+    background-color: #fff;
+  }
+  50% {
+    background-color: red;
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+#simulator[left-light-on="true"] .animatronic[position="2B"][sub-position="1"],
+#simulator[right-light-on="true"] .animatronic[position="4B"][sub-position="1"] {
+  -webkit-animation: litAnimatronicAnimation 1s linear infinite;
+          animation: litAnimatronicAnimation 1s linear infinite;
+  opacity: 1 !important;
+}
+#light-controls button {
+  border: 3px solid #fff;
+  background: #424242;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 1.5em;
+  padding: 5px;
+  text-align: left;
+  line-height: 0.8;
+}
+#light-controls button.active {
+  background: #7FB000;
+}
+#light-controls button[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
 /* Game speed selector ------------------------------------------------------ */
 #game-speed-selector {
   display: -webkit-box;

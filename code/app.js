@@ -108,6 +108,8 @@ let user = {
     currentCamera: defaultCamera,
     leftDoorIsClosed: false,
     rightDoorIsClosed: false,
+    leftLightOn: false,
+    rightLightOn: false,
     camerasToggled: 0,
     camerasLookedAt: 0,
     leftDoorToggled: 0,
@@ -1119,6 +1121,57 @@ const disableOfficeButtons = () => {
         btn.setAttribute('disabled', 'true');
     });
 };
+const initialiseLights = () => {
+    const lightControlsContainer = document.querySelector('#light-controls');
+    ['left', 'right'].forEach((type) => {
+        const lightButton = document.createElement('button');
+        lightButton.textContent = `Toggle ${type} light`;
+        lightButton.addEventListener('click', () => {
+            toggleLight(type);
+        });
+        lightControlsContainer === null || lightControlsContainer === void 0 ? void 0 : lightControlsContainer.appendChild(lightButton);
+    });
+};
+const toggleLight = (direction) => {
+    let matchingDoorway = direction === 'left' ? '2B' : '4B';
+    if (direction === 'left') {
+        user.leftLightOn = !user.leftLightOn;
+    }
+    else {
+        user.rightLightOn = !user.rightLightOn;
+    }
+    if ((direction === 'left' && user.leftLightOn) || (direction === 'right' && user.rightLightOn)) {
+        [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
+            if (animatronic.currentPosition === matchingDoorway && animatronic.subPosition !== -1) {
+                playAudio('doorway-warning');
+            }
+        });
+    }
+    if (direction === 'left' && user.leftLightOn) {
+        leftLightTimeout = window.setTimeout(() => {
+            timeoutLight('left');
+        }, 5 * secondLength); // TODO - CHECK HOW LONG THE LIGHTS ACTUALLY STAY ON IF YOU DON'T TURN THEM OFF
+    }
+    if (direction === 'right' && user.rightLightOn) {
+        rightLightTimeout = window.setTimeout(() => {
+            timeoutLight('right');
+        }, 5 * secondLength); // TODO - CHECK HOW LONG THE LIGHTS ACTUALLY STAY ON IF YOU DON'T TURN THEM OFF
+    }
+    displayLightVisuals();
+};
+const timeoutLight = (direction) => {
+    if (direction === 'left' && user.leftLightOn) {
+        user.leftLightOn = false;
+    }
+    else if (direction === 'right' && user.rightLightOn) {
+        user.rightLightOn = false;
+    }
+    displayLightVisuals();
+};
+const displayLightVisuals = () => {
+    simulator.setAttribute('left-light-on', user.leftLightOn.toString());
+    simulator.setAttribute('right-light-on', user.rightLightOn.toString());
+};
 // ========================================================================== //
 // DEATH
 // ========================================================================== //
@@ -1137,6 +1190,8 @@ const clearAllIntervals = (gameOver = true) => {
         defaultPowerDrainInterval,
         additionalPowerDrainInterval,
         powerOutageInterval,
+        leftLightTimeout,
+        rightLightTimeout,
     ];
     // It's possible to reach this function when you've run out of power, so the game isn't over quite yet.
     // We want to stop the animatronics etc from doing anything, but the timer should still be running in this case.
@@ -1365,6 +1420,7 @@ const startGame = () => {
     }
     document.body.setAttribute('cameras-on', 'false');
     initialiseDoors();
+    initialiseLights();
     generateAnimatronics();
     generateCameraButtons();
     cameraButton.addEventListener('click', toggleCameras);
@@ -1489,6 +1545,8 @@ let foxyJumpscareCountdown;
 let bonnieJumpscareCountdown;
 let chicaJumpscareCountdown;
 let powerOutageInterval;
+let leftLightTimeout;
+let rightLightTimeout;
 initialiseMenu();
 startGame();
 //# sourceMappingURL=app.js.map
