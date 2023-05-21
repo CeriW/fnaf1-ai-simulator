@@ -340,7 +340,7 @@ const moveFoxy = () => {
       addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
     }
 
-    // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
+    // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 2A, whichever comes first
     clearInterval(foxyInterval);
     Foxy.currentCountdown = 25;
     window.addEventListener('cam-on-2A', attemptFoxyJumpscare);
@@ -701,7 +701,7 @@ const moveAnimatronic = (
   window.setTimeout(() => {
     cameraScreen.src = getCameraImage(user.currentCamera);
     cameraArea.classList.remove('updating');
-  }, secondLength * 2.5);
+  }, secondLength * 5);
 
   document.querySelector(`.animatronic#${animatronic.name}`)?.setAttribute('position', position.end);
   document

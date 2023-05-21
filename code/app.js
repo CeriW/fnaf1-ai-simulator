@@ -273,7 +273,7 @@ const moveFoxy = () => {
             moveAnimatronic(Foxy, { start: '1C', end: '2A', sub: -1 });
             addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
         }
-        // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 4A, whichever comes first
+        // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 2A, whichever comes first
         clearInterval(foxyInterval);
         Foxy.currentCountdown = 25;
         window.addEventListener('cam-on-2A', attemptFoxyJumpscare);
@@ -598,7 +598,7 @@ const moveAnimatronic = (animatronic, position, logThis = true, movementCheck) =
     window.setTimeout(() => {
         cameraScreen.src = getCameraImage(user.currentCamera);
         cameraArea.classList.remove('updating');
-    }, secondLength * 2.5);
+    }, secondLength * 5);
     (_b = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0 ? void 0 : _b.setAttribute('position', position.end);
     (_c = document
         .querySelector(`.animatronic#${animatronic.name}`)) === null || _c === void 0 ? void 0 : _c.setAttribute('sub-position', (_e = (_d = position.sub) === null || _d === void 0 ? void 0 : _d.toString()) !== null && _e !== void 0 ? _e : 'none');
