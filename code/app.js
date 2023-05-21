@@ -114,6 +114,7 @@ let user = {
     power: 100,
     // power: 1,
     audioOn: false,
+    gameSpeed: 1,
 };
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -123,7 +124,7 @@ let user = {
 // We are running at 60fps
 const updateFrames = () => {
     currentFrame++;
-    framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond}fps`;
+    framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond * user.gameSpeed}fps`;
 };
 const updateTime = () => {
     currentSecond++;
@@ -1330,8 +1331,10 @@ const killAudio = (audio) => {
 // INITIALISE THE PAGE
 // ========================================================================== //
 const startGame = () => {
+    var _a;
     let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
-    secondLength = selectedRadio ? Math.ceil(1000 / parseInt(selectedRadio.value)) : 1000;
+    user.gameSpeed = (_a = parseInt(selectedRadio.value)) !== null && _a !== void 0 ? _a : 1;
+    secondLength = Math.ceil(1000 / user.gameSpeed);
     killAudio('game-menu');
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
