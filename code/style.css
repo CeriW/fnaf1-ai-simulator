@@ -477,9 +477,10 @@ button#cameras {
   display: grid;
   -ms-grid-rows: -webkit-min-content 150px -webkit-min-content;
   -ms-grid-rows: min-content 150px min-content;
-  -ms-grid-columns: 60px auto auto;
-      grid-template: "icon name name" -webkit-min-content "icon reports reports" 150px "icon starting-ai-level current-ai-level" -webkit-min-content / 60px auto auto;
-      grid-template: "icon name name" min-content "icon reports reports" 150px "icon starting-ai-level current-ai-level" min-content / 60px auto auto;
+  -ms-grid-columns: 60px 1fr -webkit-max-content;
+  -ms-grid-columns: 60px 1fr max-content;
+      grid-template: "icon name starting-ai-level" -webkit-min-content "icon reports reports" 150px "icon current-ai-level current-ai-level" -webkit-min-content / 60px 1fr -webkit-max-content;
+      grid-template: "icon name starting-ai-level" min-content "icon reports reports" 150px "icon current-ai-level current-ai-level" min-content / 60px 1fr max-content;
   border: 2px solid;
 }
 .animatronic-icon {
@@ -494,14 +495,10 @@ button#cameras {
   -ms-grid-row-span: 9;
   -ms-grid-column: 1;
 }
-.starting-ai-level {
-  -ms-grid-row: 3;
-  -ms-grid-column: 2;
-  grid-area: starting-ai-level;
-}
 .current-ai-level {
   -ms-grid-row: 3;
-  -ms-grid-column: 3;
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 2;
   grid-area: current-ai-level;
 }
 .report-item-container {
@@ -518,7 +515,6 @@ button#cameras {
 .animatronic-name {
   -ms-grid-row: 1;
   -ms-grid-column: 2;
-  -ms-grid-column-span: 2;
   font-size: 1.5em;
   font-weight: bold;
   grid-area: name;
@@ -528,7 +524,26 @@ button#cameras {
 .stats-report > .animatronic-name {
   -ms-grid-row: 1;
   -ms-grid-column: 3;
-  -ms-grid-column-span: 1;
+}
+.starting-ai-level {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
+  grid-area: starting-ai-level;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-size: 0.8em;
+}
+.starting-ai-level span {
+  font-size: 1.5em;
 }
 .animatronic-name,
 .starting-ai-level,
@@ -997,7 +1012,8 @@ body[game-mode="playable-game"] .in-game-minutes,
 body[game-mode="playable-game"] #supplementary-time-info,
 body[game-mode="playable-game"] .animatronic-report .report-item-container,
 body[game-mode="playable-game"] span.animatronic,
-body[game-mode="playable-game"] #power-time {
+body[game-mode="playable-game"] #power-time,
+body[game-mode="playable-game"] .current-ai-level {
   opacity: 0;
   pointer-events: none;
 }

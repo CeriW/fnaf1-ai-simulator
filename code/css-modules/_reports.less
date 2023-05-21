@@ -73,15 +73,14 @@
 .animatronic-report{
   display: grid;
   grid-template:
-    "icon name name" min-content
+    "icon name starting-ai-level" min-content
     "icon reports reports" 150px
-    "icon starting-ai-level current-ai-level" min-content
-    / 60px auto auto;
+    "icon current-ai-level current-ai-level" min-content
+    / 60px 1fr max-content;
   border: 2px solid;
 }
 
 .animatronic-icon{grid-area: icon; border-right: inherit;}
-.starting-ai-level{grid-area: starting-ai-level;}
 .current-ai-level{grid-area: current-ai-level;}
 .report-item-container{grid-area: reports;}
 
@@ -92,6 +91,21 @@
   grid-area: name;
   text-transform: uppercase;
   padding: 5px;
+}
+
+.starting-ai-level{
+  grid-area: starting-ai-level;
+
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8em;
+
+  span{
+    font-size: 1.5em;
+  }
 }
 
 .animatronic-name, .starting-ai-level, .current-ai-level{

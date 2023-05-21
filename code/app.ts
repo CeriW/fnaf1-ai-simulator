@@ -260,7 +260,7 @@ const generateAnimatronics = () => {
     animatronicReport.innerHTML = `
       <div class="animatronic-icon"></div>
       <div class="animatronic-name">${animatronic.name}</div>
-      <div class="starting-ai-level">Starting AI level: <span>${animatronic.currentAIlevel}<span></div>
+      <div class="starting-ai-level">Starting AI:<span>${animatronic.currentAIlevel}</span></div>
       <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
       <div class="report-item-container"></div>
     `;
@@ -1836,4 +1836,4 @@ let chicaJumpscareCountdown: number;
 let powerOutageInterval: number;
 
 initialiseMenu();
-// startGame();
+startGame();
