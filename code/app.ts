@@ -120,6 +120,7 @@ const paths = {
 let currentFrame: number = 0;
 let currentSecond: number = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
 let framesPerSecond: number = 60;
+let gameSpeed = 1;
 
 /* Time related page elements */
 const framesDisplay: HTMLDivElement = document.querySelector('#frames')!;
@@ -154,7 +155,6 @@ let user = {
   power: 100,
   // power: 1,
   audioOn: false,
-  gameSpeed: 1,
 };
 
 // ========================================================================== //
@@ -166,7 +166,7 @@ let user = {
 // We are running at 60fps
 const updateFrames = () => {
   currentFrame++;
-  framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond * user.gameSpeed}fps`;
+  framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond * gameSpeed}fps`;
 };
 
 const updateTime = () => {
@@ -1652,8 +1652,10 @@ const killAudio = (audio: AvailableAudio) => {
 
 const startGame = () => {
   let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked') as HTMLInputElement;
-  user.gameSpeed = parseInt(selectedRadio.value) ?? 1;
-  secondLength = Math.ceil(1000 / user.gameSpeed);
+  gameSpeed = parseFloat(selectedRadio.value) ?? 1;
+  secondLength = Math.ceil(1000 / gameSpeed);
+  console.log(gameSpeed);
+  console.log(secondLength);
 
   killAudio('game-menu');
 

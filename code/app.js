@@ -86,6 +86,7 @@ const paths = {
 let currentFrame = 0;
 let currentSecond = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
 let framesPerSecond = 60;
+let gameSpeed = 1;
 /* Time related page elements */
 const framesDisplay = document.querySelector('#frames');
 const secondsDisplay = document.querySelector('#real-time');
@@ -114,7 +115,6 @@ let user = {
     power: 100,
     // power: 1,
     audioOn: false,
-    gameSpeed: 1,
 };
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -124,7 +124,7 @@ let user = {
 // We are running at 60fps
 const updateFrames = () => {
     currentFrame++;
-    framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond * user.gameSpeed}fps`;
+    framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond * gameSpeed}fps`;
 };
 const updateTime = () => {
     currentSecond++;
@@ -1333,8 +1333,10 @@ const killAudio = (audio) => {
 const startGame = () => {
     var _a;
     let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
-    user.gameSpeed = (_a = parseInt(selectedRadio.value)) !== null && _a !== void 0 ? _a : 1;
-    secondLength = Math.ceil(1000 / user.gameSpeed);
+    gameSpeed = (_a = parseFloat(selectedRadio.value)) !== null && _a !== void 0 ? _a : 1;
+    secondLength = Math.ceil(1000 / gameSpeed);
+    console.log(gameSpeed);
+    console.log(secondLength);
     killAudio('game-menu');
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;

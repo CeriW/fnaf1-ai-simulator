@@ -981,6 +981,24 @@ body[game-in-progress="true"] #game-over-stats {
       -ms-flex-order: -1;
           order: -1;
 }
+#game-speed-selector {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#game-speed-selector label,
+#game-speed-selector span {
+  margin-right: 20px;
+}
+#game-speed-selector input {
+  margin-right: 5px;
+}
+#game-speed-selector *:not(span) {
+  cursor: pointer;
+}
 /* Switch ------------------------------------------------------------------- */
 .switch {
   position: relative;
