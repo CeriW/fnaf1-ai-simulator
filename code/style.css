@@ -992,6 +992,15 @@ body[game-in-progress="true"] #game-over-stats {
   font-size: 1.5em;
   width: 100%;
 }
+/* Playable game mode ------------------------------------------------------- */
+body[game-mode="playable-game"] .in-game-minutes,
+body[game-mode="playable-game"] #supplementary-time-info,
+body[game-mode="playable-game"] .animatronic-report .report-item-container,
+body[game-mode="playable-game"] span.animatronic,
+body[game-mode="playable-game"] #power-time {
+  opacity: 0;
+  pointer-events: none;
+}
 /* Game speed selector ------------------------------------------------------ */
 #game-speed-selector {
   display: -webkit-box;

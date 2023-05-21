@@ -155,6 +155,7 @@ let user = {
   power: 100,
   // power: 1,
   audioOn: false,
+  gameMode: false, // false for ai simulator, true for playable game with stuff hidden
 };
 
 // ========================================================================== //
@@ -1544,9 +1545,11 @@ const updatePowerDisplay = () => {
       ? `you have enough power to last until 6AM`
       : `you will run out of power at ${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM`;
 
+  let powerToDisplay = user.gameMode ? user.power.toFixed(0) : user.power.toFixed(1);
+
   powerDisplay.innerHTML = `
     <div id="power-percentage">
-      Power remaining: ${user.power.toFixed(1).toString()}%
+      Power remaining: ${powerToDisplay.toString()}%
     </div>
     <div id="power-usage" multiplier="${calculatePowerDrainMultiplier().toString()}">
       <span>Power usage: </span>
@@ -1794,6 +1797,7 @@ const initialiseMenu = () => {
     });
   }
 
+  // Make the audio toggle work
   document.querySelector('#audio-toggle input')?.addEventListener('change', () => {
     user.audioOn = !user.audioOn;
 
@@ -1802,6 +1806,14 @@ const initialiseMenu = () => {
     } else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
       killAudio('game-menu');
     }
+  });
+
+  // Make the game mode selector work
+  document.querySelector('#game-mode input')?.addEventListener('click', () => {
+    user.gameMode = !user.gameMode;
+    let gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
+    document.body.setAttribute('game-mode', gameModeName);
+    console.log(user);
   });
 
   gameMenu.querySelector('#start-game')?.addEventListener('click', startGame);

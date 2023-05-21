@@ -115,6 +115,7 @@ let user = {
     power: 100,
     // power: 1,
     audioOn: false,
+    gameMode: false, // false for ai simulator, true for playable game with stuff hidden
 };
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
@@ -1242,9 +1243,10 @@ const updatePowerDisplay = () => {
     const timeMessaging = parseInt(timeUserWillRunOutOfPower.hour) >= 6
         ? `you have enough power to last until 6AM`
         : `you will run out of power at ${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM`;
+    let powerToDisplay = user.gameMode ? user.power.toFixed(0) : user.power.toFixed(1);
     powerDisplay.innerHTML = `
     <div id="power-percentage">
-      Power remaining: ${user.power.toFixed(1).toString()}%
+      Power remaining: ${powerToDisplay.toString()}%
     </div>
     <div id="power-usage" multiplier="${calculatePowerDrainMultiplier().toString()}">
       <span>Power usage: </span>
@@ -1370,7 +1372,7 @@ const startGame = () => {
     window.addEventListener('cameras-off', pauseFoxy);
 };
 const initialiseMenu = () => {
-    var _a, _b;
+    var _a, _b, _c;
     let gameMenu = document.querySelector('#game-menu');
     let nightMenu = gameMenu.querySelector('#night-selector-menu');
     let customNightMenu = gameMenu.querySelector('#custom-night-menu');
@@ -1453,6 +1455,7 @@ const initialiseMenu = () => {
             });
         });
     }
+    // Make the audio toggle work
     (_a = document.querySelector('#audio-toggle input')) === null || _a === void 0 ? void 0 : _a.addEventListener('change', () => {
         user.audioOn = !user.audioOn;
         if (!document.body.getAttribute('game-in-progress') && user.audioOn) {
@@ -1462,7 +1465,14 @@ const initialiseMenu = () => {
             killAudio('game-menu');
         }
     });
-    (_b = gameMenu.querySelector('#start-game')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', startGame);
+    // Make the game mode selector work
+    (_b = document.querySelector('#game-mode input')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
+        user.gameMode = !user.gameMode;
+        let gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
+        document.body.setAttribute('game-mode', gameModeName);
+        console.log(user);
+    });
+    (_c = gameMenu.querySelector('#start-game')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', startGame);
 };
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
 let timeUpdate;
