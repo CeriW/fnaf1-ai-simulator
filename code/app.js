@@ -1214,46 +1214,19 @@ window.addEventListener('game-over-freddy', () => {
 // ========================================================================== //
 // The additional penalties on time - an additional 1% every X seconds
 // Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
-const additionalPowerDrainageIntervalSpacing = [null, 9.6, 6, 5, 4, 3, 3, 3];
-// This will run every 0.1 seconds and cause the user to lose the equivalent of 1% every 9.6 seconds
-const defaultDrainPower = () => {
-    let drainageAmount = 1 / 9.6;
-    drainageAmount /= 10;
-    user.power -= drainageAmount;
+const additionalPowerDrainageIntervalSpacing = [0, 9.6, 6, 5, 4, 3, 3, 3];
+const drainPower = () => {
+    user.power -= calculatePowerDrain();
     if (user.power <= 0) {
         clearAllIntervals(false);
         powerOutage();
     }
     updatePowerDisplay();
 };
-// This will run every 0.1 seconds
-// It will drain an equivalent of 0.1% every X seconds, multiplied by how many
-// doors/windows/lights you have on
-const calculateAdditionalPowerDrain = () => {
-    let drainageAmount = 0;
-    if (nightToSimulate === 1) {
-        // There is no extra buff on night 1 - you only lose additional power if you have stuff on.
-        drainageAmount = calculatePowerDrainMultiplier() === 1 ? 0 : 0.01 * (calculatePowerDrainMultiplier() - 1);
-    }
-    else {
-        // How much it would be per 1s
-        drainageAmount = additionalPowerDrainageIntervalSpacing[nightToSimulate]
-            ? 0.1 / additionalPowerDrainageIntervalSpacing[nightToSimulate]
-            : 0;
-        // How much it would be per 0.1s
-        drainageAmount /= 10;
-        // How much it will be multiplied
-        drainageAmount *= calculatePowerDrainMultiplier();
-    }
-    return drainageAmount;
-};
-const drainAdditionalPower = () => {
-    user.power -= calculateAdditionalPowerDrain();
-    if (user.power <= 0) {
-        clearAllIntervals(false);
-        powerOutage();
-    }
-    updatePowerDisplay();
+const calculatePowerDrain = () => {
+    let defaultPowerDrain = 0.1 * calculatePowerDrainMultiplier();
+    let nightlyBuffPowerDrain = nightToSimulate > 1 ? 0.1 / additionalPowerDrainageIntervalSpacing[nightToSimulate] : 0;
+    return (defaultPowerDrain + nightlyBuffPowerDrain) / 10; // We are running this every 0.1 seconds, hence the /10
 };
 const calculatePowerDrainMultiplier = () => {
     // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
@@ -1263,37 +1236,11 @@ const calculatePowerDrainMultiplier = () => {
 };
 const updatePowerDisplay = () => {
     const secondsOfGameRemaining = 535 - currentSecond;
-    // How many % we're going to lose through the standard 1% every 9.6 seconds
-    const standardPowerRemaining = secondsOfGameRemaining / 9.6;
-    // How much additional power we're going to lose based on night buffs and current usage
-    let additionalPowerSpend = calculateAdditionalPowerDrain(); // How much power we're due to lose every 0.1s;
-    additionalPowerSpend *= 10; // How much we'd lose every 1s;
-    // additionalPowerSpend *= secondsOfGameRemaining; // How much we're due to lose based on the seconds remaining
-    // let secondsOfPowerRemaining = standardPowerRemaining + additionalPowerSpend;
-    let standardLossPerSecond = 1 / 9.6;
-    let additionalLossPerSecond = calculateAdditionalPowerDrain() * 10; // x10 as the function is intended to calculate for 0.1s
-    // console.log(standardLossPerSecond);
-    console.log(additionalLossPerSecond);
-    const secondsOfPowerRemaining = Math.ceil(user.power / (standardLossPerSecond + additionalLossPerSecond));
+    const secondsOfPowerRemaining = Math.ceil(user.power / (calculatePowerDrain() * 10)); // x10 as this function calculates for 0.1 seconds
     const timeUserWillRunOutOfPower = calculateInGameTime(secondsOfPowerRemaining);
-    // console.log(secondsOfPowerRemaining);
     const timeMessaging = parseInt(timeUserWillRunOutOfPower.hour) >= 6
         ? `you have enough power to last until 6AM`
         : `you will run out of power at ${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM`;
-    // console.log(
-    //   'Night simulation: ' +
-    //     nightToSimulate +
-    //     '\n' +
-    //     ' Seconds of game remaining: ' +
-    //     secondsOfGameRemaining +
-    //     '\n' +
-    //     'Normal power drain to lose: ' +
-    //     standardPowerRemaining +
-    //     '\n' +
-    //     'Additional usage power drain per second: ' +
-    //     additionalPowerSpend
-    // );
-    // console.log(calculateInGameTime(535 - secondsOfPowerRemaining));
     powerDisplay.innerHTML = `
     <div id="power-percentage">
       Power remaining: ${user.power.toFixed(1).toString()}%
@@ -1311,9 +1258,6 @@ const updatePowerDisplay = () => {
       <div>Seconds of power remaining based on current usage: ${secondsOfPowerRemaining}</div>
     </div>
   `;
-    // powerPercentageDisplay.innerHTML = `${Math.ceil(user.power).toString()}%`;
-    // powerPercentageDisplay.innerHTML = `${user.power.toFixed(1).toString()}%`;
-    // powerUsag6eDisplay.setAttribute('multiplier', calculatePowerDrainMultiplier().toString());
 };
 // The sequence of events between you running out of power and Freddy jumpscaring you.
 const powerOutage = () => {
@@ -1393,8 +1337,9 @@ const startGame = () => {
         animatronic.aiLevels[7] = (_a = parseInt(animatronicAIinput.value)) !== null && _a !== void 0 ? _a : 0;
     });
     document.body.setAttribute('game-in-progress', 'true');
-    defaultPowerDrainInterval = window.setInterval(defaultDrainPower, secondLength / 10);
-    additionalPowerDrainInterval = window.setInterval(drainAdditionalPower, secondLength / 10);
+    drainPower;
+    defaultPowerDrainInterval = window.setInterval(drainPower, secondLength / 10);
+    // additionalPowerDrainInterval = window.setInterval(drainAdditionalPower, secondLength / 10);
     timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
     frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
     freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
