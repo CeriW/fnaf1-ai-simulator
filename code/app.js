@@ -108,8 +108,8 @@ let user = {
     currentCamera: defaultCamera,
     leftDoorIsClosed: false,
     rightDoorIsClosed: false,
-    leftLightOn: false,
-    rightLightOn: false,
+    leftLightIsOn: false,
+    rightLightIsOn: false,
     camerasToggled: 0,
     camerasLookedAt: 0,
     leftDoorToggled: 0,
@@ -1135,24 +1135,24 @@ const initialiseLights = () => {
 const toggleLight = (direction) => {
     let matchingDoorway = direction === 'left' ? '2B' : '4B';
     if (direction === 'left') {
-        user.leftLightOn = !user.leftLightOn;
+        user.leftLightIsOn = !user.leftLightIsOn;
     }
     else {
-        user.rightLightOn = !user.rightLightOn;
+        user.rightLightIsOn = !user.rightLightIsOn;
     }
-    if ((direction === 'left' && user.leftLightOn) || (direction === 'right' && user.rightLightOn)) {
+    if ((direction === 'left' && user.leftLightIsOn) || (direction === 'right' && user.rightLightIsOn)) {
         [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
             if (animatronic.currentPosition === matchingDoorway && animatronic.subPosition !== -1) {
                 playAudio('doorway-warning');
             }
         });
     }
-    if (direction === 'left' && user.leftLightOn) {
+    if (direction === 'left' && user.leftLightIsOn) {
         leftLightTimeout = window.setTimeout(() => {
             timeoutLight('left');
         }, 5 * secondLength); // TODO - CHECK HOW LONG THE LIGHTS ACTUALLY STAY ON IF YOU DON'T TURN THEM OFF
     }
-    if (direction === 'right' && user.rightLightOn) {
+    if (direction === 'right' && user.rightLightIsOn) {
         rightLightTimeout = window.setTimeout(() => {
             timeoutLight('right');
         }, 5 * secondLength); // TODO - CHECK HOW LONG THE LIGHTS ACTUALLY STAY ON IF YOU DON'T TURN THEM OFF
@@ -1160,17 +1160,18 @@ const toggleLight = (direction) => {
     displayLightVisuals();
 };
 const timeoutLight = (direction) => {
-    if (direction === 'left' && user.leftLightOn) {
-        user.leftLightOn = false;
+    if (direction === 'left' && user.leftLightIsOn) {
+        user.leftLightIsOn = false;
     }
-    else if (direction === 'right' && user.rightLightOn) {
-        user.rightLightOn = false;
+    else if (direction === 'right' && user.rightLightIsOn) {
+        user.rightLightIsOn = false;
     }
     displayLightVisuals();
 };
 const displayLightVisuals = () => {
-    simulator.setAttribute('left-light-on', user.leftLightOn.toString());
-    simulator.setAttribute('right-light-on', user.rightLightOn.toString());
+    simulator.setAttribute('left-light-on', user.leftLightIsOn.toString());
+    simulator.setAttribute('right-light-on', user.rightLightIsOn.toString());
+    updatePowerDisplay();
 };
 // ========================================================================== //
 // DEATH
@@ -1288,7 +1289,14 @@ const calculatePowerDrain = () => {
 const calculatePowerDrainMultiplier = () => {
     // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
     // The first item in this array is true as the multiplier needs to be at least 1
-    const usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn].filter(Boolean).length;
+    const usage = [
+        true,
+        user.leftDoorIsClosed,
+        user.rightDoorIsClosed,
+        user.camerasOn,
+        user.leftLightIsOn,
+        user.rightLightIsOn,
+    ].filter(Boolean).length;
     return usage > 4 ? 4 : usage;
 };
 const updatePowerDisplay = () => {
