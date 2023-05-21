@@ -1137,9 +1137,17 @@ const toggleLight = (direction) => {
     let matchingDoorway = direction === 'left' ? '2B' : '4B';
     if (direction === 'left') {
         user.leftLightIsOn = !user.leftLightIsOn;
+        if (!user.leftLightIsOn) {
+            killAudio('light-left');
+        }
+        clearTimeout(leftLightTimeout);
     }
     else {
         user.rightLightIsOn = !user.rightLightIsOn;
+        if (!user.rightLightIsOn) {
+            killAudio('light-right');
+        }
+        clearTimeout(rightLightTimeout);
     }
     if ((direction === 'left' && user.leftLightIsOn) || (direction === 'right' && user.rightLightIsOn)) {
         [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
@@ -1147,6 +1155,7 @@ const toggleLight = (direction) => {
                 playAudio('doorway-warning');
             }
         });
+        playAudio(`light-${direction}`);
     }
     if (direction === 'left' && user.leftLightIsOn) {
         leftLightTimeout = window.setTimeout(() => {
@@ -1163,9 +1172,11 @@ const toggleLight = (direction) => {
 const timeoutLight = (direction) => {
     if (direction === 'left' && user.leftLightIsOn) {
         user.leftLightIsOn = false;
+        killAudio('light-left');
     }
     else if (direction === 'right' && user.rightLightIsOn) {
         user.rightLightIsOn = false;
+        killAudio('light-right');
     }
     displayLightVisuals();
 };
@@ -1184,16 +1195,18 @@ const clearAllIntervals = (gameOver = true) => {
         chicaInterval,
         foxyInterval,
         foxyCooldown,
-        foxyJumpscareCountdown,
         freddyInterval,
-        bonnieJumpscareCountdown,
-        chicaJumpscareCountdown,
         freddyCountdown,
         defaultPowerDrainInterval,
         additionalPowerDrainInterval,
         powerOutageInterval,
+    ];
+    const timeoutsToClear = [
         leftLightTimeout,
         rightLightTimeout,
+        foxyJumpscareCountdown,
+        bonnieJumpscareCountdown,
+        chicaJumpscareCountdown,
     ];
     // It's possible to reach this function when you've run out of power, so the game isn't over quite yet.
     // We want to stop the animatronics etc from doing anything, but the timer should still be running in this case.
@@ -1202,6 +1215,9 @@ const clearAllIntervals = (gameOver = true) => {
     }
     intervalsToClear.forEach((interval) => {
         clearInterval(interval);
+    });
+    timeoutsToClear.forEach((timeout) => {
+        clearTimeout(timeout);
     });
 };
 const gameOver = (reason) => {
