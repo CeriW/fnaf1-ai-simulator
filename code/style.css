@@ -25,6 +25,9 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+.buttonStyle:hover {
+  border-color: #7FB000;
+}
 /* POWER  ------------------------------------------------------------------- */
 #power {
   font-family: 'VT323', monospace;
@@ -373,6 +376,9 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+.door-button:hover {
+  border-color: #7FB000;
+}
 #Rooms,
 #Dead_space {
   pointer-events: none;
@@ -673,6 +679,9 @@ body[cameras-on="false"] #camera-display {
   opacity: 0.3;
   cursor: not-allowed;
 }
+.camera-button:hover {
+  border-color: #7FB000;
+}
 .camera-button.active {
   pointer-events: none;
 }
@@ -790,6 +799,9 @@ body[cameras-on="false"] #camera-display {
   cursor: not-allowed;
 }
 #game-over-stats button:hover {
+  border-color: #7FB000;
+}
+#game-over-stats button:hover {
   background: #7FB000;
 }
 body[game-in-progress="true"] #game-over-stats {
@@ -888,6 +900,10 @@ body[game-in-progress="true"] #game-over-stats {
 #game-menu button#start-game[disabled] {
   opacity: 0.3;
   cursor: not-allowed;
+}
+#game-menu button.simulate-night:hover,
+#game-menu button#start-game:hover {
+  border-color: #7FB000;
 }
 @media (max-width: 1400px) {
   #game-menu button.simulate-night,
@@ -1063,6 +1079,13 @@ body[game-mode="playable-game"] .current-ai-level {
   opacity: 0.3;
   cursor: not-allowed;
 }
+#light-controls button:hover {
+  border-color: #7FB000;
+}
+#simulator[left-light-on="true"] ~ #light-controls button[direction="left"],
+#simulator[right-light-on="true"] ~ #light-controls button[direction="right"] {
+  background: #7FB000;
+}
 /* Game speed selector ------------------------------------------------------ */
 #game-speed-selector {
   display: -webkit-box;
@@ -1095,6 +1118,9 @@ body[game-mode="playable-game"] .current-ai-level {
 #game-speed-selector label[disabled] {
   opacity: 0.3;
   cursor: not-allowed;
+}
+#game-speed-selector label:hover {
+  border-color: #7FB000;
 }
 #game-speed-selector input:checked + label {
   background: #7FB000;

@@ -17,3 +17,8 @@
 #light-controls button{
   .buttonStyle();
 }
+
+#simulator[left-light-on="true"] ~ #light-controls button[direction="left"],
+#simulator[right-light-on="true"] ~ #light-controls button[direction="right"]{
+  .buttonStyle.highlighted();
+}

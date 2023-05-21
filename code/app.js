@@ -1123,11 +1123,12 @@ const disableOfficeButtons = () => {
 };
 const initialiseLights = () => {
     const lightControlsContainer = document.querySelector('#light-controls');
-    ['left', 'right'].forEach((type) => {
+    ['left', 'right'].forEach((direction) => {
         const lightButton = document.createElement('button');
-        lightButton.textContent = `Toggle ${type} light`;
+        lightButton.textContent = `Toggle ${direction} light`;
+        lightButton.setAttribute('direction', direction);
         lightButton.addEventListener('click', () => {
-            toggleLight(type);
+            toggleLight(direction);
         });
         lightControlsContainer === null || lightControlsContainer === void 0 ? void 0 : lightControlsContainer.appendChild(lightButton);
     });
