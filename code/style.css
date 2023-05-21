@@ -937,68 +937,6 @@ body[game-in-progress="true"] #game-over-stats {
     font-size: 1.25em;
   }
 }
-.ai-adjuster {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: stretch;
-      -ms-flex-align: stretch;
-          align-items: stretch;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  margin-top: 20px;
-}
-.ai-adjuster button {
-  background: #464664;
-  color: white;
-  font-weight: bold;
-  border: none;
-  font-size: 1.5em;
-  padding: 10px;
-}
-.ai-adjuster input {
-  background: transparent;
-  color: white;
-  border: none;
-  text-align: center;
-  font-size: 4em;
-  font-family: monospace;
-  width: 150px;
-  outline: none;
-}
-.ai-adjuster input::-webkit-inner-spin-button {
-  display: none;
-}
-@media (max-width: 1000px) {
-  .ai-adjuster input {
-    font-size: 2em;
-    width: 75px;
-  }
-}
-.ai-adjuster button:nth-child(2) {
-  -webkit-box-ordinal-group: 0;
-      -ms-flex-order: -1;
-          order: -1;
-}
-#game-speed-selector {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-#game-speed-selector label,
-#game-speed-selector span {
-  margin-right: 20px;
-}
-#game-speed-selector input {
-  margin-right: 5px;
-}
-#game-speed-selector *:not(span) {
-  cursor: pointer;
-}
 /* Switch ------------------------------------------------------------------- */
 .switch {
   position: relative;
@@ -1069,6 +1007,91 @@ body[game-in-progress="true"] #game-over-stats {
   border-bottom: 2px solid #fff;
   font-size: 1.5em;
   width: 100%;
+}
+/* Game speed selector ------------------------------------------------------ */
+#game-speed-selector {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+#game-speed-selector span {
+  margin-right: 20px;
+}
+#game-speed-selector input {
+  opacity: 0;
+}
+#game-speed-selector label {
+  border: 3px solid #fff;
+  background: #424242;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 1.5em;
+  padding: 5px;
+  text-align: left;
+  line-height: 0.8;
+  margin: 0;
+  min-width: 50px;
+  text-align: center;
+}
+#game-speed-selector label.active {
+  background: #7FB000;
+}
+#game-speed-selector label[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+#game-speed-selector input:checked + label {
+  background: #7FB000;
+}
+#game-speed-selector label:hover {
+  border-color: #7FB000;
+}
+.ai-adjuster {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 20px;
+}
+.ai-adjuster button {
+  background: #464664;
+  color: white;
+  font-weight: bold;
+  border: none;
+  font-size: 1.5em;
+  padding: 10px;
+}
+.ai-adjuster input {
+  background: transparent;
+  color: white;
+  border: none;
+  text-align: center;
+  font-size: 4em;
+  font-family: monospace;
+  width: 150px;
+  outline: none;
+}
+.ai-adjuster input::-webkit-inner-spin-button {
+  display: none;
+}
+@media (max-width: 1000px) {
+  .ai-adjuster input {
+    font-size: 2em;
+    width: 75px;
+  }
+}
+.ai-adjuster button:nth-child(2) {
+  -webkit-box-ordinal-group: 0;
+      -ms-flex-order: -1;
+          order: -1;
 }
 body {
   background: #000;

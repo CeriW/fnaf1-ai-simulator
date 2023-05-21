@@ -1,0 +1,30 @@
+/* Game speed selector ------------------------------------------------------ */
+
+#game-speed-selector{
+
+  display: flex;
+  align-items: center;
+  
+  span{
+    margin-right: 20px;
+  }
+
+  input{
+    opacity: 0;
+  }
+
+  label{
+    .buttonStyle();
+    margin: 0;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  input:checked + label{
+    background: @green;
+  }
+
+  label:hover{
+    border-color: @green;
+  }
+}
