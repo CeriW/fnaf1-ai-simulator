@@ -1,19 +1,90 @@
 /* Lights ------------------------------------------------------------------- */
 
 @keyframes litAnimatronicAnimation {
-  0%  {    background-color   : @white;  }
-  50% {    background-color   : red;  }
-  100%{    background-color   : @white;  }
+  0% {
+    background-color: @white;
+  }
+  50% {
+    background-color: red;
+  }
+  100% {
+    background-color: @white;
+  }
 }
 
-
-#simulator[left-light-on="true"] .animatronic[position="2B"][sub-position="1"],
-#simulator[right-light-on="true"] .animatronic[position="4B"][sub-position="1"]{
+#simulator[left-light-on='true'] .animatronic[position='2B'][sub-position='1'],
+#simulator[right-light-on='true'] .animatronic[position='4B'][sub-position='1'] {
   animation: litAnimatronicAnimation 1s linear infinite;
   opacity: 1 !important;
 }
 
-// #simulator[left-light-on="true"] ~ #controls .light-button[door="left"],
-// #simulator[right-light-on="true"] ~ #controls .light-button[door="right"]{
-//   .buttonStyle.highlighted();
-// }
+@keyframes flickerI {
+  0% {
+    opacity: 0.4;
+  }
+  5% {
+    opacity: 0.5;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  30% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 0.1;
+  }
+  40% {
+    opacity: 0.25;
+  }
+  45% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#left-light-graphic,
+#right-light-graphic {
+  position: relative;
+  animation: flickerI 2s infinite;
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(rgba(#dbddef, 0.9), rgba(#dbddef, 0) 75%);
+  animation: flickerI 1s infinite;
+  left: 35%;
+  bottom: 12.5%;
+}
+
+#right-light-graphic {
+  left: 48%;
+}
+
+#simulator:not([left-light-on='true']) #left-light-graphic {
+  display: none;
+}
+
+#simulator:not([right-light-on='true']) #right-light-graphic {
+  display: none;
+}
