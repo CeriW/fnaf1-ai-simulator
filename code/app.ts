@@ -1939,4 +1939,4 @@ let leftLightTimeout: number;
 let rightLightTimeout: number;
 
 initialiseMenu();
-startGame();
+// startGame();

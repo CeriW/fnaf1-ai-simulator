@@ -1573,5 +1573,5 @@ let powerOutageInterval;
 let leftLightTimeout;
 let rightLightTimeout;
 initialiseMenu();
-startGame();
+// startGame();
 //# sourceMappingURL=app.js.map
