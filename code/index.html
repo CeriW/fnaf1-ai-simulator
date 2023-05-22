@@ -3,11 +3,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <aside id="info-bar">Audio:
-    <label class="switch" id="audio-toggle">
-      <input type="checkbox"><span class="slider"></span>
-    </label>    Game mode:
-    <div id="game-mode-selector">AI simulator:
+  <aside id="info-bar">
+    <div id="audio-container">Audio:
+      <label class="switch" id="audio-toggle">
+        <input type="checkbox"><span class="slider"></span>
+      </label><span id="sound-prompt">Best with sound on</span>
+    </div>
+    <div id="game-mode-selector">
+      Game mode:
+      AI simulator:
       <label class="switch" id="game-mode">
         <input type="checkbox"><span class="slider"></span>
       </label>      Playable game

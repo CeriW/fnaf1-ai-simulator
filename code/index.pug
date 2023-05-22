@@ -4,12 +4,15 @@ head
 
 body
   aside#info-bar
-    | Audio:
-    label#audio-toggle.switch
-      input(type='checkbox')
-      span.slider
-    |     Game mode:
+    #audio-container
+      | Audio:
+      label#audio-toggle.switch
+        input(type='checkbox')
+        span.slider
+      span#sound-prompt
+        | Best with sound on
     #game-mode-selector
+      | Game mode:
       | AI simulator:
       label#game-mode.switch
         input(type='checkbox')

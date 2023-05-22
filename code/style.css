@@ -827,6 +827,7 @@ body[game-in-progress="true"] #game-over-stats {
       justify-content: space-around;
   min-height: calc(100vh - 60px);
   text-align: center;
+  padding-top: 50px;
 }
 #game-menu h1 {
   font-family: 'VT323', monospace;
@@ -906,12 +907,12 @@ body[game-in-progress="true"] #game-over-stats {
   #custom-night-menu {
     display: -ms-grid;
     display: grid;
-        grid-template: ". ." ". .";
+        grid-template: '. .' '. .';
   }
 }
 @media (max-width: 500px) {
   #custom-night-menu {
-        grid-template: "." "." "." ".";
+        grid-template: '.' '.' '.' '.';
   }
 }
 #night-selector-menu button {
@@ -992,6 +993,58 @@ body[game-in-progress="true"] #game-over-stats {
   border-bottom: 2px solid #fff;
   font-size: 1.5em;
   width: 100%;
+}
+#audio-container {
+  position: relative;
+}
+#audio-container #sound-prompt {
+  background: #7fb000;
+  color: #000;
+  font-size: 16px;
+  width: 100px;
+  line-height: 0.9;
+  text-align: center;
+  padding: 25px 10px 5px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  position: absolute;
+  right: -32px;
+  top: 100%;
+  -webkit-animation: float 3s ease-in-out infinite;
+          animation: float 3s ease-in-out infinite;
+  -webkit-clip-path: polygon(50% 0%, 100% 20px, 100% 100%, 0% 100%, 0% 20px);
+          clip-path: polygon(50% 0%, 100% 20px, 100% 100%, 0% 100%, 0% 20px);
+}
+body[game-in-progress='true'] #sound-prompt {
+  display: none;
+}
+@-webkit-keyframes float {
+  0% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
+  50% {
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px);
+  }
+  100% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
+}
+@keyframes float {
+  0% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
+  50% {
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px);
+  }
+  100% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+  }
 }
 /* Playable game mode ------------------------------------------------------- */
 body[game-mode="playable-game"] .in-game-minutes,

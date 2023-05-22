@@ -1,6 +1,6 @@
 /* Info bar ----------------------------------------------------------------- */
 
-#info-bar{
+#info-bar {
   background: @black;
   color: @white;
   // position: absolute;
@@ -14,4 +14,40 @@
   border-bottom: 2px solid @white;
   font-size: 1.5em;
   width: 100%;
+}
+
+#audio-container {
+  position: relative;
+
+  #sound-prompt {
+    background: @green;
+    color: @black;
+    font-size: 16px;
+    width: 100px;
+    line-height: 0.9;
+    text-align: center;
+    padding: 25px 10px 5px;
+    box-sizing: border-box;
+    position: absolute;
+    right: -32px;
+    top: 100%;
+    animation: float 3s ease-in-out infinite;
+    clip-path: polygon(50% 0%, 100% 20px, 100% 100%, 0% 100%, 0% 20px);
+  }
+}
+
+body[game-in-progress='true'] #sound-prompt {
+  display: none;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
 }
