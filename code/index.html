@@ -1,179 +1,109 @@
 <!DOCTYPE html>
-<html>
-
 <head>
   <link rel="stylesheet" href="style.css">
 </head>
-
-<body game-mode="ai-simulator">
-<!-- <body game-mode="playable-game"> -->
-
-
-  <!-- <header>
-    <h1>How Five Nights At Freddy's works</h1>
-  </header> -->
-
-  <aside id="info-bar">
-    Audio:
-    <label class="switch" id="audio-toggle">
-      <input type="checkbox">
-      <span class="slider"></span>
-    </label>
-
-    Game mode:
-    <div id="game-mode-selector">
-      AI simulator:
-      <label class="switch" id="game-mode">
-        <input type="checkbox">
-        <span class="slider"></span>
-      </label>
-      Playable game
-    </div>
-
-
-
-  </aside>
-
-  <div id="game-menu">
-    <h1>WELCOME TO THE FIVE NIGHTS AT FREDDY'S SIMULATOR</h1>
-    <div id="night-selector-menu"></div>
-    <div id="custom-night-menu"></div>
-    <div class="ai-descriptions">0&#8209;2(easy) 3&#8209;6(med) 7&#8209;12(hard) 13&#8209;20(extreme)</div>
-
-    <div id="game-speed-selector">
-      <span>Game speed:</span>
-
-      <input type="radio" id="speed0" name="speed" value="0.25">
-      <label for="speed0">x0.25</label>
-
-      <input type="radio" id="speed1" name="speed" value="0.5">
-      <label for="speed1">x0.5</label>
-
-      <input type="radio" id="speed2" name="speed" value="1" checked>
-      <label for="speed2">x1</label> 
-
-      <input type="radio" id="speed3" name="speed" value="2">
-      <label for="speed3">x2</label>
-
-      <input type="radio" id="speed4" name="speed" value="3">
-      <label for="speed4">x3</label>
-
-    </div>
-
-
-    <button id="start-game">START GAME</button>
+<aside id="info-bar">Audio:
+  <label class="switch" id="audio-toggle">
+    <input type="checkbox"><span class="slider"></span>
+  </label>    Game mode:
+  <div id="game-mode-selector">AI simulator:
+    <label class="switch" id="game-mode">
+      <input type="checkbox"><span class="slider"></span>
+    </label>      Playable game
   </div>
-
-
-  <main>
-    <div id="simulator-container">
-      <div id="simulator">
-        <svg id="pizzeria-layout" version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-
-          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          viewBox="0 0 401 358" enable-background="new 0 0 401 358" xml:space="preserve">
-
-          <g id="Dead_space">
-            <rect x="356" y="164.5" fill="none" stroke-width="5" stroke-miterlimit="10" width="27" height="31.5"/>
-            <rect x="356" y="109.75" fill="none" stroke-width="5" stroke-miterlimit="10" width="27" height="31.5"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="50" y1="66" x2="64" y2="66"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="50" y1="81" x2="64" y2="81"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="302" y1="97" x2="320" y2="97"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="302" y1="109.75" x2="314" y2="109.75"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="172" x2="356" y2="172"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="186" x2="356" y2="186"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="117.5" x2="356" y2="117.5"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="130.5" x2="356" y2="130.5"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="274" y1="196" x2="274" y2="209"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="287" y1="196" x2="287" y2="209"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="228.5" y1="209" x2="228.5" y2="196"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="241" y1="209" x2="241" y2="196"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="122" y1="209" x2="122" y2="196"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="136" y1="209" x2="136" y2="196"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="95" y1="252.5" x2="112" y2="252.5"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="95" y1="266.5" x2="112" y2="266.5"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="201" y1="309.5" x2="215.945" y2="309.5"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="215.945" y1="322" x2="201" y2="322"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="148" y1="322" x2="165" y2="322"/>
-            <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="165" y1="309.5" x2="148" y2="309.5"/>
-          </g>
-          <g id="Rooms">
-          <rect x="64" y="55" id="dining-room" camera="1B" width="238" height="141"/>
-          <rect x="14" y="55" id="backstage" camera="5" width="36" height="70.5"/>
-          <rect x="28" y="141" id="pirate-cove" camera="1C" width="36" height="47"/>
-          <rect x="314" y="76.75" id="restrooms" camera="7" width="29" height="119.25"/>
-          <rect x="130" y="19.75" id="show-stage" camera="1A" width="105.945" height="35.25"/>
-          <rect x="112" y="209" id="west-hall" width="36" height="132"/>
-          <rect x="215.945" y="209" id="east-hall" width="36" height="132"/>
-          <rect x="164.5" y="282" id="security-office" width="36" height="59"/>
-          <rect x="270" y="209" id="kitchen" camera="6" width="81" height="66"/>
-          <rect x="59" y="225" id="supply-closet" camera="3" width="36" height="70.5"/>
-          </g>
-        </svg>
-
-        <svg id="close-icons" version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-
-          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          viewBox="0 0 401 358" enable-background="new 0 0 401 358" xml:space="preserve">
-          <g id="left-door-close-icon" transform="scale(0.03) translate(4950,10260)" class="hidden">
-            <path d="m256 0c-141.387 0-256 114.613-256 256s114.613 256 256 256 256-114.613 256-256-114.613-256-256-256zm-162.461 356.87c-2.571-4.141-4.998-8.395-7.248-12.742-12.886-24.73-20.517-52.578-21.425-82.139-3.335-108.18 84.7-198.198 192.922-197.207 31.131.279 60.476 8.013 86.373 21.477 4.347 2.261 8.591 4.688 12.731 7.269 1.879 1.167 2.189 3.779.63 5.338l-258.635 258.634c-1.559 1.559-4.171 1.249-5.348-.63zm162.461 90.358c-31.792 0-61.767-7.765-88.128-21.487-4.347-2.261-8.611-4.688-12.752-7.259-1.89-1.177-2.199-3.789-.64-5.349l258.653-258.653c1.559-1.559 4.172-1.249 5.349.64 2.571 4.141 4.997 8.405 7.259 12.752 13.723 26.392 21.487 56.336 21.487 88.128 0 105.609-85.588 191.228-191.228 191.228z" fill="#e94444"/>
-            <path d="m402.426 45.99c56.243 46.95 92.021 117.587 92.021 196.587 0 141.387-114.613 256-256 256-54.446 0-104.938-17.006-146.426-45.99 44.41 37.1 101.592 59.413 163.979 59.413 141.387 0 256-114.613 256-256 0-86.93-43.326-163.742-109.574-210.01z" fill="#d83131"/>
-          </g>
-          <g id="right-door-close-icon" transform="scale(0.03) translate(6700,10260)" class="hidden">
-            <path d="m256 0c-141.387 0-256 114.613-256 256s114.613 256 256 256 256-114.613 256-256-114.613-256-256-256zm-162.461 356.87c-2.571-4.141-4.998-8.395-7.248-12.742-12.886-24.73-20.517-52.578-21.425-82.139-3.335-108.18 84.7-198.198 192.922-197.207 31.131.279 60.476 8.013 86.373 21.477 4.347 2.261 8.591 4.688 12.731 7.269 1.879 1.167 2.189 3.779.63 5.338l-258.635 258.634c-1.559 1.559-4.171 1.249-5.348-.63zm162.461 90.358c-31.792 0-61.767-7.765-88.128-21.487-4.347-2.261-8.611-4.688-12.752-7.259-1.89-1.177-2.199-3.789-.64-5.349l258.653-258.653c1.559-1.559 4.172-1.249 5.349.64 2.571 4.141 4.997 8.405 7.259 12.752 13.723 26.392 21.487 56.336 21.487 88.128 0 105.609-85.588 191.228-191.228 191.228z" fill="#e94444"/>
-            <path d="m402.426 45.99c56.243 46.95 92.021 117.587 92.021 196.587 0 141.387-114.613 256-256 256-54.446 0-104.938-17.006-146.426-45.99 44.41 37.1 101.592 59.413 163.979 59.413 141.387 0 256-114.613 256-256 0-86.93-43.326-163.742-109.574-210.01z" fill="#d83131"/>
-          </g>
-        </svg>
-
-      </div>
-
-      <div id="door-controls"></div>
-      <div id="light-controls"></div>
-
-      <button id="cameras">Toggle cameras</button>
-
-      <div id="game-over-stats"></div>
-      <div id="office-overlay" class="hidden"><img></img></div>
-
+</aside>
+<div id="game-menu">
+  <h1>WELCOME TO THE FIVE NIGHTS AT FREDDY&apos;S SIMULATOR</h1>
+  <div id="night-selector-menu"></div>
+  <div id="custom-night-menu"></div>
+  <div class="ai-descriptions">0&#x2011;2(easy) 3&#x2011;6(med) 7&#x2011;12(hard) 13&#x2011;20(extreme)</div>
+  <div id="game-speed-selector"><span>Game speed:</span>
+    <input id="speed0" type="radio" name="speed" value="0.25">
+    <label for="speed0">x0.25</label>
+    <input id="speed1" type="radio" name="speed" value="0.5">
+    <label for="speed1">x0.5</label>
+    <input id="speed2" type="radio" name="speed" value="1" checked="">
+    <label for="speed2">x1</label>
+    <input id="speed3" type="radio" name="speed" value="2">
+    <label for="speed3">x2</label>
+    <input id="speed4" type="radio" name="speed" value="3">
+    <label for="speed4">x3</label>
+  </div>
+  <button id="start-game">START GAME</button>
+</div>
+<main>
+  <div id="simulator-container">
+    <div id="simulator">
+      <svg id="pizzeria-layout" version="1.1" xmlns:x="&amp;ns_extend;" xmlns:i="&amp;ns_ai;" xmlns:graph="&amp;ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 401 358" enable-background="new 0 0 401 358" xml:space="preserve">
+        <g id="Dead_space">
+          <rect x="356" y="164.5" fill="none" stroke-width="5" stroke-miterlimit="10" width="27" height="31.5"></rect>
+          <rect x="356" y="109.75" fill="none" stroke-width="5" stroke-miterlimit="10" width="27" height="31.5"></rect>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="50" y1="66" x2="64" y2="66"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="50" y1="81" x2="64" y2="81"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="302" y1="97" x2="320" y2="97"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="302" y1="109.75" x2="314" y2="109.75"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="172" x2="356" y2="172"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="186" x2="356" y2="186"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="117.5" x2="356" y2="117.5"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="343" y1="130.5" x2="356" y2="130.5"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="274" y1="196" x2="274" y2="209"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="287" y1="196" x2="287" y2="209"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="228.5" y1="209" x2="228.5" y2="196"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="241" y1="209" x2="241" y2="196"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="122" y1="209" x2="122" y2="196"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="136" y1="209" x2="136" y2="196"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="95" y1="252.5" x2="112" y2="252.5"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="95" y1="266.5" x2="112" y2="266.5"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="201" y1="309.5" x2="215.945" y2="309.5"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="215.945" y1="322" x2="201" y2="322"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="148" y1="322" x2="165" y2="322"></line>
+          <line fill="none" stroke-width="5" stroke-miterlimit="10" x1="165" y1="309.5" x2="148" y2="309.5"></line>
+        </g>
+        <g id="Rooms">
+          <rect id="dining-room" x="64" y="55" camera="1B" width="238" height="141"></rect>
+          <rect id="backstage" x="14" y="55" camera="5" width="36" height="70.5"></rect>
+          <rect id="pirate-cove" x="28" y="141" camera="1C" width="36" height="47"></rect>
+          <rect id="restrooms" x="314" y="76.75" camera="7" width="29" height="119.25"></rect>
+          <rect id="show-stage" x="130" y="19.75" camera="1A" width="105.945" height="35.25"></rect>
+          <rect id="west-hall" x="112" y="209" width="36" height="132"></rect>
+          <rect id="east-hall" x="215.945" y="209" width="36" height="132"></rect>
+          <rect id="security-office" x="164.5" y="282" width="36" height="59"></rect>
+          <rect id="kitchen" x="270" y="209" camera="6" width="81" height="66"></rect>
+          <rect id="supply-closet" x="59" y="225" camera="3" width="36" height="70.5"></rect>
+        </g>
+      </svg>
+      <svg id="close-icons" version="1.1" xmlns:x="&amp;ns_extend;" xmlns:i="&amp;ns_ai;" xmlns:graph="&amp;ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 401 358" enable-background="new 0 0 401 358" xml:space="preserve">
+        <g class="hidden" id="left-door-close-icon" transform="scale(0.03) translate(4950,10260)">
+          <path d="m256 0c-141.387 0-256 114.613-256 256s114.613 256 256 256 256-114.613 256-256-114.613-256-256-256zm-162.461 356.87c-2.571-4.141-4.998-8.395-7.248-12.742-12.886-24.73-20.517-52.578-21.425-82.139-3.335-108.18 84.7-198.198 192.922-197.207 31.131.279 60.476 8.013 86.373 21.477 4.347 2.261 8.591 4.688 12.731 7.269 1.879 1.167 2.189 3.779.63 5.338l-258.635 258.634c-1.559 1.559-4.171 1.249-5.348-.63zm162.461 90.358c-31.792 0-61.767-7.765-88.128-21.487-4.347-2.261-8.611-4.688-12.752-7.259-1.89-1.177-2.199-3.789-.64-5.349l258.653-258.653c1.559-1.559 4.172-1.249 5.349.64 2.571 4.141 4.997 8.405 7.259 12.752 13.723 26.392 21.487 56.336 21.487 88.128 0 105.609-85.588 191.228-191.228 191.228z" fill="#e94444"></path>
+          <path d="m402.426 45.99c56.243 46.95 92.021 117.587 92.021 196.587 0 141.387-114.613 256-256 256-54.446 0-104.938-17.006-146.426-45.99 44.41 37.1 101.592 59.413 163.979 59.413 141.387 0 256-114.613 256-256 0-86.93-43.326-163.742-109.574-210.01z" fill="#d83131"></path>
+        </g>
+        <g class="hidden" id="right-door-close-icon" transform="scale(0.03) translate(6700,10260)">
+          <path d="m256 0c-141.387 0-256 114.613-256 256s114.613 256 256 256 256-114.613 256-256-114.613-256-256-256zm-162.461 356.87c-2.571-4.141-4.998-8.395-7.248-12.742-12.886-24.73-20.517-52.578-21.425-82.139-3.335-108.18 84.7-198.198 192.922-197.207 31.131.279 60.476 8.013 86.373 21.477 4.347 2.261 8.591 4.688 12.731 7.269 1.879 1.167 2.189 3.779.63 5.338l-258.635 258.634c-1.559 1.559-4.171 1.249-5.348-.63zm162.461 90.358c-31.792 0-61.767-7.765-88.128-21.487-4.347-2.261-8.611-4.688-12.752-7.259-1.89-1.177-2.199-3.789-.64-5.349l258.653-258.653c1.559-1.559 4.172-1.249 5.349.64 2.571 4.141 4.997 8.405 7.259 12.752 13.723 26.392 21.487 56.336 21.487 88.128 0 105.609-85.588 191.228-191.228 191.228z" fill="#e94444"></path>
+          <path d="m402.426 45.99c56.243 46.95 92.021 117.587 92.021 196.587 0 141.387-114.613 256-256 256-54.446 0-104.938-17.006-146.426-45.99 44.41 37.1 101.592 59.413 163.979 59.413 141.387 0 256-114.613 256-256 0-86.93-43.326-163.742-109.574-210.01z" fill="#d83131"></path>
+        </g>
+      </svg>
     </div>
-
-    <div id="sidebar">
-
-      <div id="camera-display">
-        <div id="static"></div>
-        <img id="camera-screen" src="../assets/cameras/1A-empty.webp">
-        <span id="camera-status">CAMERAS ARE OFF</span>
-      </div>
-
-      <div id="animatronic-report"></div>
-
-      <div>
-        <div id="timer">
-          <div id="in-game-time">
-            <span class="in-game-hour">12</span>
-            <span class="in-game-minutes">00</span>
-            <span class="am-marker">AM</span>
-          </div>
-          <div id="supplementary-time-info">
-            Real time passed:
-            <div id="real-time">0 : 00</div>
-            <div id="frames">0</div>
-          </div>
-
-          <!-- <details>
-            <summary>How does time work in FNAF?</summary>
-            Each hour in FNAF lasts 90 real-time seconds, with the exception of 12AM which lasts 89 real-time seconds.
-          </details> -->
-        </div>
-
-        <div id="power">
+    <div id="door-controls"></div>
+    <div id="light-controls"></div>
+    <button id="cameras">Toggle cameras</button>
+    <div id="game-over-stats"></div>
+    <div class="hidden" id="office-overlay"><img></div>
+  </div>
+  <div id="sidebar">
+    <div id="camera-display">
+      <div id="static"></div><img id="camera-screen" src="../assets/cameras/1A-empty.webp"><span id="camera-status">CAMERAS ARE OFF</span>
+    </div>
+    <div id="animatronic-report"></div>
+    <div>
+      <div id="timer">
+        <div id="in-game-time"><span class="in-game-hour">12</span><span class="in-game-minutes">00</span><span class="am-marker">AM</span></div>
+        <div id="supplementary-time-info">Real time passed:
+          <div id="real-time">0 : 00</div>
+          <div id="frames">0</div>
         </div>
       </div>
+      <div id="power"></div>
     </div>
-  </main>
-
-
+  </div>
+</main>
 <script type="module" src="app.js"></script>
-
-</body>
-</html>
