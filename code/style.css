@@ -896,6 +896,7 @@ body[game-in-progress="true"] #game-over-stats {
 #game-menu h2 {
   font-size: 2em;
   text-align: center;
+  margin-top: 0;
 }
 #custom-night-menu {
   display: -webkit-box;
