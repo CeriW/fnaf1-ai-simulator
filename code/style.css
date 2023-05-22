@@ -1133,11 +1133,11 @@ body[game-mode="playable-game"] .current-ai-level {
   background: radial-gradient(rgba(219, 221, 239, 0.9), rgba(219, 221, 239, 0) 75%);
   -webkit-animation: flickerI 1s infinite;
           animation: flickerI 1s infinite;
-  left: 35%;
-  bottom: 12.5%;
+  left: 35.5%;
+  bottom: 8.6%;
 }
 #right-light-graphic {
-  left: 48%;
+  left: 49%;
 }
 #simulator:not([left-light-on='true']) #left-light-graphic {
   display: none;
