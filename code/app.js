@@ -1093,7 +1093,7 @@ const initialiseDoors = () => {
         // Create door buttons
         let myButton = document.createElement('button');
         myButton.classList.add('door-button');
-        myButton.textContent = `Close ${direction} door`;
+        // myButton.textContent = `${direction} door`;
         myButton.setAttribute('door', direction);
         (_a = document.querySelector('#controls')) === null || _a === void 0 ? void 0 : _a.append(myButton);
         // Make the door buttons toggle the doors
@@ -1126,7 +1126,7 @@ const initialiseLights = () => {
     ['left', 'right'].forEach((direction) => {
         const lightButton = document.createElement('button');
         lightButton.classList.add('light-button');
-        lightButton.textContent = `Toggle ${direction} light`;
+        // lightButton.textContent = `${direction} light`;
         lightButton.setAttribute('door', direction);
         lightButton.addEventListener('click', () => {
             toggleLight(direction);

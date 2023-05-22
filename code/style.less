@@ -1,6 +1,6 @@
 @black: #000;
 @white: #fff;
-@green: #7FB000;
+@green: #7fb000;
 
 @l-screens: 1400px;
 @m-screens: 1000px;
@@ -9,7 +9,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
-.customFont{
+.customFont {
   font-family: 'VT323', monospace;
 }
 
@@ -23,21 +23,21 @@
   text-align: left;
   line-height: 0.8;
 
-  &.active{
+  &.active {
     background: @green;
   }
 
-  &[disabled]{
+  &[disabled] {
     opacity: 0.3;
     cursor: not-allowed;
   }
 
-  &:hover{
+  &:hover {
     border-color: @green;
   }
 
-  .hover(){
-    &:hover{
+  .hover() {
+    &:hover {
       background: @green;
     }
   }
@@ -60,13 +60,13 @@
 @import 'css-modules/_info-bar.less';
 @import 'css-modules/_playable-game-mode.less';
 @import 'css-modules/_lights.less';
+@import 'css-modules/_controls.less';
 
 // Game menu
 @import 'css-modules/game-menu/_game-speed-selector.less';
 @import 'css-modules/game-menu/_ai-adjuster.less';
 
-
-body{
+body {
   background: @black;
   color: @white;
   // padding: 30px;
@@ -83,69 +83,58 @@ body{
   font-size: 16px;
 }
 
-
-body[game-in-progress]{
-  #game-menu{
+body[game-in-progress] {
+  #game-menu {
     display: none;
   }
 }
 
-
-body:not([game-in-progress]){
-  main{
+body:not([game-in-progress]) {
+  main {
     display: none;
   }
 }
 
-
-
-main{
+main {
   width: 100%;
   display: grid;
-  grid-template: 
-    ". ." auto
+  grid-template:
+    '. .' auto
     / 750px 1fr;
 }
 
-@media(max-width: @l-screens){
-  main{
-    grid-template: 
-    ". ." auto
-    / 600px 1fr;
+@media (max-width: @l-screens) {
+  main {
+    grid-template:
+      '. .' auto
+      / 600px 1fr;
   }
 }
 
-@media(max-width: @m-screens){
-  main{
-    grid-template: 
-    ". ." auto
-    / 500px 1fr;
+@media (max-width: @m-screens) {
+  main {
+    grid-template:
+      '. .' auto
+      / 500px 1fr;
   }
 }
 
-
-
-
-
-
-
-details{
+details {
   width: 100%;
   cursor: pointer;
 }
 
-img{
+img {
   max-width: 100%;
 }
 
-.hidden{
+.hidden {
   display: none !important;
 }
 
-button{
+button {
   cursor: pointer;
 }
-
 
 /* width */
 ::-webkit-scrollbar {
@@ -154,46 +143,42 @@ button{
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #111; 
+  background: #111;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #999; 
+  background: #999;
 }
-
 
 /* Pizzeria layout ---------------------------------------------------------- */
 
-
-
-#pizzeria-layout{
+#pizzeria-layout {
   max-width: 750px;
 
-  *{
+  * {
     stroke-width: 0.75;
   }
 
-  #Rooms *{
+  #Rooms * {
     stroke: @white;
   }
 
-  #Dead_space{
+  #Dead_space {
     stroke: #333333;
   }
 }
 
-#sidebar{
+#sidebar {
   display: grid;
   grid-template:
-    ". ." auto
-    " reports reports" min-content
+    '. .' auto
+    ' reports reports' min-content
     / 1fr 1fr;
-    gap: 10px;
+  gap: 10px;
 }
-
