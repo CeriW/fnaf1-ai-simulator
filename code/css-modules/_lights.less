@@ -14,11 +14,11 @@
 }
 
 
-#light-controls button{
+#controls button{
   .buttonStyle();
 }
 
-#simulator[left-light-on="true"] ~ #light-controls button[direction="left"],
-#simulator[right-light-on="true"] ~ #light-controls button[direction="right"]{
+#simulator[left-light-on="true"] ~ #controls button[door="left"],
+#simulator[right-light-on="true"] ~ #controls button[door="right"]{
   .buttonStyle.highlighted();
 }

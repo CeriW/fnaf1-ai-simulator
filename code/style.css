@@ -1062,7 +1062,7 @@ body[game-mode="playable-game"] .current-ai-level {
           animation: litAnimatronicAnimation 1s linear infinite;
   opacity: 1 !important;
 }
-#light-controls button {
+#controls button {
   border: 3px solid #fff;
   background: #424242;
   color: #fff;
@@ -1072,18 +1072,18 @@ body[game-mode="playable-game"] .current-ai-level {
   text-align: left;
   line-height: 0.8;
 }
-#light-controls button.active {
+#controls button.active {
   background: #7FB000;
 }
-#light-controls button[disabled] {
+#controls button[disabled] {
   opacity: 0.3;
   cursor: not-allowed;
 }
-#light-controls button:hover {
+#controls button:hover {
   border-color: #7FB000;
 }
-#simulator[left-light-on="true"] ~ #light-controls button[direction="left"],
-#simulator[right-light-on="true"] ~ #light-controls button[direction="right"] {
+#simulator[left-light-on="true"] ~ #controls button[door="left"],
+#simulator[right-light-on="true"] ~ #controls button[door="right"] {
   background: #7FB000;
 }
 /* Game speed selector ------------------------------------------------------ */

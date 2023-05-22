@@ -1366,7 +1366,7 @@ const initialiseDoors = () => {
     myButton.classList.add('door-button');
     myButton.textContent = `Close ${direction} door`;
     myButton.setAttribute('door', direction);
-    document.querySelector('#door-controls')?.append(myButton);
+    document.querySelector('#controls')?.append(myButton);
 
     // Make the door buttons toggle the doors
     myButton.addEventListener('click', () => {
@@ -1404,12 +1404,13 @@ const disableOfficeButtons = () => {
 type LightDirection = 'left' | 'right';
 
 const initialiseLights = () => {
-  const lightControlsContainer = document.querySelector('#light-controls');
+  const lightControlsContainer = document.querySelector('#controls');
 
   ['left', 'right'].forEach((direction) => {
     const lightButton = document.createElement('button');
+    lightButton.classList.add('light-button');
     lightButton.textContent = `Toggle ${direction} light`;
-    lightButton.setAttribute('direction', direction);
+    lightButton.setAttribute('door', direction);
     lightButton.addEventListener('click', () => {
       toggleLight(direction as LightDirection);
     });
@@ -1939,6 +1940,4 @@ let leftLightTimeout: number;
 let rightLightTimeout: number;
 
 initialiseMenu();
-// startGame();
-
-console.log('hjey');
+startGame();
