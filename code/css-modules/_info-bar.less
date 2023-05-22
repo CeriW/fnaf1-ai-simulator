@@ -3,17 +3,17 @@
 #info-bar {
   background: @black;
   color: @white;
-  // position: absolute;
-  // left: 0;
-  // right: 0;
-  // bottom: 0;
-  // z-index: 99;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   border-bottom: 2px solid @white;
-  font-size: 1.5em;
+  font-size: 1.25em;
   width: 100%;
+
+  & > div {
+    display: flex;
+    align-items: center;
+  }
 }
 
 #audio-container {
@@ -29,10 +29,14 @@
     padding: 25px 10px 5px;
     box-sizing: border-box;
     position: absolute;
-    right: -32px;
+    right: -18px;
     top: 100%;
     animation: float 3s ease-in-out infinite;
     clip-path: polygon(50% 0%, 100% 20px, 100% 100%, 0% 100%, 0% 20px);
+  }
+
+  .switch .slider {
+    background: red;
   }
 }
 
@@ -49,5 +53,15 @@ body[game-in-progress='true'] #sound-prompt {
   }
   100% {
     transform: translateY(-5px);
+  }
+}
+
+#game-mode-selector {
+  & > span:first-child {
+    margin-left: 20px;
+  }
+
+  .slider {
+    background: #333 !important;
   }
 }
