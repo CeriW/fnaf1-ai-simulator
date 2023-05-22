@@ -1574,4 +1574,5 @@ let leftLightTimeout;
 let rightLightTimeout;
 initialiseMenu();
 // startGame();
+console.log('hjey');
 //# sourceMappingURL=app.js.map

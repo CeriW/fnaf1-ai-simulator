@@ -1940,3 +1940,5 @@ let rightLightTimeout: number;
 
 initialiseMenu();
 // startGame();
+
+console.log('hjey');
