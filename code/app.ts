@@ -1723,18 +1723,49 @@ const powerOutage = () => {
 type AvailableAudio =
   | 'door-toggle'
   | 'doorway-warning'
+  | 'eerie'
+  | 'error'
   | 'foxy-door-bash'
+  | 'foxy-run'
+  | 'freddy-move-1'
+  | 'freddy-move-2'
+  | 'freddy-move-3'
   | 'game-menu'
+  | 'garble-1'
+  | 'garble-2'
+  | 'garble-3'
+  | 'jumpscare'
+  | 'jumpscare-golden-freddy'
   | 'light-left'
   | 'light-right'
+  | 'office-fan'
+  | 'oven-1'
+  | 'oven-2'
+  | 'oven-3'
+  | 'oven-4'
+  | 'pirate-song'
+  | 'post-jumpscare'
   | 'power-outage'
-  | 'toreador-march';
+  | 'robot-voice'
+  | 'toreador-march'
+  | '6AM'
+  | 'animatronic-camera-move'
+  | 'breath-1'
+  | 'breath-2'
+  | 'breath-3'
+  | 'breath-4'
+  | 'camera-change'
+  | 'camera-feed'
+  | 'camera-toggle-off'
+  | 'camera-toggle-on'
+  | 'cheer'
+  | 'circus';
 
 const playAudio = (audio: AvailableAudio) => {
   if (user.audioOn) {
     let myAudio = document.createElement('audio');
     myAudio.classList.add(audio);
-    myAudio.src = `${paths.audio}/${audio}.mp3`;
+    myAudio.src = `${paths.audio}/${audio}' | '`;
     document.body.appendChild(myAudio);
     myAudio.play();
     myAudio.onended = () => {
