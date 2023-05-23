@@ -25,7 +25,7 @@ A random one of these will play when Chica is in the kitchen, even when the came
 [freddy-move-2.mp3](../assets/sounds/freddy-move-2.mp3)  
 [freddy-move-3.mp3](../assets/sounds/freddy-move-3.mp3)
 
-One of these sounds, chosen randomly each time, will play each time Freddy moves. Freddy is difficult to see on camera and always follows a set patch, so if you pay attention it can actually be easier to keep track of Freddy by counting how many times he's laughed rather than finding him on the cameras.
+One of these sounds, chosen randomly each time, will play each time Freddy moves. Freddy is difficult to see on camera and always follows a set path, so if you pay attention it can actually be easier to keep track of Freddy by counting how many times he's laughed rather than finding him on the cameras.
 
 ## Middle ground
 
