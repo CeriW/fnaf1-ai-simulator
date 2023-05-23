@@ -1395,10 +1395,17 @@ const powerOutage = () => {
 const playAudio = (audio) => {
     // Audio that should loop
     const loopingAudio = ['office-fan'];
+    let myAudioSource;
+    switch (audio) {
+        case 'oven':
+            myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+        default:
+            myAudioSource = audio;
+    }
     if (user.audioOn) {
         let myAudio = document.createElement('audio');
         myAudio.classList.add(audio);
-        myAudio.src = `${paths.audio}/${audio}.mp3`;
+        myAudio.src = `${paths.audio}/${myAudioSource}.mp3`;
         if (loopingAudio.includes(audio)) {
             myAudio.setAttribute('loop', 'true');
         }
@@ -1408,13 +1415,14 @@ const playAudio = (audio) => {
             document.body.removeChild(myAudio);
         };
     }
-    // Audio that will need its volume tweaking on certain conditions
-    if (audio === 'office-fan') {
-        updateAudioVolume('office-fan', user.camerasOn);
+    switch (audio) {
+        case 'office-fan':
+            updateAudioVolume('office-fan', user.camerasOn);
+            break;
     }
 };
-const killAudio = (audio) => {
-    const matchingAudio = document.querySelectorAll(`audio.${audio}`);
+const killAudio = (audio = null) => {
+    const matchingAudio = audio ? document.querySelectorAll(`audio.${audio}`) : document.querySelectorAll(`audio`);
     matchingAudio.forEach((match) => {
         match.remove();
     });
@@ -1427,6 +1435,9 @@ const updateAudioVolume = (audio, condition) => {
     myAudio.forEach((a) => {
         a.volume = condition ? 0.4 : 1;
     });
+};
+const playAudioAmbience = () => {
+    playAudio('office-fan');
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
@@ -1557,12 +1568,16 @@ const initialiseMenu = () => {
     // Make the audio toggle work
     (_a = document.querySelector('#audio-toggle input')) === null || _a === void 0 ? void 0 : _a.addEventListener('change', () => {
         user.audioOn = !user.audioOn;
+        // Play the game menu music if the game hasn't started yet
         if (!document.body.getAttribute('game-in-progress') && user.audioOn) {
             playAudio('game-menu');
         }
-        else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
-            killAudio('game-menu');
-            playAudio('office-fan');
+        // Turn all the audio off if the user has chosen so
+        else if (!user.audioOn) {
+            killAudio();
+        }
+        else {
+            playAudioAmbience();
         }
     });
     // Make the game mode selector work
