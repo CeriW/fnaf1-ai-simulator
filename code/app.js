@@ -565,18 +565,21 @@ const calculateNewBonniePosition = () => {
 const calculateNewChicaPosition = () => {
     let randomChoice = Math.round(Math.random());
     let newPosition = '';
-    // QUESTION - I AM ASSUMING CHICA CAN'T JUMP BETWEEN THE KITCHEN AND RESTROOMS WITHOUT GOING VIA 1B
+    let choices;
     switch (Chica.currentPosition) {
         case '1A':
             newPosition = '1B';
             break;
         case '1B':
-            const choices = ['4A', '6', '7'];
+            choices = ['4A', '6', '7'];
             newPosition = choices[Math.floor(Math.random() * choices.length)];
             break;
         case '6':
+            choices = ['1B', '7'];
+            newPosition = choices[Math.floor(Math.random() * choices.length)];
         case '7':
-            newPosition = '1B';
+            choices = ['1B', '6'];
+            newPosition = choices[Math.floor(Math.random() * choices.length)];
             break;
         case '4A':
             newPosition = randomChoice === 0 ? '1B' : '4B';
@@ -1437,7 +1440,7 @@ const updateAudioVolume = (audio, condition) => {
     });
 };
 const playAudioAmbience = () => {
-    playAudio('office-fan');
+    // playAudio('office-fan');
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
@@ -1448,7 +1451,7 @@ const startGame = () => {
     gameSpeed = (_a = parseFloat(selectedRadio.value)) !== null && _a !== void 0 ? _a : 1;
     secondLength = Math.ceil(1000 / gameSpeed);
     killAudio('game-menu');
-    playAudio('office-fan');
+    playAudioAmbience();
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);

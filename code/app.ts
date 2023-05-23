@@ -655,18 +655,21 @@ const calculateNewChicaPosition = () => {
   let randomChoice = Math.round(Math.random());
   let newPosition = '';
 
-  // QUESTION - I AM ASSUMING CHICA CAN'T JUMP BETWEEN THE KITCHEN AND RESTROOMS WITHOUT GOING VIA 1B
+  let choices;
   switch (Chica.currentPosition) {
     case '1A':
       newPosition = '1B';
       break;
     case '1B':
-      const choices = ['4A', '6', '7'];
+      choices = ['4A', '6', '7'];
       newPosition = choices[Math.floor(Math.random() * choices.length)];
       break;
     case '6':
+      choices = ['1B', '7'];
+      newPosition = choices[Math.floor(Math.random() * choices.length)];
     case '7':
-      newPosition = '1B';
+      choices = ['1B', '6'];
+      newPosition = choices[Math.floor(Math.random() * choices.length)];
       break;
     case '4A':
       newPosition = randomChoice === 0 ? '1B' : '4B';
@@ -1810,7 +1813,7 @@ const updateAudioVolume = (audio: AvailableAudio, condition: boolean) => {
 };
 
 const playAudioAmbience = () => {
-  playAudio('office-fan');
+  // playAudio('office-fan');
 };
 
 // ========================================================================== //
@@ -1823,7 +1826,7 @@ const startGame = () => {
   secondLength = Math.ceil(1000 / gameSpeed);
 
   killAudio('game-menu');
-  playAudio('office-fan');
+  playAudioAmbience();
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
