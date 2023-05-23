@@ -404,6 +404,7 @@ const moveFreddy = () => {
         Freddy.currentPosition = '4A';
         moveAnimatronic(Freddy, { start: '4B', end: '4A' });
         Freddy.stats.officeAttempts++;
+        playAudio('freddy-move');
         // CAMERAS ON, HE'S AT 4B, USER IS NOT LOOKING AT 4B BUT HE'S FAILED HIS MOVEMENT CHECK
     }
     else if (user.camerasOn &&
@@ -425,6 +426,7 @@ const moveFreddy = () => {
     else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
         addReport(Freddy, 'in the office');
         moveAnimatronic(Freddy, { start: '4B', end: 'office' }, false);
+        playAudio('freddy-move');
         Freddy.stats.officeAttempts++;
     }
     else if (Freddy.currentPosition === 'office') {
@@ -471,6 +473,7 @@ const moveFreddy = () => {
             if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
                 moveAnimatronic(Freddy, { start: currentPosition, end: endingPosition });
                 freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
+                playAudio('freddy-move');
                 clearInterval(freddyCountdown);
             }
             else if (Freddy.currentCountdown <= 0 && user.camerasOn) {
@@ -1407,6 +1410,9 @@ const playAudio = (audio) => {
     switch (audio) {
         case 'oven':
             myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+            break;
+        case 'freddy-move':
+            myAudioSource = `freddy-move-${Math.ceil(Math.random() * 3)}`;
             break;
         default:
             myAudioSource = audio;
