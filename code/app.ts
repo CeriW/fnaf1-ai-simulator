@@ -1762,10 +1762,16 @@ type AvailableAudio =
   | 'circus';
 
 const playAudio = (audio: AvailableAudio) => {
+  // Audio that should loop
+  const loopingAudio = ['office-fan'];
+
   if (user.audioOn) {
     let myAudio = document.createElement('audio');
     myAudio.classList.add(audio);
-    myAudio.src = `${paths.audio}/${audio}' | '`;
+    myAudio.src = `${paths.audio}/${audio}.mp3`;
+    if (loopingAudio.includes(audio)) {
+      myAudio.setAttribute('loop', 'true');
+    }
     document.body.appendChild(myAudio);
     myAudio.play();
     myAudio.onended = () => {
@@ -1789,10 +1795,9 @@ const startGame = () => {
   let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked') as HTMLInputElement;
   gameSpeed = parseFloat(selectedRadio.value) ?? 1;
   secondLength = Math.ceil(1000 / gameSpeed);
-  console.log(gameSpeed);
-  console.log(secondLength);
 
   killAudio('game-menu');
+  playAudio('office-fan');
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(

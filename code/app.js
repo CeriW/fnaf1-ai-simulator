@@ -1393,10 +1393,15 @@ const powerOutage = () => {
     // Note - you will still win the night if you reach 6AM after the power has gone out but before Freddy jumpscares you
 };
 const playAudio = (audio) => {
+    // Audio that should loop
+    const loopingAudio = ['office-fan'];
     if (user.audioOn) {
         let myAudio = document.createElement('audio');
         myAudio.classList.add(audio);
         myAudio.src = `${paths.audio}/${audio}.mp3`;
+        if (loopingAudio.includes(audio)) {
+            myAudio.setAttribute('loop', 'true');
+        }
         document.body.appendChild(myAudio);
         myAudio.play();
         myAudio.onended = () => {
@@ -1418,9 +1423,8 @@ const startGame = () => {
     let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
     gameSpeed = (_a = parseFloat(selectedRadio.value)) !== null && _a !== void 0 ? _a : 1;
     secondLength = Math.ceil(1000 / gameSpeed);
-    console.log(gameSpeed);
-    console.log(secondLength);
     killAudio('game-menu');
+    playAudio('office-fan');
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);
