@@ -1314,8 +1314,9 @@ const toggleCameras = () => {
   }
   if (!user.camerasOn) {
     window.dispatchEvent(new Event('cameras-off'));
-    console.log('Cameras off');
   }
+
+  updateAudioVolume('office-fan', !user.camerasOn);
 
   updatePowerDisplay();
 };
@@ -1787,6 +1788,16 @@ const killAudio = (audio: AvailableAudio) => {
   });
 };
 
+// Used to update the volume of audio that changes under certain conditions
+// e.g. fans are quieter when the cameras are up, Chica in the kitchen is quieter
+// when you're not looking at the kitchen cam
+const updateAudioVolume = (audio: AvailableAudio, condition: boolean) => {
+  let myAudio = document.querySelectorAll(`audio.${audio}`) as NodeListOf<HTMLAudioElement>;
+  myAudio.forEach((a) => {
+    a.volume = condition ? 1 : 0.4;
+  });
+};
+
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
@@ -1798,6 +1809,7 @@ const startGame = () => {
 
   killAudio('game-menu');
   playAudio('office-fan');
+  updateAudioVolume('office-fan', !user.camerasOn);
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
@@ -1943,6 +1955,7 @@ const initialiseMenu = () => {
       playAudio('game-menu');
     } else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
       killAudio('game-menu');
+      playAudio('office-fan');
     }
   });
 

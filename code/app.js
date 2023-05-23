@@ -1049,8 +1049,8 @@ const toggleCameras = () => {
     }
     if (!user.camerasOn) {
         window.dispatchEvent(new Event('cameras-off'));
-        console.log('Cameras off');
     }
+    updateAudioVolume('office-fan', !user.camerasOn);
     updatePowerDisplay();
 };
 const generateCameraButtons = () => {
@@ -1415,6 +1415,15 @@ const killAudio = (audio) => {
         match.remove();
     });
 };
+// Used to update the volume of audio that changes under certain conditions
+// e.g. fans are quieter when the cameras are up, Chica in the kitchen is quieter
+// when you're not looking at the kitchen cam
+const updateAudioVolume = (audio, condition) => {
+    let myAudio = document.querySelectorAll(`audio.${audio}`);
+    myAudio.forEach((a) => {
+        a.volume = condition ? 1 : 0.4;
+    });
+};
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
@@ -1425,6 +1434,7 @@ const startGame = () => {
     secondLength = Math.ceil(1000 / gameSpeed);
     killAudio('game-menu');
     playAudio('office-fan');
+    updateAudioVolume('office-fan', !user.camerasOn);
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);
@@ -1549,6 +1559,7 @@ const initialiseMenu = () => {
         }
         else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
             killAudio('game-menu');
+            playAudio('office-fan');
         }
     });
     // Make the game mode selector work
