@@ -1316,7 +1316,7 @@ const toggleCameras = () => {
     window.dispatchEvent(new Event('cameras-off'));
   }
 
-  updateAudioVolume('office-fan', !user.camerasOn);
+  updateAudioVolume('office-fan', user.camerasOn);
 
   updatePowerDisplay();
 };
@@ -1794,7 +1794,7 @@ const killAudio = (audio: AvailableAudio) => {
 const updateAudioVolume = (audio: AvailableAudio, condition: boolean) => {
   let myAudio = document.querySelectorAll(`audio.${audio}`) as NodeListOf<HTMLAudioElement>;
   myAudio.forEach((a) => {
-    a.volume = condition ? 1 : 0.4;
+    a.volume = condition ? 0.4 : 1;
   });
 };
 
@@ -1809,7 +1809,7 @@ const startGame = () => {
 
   killAudio('game-menu');
   playAudio('office-fan');
-  updateAudioVolume('office-fan', !user.camerasOn);
+  updateAudioVolume('office-fan', user.camerasOn);
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
@@ -1956,6 +1956,7 @@ const initialiseMenu = () => {
     } else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
       killAudio('game-menu');
       playAudio('office-fan');
+      updateAudioVolume('office-fan', user.camerasOn);
     }
   });
 

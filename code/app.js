@@ -1050,7 +1050,7 @@ const toggleCameras = () => {
     if (!user.camerasOn) {
         window.dispatchEvent(new Event('cameras-off'));
     }
-    updateAudioVolume('office-fan', !user.camerasOn);
+    updateAudioVolume('office-fan', user.camerasOn);
     updatePowerDisplay();
 };
 const generateCameraButtons = () => {
@@ -1421,7 +1421,7 @@ const killAudio = (audio) => {
 const updateAudioVolume = (audio, condition) => {
     let myAudio = document.querySelectorAll(`audio.${audio}`);
     myAudio.forEach((a) => {
-        a.volume = condition ? 1 : 0.4;
+        a.volume = condition ? 0.4 : 1;
     });
 };
 // ========================================================================== //
@@ -1434,7 +1434,7 @@ const startGame = () => {
     secondLength = Math.ceil(1000 / gameSpeed);
     killAudio('game-menu');
     playAudio('office-fan');
-    updateAudioVolume('office-fan', !user.camerasOn);
+    updateAudioVolume('office-fan', user.camerasOn);
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);
@@ -1560,6 +1560,7 @@ const initialiseMenu = () => {
         else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
             killAudio('game-menu');
             playAudio('office-fan');
+            updateAudioVolume('office-fan', user.camerasOn);
         }
     });
     // Make the game mode selector work
