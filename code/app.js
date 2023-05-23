@@ -500,6 +500,9 @@ const moveBonnieOrChica = (animatronic) => {
     }
     else if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
         moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition }, true, movementCheck);
+        if (animatronic.name === 'Chica' && newPosition === '6') {
+            playAudio('oven');
+        }
         // If they're at their hall corner but aren't in your doorway yet, move them into the doorway
     }
     else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition === -1) {
@@ -565,26 +568,28 @@ const calculateNewBonniePosition = () => {
 const calculateNewChicaPosition = () => {
     let randomChoice = Math.round(Math.random());
     let newPosition = '';
-    let choices;
-    switch (Chica.currentPosition) {
-        case '1A':
-            newPosition = '1B';
-            break;
-        case '1B':
-            choices = ['4A', '6', '7'];
-            newPosition = choices[Math.floor(Math.random() * choices.length)];
-            break;
-        case '6':
-            choices = ['1B', '7'];
-            newPosition = choices[Math.floor(Math.random() * choices.length)];
-        case '7':
-            choices = ['1B', '6'];
-            newPosition = choices[Math.floor(Math.random() * choices.length)];
-            break;
-        case '4A':
-            newPosition = randomChoice === 0 ? '1B' : '4B';
-            break;
-    }
+    // let choices;
+    // switch (Chica.currentPosition) {
+    //   case '1A':
+    //     newPosition = '1B';
+    //     break;
+    //   case '1B':
+    //     choices = ['4A', '6', '7'];
+    //     newPosition = choices[Math.floor(Math.random() * choices.length)];
+    //     break;
+    //   case '6':
+    //     choices = ['1B', '7'];
+    //     newPosition = choices[Math.floor(Math.random() * choices.length)];
+    //     playAudio('oven');
+    //   case '7':
+    //     choices = ['1B', '6'];
+    //     newPosition = choices[Math.floor(Math.random() * choices.length)];
+    //     break;
+    //   case '4A':
+    //     newPosition = randomChoice === 0 ? '1B' : '4B';
+    //     break;
+    // }
+    newPosition = '6';
     return newPosition;
 };
 const moveAnimatronic = (animatronic, position, logThis = true, movementCheck) => {
@@ -1053,7 +1058,7 @@ const toggleCameras = () => {
     if (!user.camerasOn) {
         window.dispatchEvent(new Event('cameras-off'));
     }
-    updateAudioVolume('office-fan', user.camerasOn);
+    setAudioVolumes();
     updatePowerDisplay();
 };
 const generateCameraButtons = () => {
@@ -1086,6 +1091,7 @@ const lookAtCamera = (camera) => {
     window.dispatchEvent(new Event(`cam-on-${camera}`));
     console.log(`cam-on-${camera}`);
     cameraScreen.src = getCameraImage(camera);
+    setAudioVolumes();
 };
 // ========================================================================== //
 // DOORS
@@ -1402,6 +1408,7 @@ const playAudio = (audio) => {
     switch (audio) {
         case 'oven':
             myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+            break;
         default:
             myAudioSource = audio;
     }
@@ -1418,11 +1425,7 @@ const playAudio = (audio) => {
             document.body.removeChild(myAudio);
         };
     }
-    switch (audio) {
-        case 'office-fan':
-            updateAudioVolume('office-fan', user.camerasOn);
-            break;
-    }
+    setAudioVolumes();
 };
 const killAudio = (audio = null) => {
     const matchingAudio = audio ? document.querySelectorAll(`audio.${audio}`) : document.querySelectorAll(`audio`);
@@ -1430,17 +1433,23 @@ const killAudio = (audio = null) => {
         match.remove();
     });
 };
-// Used to update the volume of audio that changes under certain conditions
-// e.g. fans are quieter when the cameras are up, Chica in the kitchen is quieter
-// when you're not looking at the kitchen cam
-const updateAudioVolume = (audio, condition) => {
-    let myAudio = document.querySelectorAll(`audio.${audio}`);
-    myAudio.forEach((a) => {
-        a.volume = condition ? 0.4 : 1;
+// Update the audio volumes depending on certain conditions
+const setAudioVolumes = () => {
+    let audios = document.querySelectorAll('audio');
+    audios.forEach((audio) => {
+        if (audio.classList.contains('office-fan')) {
+            // Office fan should be quieter if we're looking at the cameras
+            audio.volume = user.camerasOn ? 0.4 : 1;
+        }
+        else if (audio.classList.contains('oven')) {
+            // The oven sounds should be loud if Chica is in the kitchen and we are looking at that cam, otherwise quieter
+            audio.volume = Chica.currentPosition === '6' && user.camerasOn && user.currentCamera === '6' ? 1 : 0.25;
+        }
     });
 };
 const playAudioAmbience = () => {
-    // playAudio('office-fan');
+    playAudio('office-fan');
+    setAudioVolumes();
 };
 // ========================================================================== //
 // INITIALISE THE PAGE
