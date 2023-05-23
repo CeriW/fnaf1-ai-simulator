@@ -72,4 +72,6 @@ Detrimental audio can be split into three subcategories:
 - [toreador-march.mp3](../assets/sounds/power-outage.mp3) plays when Freddy is at your door after having run out of power
 - Complete silence - there's no sound effect for this. It's just worth noting that in the gap between the toreador march and Freddy's jumpscare, there is complete silence.
 
-PHONE GUY
+## Phone Guy - a bit of all three
+
+'Phone guy', as called by the fans, is a pre-recorded phone call the user receives at the beginning of each night. At the beginning of the game these phone calls give vague but helpful hints on how to survive the night. As the game progresses these hints are often misleading, rambling and distracting, crossing the border from arguably advantageous audio into detrimental audio, covering the full range of muddied information (making it harder to hear audio clues), red herrings (giving you misleading or flat out wrong information), to pure horror (the completely garbled message of night 5). The game gives you the option to mute these after they have started.
