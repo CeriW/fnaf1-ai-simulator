@@ -568,28 +568,27 @@ const calculateNewBonniePosition = () => {
 const calculateNewChicaPosition = () => {
     let randomChoice = Math.round(Math.random());
     let newPosition = '';
-    // let choices;
-    // switch (Chica.currentPosition) {
-    //   case '1A':
-    //     newPosition = '1B';
-    //     break;
-    //   case '1B':
-    //     choices = ['4A', '6', '7'];
-    //     newPosition = choices[Math.floor(Math.random() * choices.length)];
-    //     break;
-    //   case '6':
-    //     choices = ['1B', '7'];
-    //     newPosition = choices[Math.floor(Math.random() * choices.length)];
-    //     playAudio('oven');
-    //   case '7':
-    //     choices = ['1B', '6'];
-    //     newPosition = choices[Math.floor(Math.random() * choices.length)];
-    //     break;
-    //   case '4A':
-    //     newPosition = randomChoice === 0 ? '1B' : '4B';
-    //     break;
-    // }
-    newPosition = '6';
+    let choices;
+    switch (Chica.currentPosition) {
+        case '1A':
+            newPosition = '1B';
+            break;
+        case '1B':
+            choices = ['4A', '6', '7'];
+            newPosition = choices[Math.floor(Math.random() * choices.length)];
+            break;
+        case '6':
+            choices = ['1B', '7'];
+            newPosition = choices[Math.floor(Math.random() * choices.length)];
+            playAudio('oven');
+        case '7':
+            choices = ['1B', '6'];
+            newPosition = choices[Math.floor(Math.random() * choices.length)];
+            break;
+        case '4A':
+            newPosition = randomChoice === 0 ? '1B' : '4B';
+            break;
+    }
     return newPosition;
 };
 const moveAnimatronic = (animatronic, position, logThis = true, movementCheck) => {
