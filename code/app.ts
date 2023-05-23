@@ -1779,6 +1779,11 @@ const playAudio = (audio: AvailableAudio) => {
       document.body.removeChild(myAudio);
     };
   }
+
+  // Audio that will need its volume tweaking on certain conditions
+  if (audio === 'office-fan') {
+    updateAudioVolume('office-fan', user.camerasOn);
+  }
 };
 
 const killAudio = (audio: AvailableAudio) => {
@@ -1809,7 +1814,6 @@ const startGame = () => {
 
   killAudio('game-menu');
   playAudio('office-fan');
-  updateAudioVolume('office-fan', user.camerasOn);
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
@@ -1956,7 +1960,6 @@ const initialiseMenu = () => {
     } else if (!document.body.getAttribute('game-in-progress') && !user.audioOn) {
       killAudio('game-menu');
       playAudio('office-fan');
-      updateAudioVolume('office-fan', user.camerasOn);
     }
   });
 
