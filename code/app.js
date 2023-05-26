@@ -95,6 +95,7 @@ const inGameHourDisplay = document.querySelector('#in-game-time');
 const simulator = document.querySelector('#simulator');
 const sidebar = document.querySelector('#sidebar');
 const officeDisplay = document.querySelector('#office-overlay img');
+const muteButton = document.querySelector('button#mute-call');
 // Camera related page elements
 const cameraArea = document.querySelector('#camera-display');
 const cameraButton = document.querySelector('button#cameras');
@@ -184,7 +185,7 @@ const calculateInGameTime = (modifier = 0) => {
 // ========================================================================== //
 const generateAnimatronics = () => {
     [Bonnie, Foxy, Freddy, Chica].forEach((animatronic) => {
-        var _a, _b;
+        var _a, _b, _c;
         // Initialise their starting AI level
         animatronic.currentAIlevel = (_a = animatronic.aiLevels[nightToSimulate]) !== null && _a !== void 0 ? _a : 1;
         // Create the icons
@@ -206,6 +207,11 @@ const generateAnimatronics = () => {
       <div class="report-item-container"></div>
     `;
         sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
+        if (animatronic === Freddy) {
+            (_c = animatronicReport.querySelector('.animatronic-icon')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
+                playAudio('freddy-nose');
+            });
+        }
     });
 };
 const makeMovementCheck = (animatronic) => {
@@ -1467,6 +1473,9 @@ const playAudio = (audio) => {
         case 'garble':
             myAudioSource = `garble-${Math.ceil(Math.random() * 3)}`;
             break;
+        case 'phone-guy':
+            myAudioSource = `phone-guy-night-${nightToSimulate}`;
+            break;
         case 'light-left':
         case 'light-right':
         case 'door-toggle':
@@ -1486,6 +1495,9 @@ const playAudio = (audio) => {
         myAudio.play();
         myAudio.onended = () => {
             document.body.removeChild(myAudio);
+            if (audio === 'phone-guy') {
+                muteButton === null || muteButton === void 0 ? void 0 : muteButton.remove();
+            }
         };
     }
     if (audio === 'jumpscare') {
@@ -1581,6 +1593,11 @@ const startGame = () => {
     secondLength = Math.ceil(1000 / gameSpeed);
     killAudio('game-menu');
     playAudioAmbience();
+    playAudio('phone-guy');
+    muteButton === null || muteButton === void 0 ? void 0 : muteButton.addEventListener('click', () => {
+        killAudio('phone-guy');
+        muteButton.remove();
+    });
     [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
         var _a;
         let animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);

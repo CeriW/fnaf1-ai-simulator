@@ -131,6 +131,7 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
 const officeDisplay: HTMLImageElement = document.querySelector('#office-overlay img')!;
+const muteButton = document.querySelector('button#mute-call');
 
 // Camera related page elements
 const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
@@ -267,6 +268,11 @@ const generateAnimatronics = () => {
       <div class="report-item-container"></div>
     `;
     sidebar.querySelector('#animatronic-report')!.appendChild(animatronicReport);
+    if (animatronic === Freddy) {
+      animatronicReport.querySelector('.animatronic-icon')?.addEventListener('click', () => {
+        playAudio('freddy-nose');
+      });
+    }
   });
 };
 
@@ -1790,6 +1796,7 @@ type AvailableAudio =
   | 'foxy-door-bash'
   | 'foxy-run'
   | 'freddy-move'
+  | 'freddy-nose'
   | 'game-menu'
   | 'garble'
   | 'jumpscare'
@@ -1811,6 +1818,7 @@ type AvailableAudio =
   | 'camera-toggle-off'
   | 'camera-toggle-on'
   | 'cheer'
+  | 'phone-guy'
   | 'circus';
 
 const playAudio = (audio: AvailableAudio) => {
@@ -1833,6 +1841,9 @@ const playAudio = (audio: AvailableAudio) => {
     case 'garble':
       myAudioSource = `garble-${Math.ceil(Math.random() * 3)}`;
       break;
+    case 'phone-guy':
+      myAudioSource = `phone-guy-night-${nightToSimulate}`;
+      break;
     case 'light-left':
     case 'light-right':
     case 'door-toggle':
@@ -1853,6 +1864,10 @@ const playAudio = (audio: AvailableAudio) => {
     myAudio.play();
     myAudio.onended = () => {
       document.body.removeChild(myAudio);
+
+      if (audio === 'phone-guy') {
+        muteButton?.remove();
+      }
     };
   }
 
@@ -1958,6 +1973,12 @@ const startGame = () => {
 
   killAudio('game-menu');
   playAudioAmbience();
+  playAudio('phone-guy');
+
+  muteButton?.addEventListener('click', () => {
+    killAudio('phone-guy');
+    muteButton.remove();
+  });
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
