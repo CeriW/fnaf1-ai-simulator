@@ -1448,6 +1448,7 @@ const powerOutage = () => {
 const playAudio = (audio) => {
     // Audio that should loop
     const loopingAudio = ['office-fan', 'camera-feed'];
+    let blockMultiples = Boolean(document.querySelector(`audio.${audio}`));
     // Some audio types should be randomly picked from a number of available files
     let myAudioSource;
     switch (audio) {
@@ -1463,10 +1464,15 @@ const playAudio = (audio) => {
         case 'garble':
             myAudioSource = `garble-${Math.ceil(Math.random() * 3)}`;
             break;
+        case 'light-left':
+        case 'light-right':
+        case 'door-toggle':
+        case 'doorway-warning':
+            blockMultiples = false;
         default:
             myAudioSource = audio;
     }
-    if (user.audioOn) {
+    if (user.audioOn && !blockMultiples) {
         let myAudio = document.createElement('audio');
         myAudio.classList.add(audio);
         myAudio.src = `${paths.audio}/${myAudioSource}.mp3`;
@@ -1512,6 +1518,13 @@ const setAudioVolumes = () => {
         }
         else if (audio.classList.contains('pirate-song')) {
             audio.volume = user.camerasOn && user.currentCamera === '1C' ? 1 : 0.4;
+        }
+        else if (audio.classList.contains('robot-voice')) {
+            if ((user.currentCamera !== '2B' && user.currentCamera !== '4B') ||
+                (user.currentCamera === '2B' && Bonnie.currentPosition !== '2B') ||
+                (user.currentCamera === '4B' && Chica.currentPosition !== '4B')) {
+                killAudio('robot-voice');
+            }
             // Some audio just generally needs to be quieter
         }
         else if (audio.classList.contains('eerie')) {
