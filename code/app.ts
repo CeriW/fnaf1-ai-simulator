@@ -1544,6 +1544,9 @@ const clearAllIntervals = (gameOver = true) => {
     powerOutageInterval,
     pirateSongInterval,
     circusInterval,
+    eerieInterval,
+    ambienceInterval,
+    coldPresenceInterval,
   ];
 
   const timeoutsToClear = [
@@ -1778,6 +1781,8 @@ const powerOutage = () => {
 // ========================================================================== //
 
 type AvailableAudio =
+  | 'ambience'
+  | 'cold-presence'
   | 'door-toggle'
   | 'doorway-warning'
   | 'eerie'
@@ -1904,12 +1909,6 @@ const setAudioVolumes = () => {
 
 const playAudioAmbience = () => {
   playAudio('office-fan');
-  eerieInterval = window.setInterval(() => {
-    if (Math.random() * 10 > 8) {
-      playAudio('eerie');
-      clearInterval(eerieInterval);
-    }
-  }, 10 * secondLength);
 
   circusInterval = window.setInterval(() => {
     if (Math.random() * 20 > 19) {
@@ -1923,6 +1922,27 @@ const playAudioAmbience = () => {
       playAudio('pirate-song');
     }
   }, 30 * secondLength);
+
+  ambienceInterval = window.setInterval(() => {
+    if (Math.random() * 20 > 19) {
+      playAudio('ambience');
+      clearInterval(ambienceInterval);
+    }
+  }, 10 * secondLength);
+
+  coldPresenceInterval = window.setInterval(() => {
+    if (Math.random() * 20 > 19) {
+      playAudio('cold-presence');
+      clearInterval(coldPresenceInterval);
+    }
+  }, 11 * secondLength);
+
+  eerieInterval = window.setInterval(() => {
+    if (Math.random() * 20 > 19) {
+      playAudio('eerie');
+      clearInterval(eerieInterval);
+    }
+  }, 12 * secondLength);
 
   setAudioVolumes();
 };
@@ -2122,6 +2142,8 @@ let rightLightTimeout: number;
 let circusInterval: number;
 let pirateSongInterval: number;
 let eerieInterval: number;
+let ambienceInterval: number;
+let coldPresenceInterval: number;
 
 initialiseMenu();
 // startGame();
