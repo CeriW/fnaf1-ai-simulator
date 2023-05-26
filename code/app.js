@@ -1103,9 +1103,7 @@ const lookAtCamera = (camera) => {
     cameraScreen.src = getCameraImage(camera);
     playAudio('camera-change');
     setAudioVolumes();
-    let randomGarbleChance = Math.random() * 10;
-    console.log(randomGarbleChance);
-    if (randomGarbleChance > 7) {
+    if (Math.random() * 10 > 7) {
         playAudio('garble');
     }
 };
@@ -1493,10 +1491,21 @@ const setAudioVolumes = () => {
             // The oven sounds should be loud if Chica is in the kitchen and we are looking at that cam, otherwise quieter
             audio.volume = Chica.currentPosition === '6' && user.camerasOn && user.currentCamera === '6' ? 1 : 0.25;
         }
+        else if (audio.classList.contains('eerie')) {
+            audio.volume = 0.5;
+        }
     });
 };
 const playAudioAmbience = () => {
     playAudio('office-fan');
+    let eerieInterval = window.setInterval(() => {
+        console.log('no');
+        if (Math.random() * 10 > 8) {
+            console.log('yes');
+            playAudio('eerie');
+            clearInterval(eerieInterval);
+        }
+    }, 10 * secondLength);
     setAudioVolumes();
 };
 // ========================================================================== //
