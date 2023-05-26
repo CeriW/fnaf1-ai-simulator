@@ -607,6 +607,7 @@ const moveAnimatronic = (animatronic, position, logThis = true, movementCheck) =
     // Update the cameras if you're looking at their start or end position
     if (user.camerasOn && (user.currentCamera === position.start || user.currentCamera === position.end)) {
         cameraArea.classList.add('updating');
+        playAudio('animatronic-camera-move');
     }
     window.setTimeout(() => {
         cameraScreen.src = getCameraImage(user.currentCamera);
