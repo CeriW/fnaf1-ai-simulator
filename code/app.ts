@@ -1374,11 +1374,12 @@ const lookAtCamera = (camera: Camera) => {
   console.log(`cam-on-${camera}`);
   cameraScreen.src = getCameraImage(camera);
   playAudio('camera-change');
-  setAudioVolumes();
 
   if (Math.random() * 10 > 7) {
     playAudio('garble');
   }
+
+  setAudioVolumes();
 };
 
 // ========================================================================== //
@@ -1859,6 +1860,10 @@ const setAudioVolumes = () => {
     } else if (audio.classList.contains('oven')) {
       // The oven sounds should be loud if Chica is in the kitchen and we are looking at that cam, otherwise quieter
       audio.volume = Chica.currentPosition === '6' && user.camerasOn && user.currentCamera === '6' ? 1 : 0.25;
+    } else if (audio.classList.contains('pirate-song')) {
+      audio.volume = user.camerasOn && user.currentCamera === '1C' ? 1 : 0.4;
+
+      // Some audio just generally needs to be quieter
     } else if (audio.classList.contains('eerie')) {
       audio.volume = 0.5;
     } else if (audio.classList.contains('circus')) {
@@ -1880,6 +1885,12 @@ const playAudioAmbience = () => {
     if (Math.random() * 20 > 19) {
       playAudio('circus');
       clearInterval(circusInterval);
+    }
+  }, 30 * secondLength);
+
+  let pirateSongInterval = window.setInterval(() => {
+    if (Math.random() * 20 > 19) {
+      playAudio('pirate-song');
     }
   }, 30 * secondLength);
 
