@@ -1245,6 +1245,8 @@ const clearAllIntervals = (gameOver = true) => {
         defaultPowerDrainInterval,
         additionalPowerDrainInterval,
         powerOutageInterval,
+        pirateSongInterval,
+        circusInterval,
     ];
     const timeoutsToClear = [
         leftLightTimeout,
@@ -1522,19 +1524,19 @@ const setAudioVolumes = () => {
 };
 const playAudioAmbience = () => {
     playAudio('office-fan');
-    let eerieInterval = window.setInterval(() => {
+    eerieInterval = window.setInterval(() => {
         if (Math.random() * 10 > 8) {
             playAudio('eerie');
             clearInterval(eerieInterval);
         }
     }, 10 * secondLength);
-    let circusInterval = window.setInterval(() => {
+    circusInterval = window.setInterval(() => {
         if (Math.random() * 20 > 19) {
             playAudio('circus');
             clearInterval(circusInterval);
         }
     }, 30 * secondLength);
-    let pirateSongInterval = window.setInterval(() => {
+    pirateSongInterval = window.setInterval(() => {
         if (Math.random() * 20 > 19) {
             playAudio('pirate-song');
         }
@@ -1707,6 +1709,9 @@ let chicaJumpscareCountdown;
 let powerOutageInterval;
 let leftLightTimeout;
 let rightLightTimeout;
+let circusInterval;
+let pirateSongInterval;
+let eerieInterval;
 initialiseMenu();
 // startGame();
 //# sourceMappingURL=app.js.map
