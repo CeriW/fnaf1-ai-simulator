@@ -1065,6 +1065,8 @@ const toggleCameras = () => {
         window.dispatchEvent(new Event('cameras-off'));
         killAudio('camera-toggle-on');
         killAudio('camera-feed');
+        killAudio('animatronic-camera-move');
+        killAudio('garble');
     }
     setAudioVolumes();
     updatePowerDisplay();
@@ -1101,6 +1103,11 @@ const lookAtCamera = (camera) => {
     cameraScreen.src = getCameraImage(camera);
     playAudio('camera-change');
     setAudioVolumes();
+    let randomGarbleChance = Math.random() * 10;
+    console.log(randomGarbleChance);
+    if (randomGarbleChance > 7) {
+        playAudio('garble');
+    }
 };
 // ========================================================================== //
 // DOORS
@@ -1436,6 +1443,9 @@ const playAudio = (audio) => {
         case 'freddy-move':
             myAudioSource = `freddy-move-${Math.ceil(Math.random() * 3)}`;
             break;
+        case 'garble':
+            myAudioSource = `garble-${Math.ceil(Math.random() * 3)}`;
+            break;
         default:
             myAudioSource = audio;
     }
@@ -1456,6 +1466,11 @@ const playAudio = (audio) => {
         window.setTimeout(() => {
             playAudio('post-jumpscare');
         }, 5000);
+    }
+    else if (audio === '6AM') {
+        window.setTimeout(() => {
+            playAudio('cheer');
+        }, 5500);
     }
     setAudioVolumes();
 };
@@ -1630,7 +1645,6 @@ const initialiseMenu = () => {
         user.gameMode = !user.gameMode;
         let gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
         document.body.setAttribute('game-mode', gameModeName);
-        console.log(user);
     });
     (_c = gameMenu.querySelector('#start-game')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', startGame);
 };

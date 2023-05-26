@@ -1331,6 +1331,8 @@ const toggleCameras = () => {
     window.dispatchEvent(new Event('cameras-off'));
     killAudio('camera-toggle-on');
     killAudio('camera-feed');
+    killAudio('animatronic-camera-move');
+    killAudio('garble');
   }
 
   setAudioVolumes();
@@ -1373,6 +1375,10 @@ const lookAtCamera = (camera: Camera) => {
   cameraScreen.src = getCameraImage(camera);
   playAudio('camera-change');
   setAudioVolumes();
+
+  if (Math.random() * 10 > 7) {
+    playAudio('garble');
+  }
 };
 
 // ========================================================================== //
@@ -1763,9 +1769,7 @@ type AvailableAudio =
   | 'foxy-run'
   | 'freddy-move'
   | 'game-menu'
-  | 'garble-1'
-  | 'garble-2'
-  | 'garble-3'
+  | 'garble'
   | 'jumpscare'
   | 'jumpscare-golden-freddy'
   | 'light-left'
@@ -1803,6 +1807,9 @@ const playAudio = (audio: AvailableAudio) => {
     case 'freddy-move':
       myAudioSource = `freddy-move-${Math.ceil(Math.random() * 3)}`;
       break;
+    case 'garble':
+      myAudioSource = `garble-${Math.ceil(Math.random() * 3)}`;
+      break;
     default:
       myAudioSource = audio;
   }
@@ -1825,6 +1832,10 @@ const playAudio = (audio: AvailableAudio) => {
     window.setTimeout(() => {
       playAudio('post-jumpscare');
     }, 5000);
+  } else if (audio === '6AM') {
+    window.setTimeout(() => {
+      playAudio('cheer');
+    }, 5500);
   }
 
   setAudioVolumes();
@@ -2027,7 +2038,6 @@ const initialiseMenu = () => {
     user.gameMode = !user.gameMode;
     let gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
     document.body.setAttribute('game-mode', gameModeName);
-    console.log(user);
   });
 
   gameMenu.querySelector('#start-game')?.addEventListener('click', startGame);
