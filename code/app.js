@@ -1099,6 +1099,7 @@ const lookAtCamera = (camera) => {
     window.dispatchEvent(new Event(`cam-on-${camera}`));
     console.log(`cam-on-${camera}`);
     cameraScreen.src = getCameraImage(camera);
+    playAudio('camera-change');
     setAudioVolumes();
 };
 // ========================================================================== //
