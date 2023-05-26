@@ -1494,18 +1494,26 @@ const setAudioVolumes = () => {
         else if (audio.classList.contains('eerie')) {
             audio.volume = 0.5;
         }
+        else if (audio.classList.contains('circus')) {
+            audio.volume = 0.3;
+        }
     });
 };
 const playAudioAmbience = () => {
     playAudio('office-fan');
     let eerieInterval = window.setInterval(() => {
-        console.log('no');
         if (Math.random() * 10 > 8) {
-            console.log('yes');
             playAudio('eerie');
             clearInterval(eerieInterval);
         }
     }, 10 * secondLength);
+    let circusInterval = window.setInterval(() => {
+        console.log('hey');
+        if (Math.random() * 20 > 19) {
+            playAudio('circus');
+            clearInterval(circusInterval);
+        }
+    }, 30 * secondLength);
     setAudioVolumes();
 };
 // ========================================================================== //
