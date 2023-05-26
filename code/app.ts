@@ -1548,7 +1548,12 @@ const clearAllIntervals = (gameOver = true) => {
 
 const gameOver = (reason: Animatronic | '6AM') => {
   killAudio(null);
-  playAudio('jumpscare');
+
+  if (reason === '6AM') {
+    playAudio('6AM');
+  } else {
+    playAudio('jumpscare');
+  }
   document.body.setAttribute('game-in-progress', 'false');
   clearAllIntervals();
 

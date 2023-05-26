@@ -1248,7 +1248,12 @@ const clearAllIntervals = (gameOver = true) => {
 };
 const gameOver = (reason) => {
     killAudio(null);
-    playAudio('jumpscare');
+    if (reason === '6AM') {
+        playAudio('6AM');
+    }
+    else {
+        playAudio('jumpscare');
+    }
     document.body.setAttribute('game-in-progress', 'false');
     clearAllIntervals();
     let gameOverWindow = document.querySelector('#game-over-stats');
