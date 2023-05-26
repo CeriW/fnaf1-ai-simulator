@@ -1324,9 +1324,13 @@ const toggleCameras = () => {
 
   if (user.camerasOn) {
     lookAtCamera(user.currentCamera);
+    playAudio('camera-toggle-on');
+    playAudio('camera-toggle-off');
   }
   if (!user.camerasOn) {
     window.dispatchEvent(new Event('cameras-off'));
+    killAudio('camera-toggle-on');
+    killAudio('camera-feed');
   }
 
   setAudioVolumes();
@@ -1774,8 +1778,9 @@ type AvailableAudio =
 
 const playAudio = (audio: AvailableAudio) => {
   // Audio that should loop
-  const loopingAudio = ['office-fan'];
+  const loopingAudio = ['office-fan', 'camera-feed'];
 
+  // Some audio types should be randomly picked from a number of available files
   let myAudioSource;
   switch (audio) {
     case 'oven':
