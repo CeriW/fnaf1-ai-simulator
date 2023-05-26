@@ -385,6 +385,7 @@ const attemptFoxyJumpscare = (e?: Event) => {
     if (foxyIcon) {
       foxyIcon.style.animation = `foxyHallAnimation ${(1.87 * secondLength) / 1000}s linear backwards`;
     }
+    playAudio('foxy-run');
     foxyJumpscareCountdown = window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
   } else {
     performFoxyJumpscareCheck();
