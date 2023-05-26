@@ -1547,6 +1547,7 @@ const clearAllIntervals = (gameOver = true) => {
 };
 
 const gameOver = (reason: Animatronic | '6AM') => {
+  playAudio('jumpscare');
   document.body.setAttribute('game-in-progress', 'false');
   clearAllIntervals();
 

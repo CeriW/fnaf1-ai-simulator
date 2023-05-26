@@ -1247,6 +1247,7 @@ const clearAllIntervals = (gameOver = true) => {
     });
 };
 const gameOver = (reason) => {
+    playAudio('jumpscare');
     document.body.setAttribute('game-in-progress', 'false');
     clearAllIntervals();
     let gameOverWindow = document.querySelector('#game-over-stats');
