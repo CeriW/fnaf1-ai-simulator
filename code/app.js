@@ -1247,6 +1247,7 @@ const clearAllIntervals = (gameOver = true) => {
     });
 };
 const gameOver = (reason) => {
+    killAudio(null);
     playAudio('jumpscare');
     document.body.setAttribute('game-in-progress', 'false');
     clearAllIntervals();
@@ -1446,8 +1447,14 @@ const playAudio = (audio) => {
             document.body.removeChild(myAudio);
         };
     }
+    if (audio === 'jumpscare') {
+        window.setTimeout(() => {
+            playAudio('post-jumpscare');
+        }, 5000);
+    }
     setAudioVolumes();
 };
+// Passing in null will kill all audio
 const killAudio = (audio = null) => {
     const matchingAudio = audio ? document.querySelectorAll(`audio.${audio}`) : document.querySelectorAll(`audio`);
     matchingAudio.forEach((match) => {

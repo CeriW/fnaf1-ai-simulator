@@ -1547,6 +1547,7 @@ const clearAllIntervals = (gameOver = true) => {
 };
 
 const gameOver = (reason: Animatronic | '6AM') => {
+  killAudio(null);
   playAudio('jumpscare');
   document.body.setAttribute('game-in-progress', 'false');
   clearAllIntervals();
@@ -1815,9 +1816,16 @@ const playAudio = (audio: AvailableAudio) => {
     };
   }
 
+  if (audio === 'jumpscare') {
+    window.setTimeout(() => {
+      playAudio('post-jumpscare');
+    }, 5000);
+  }
+
   setAudioVolumes();
 };
 
+// Passing in null will kill all audio
 const killAudio = (audio: AvailableAudio | null = null) => {
   const matchingAudio = audio ? document.querySelectorAll(`audio.${audio}`) : document.querySelectorAll(`audio`);
   matchingAudio.forEach((match) => {
