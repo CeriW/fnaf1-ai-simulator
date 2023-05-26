@@ -1117,26 +1117,31 @@ const initialiseDoors = () => {
         // Make the door buttons toggle the doors
         myButton.addEventListener('click', () => {
             var _a;
-            myButton.classList.toggle('active');
-            (_a = simulator.querySelector(`g#${direction}-door-close-icon`)) === null || _a === void 0 ? void 0 : _a.classList.toggle('hidden');
-            // Note - I could simplify this using else, but I'm leaving it like this to future proof it
-            // Other FNAF games have doors in directions other than left and right.
-            if (direction === 'left') {
-                user.leftDoorIsClosed = !user.leftDoorIsClosed;
-                user.leftDoorToggled++;
+            if (!myButton.classList.contains('error-state')) {
+                myButton.classList.toggle('active');
+                (_a = simulator.querySelector(`g#${direction}-door-close-icon`)) === null || _a === void 0 ? void 0 : _a.classList.toggle('hidden');
+                // Note - I could simplify this using else, but I'm leaving it like this to future proof it
+                // Other FNAF games have doors in directions other than left and right.
+                if (direction === 'left') {
+                    user.leftDoorIsClosed = !user.leftDoorIsClosed;
+                    user.leftDoorToggled++;
+                }
+                if (direction === 'right') {
+                    user.rightDoorIsClosed = !user.rightDoorIsClosed;
+                    user.rightDoorToggled++;
+                }
+                updatePowerDisplay();
+                playAudio('door-toggle');
             }
-            if (direction === 'right') {
-                user.rightDoorIsClosed = !user.rightDoorIsClosed;
-                user.rightDoorToggled++;
-            }
-            updatePowerDisplay();
-            playAudio('door-toggle');
         });
     });
 };
 const disableOfficeButtons = () => {
-    document.querySelectorAll('.door-button').forEach((btn) => {
-        btn.setAttribute('disabled', 'true');
+    document.querySelectorAll('#controls button').forEach((btn) => {
+        btn.classList.add('error-state');
+        btn.addEventListener('click', (e) => {
+            playAudio('error');
+        });
     });
 };
 const initialiseLights = () => {
@@ -1147,7 +1152,9 @@ const initialiseLights = () => {
         // lightButton.textContent = `${direction} light`;
         lightButton.setAttribute('door', direction);
         lightButton.addEventListener('click', () => {
-            toggleLight(direction);
+            if (!lightButton.classList.contains('error-state')) {
+                toggleLight(direction);
+            }
         });
         lightControlsContainer === null || lightControlsContainer === void 0 ? void 0 : lightControlsContainer.appendChild(lightButton);
     });
