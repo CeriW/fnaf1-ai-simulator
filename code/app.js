@@ -523,9 +523,21 @@ const moveBonnieOrChica = (animatronic) => {
         animatronic.stats.officeAttempts++;
         if (name === 'Bonnie') {
             clearInterval(bonnieInterval);
+            bonnieInterval = window.setInterval(() => {
+                if (Math.random() * 3 > 2) {
+                    playAudio('breath');
+                    clearInterval(bonnieInterval);
+                }
+            });
         }
         else {
             clearInterval(chicaInterval);
+            chicaInterval = window.setInterval(() => {
+                if (Math.random() * 3 > 2) {
+                    playAudio('breath');
+                    clearInterval(chicaInterval);
+                }
+            });
         }
         // Disable the doors and lights once the animatronic is in the office
         disableOfficeButtons();
@@ -1439,6 +1451,9 @@ const playAudio = (audio) => {
     switch (audio) {
         case 'oven':
             myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+            break;
+        case 'breath':
+            myAudioSource = `breath-${Math.ceil(Math.random() * 4)}`;
             break;
         case 'freddy-move':
             myAudioSource = `freddy-move-${Math.ceil(Math.random() * 3)}`;

@@ -607,8 +607,20 @@ const moveBonnieOrChica = (animatronic: Animatronic) => {
 
     if (name === 'Bonnie') {
       clearInterval(bonnieInterval);
+      bonnieInterval = window.setInterval(() => {
+        if (Math.random() * 3 > 2) {
+          playAudio('breath');
+          clearInterval(bonnieInterval);
+        }
+      });
     } else {
       clearInterval(chicaInterval);
+      chicaInterval = window.setInterval(() => {
+        if (Math.random() * 3 > 2) {
+          playAudio('breath');
+          clearInterval(chicaInterval);
+        }
+      });
     }
 
     // Disable the doors and lights once the animatronic is in the office
@@ -1786,10 +1798,7 @@ type AvailableAudio =
   | 'toreador-march'
   | '6AM'
   | 'animatronic-camera-move'
-  | 'breath-1'
-  | 'breath-2'
-  | 'breath-3'
-  | 'breath-4'
+  | 'breath'
   | 'camera-change'
   | 'camera-feed'
   | 'camera-toggle-off'
@@ -1806,6 +1815,9 @@ const playAudio = (audio: AvailableAudio) => {
   switch (audio) {
     case 'oven':
       myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+      break;
+    case 'breath':
+      myAudioSource = `breath-${Math.ceil(Math.random() * 4)}`;
       break;
     case 'freddy-move':
       myAudioSource = `freddy-move-${Math.ceil(Math.random() * 3)}`;
