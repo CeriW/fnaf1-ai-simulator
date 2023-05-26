@@ -1877,7 +1877,6 @@ const playAudioAmbience = () => {
   }, 10 * secondLength);
 
   let circusInterval = window.setInterval(() => {
-    console.log('hey');
     if (Math.random() * 20 > 19) {
       playAudio('circus');
       clearInterval(circusInterval);
