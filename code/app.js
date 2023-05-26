@@ -952,7 +952,8 @@ const generateCamImage2B = () => {
     // likely than others.
     if (info.bonnieIsHere && Bonnie.subPosition === -1) {
         let bonnieRandomiser = Math.ceil(Math.random() * 8);
-        if (bonnieRandomiser === 1) {
+        if (bonnieRandomiser === 1 && nightToSimulate >= 3) {
+            playAudio('robot-voice');
             return '2B-bonnie-3.webp';
         }
         else if (bonnieRandomiser > 6) {
@@ -998,7 +999,8 @@ const generateCamImage4B = () => {
     }
     if (info.chicaIsHere && Chica.subPosition === -1) {
         let chicaRandomiser = Math.ceil(Math.random() * 6);
-        if (chicaRandomiser === 1) {
+        if (chicaRandomiser === 1 && nightToSimulate >= 3) {
+            playAudio('robot-voice');
             return '4B-chica-3.webp';
         }
         else if (chicaRandomiser === 2) {
