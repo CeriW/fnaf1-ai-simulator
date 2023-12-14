@@ -43,17 +43,14 @@
   width: 20px;
   height: 30px;
   background: -webkit-gradient(linear, left top, right top, from(#23eb1f), color-stop(75%, #23eb1f), color-stop(75%, #27b723));
-  background: -o-linear-gradient(left, #23eb1f 0%, #23eb1f 75%, #27b723 75%);
   background: linear-gradient(to right, #23eb1f 0%, #23eb1f 75%, #27b723 75%);
 }
 #power-usage div:nth-child(4) {
   background: -webkit-gradient(linear, left top, right top, from(#fff300), color-stop(75%, #fff300), color-stop(75%, #f3870b));
-  background: -o-linear-gradient(left, #fff300 0%, #fff300 75%, #f3870b 75%);
   background: linear-gradient(to right, #fff300 0%, #fff300 75%, #f3870b 75%);
 }
 #power-usage div:nth-child(5) {
   background: -webkit-gradient(linear, left top, right top, from(#ff2323), color-stop(75%, #ff2323), color-stop(75%, #cb0000));
-  background: -o-linear-gradient(left, #ff2323 0%, #ff2323 75%, #cb0000 75%);
   background: linear-gradient(to right, #ff2323 0%, #ff2323 75%, #cb0000 75%);
 }
 #power-usage[multiplier="1"] div:nth-child(5),
@@ -592,7 +589,6 @@ button#cameras {
   background: url('../../assets/cameras/static.gif');
   background-size: cover;
   -webkit-transition: opacity 0.2s;
-  -o-transition: opacity 0.2s;
   transition: opacity 0.2s;
 }
 #camera-display.updating #static {
@@ -951,7 +947,6 @@ body[game-in-progress="true"] #game-over-stats {
   bottom: 0;
   background-color: #333;
   -webkit-transition: 0.4s;
-  -o-transition: 0.4s;
   transition: 0.4s;
 }
 .switch .slider:before {
@@ -963,7 +958,6 @@ body[game-in-progress="true"] #game-over-stats {
   bottom: 4px;
   background-color: #fff;
   -webkit-transition: 0.4s;
-  -o-transition: 0.4s;
   transition: 0.4s;
 }
 .switch input:checked + .slider {
@@ -1199,7 +1193,6 @@ body[game-mode="playable-game"] .current-ai-level {
   position: absolute;
   width: 50px;
   height: 50px;
-  background: -o-radial-gradient(rgba(219, 221, 239, 0.9), rgba(219, 221, 239, 0) 75%);
   background: radial-gradient(rgba(219, 221, 239, 0.9), rgba(219, 221, 239, 0) 75%);
   -webkit-animation: flickerI 1s infinite;
           animation: flickerI 1s infinite;
@@ -1252,11 +1245,9 @@ body[game-mode="playable-game"] .current-ai-level {
   right: calc(100% + 12px);
 }
 #controls .door-button {
-  background: -o-radial-gradient(#c40000, #720000);
   background: radial-gradient(#c40000, #720000);
 }
 #controls .door-button.active {
-  background: -o-radial-gradient(#6ae500 33%, #1e6c00);
   background: radial-gradient(#6ae500 33%, #1e6c00);
   border-color: #1e6c00;
 }
@@ -1264,7 +1255,6 @@ body[game-mode="playable-game"] .current-ai-level {
   content: 'DOOR';
 }
 #controls .light-button {
-  background: -o-radial-gradient(#666, #474747);
   background: radial-gradient(#666, #474747);
   border-color: #494949;
   border-right-color: #363636;
@@ -1275,7 +1265,6 @@ body[game-mode="playable-game"] .current-ai-level {
 }
 #simulator[left-light-on='true'] + #controls .light-button[door='left'],
 #simulator[right-light-on='true'] + #controls .light-button[door='right'] {
-  background: -o-radial-gradient(#d4d5d9 33%, #637bbe);
   background: radial-gradient(#d4d5d9 33%, #637bbe);
   border-color: #6d82bd;
 }
@@ -1283,9 +1272,14 @@ body[game-mode="playable-game"] .current-ai-level {
   position: absolute;
   top: 10px;
   right: 10px;
-  border: 2px solid #a2a4a7;
-  background-color: rgba(255, 255, 255, 0.6);
+  color: #9a9a9a;
+  border: 2px solid #9a9a9a;
+  background-color: rgba(255, 255, 255, 0.2);
   z-index: 10;
+  padding: 3px 7px;
+  font-family: 'VT323', monospace;
+  font-size: 23px;
+  border-radius: 8px;
 }
 /* Game speed selector ------------------------------------------------------ */
 #game-speed-selector {

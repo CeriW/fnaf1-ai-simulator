@@ -1586,6 +1586,7 @@ const gameOver = (reason: Animatronic | '6AM') => {
     playAudio('jumpscare');
   }
   document.body.setAttribute('game-in-progress', 'false');
+  document.querySelector('#sound-prompt')?.remove();
   clearAllIntervals();
 
   let gameOverWindow = document.querySelector('#game-over-stats')!;

@@ -1,12 +1,15 @@
+"use strict";
+
 // TESTING VARIABLES
-let nightToSimulate = 1;
-let secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
-const defaultCamera = '1A';
-const Freddy = {
+var nightToSimulate = 1;
+var secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+var defaultCamera = '1A';
+var Freddy = {
   name: 'Freddy',
   currentPosition: '1A',
   movementOpportunityInterval: 3.02,
   aiLevels: [null, 0, 0, 1, Math.ceil(Math.random() * 2), 3, 4, 20],
+  // Freddy randomly starts at 1 or 2 on night 4
   currentAIlevel: 0,
   currentCountdown: 0,
   pronouns: ['he', 'his'],
@@ -14,10 +17,10 @@ const Freddy = {
   stats: {
     successfulMovementChecks: 0,
     failedMovementChecks: 0,
-    officeAttempts: 0,
-  },
+    officeAttempts: 0
+  }
 };
-const Bonnie = {
+var Bonnie = {
   name: 'Bonnie',
   currentPosition: '1A',
   movementOpportunityInterval: 4.97,
@@ -29,10 +32,10 @@ const Bonnie = {
   stats: {
     successfulMovementChecks: 0,
     failedMovementChecks: 0,
-    officeAttempts: 0,
-  },
+    officeAttempts: 0
+  }
 };
-const Chica = {
+var Chica = {
   name: 'Chica',
   currentPosition: '1A',
   movementOpportunityInterval: 4.98,
@@ -44,10 +47,10 @@ const Chica = {
   stats: {
     successfulMovementChecks: 0,
     failedMovementChecks: 0,
-    officeAttempts: 0,
-  },
+    officeAttempts: 0
+  }
 };
-const Foxy = {
+var Foxy = {
   name: 'Foxy',
   currentPosition: '1C',
   currentAIlevel: 0,
@@ -59,51 +62,58 @@ const Foxy = {
   stats: {
     successfulMovementChecks: 0,
     failedMovementChecks: 0,
-    officeAttempts: 0,
-  },
+    officeAttempts: 0
+  }
 };
-const cameraNames = {
+var cameraNames = {
   '1A': 'Show stage',
   '1B': 'Dining area',
   '1C': 'Pirate cove',
   '2A': 'West hall',
   '2B': 'W. hall corner',
-  3: 'Supply closet',
+  '3': 'Supply closet',
   '4A': 'East hall',
   '4B': 'E. hall corner',
-  5: 'Backstage',
-  6: 'Kitchen',
-  7: 'Restrooms',
+  '5': 'Backstage',
+  '6': 'Kitchen',
+  '7': 'Restrooms'
 };
-const paths = {
+var paths = {
   assets: '../assets',
   cameras: '../assets/cameras',
   animatronics: '../assets/animatronics',
   office: '../assets/office',
-  audio: '../assets/sounds',
+  audio: '../assets/sounds'
 };
+
 /* Time related variables */
-let currentFrame = 0;
-let currentSecond = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
-const framesPerSecond = 60;
-let gameSpeed = 1;
+var currentFrame = 0;
+var currentSecond = -1; // We start at 1 as 12AM is 89 real seconds long whereas all the others are 90 seconds
+var framesPerSecond = 60;
+var gameSpeed = 1;
+
 /* Time related page elements */
-const framesDisplay = document.querySelector('#frames');
-const secondsDisplay = document.querySelector('#real-time');
-const inGameHourDisplay = document.querySelector('#in-game-time');
+var framesDisplay = document.querySelector('#frames');
+var secondsDisplay = document.querySelector('#real-time');
+var inGameHourDisplay = document.querySelector('#in-game-time');
+
 // General page elements
-const simulator = document.querySelector('#simulator');
-const sidebar = document.querySelector('#sidebar');
-const officeDisplay = document.querySelector('#office-overlay img');
+var simulator = document.querySelector('#simulator');
+var sidebar = document.querySelector('#sidebar');
+var officeDisplay = document.querySelector('#office-overlay img');
+
 // Camera related page elements
-const cameraArea = document.querySelector('#camera-display');
-const cameraButton = document.querySelector('button#cameras');
-const cameraStatusText = document.querySelector('#camera-status');
-const cameraScreen = document.querySelector('img#camera-screen');
+var cameraArea = document.querySelector('#camera-display');
+var cameraButton = document.querySelector('button#cameras');
+var cameraStatusText = document.querySelector('#camera-status');
+var cameraScreen = document.querySelector('img#camera-screen');
+
 // Power related page elements
-const powerDisplay = document.querySelector('#power');
+var powerDisplay = document.querySelector('#power');
+
 /* Player choosable variables */
-const user = {
+
+var user = {
   camerasOn: false,
   currentCamera: defaultCamera,
   leftDoorIsClosed: false,
@@ -117,111 +127,109 @@ const user = {
   power: 100,
   // power: 1,
   audioOn: false,
-  gameMode: false, // false for ai simulator, true for playable game with stuff hidden
+  gameMode: false // false for ai simulator, true for playable game with stuff hidden
 };
+
 // ========================================================================== //
 // TIMER BASED FUNCTIONS
 // These are split off separately as they each need to update at
 // different rates.
 // ========================================================================== //
+
 // We are running at 60fps
-const updateFrames = () => {
+var updateFrames = function updateFrames() {
   currentFrame++;
-  framesDisplay.textContent = `${currentFrame} frames at ${framesPerSecond * gameSpeed}fps`;
+  framesDisplay.textContent = "".concat(currentFrame, " frames at ").concat(framesPerSecond * gameSpeed, "fps");
 };
-const updateTime = () => {
+var updateTime = function updateTime() {
   currentSecond++;
+
   // REAL TIME
-  const realMinutes = Math.floor(currentSecond / 60);
-  const realRemainingSeconds = currentSecond % 60;
-  secondsDisplay.textContent = `
-    ${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}
-  `;
+  var realMinutes = Math.floor(currentSecond / 60);
+  var realRemainingSeconds = currentSecond % 60;
+  secondsDisplay.textContent = "\n    ".concat(realMinutes, " : ").concat(String(realRemainingSeconds).padStart(2, '0'), "\n  ");
+
   // IN GAME TIME
-  const gameTime = calculateInGameTime();
-  inGameHourDisplay.innerHTML = `
-    <span class="in-game-hour">${gameTime.hour}</span>
-    <span class="in-game-minutes">${String(gameTime.minute).padStart(2, '0')}</span>
-    <span class="am-marker">AM</span>
-  `;
+
+  var gameTime = calculateInGameTime();
+  inGameHourDisplay.innerHTML = "\n    <span class=\"in-game-hour\">".concat(gameTime.hour, "</span>\n    <span class=\"in-game-minutes\">").concat(String(gameTime.minute).padStart(2, '0'), "</span>\n    <span class=\"am-marker\">AM</span>\n  ");
+
   // console.log(
   //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
   // );
+
   updateFrames();
+
   // 2AM
   if (currentSecond === 179) {
     increaseAILevel(Bonnie);
   }
+
   // 3AM
   if (currentSecond === 268) {
     increaseAILevel(Bonnie);
     increaseAILevel(Chica);
     increaseAILevel(Foxy);
   }
+
   // 4AM
   if (currentSecond === 357) {
     increaseAILevel(Bonnie);
   }
+
   // 6AM - end game
   if (currentSecond === 535) {
     gameOver('6AM');
   }
 };
+
 // Modifier is how much to offset the time by.
 // This is used in the calculations in calculateRemainingPower() to figure out
 // what time you will run out of power based on current usage.
-const calculateInGameTime = (modifier = 0) => {
-  const inGameMinutes =
-    Math.floor((currentSecond + modifier) * 0.6741573033707866) > 0
-      ? Math.floor((currentSecond + modifier) * 0.6741573033707866)
-      : 0;
+var calculateInGameTime = function calculateInGameTime() {
+  var modifier = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+  var inGameMinutes = Math.floor((currentSecond + modifier) * 0.6741573033707866) > 0 ? Math.floor((currentSecond + modifier) * 0.6741573033707866) : 0;
   return {
     hour: String(Math.floor(inGameMinutes / 60) > 0 ? Math.floor(inGameMinutes / 60) : 12),
-    minute: String(inGameMinutes % 60).padStart(2, '0'),
+    minute: String(inGameMinutes % 60).padStart(2, '0')
   };
 };
+
 // ========================================================================== //
 // ANIMATRONIC BASED FUNCTIONS
 // ========================================================================== //
-const generateAnimatronics = () => {
-  [Bonnie, Foxy, Freddy, Chica].forEach((animatronic) => {
-    let _a, _b, _c;
+
+var generateAnimatronics = function generateAnimatronics() {
+  [Bonnie, Foxy, Freddy, Chica].forEach(function (animatronic) {
+    var _animatronic$aiLevels, _animatronic$subPosit;
     // Initialise their starting AI level
-    animatronic.currentAIlevel = (_a = animatronic.aiLevels[nightToSimulate]) !== null && _a !== void 0 ? _a : 1;
+    animatronic.currentAIlevel = (_animatronic$aiLevels = animatronic.aiLevels[nightToSimulate]) !== null && _animatronic$aiLevels !== void 0 ? _animatronic$aiLevels : 1;
+
     // Create the icons
-    const icon = document.createElement('span');
+    var icon = document.createElement('span');
     icon.classList.add('animatronic');
     icon.setAttribute('id', animatronic.name);
     icon.setAttribute('position', animatronic.currentPosition);
-    icon.setAttribute(
-      'sub-position',
-      (_b = animatronic.subPosition.toString()) !== null && _b !== void 0 ? _b : 'none'
-    );
+    icon.setAttribute('sub-position', (_animatronic$subPosit = animatronic.subPosition.toString()) !== null && _animatronic$subPosit !== void 0 ? _animatronic$subPosit : 'none');
     simulator.appendChild(icon);
+
     // Create the report
-    const animatronicReport = document.createElement('div');
+    var animatronicReport = document.createElement('div');
     animatronicReport.classList.add('animatronic-report');
     animatronicReport.setAttribute('for', animatronic.name);
-    animatronicReport.innerHTML = `
-      <div class="animatronic-icon"></div>
-      <div class="animatronic-name">${animatronic.name}</div>
-      <div class="starting-ai-level">Starting AI:<span>${animatronic.currentAIlevel}</span></div>
-      <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
-      <div class="report-item-container"></div>
-    `;
+    animatronicReport.innerHTML = "\n      <div class=\"animatronic-icon\"></div>\n      <div class=\"animatronic-name\">".concat(animatronic.name, "</div>\n      <div class=\"starting-ai-level\">Starting AI:<span>").concat(animatronic.currentAIlevel, "</span></div>\n      <div class=\"current-ai-level\">Current AI level: <span>").concat(animatronic.currentAIlevel, "</span></div>\n      <div class=\"report-item-container\"></div>\n    ");
     sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
     if (animatronic === Freddy) {
-      (_c = animatronicReport.querySelector('.animatronic-icon')) === null || _c === void 0
-        ? void 0
-        : _c.addEventListener('click', () => {
-            playAudio('freddy-nose');
-          });
+      var _animatronicReport$qu;
+      (_animatronicReport$qu = animatronicReport.querySelector('.animatronic-icon')) === null || _animatronicReport$qu === void 0 || _animatronicReport$qu.addEventListener('click', function () {
+        playAudio('freddy-nose');
+      });
     }
   });
 };
-const makeMovementCheck = (animatronic) => {
-  const comparisonNumber = Math.ceil(Math.random() * 20);
-  const canMove = animatronic.currentAIlevel >= comparisonNumber;
+var makeMovementCheck = function makeMovementCheck(animatronic) {
+  var comparisonNumber = Math.ceil(Math.random() * 20);
+  var canMove = animatronic.currentAIlevel >= comparisonNumber;
   if (canMove) {
     animatronic.stats.successfulMovementChecks++;
   } else {
@@ -229,23 +237,24 @@ const makeMovementCheck = (animatronic) => {
   }
   return {
     animatronicName: animatronic.name,
-    canMove,
+    canMove: canMove,
     scoreToBeat: comparisonNumber,
-    aiLevel: animatronic.currentAIlevel,
+    aiLevel: animatronic.currentAIlevel
   };
 };
-const increaseAILevel = (animatronic) => {
+var increaseAILevel = function increaseAILevel(animatronic) {
   if (animatronic.currentAIlevel < 20) {
     animatronic.currentAIlevel++;
     addReport(animatronic, 'increase AI level');
-    const aiReport = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .current-ai-level span`);
+    var aiReport = document.querySelector(".animatronic-report[for=\"".concat(animatronic.name, "\"] .current-ai-level span"));
     if (aiReport) {
       aiReport.innerHTML = animatronic.currentAIlevel.toString();
     }
   }
 };
+
 /* ========================================================================== //
-DEVELOPER NOTE
+DEVELOPER NOTE  
 /* ========================================================================== //
 
 Some of the if statements for the animatronics are quite lengthly.
@@ -260,35 +269,43 @@ the animatronics should be doing for any given statement.
 // ========================================================================== //
 // FOXY
 // ========================================================================== */
-const moveFoxy = () => {
-  const movementCheck = makeMovementCheck(Foxy);
+
+var moveFoxy = function moveFoxy() {
+  var movementCheck = makeMovementCheck(Foxy);
   if (Foxy.currentAIlevel === 0) {
     addReport(Foxy, 'AI level 0');
   } else if (user.camerasOn && Foxy.currentPosition === '1C') {
     // Foxy will fail all movement checks while the cameras are on
     addReport(Foxy, 'camera auto fail');
+
     // If Foxy fails a movement check while at 1C, he will not be able to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
   } else if (!movementCheck.canMove && Foxy.currentPosition === '1C') {
     addReport(Foxy, 'foxy failed pirate cove movement check', movementCheck);
   } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition < 2) {
     // Foxy needs to make 3 successful movement checks before he is able to leave 1C
-    moveAnimatronic(Foxy, { start: '1C', end: '1C', sub: Foxy.subPosition + 1 }, false);
+    moveAnimatronic(Foxy, {
+      start: '1C',
+      end: '1C',
+      sub: Foxy.subPosition + 1
+    }, false);
     addReport(Foxy, 'foxy successful pirate cove movement check', movementCheck);
-  } else if (
-    (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 2) ||
-    Foxy.currentPosition === '2A'
-  ) {
+  } else if (movementCheck.canMove && Foxy.currentPosition === '1C' && Foxy.subPosition === 2 || Foxy.currentPosition === '2A') {
     // Once Foxy has made 3 successful movement checks, he can leave Pirate Cove
     if (Foxy.currentPosition === '1C') {
       // This if statement isn't necessary in normal play, but is necessary during testing when his starting position isn't 1C
-      moveAnimatronic(Foxy, { start: '1C', end: '2A', sub: -1 });
+      moveAnimatronic(Foxy, {
+        start: '1C',
+        end: '2A',
+        sub: -1
+      });
       addReport(Foxy, 'foxy leaving pirate cove', movementCheck);
     }
+
     // Once he has left Pirate Cove, he will attempt to attack in 25 seconds or 1.87 seconds after the player looks at cam 2A, whichever comes first
     clearInterval(foxyInterval);
     Foxy.currentCountdown = 25;
     window.addEventListener('cam-on-2A', attemptFoxyJumpscare);
-    foxyInterval = window.setInterval(() => {
+    foxyInterval = window.setInterval(function () {
       Foxy.currentCountdown--;
       if (Foxy.currentCountdown === 0) {
         attemptFoxyJumpscare();
@@ -296,18 +313,25 @@ const moveFoxy = () => {
     }, secondLength);
   }
 };
-const attemptFoxyJumpscare = (e) => {
+var attemptFoxyJumpscare = function attemptFoxyJumpscare(e) {
   clearInterval(foxyInterval);
   Foxy.stats.officeAttempts++;
-  const performFoxyJumpscareCheck = () => {
-    const restartSubPosition = Math.floor(Math.random() * 2);
+  var performFoxyJumpscareCheck = function performFoxyJumpscareCheck() {
+    var restartSubPosition = Math.floor(Math.random() * 2);
     if (user.leftDoorIsClosed) {
       // If Foxy bashes on your door, you lose 1% power, plus an additional 5% for every time after that (e.g. 7% the second time, 13% the third etc)
       // We do -1 as the attempts get incremented before this function is called.
-      const powerDrainage = 1 + (Foxy.stats.officeAttempts - 1) * 5;
+      var powerDrainage = 1 + (Foxy.stats.officeAttempts - 1) * 5;
       user.power -= powerDrainage;
-      addReport(Foxy, 'foxy left door closed', null, { restartSubPosition, powerDrainage });
-      moveAnimatronic(Foxy, { start: '2A', end: '1C', sub: restartSubPosition }, false);
+      addReport(Foxy, 'foxy left door closed', null, {
+        restartSubPosition: restartSubPosition,
+        powerDrainage: powerDrainage
+      });
+      moveAnimatronic(Foxy, {
+        start: '2A',
+        end: '1C',
+        sub: restartSubPosition
+      }, false);
       foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
       playAudio('foxy-door-bash');
       updatePowerDisplay();
@@ -315,13 +339,14 @@ const attemptFoxyJumpscare = (e) => {
       gameOverFoxy();
     }
   };
+
   // If this is happening as a result of looking at cam 4A, we need to wait 1.87 seconds before he attempts to attack
   // If this is happening as a result of him waiting 25 seconds (in which case there will be no event parameter here) he will attempt to attack immediately.
   if (e) {
     addReport(Foxy, 'foxy coming down hall');
-    const foxyIcon = document.querySelector('.animatronic#Foxy');
+    var foxyIcon = document.querySelector('.animatronic#Foxy');
     if (foxyIcon) {
-      foxyIcon.style.animation = `foxyHallAnimation ${(1.87 * secondLength) / 1000}s linear backwards`;
+      foxyIcon.style.animation = "foxyHallAnimation ".concat(1.87 * secondLength / 1000, "s linear backwards");
     }
     playAudio('foxy-run');
     foxyJumpscareCountdown = window.setTimeout(performFoxyJumpscareCheck, secondLength * 1.87);
@@ -329,15 +354,16 @@ const attemptFoxyJumpscare = (e) => {
     performFoxyJumpscareCheck();
   }
 };
+
 // When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
 // QUESTION - I am assuming the countdown doesn't renew if another cameras-off event happens during his cooldown.
-const pauseFoxy = () => {
+var pauseFoxy = function pauseFoxy() {
   if (Foxy.currentPosition === '1C') {
-    const cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
+    var cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
     Foxy.currentCountdown = cooldownInSeconds * secondLength;
     addReport(Foxy, 'foxy paused', null, cooldownInSeconds);
     clearInterval(foxyInterval);
-    foxyCooldown = window.setInterval(() => {
+    foxyCooldown = window.setInterval(function () {
       Foxy.currentCountdown--;
       if (Foxy.currentCountdown <= 0) {
         foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
@@ -346,16 +372,18 @@ const pauseFoxy = () => {
     }, 1);
   }
 };
+
 // ========================================================================== //
 // FREDDY
 // ========================================================================== //
+
 // Once Freddy is in the office he has a 25% chance of getting you every 1 second while the cameras are down
-const makeFreddyJumpscareCheck = () => {
+var makeFreddyJumpscareCheck = function makeFreddyJumpscareCheck() {
   clearInterval(freddyInterval);
-  freddyInterval = window.setInterval(() => {
-    const comparisonNumber = Math.random();
-    const jumpscare = {
-      canMove: comparisonNumber > 0.75,
+  freddyInterval = window.setInterval(function () {
+    var comparisonNumber = Math.random();
+    var jumpscare = {
+      canMove: comparisonNumber > 0.75
     };
     if (jumpscare.canMove && !user.camerasOn) {
       gameOverFreddy();
@@ -365,14 +393,15 @@ const makeFreddyJumpscareCheck = () => {
         animatronicName: 'Freddy',
         canMove: true,
         scoreToBeat: 0.75 * 100,
-        aiLevel: Math.floor(comparisonNumber * 100),
+        aiLevel: Math.floor(comparisonNumber * 100)
       });
     }
   }, secondLength);
 };
+
 // Freddy always follows a set path, and waits a certain amount of time before actually moving.
-const moveFreddy = () => {
-  const movementCheck = makeMovementCheck(Freddy);
+var moveFreddy = function moveFreddy() {
+  var movementCheck = makeMovementCheck(Freddy);
   if (Freddy.currentAIlevel === 0) {
     addReport(Freddy, 'AI level 0');
   } else if (Freddy.currentPosition === '1A' && Bonnie.currentPosition === '1A' && Chica.currentPosition === '1A') {
@@ -386,36 +415,31 @@ const moveFreddy = () => {
     // CAMERAS ON, HE'S NOT AT 4B
     // Freddy will automatically fail all movement checks while the cameras are up
     addReport(Freddy, 'camera auto fail');
+
     // CAMERAS ON, HE'S AT 4B, USER IS LOOKING AT 4B. DOORS DON'T MATTER HERE
     // Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.
   } else if (user.camerasOn && user.currentCamera === '4B') {
     addReport(Freddy, 'freddy and camera at 4B');
+
     // ✓ CAMERAS ON    ✓ HE'S AT 4B    ✓ USER IS NOT LOOKING AT 4B    ✓ HE WANTS TO ENTER THE OFFICE     X THE RIGHT DOOR IS CLOSED
-  } else if (
-    user.camerasOn &&
-    Freddy.currentPosition === '4B' &&
-    user.currentCamera !== '4B' &&
-    user.rightDoorIsClosed &&
-    movementCheck.canMove
-  ) {
+  } else if (user.camerasOn && Freddy.currentPosition === '4B' && user.currentCamera !== '4B' && user.rightDoorIsClosed && movementCheck.canMove) {
     // Freddy can't get you when the right door is closed even if you're not looking at 4B
     // QUESTION - I HAVE ASSUMED HE RETURNS TO 4A WHEN THIS IS THE CASE?
     // QUESTION - DOES HE HAVE TO PASS A MOVEMENT CHECK BEFORE HE MOVES BACK TO 4A?
     // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY? Because that's not happening right here with this code
     addReport(Freddy, 'right door closed', null, '4A');
     Freddy.currentPosition = '4A';
-    moveAnimatronic(Freddy, { start: '4B', end: '4A' });
+    moveAnimatronic(Freddy, {
+      start: '4B',
+      end: '4A'
+    });
     Freddy.stats.officeAttempts++;
     playAudio('freddy-move');
+
     // CAMERAS ON, HE'S AT 4B, USER IS NOT LOOKING AT 4B BUT HE'S FAILED HIS MOVEMENT CHECK
-  } else if (
-    user.camerasOn &&
-    Freddy.currentPosition === '4B' &&
-    user.currentCamera !== '4B' &&
-    !user.rightDoorIsClosed &&
-    !movementCheck.canMove
-  ) {
+  } else if (user.camerasOn && Freddy.currentPosition === '4B' && user.currentCamera !== '4B' && !user.rightDoorIsClosed && !movementCheck.canMove) {
     // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
+
     // Freddy could have entered the office but he failed his movement check. He will continue to wait at Cam 4B
     addReport(Freddy, 'enter office failed movement check', movementCheck);
     Freddy.stats.failedMovementChecks++;
@@ -423,54 +447,70 @@ const moveFreddy = () => {
     // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
     addReport(Freddy, 'enter office cameras off');
     Freddy.stats.officeAttempts++;
+
     // THE CAMERAS ARE ON, HE'S AT 4B, THE RIGHT DOOR IS OPEN, HE CAN GET INTO THE OFFICE!!!!!
   } else if (user.camerasOn && Freddy.currentPosition === '4B' && !user.rightDoorIsClosed) {
     addReport(Freddy, 'in the office');
-    moveAnimatronic(Freddy, { start: '4B', end: 'office' }, false);
+    moveAnimatronic(Freddy, {
+      start: '4B',
+      end: 'office'
+    }, false);
     playAudio('freddy-move');
     Freddy.stats.officeAttempts++;
   } else if (Freddy.currentPosition === 'office') {
     makeFreddyJumpscareCheck();
   } else if (movementCheck.canMove) {
-    let waitingTime = 1000 - Freddy.currentAIlevel * 100; // How many FRAMES to wait before moving
+    var waitingTime = 1000 - Freddy.currentAIlevel * 100; // How many FRAMES to wait before moving
     waitingTime = waitingTime >= 0 ? waitingTime : 0;
-    const currentPosition = Freddy.currentPosition;
-    let endingPosition = currentPosition;
+    var currentPosition = Freddy.currentPosition;
+    var endingPosition = currentPosition;
+
     // Freddy always follows a set path
     switch (Freddy.currentPosition) {
-      case '1A': // Show stage
+      case '1A':
+        // Show stage
         endingPosition = '1B';
         break;
-      case '1B': // Dining area
+      case '1B':
+        // Dining area
         endingPosition = '7';
         break;
-      case '7': // Restrooms
+      case '7':
+        // Restrooms
         endingPosition = '6';
         break;
-      case '6': // Kitchen
+      case '6':
+        // Kitchen
         endingPosition = '4A';
         break;
-      case '4A': // East hall
+      case '4A':
+        // East hall
         endingPosition = '4B';
         break;
     }
+
     // Round to a reasonable number of decimal points for the report, only if it's not an integer.
-    const formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
+    var formattedWaitingTime = Number.isInteger(waitingTime / 60) ? waitingTime / 60 : (waitingTime / 60).toFixed(2);
     addReport(Freddy, 'freddy successful movement check', movementCheck, {
-      formattedWaitingTime,
-      currentPosition,
-      endingPosition,
+      formattedWaitingTime: formattedWaitingTime,
+      currentPosition: currentPosition,
+      endingPosition: endingPosition
     });
     clearInterval(freddyInterval);
+
     // Freddy waits a certain amount of time between passing his movement check and actually moving.
     // The amount of time is dependent on his AI level.
-    Freddy.currentCountdown = (waitingTime / framesPerSecond) * secondLength;
+    Freddy.currentCountdown = waitingTime / framesPerSecond * secondLength;
+
     // Freddy will not move while the cameras are up.
     // If his countdown expires while the cameras are up, he will wait until the cameras are down to move.
-    freddyCountdown = window.setInterval(() => {
+    freddyCountdown = window.setInterval(function () {
       Freddy.currentCountdown--;
       if (Freddy.currentCountdown <= 0 && !user.camerasOn) {
-        moveAnimatronic(Freddy, { start: currentPosition, end: endingPosition });
+        moveAnimatronic(Freddy, {
+          start: currentPosition,
+          end: endingPosition
+        });
         freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
         playAudio('freddy-move');
         clearInterval(freddyCountdown);
@@ -482,43 +522,54 @@ const moveFreddy = () => {
     addReport(Freddy, 'failed movement check', movementCheck);
   }
 };
+
 // ========================================================================== //
 // BONNIE AND CHICA
 // Bonnie and Chica share much of the same logic with only minor differences.
 // ========================================================================== //
-const moveBonnieOrChica = (animatronic) => {
+
+var moveBonnieOrChica = function moveBonnieOrChica(animatronic) {
   // Figure out which set of details we need to use depending on whether it's Bonnie or Chica we're dealing with
-  const name = animatronic.name;
-  const newPosition = name === 'Bonnie' ? calculateNewBonniePosition() : calculateNewChicaPosition();
-  const hallCorner = name === 'Bonnie' ? '2B' : '4B';
-  const doorClosed = name === 'Bonnie' ? user.leftDoorIsClosed : user.rightDoorIsClosed;
-  const doorClosedMessage = name === 'Bonnie' ? 'left door closed' : 'right door closed';
-  const movementCheck = makeMovementCheck(animatronic);
+  var name = animatronic.name;
+  var newPosition = name === 'Bonnie' ? calculateNewBonniePosition() : calculateNewChicaPosition();
+  var hallCorner = name === 'Bonnie' ? '2B' : '4B';
+  var doorClosed = name === 'Bonnie' ? user.leftDoorIsClosed : user.rightDoorIsClosed;
+  var doorClosedMessage = name === 'Bonnie' ? 'left door closed' : 'right door closed';
+  var movementCheck = makeMovementCheck(animatronic);
   if (animatronic.currentAIlevel === 0) {
     addReport(animatronic, 'AI level 0');
+
     // They can move, aren't in their hall corner
   } else if (movementCheck.canMove && animatronic.currentPosition !== hallCorner) {
-    moveAnimatronic(animatronic, { start: animatronic.currentPosition, end: newPosition }, true, movementCheck);
+    moveAnimatronic(animatronic, {
+      start: animatronic.currentPosition,
+      end: newPosition
+    }, true, movementCheck);
     if (animatronic.name === 'Chica' && newPosition === '6') {
       playAudio('oven');
     }
+
     // If they're at their hall corner but aren't in your doorway yet, move them into the doorway
   } else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition === -1) {
-    moveAnimatronic(animatronic, { start: hallCorner, end: hallCorner, sub: 1 }, false);
+    moveAnimatronic(animatronic, {
+      start: hallCorner,
+      end: hallCorner,
+      sub: 1
+    }, false);
     addReport(animatronic, 'in the doorway', movementCheck);
+
     // Passed a movement check, is already in the doorway and the door is not closed, they can get into your office!
-  } else if (
-    movementCheck.canMove &&
-    animatronic.currentPosition === hallCorner &&
-    animatronic.subPosition !== -1 &&
-    !doorClosed
-  ) {
-    moveAnimatronic(animatronic, { start: hallCorner, end: 'office', sub: -1 }, false);
+  } else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition !== -1 && !doorClosed) {
+    moveAnimatronic(animatronic, {
+      start: hallCorner,
+      end: 'office',
+      sub: -1
+    }, false);
     addReport(animatronic, 'enter office bonnie or chica', movementCheck);
     animatronic.stats.officeAttempts++;
     if (name === 'Bonnie') {
       clearInterval(bonnieInterval);
-      bonnieInterval = window.setInterval(() => {
+      bonnieInterval = window.setInterval(function () {
         if (Math.random() * 3 > 2) {
           playAudio('breath');
           clearInterval(bonnieInterval);
@@ -526,16 +577,19 @@ const moveBonnieOrChica = (animatronic) => {
       });
     } else {
       clearInterval(chicaInterval);
-      chicaInterval = window.setInterval(() => {
+      chicaInterval = window.setInterval(function () {
         if (Math.random() * 3 > 2) {
           playAudio('breath');
           clearInterval(chicaInterval);
         }
       });
     }
+
     // Disable the doors and lights once the animatronic is in the office
     disableOfficeButtons();
+
     // They will jumpscare you in 30 seconds or when you next bring the cameras down - whichever comes first.
+
     if (name === 'Bonnie') {
       bonnieJumpscareCountdown = window.setTimeout(gameOverBonnie, secondLength * 30);
       window.addEventListener('cameras-off', gameOverBonnie);
@@ -543,23 +597,20 @@ const moveBonnieOrChica = (animatronic) => {
       chicaJumpscareCountdown = window.setTimeout(gameOverChica, secondLength * 30);
       window.addEventListener('cameras-off', gameOverChica);
     }
+
     // He meets all the critera to enter the office but the door is closed. He will return to the dining area
-  } else if (
-    movementCheck.canMove &&
-    animatronic.currentPosition === hallCorner &&
-    animatronic.subPosition !== -1 &&
-    doorClosed
-  ) {
-    moveAnimatronic(animatronic, { start: hallCorner, end: '1B', sub: -1 }, false);
+  } else if (movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition !== -1 && doorClosed) {
+    moveAnimatronic(animatronic, {
+      start: hallCorner,
+      end: '1B',
+      sub: -1
+    }, false);
     addReport(animatronic, doorClosedMessage, movementCheck, '1B');
+
     // The conditions were right to enter the office but they failed their movement check
-  } else if (
-    !movementCheck.canMove &&
-    animatronic.currentPosition === hallCorner &&
-    animatronic.subPosition !== -1 &&
-    !user.leftDoorIsClosed
-  ) {
+  } else if (!movementCheck.canMove && animatronic.currentPosition === hallCorner && animatronic.subPosition !== -1 && !user.leftDoorIsClosed) {
     addReport(animatronic, 'enter office failed movement check doorway', movementCheck);
+
     // Failed a bog standard movement check with no other fancy conditions
   } else if (!movementCheck.canMove) {
     addReport(animatronic, 'failed movement check', movementCheck);
@@ -567,17 +618,19 @@ const moveBonnieOrChica = (animatronic) => {
     addReport(animatronic, 'debug');
   }
 };
+
 // Bonnie does not have to chose adjacent rooms. He can pick at random from a list of approved locations.
-const calculateNewBonniePosition = () => {
-  const possibleLocations = ['1B', '3', '5', '2A', '2B'];
-  const choice = Math.floor(Math.random() * possibleLocations.length);
+var calculateNewBonniePosition = function calculateNewBonniePosition() {
+  var possibleLocations = ['1B', '3', '5', '2A', '2B'];
+  var choice = Math.floor(Math.random() * possibleLocations.length);
   return possibleLocations[choice];
 };
+
 // Chica can only choose cameras adjacent to where she already is.
-const calculateNewChicaPosition = () => {
-  const randomChoice = Math.round(Math.random());
-  let newPosition = '';
-  let choices;
+var calculateNewChicaPosition = function calculateNewChicaPosition() {
+  var randomChoice = Math.round(Math.random());
+  var newPosition = '';
+  var choices;
   switch (Chica.currentPosition) {
     case '1A':
       newPosition = '1B';
@@ -600,70 +653,62 @@ const calculateNewChicaPosition = () => {
   }
   return newPosition;
 };
-const moveAnimatronic = (animatronic, position, logThis = true, movementCheck) => {
-  let _a, _b, _c, _d, _e;
+var moveAnimatronic = function moveAnimatronic(animatronic, position) {
+  var _position$sub, _document$querySelect, _document$querySelect2, _position$sub$toStrin, _position$sub2;
+  var logThis = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var movementCheck = arguments.length > 3 ? arguments[3] : undefined;
   animatronic.currentPosition = position.end;
-  animatronic.subPosition = (_a = position.sub) !== null && _a !== void 0 ? _a : -1;
+  animatronic.subPosition = (_position$sub = position.sub) !== null && _position$sub !== void 0 ? _position$sub : -1;
   if (logThis) {
     addReport(animatronic, 'has moved', movementCheck, {
       currentPosition: position.start,
-      endPosition: position.end,
+      endPosition: position.end
     });
   }
+
   // Update the cameras if you're looking at their start or end position
   if (user.camerasOn && (user.currentCamera === position.start || user.currentCamera === position.end)) {
     cameraArea.classList.add('updating');
     playAudio('animatronic-camera-move');
   }
-  window.setTimeout(() => {
+  window.setTimeout(function () {
     cameraScreen.src = getCameraImage(user.currentCamera);
     cameraArea.classList.remove('updating');
   }, secondLength * 5);
-  (_b = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _b === void 0
-    ? void 0
-    : _b.setAttribute('position', position.end);
-  (_c = document.querySelector(`.animatronic#${animatronic.name}`)) === null || _c === void 0
-    ? void 0
-    : _c.setAttribute(
-        'sub-position',
-        (_e = (_d = position.sub) === null || _d === void 0 ? void 0 : _d.toString()) !== null && _e !== void 0
-          ? _e
-          : 'none'
-      );
+  (_document$querySelect = document.querySelector(".animatronic#".concat(animatronic.name))) === null || _document$querySelect === void 0 || _document$querySelect.setAttribute('position', position.end);
+  (_document$querySelect2 = document.querySelector(".animatronic#".concat(animatronic.name))) === null || _document$querySelect2 === void 0 || _document$querySelect2.setAttribute('sub-position', (_position$sub$toStrin = (_position$sub2 = position.sub) === null || _position$sub2 === void 0 ? void 0 : _position$sub2.toString()) !== null && _position$sub$toStrin !== void 0 ? _position$sub$toStrin : 'none');
 };
-const pluralise = (number, word) => {
-  const plural = number > 1 ? 's' : '';
+
+// ========================================================================== //
+// REPORTING
+// ========================================================================== //
+// Foxy is leaving Pirate cove
+
+var pluralise = function pluralise(number, word) {
+  var plural = number > 1 ? 's' : '';
   return word + plural;
 };
-const capitalise = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-const addReport = (
-  animatronic,
-  reason,
-  movementCheck = null,
-  additionalInfo = null // Some reports need to pass in some additional info. This can take different formats so is allowed to be an 'any' type
-) => {
-  let _a;
+var capitalise = function capitalise(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};
+var addReport = function addReport(animatronic, reason) {
+  var movementCheck = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var additionalInfo = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
   // Figuring out what the message actually should be
-  let message = '';
-  let type = 'info';
-  let preventDuplicates = false;
-  const stats = movementCheck
-    ? `<div class="report-extra-info">Score to beat: ${Math.ceil(movementCheck.scoreToBeat)} ${
-        animatronic.name
-      }'s AI level: ${movementCheck.aiLevel}</div>`
-    : '';
+  var message = '';
+  var type = 'info';
+  var preventDuplicates = false;
+  var stats = movementCheck ? "<div class=\"report-extra-info\">Score to beat: ".concat(Math.ceil(movementCheck.scoreToBeat), " ").concat(animatronic.name, "'s AI level: ").concat(movementCheck.aiLevel, "</div>") : '';
   switch (reason) {
     case 'debug':
-      message = 'Something happened';
+      message = "Something happened";
       break;
     case 'power outage - freddy not arrived':
-      message =
-        'Your power has run out. Freddy has a 20% chance of arriving at your office every 5 seconds, up to a maximum of 20 seconds.';
+      message = 'Your power has run out. Freddy has a 20% chance of arriving at your office every 5 seconds, up to a maximum of 20 seconds.';
       type = 'death-zone';
       break;
     case 'power outage - freddy has arrived':
-      message =
-        'Freddy has arrived at your office. His song has a 20% chance of ending every 5 seconds, up to a maxmimum of 20 seconds';
+      message = 'Freddy has arrived at your office. His song has a 20% chance of ending every 5 seconds, up to a maxmimum of 20 seconds';
       type = 'death-zone';
       break;
     case 'power outage - freddy is waiting to jumpscare':
@@ -671,125 +716,86 @@ const addReport = (
       type = 'death-zone';
       break;
     case 'power outage - freddy failed to arrive':
-      message = `Freddy failed his check to arrive at the office. He will try up to ${additionalInfo} more ${pluralise(
-        additionalInfo,
-        'time'
-      )}<div class="report-extra-info">20% chance every 5 seconds</div>`;
+      message = "Freddy failed his check to arrive at the office. He will try up to ".concat(additionalInfo, " more ").concat(pluralise(additionalInfo, 'time'), "<div class=\"report-extra-info\">20% chance every 5 seconds</div>");
       break;
     case "power outage - freddy's song didn't end":
-      message = `Freddy failed his check to end his song. He will continue for up to ${additionalInfo} more ${pluralise(
-        additionalInfo,
-        'second'
-      )}<div class="report-extra-info">20% chance every 5 seconds</div>`;
+      message = "Freddy failed his check to end his song. He will continue for up to ".concat(additionalInfo, " more ").concat(pluralise(additionalInfo, 'second'), "<div class=\"report-extra-info\">20% chance every 5 seconds</div>");
       break;
     case "power outage - freddy didn't jumpscare":
-      message =
-        'Freddy failed his check to jumpscare you.<div class="report-extra-info">20% chance every 2 seconds</div>';
+      message = "Freddy failed his check to jumpscare you.<div class=\"report-extra-info\">20% chance every 2 seconds</div>";
       break;
     case 'AI level 0':
-      message = `${animatronic.name}'s AI level is 0 and is unable to move.`;
+      message = "".concat(animatronic.name, "'s AI level is 0 and is unable to move.");
       if (animatronic === Bonnie) {
-        message += '<div class="report-extra-info">His AI level will increase at 2AM</div>';
+        message += "<div class=\"report-extra-info\">His AI level will increase at 2AM</div>";
       } else if (animatronic === Chica || animatronic === Foxy) {
-        message += `<div class="report-extra-info">${capitalise(
-          animatronic.pronouns[1]
-        )} AI level will increase at 3AM</div>`;
+        message += "<div class=\"report-extra-info\">".concat(capitalise(animatronic.pronouns[1]), " AI level will increase at 3AM</div>");
       }
       preventDuplicates = true;
       break;
     case 'in the doorway':
-      const side = animatronic.name === 'Bonnie' ? 'left' : 'right';
-      message = `${animatronic.name} is in your ${side} doorway!`;
+      var side = animatronic.name === 'Bonnie' ? 'left' : 'right';
+      message = "".concat(animatronic.name, " is in your ").concat(side, " doorway!");
       type = 'alert';
       break;
     case 'increase AI level':
-      message = `${animatronic.name}'s AI level has increased by 1 to ${animatronic.currentAIlevel}`;
+      message = "".concat(animatronic.name, "'s AI level has increased by 1 to ").concat(animatronic.currentAIlevel);
       break;
     case 'increase AI level max':
-      message = `${animatronic.name} could have increased their AI level but they are already at 20`;
+      message = "".concat(animatronic.name, " could have increased their AI level but they are already at 20");
     case 'camera auto fail':
-      message = `${animatronic.name} will automatically fail all movement checks while the cameras are on`;
+      message = "".concat(animatronic.name, " will automatically fail all movement checks while the cameras are on");
       preventDuplicates = true;
       break;
     case 'failed movement check':
-      message = `${animatronic.name} has failed ${animatronic.pronouns[1]} movement check and will remain at cam ${
-        animatronic.currentPosition
-      } (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+      message = "".concat(animatronic.name, " has failed ").concat(animatronic.pronouns[1], " movement check and will remain at cam ").concat(animatronic.currentPosition, " (").concat(cameraNames[animatronic.currentPosition], ") ").concat(stats);
       type = 'good';
       break;
     case 'freddy and camera at 4B':
-      message =
-        'Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.';
+      message = "Freddy will fail all movement checks while both he and the camera are at 4B. Other cameras no longer count while Freddy is at 4B.";
       preventDuplicates = true;
       break;
     case 'right door closed':
-      message = `${animatronic.name} was ready to enter your office but the right door was closed. ${capitalise(
-        animatronic.pronouns[0]
-      )} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
+      message = "".concat(animatronic.name, " was ready to enter your office but the right door was closed. ").concat(capitalise(animatronic.pronouns[0]), " will return to cam ").concat(additionalInfo, " (").concat(cameraNames[additionalInfo], ")");
       type = 'good';
       break;
     case 'left door closed':
-      message = `${animatronic.name} was ready to enter your office but the left door was closed.
-      ${capitalise(animatronic.pronouns[0])} will return to cam ${additionalInfo} (${cameraNames[additionalInfo]})`;
+      message = "".concat(animatronic.name, " was ready to enter your office but the left door was closed.\n      ").concat(capitalise(animatronic.pronouns[0]), " will return to cam ").concat(additionalInfo, " (").concat(cameraNames[additionalInfo], ")");
       type = 'good';
       break;
     case 'enter office bonnie or chica':
-      message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE
-      <div class="report-extra-info">${capitalise(
-        animatronic.pronouns[0]
-      )} will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>`;
+      message = "".concat(animatronic.name.toUpperCase(), " HAS ENTERED THE OFFICE\n      <div class=\"report-extra-info\">").concat(capitalise(animatronic.pronouns[0]), " will jumpscare you in 30 seconds or the next time the camera goes down - whichever comes first</div>");
       type = 'death-zone';
       preventDuplicates = true;
       break;
     case 'freddy office failed movement check':
-      message = `Freddy is in your office but failed his movement check and was unable to jumpscare you. 
-          <div class="report-extra-info">
-          Score to beat: ${
-            movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat
-          }/100   Freddy's score: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel}
-          </div>`;
+      message = "Freddy is in your office but failed his movement check and was unable to jumpscare you. \n          <div class=\"report-extra-info\">\n          Score to beat: ".concat(movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat, "/100   Freddy's score: ").concat(movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel, "\n          </div>");
       type = 'death-zone';
       break;
     case 'enter office failed movement check':
-      message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${
-        animatronic.pronouns[1]
-      } movement check. ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${
-        animatronic.currentPosition
-      } (${cameraNames[animatronic.currentPosition]}) ${stats}`;
+      message = "".concat(animatronic.name, " could have entered the office but ").concat(animatronic.pronouns[0], " failed ").concat(animatronic.pronouns[1], " movement check. ").concat(capitalise(animatronic.pronouns[0]), " will continue to wait at cam ").concat(animatronic.currentPosition, " (").concat(cameraNames[animatronic.currentPosition], ") ").concat(stats);
       type = 'alert';
       break;
     case 'enter office failed movement check doorway':
-      const doorSide = animatronic.currentPosition === '2B' ? 'left' : 'right';
-      message = `${animatronic.name} could have entered the office but ${animatronic.pronouns[0]} failed ${
-        animatronic.pronouns[1]
-      } movement check.
-      ${capitalise(animatronic.pronouns[0])} will continue to wait in the ${doorSide} doorway ${stats}`;
+      var doorSide = animatronic.currentPosition === '2B' ? 'left' : 'right';
+      message = "".concat(animatronic.name, " could have entered the office but ").concat(animatronic.pronouns[0], " failed ").concat(animatronic.pronouns[1], " movement check.\n      ").concat(capitalise(animatronic.pronouns[0]), " will continue to wait in the ").concat(doorSide, " doorway ").concat(stats);
       type = 'alert';
       break;
     case 'enter office cameras off':
-      message = `${animatronic.name} passed ${
-        animatronic.pronouns[1]
-      } movement check to enter the office but couldn't because the cameras were off.
-      ${capitalise(animatronic.pronouns[0])} will continue to wait at cam ${animatronic.currentPosition} (${
-        cameraNames[animatronic.currentPosition]
-      }) ${stats}`;
+      message = "".concat(animatronic.name, " passed ").concat(animatronic.pronouns[1], " movement check to enter the office but couldn't because the cameras were off.\n      ").concat(capitalise(animatronic.pronouns[0]), " will continue to wait at cam ").concat(animatronic.currentPosition, " (").concat(cameraNames[animatronic.currentPosition], ") ").concat(stats);
       type = 'warning';
       break;
     case 'in the office':
-      message = `${animatronic.name.toUpperCase()} HAS ENTERED THE OFFICE`;
+      message = "".concat(animatronic.name.toUpperCase(), " HAS ENTERED THE OFFICE");
       type = 'death-zone';
       preventDuplicates = true;
       break;
     case 'waiting for cameras down':
-      message = `${animatronic.name} is ready to move but is waiting for the cameras to go down`;
+      message = "".concat(animatronic.name, " is ready to move but is waiting for the cameras to go down");
       preventDuplicates = true;
       break;
     case 'freddy successful movement check':
-      message = `Freddy will move from
-      ${additionalInfo.currentPosition} (${cameraNames[additionalInfo.currentPosition]})
-      to ${additionalInfo.endingPosition} (${cameraNames[additionalInfo.endingPosition]})
-      in ${additionalInfo.formattedWaitingTime} seconds
-      ${stats}`;
+      message = "Freddy will move from\n      ".concat(additionalInfo.currentPosition, " (").concat(cameraNames[additionalInfo.currentPosition], ")\n      to ").concat(additionalInfo.endingPosition, " (").concat(cameraNames[additionalInfo.endingPosition], ")\n      in ").concat(additionalInfo.formattedWaitingTime, " seconds\n      ").concat(stats);
       type = 'bad';
       break;
     case 'freddy and bonnie on stage':
@@ -805,49 +811,31 @@ const addReport = (
       preventDuplicates = true;
       break;
     case 'has moved':
-      message = `${animatronic.name} has moved from cam ${additionalInfo.currentPosition} (${
-        cameraNames[additionalInfo.currentPosition]
-      }) to cam ${additionalInfo.endPosition} (${cameraNames[additionalInfo.endPosition]})`;
+      message = "".concat(animatronic.name, " has moved from cam ").concat(additionalInfo.currentPosition, " (").concat(cameraNames[additionalInfo.currentPosition], ") to cam ").concat(additionalInfo.endPosition, " (").concat(cameraNames[additionalInfo.endPosition], ")");
       if (movementCheck) {
-        message += `<div class="report-extra-info">
-        Score to beat: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat}  ${
-          animatronic.name
-        }'s score: ${movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel}
-        </div>`;
+        message += "<div class=\"report-extra-info\">\n        Score to beat: ".concat(movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.scoreToBeat, "  ").concat(animatronic.name, "'s score: ").concat(movementCheck === null || movementCheck === void 0 ? void 0 : movementCheck.aiLevel, "\n        </div>");
       }
       type = 'bad';
       break;
     case 'foxy successful pirate cove movement check':
-      const stepsRemaining = 3 - Foxy.subPosition;
-      message = `Foxy has made a successful movement check. He is ${stepsRemaining} ${pluralise(
-        stepsRemaining,
-        'step'
-      )}&nbsp;away from leaving Pirate Cove ${stats}`;
+      var stepsRemaining = 3 - Foxy.subPosition;
+      message = "Foxy has made a successful movement check. He is ".concat(stepsRemaining, " ").concat(pluralise(stepsRemaining, 'step'), "&nbsp;away from leaving Pirate Cove ").concat(stats);
       type = stepsRemaining === 1 ? 'warning' : 'bad';
       break;
     case 'foxy paused':
-      message = `The cameras have just been turned off. Foxy will be unable to make movement checks for ${additionalInfo.toFixed(
-        2
-      )} seconds <div class="report-extra-info">Random number between 0.83 and 16.67</div>`;
+      message = "The cameras have just been turned off. Foxy will be unable to make movement checks for ".concat(additionalInfo.toFixed(2), " seconds <div class=\"report-extra-info\">Random number between 0.83 and 16.67</div>");
       break;
     case 'foxy failed pirate cove movement check':
-      const stepsRemainingB = 3 - Foxy.subPosition;
-      message = `Foxy has failed his movement check. He is still ${stepsRemainingB} ${pluralise(
-        stepsRemainingB,
-        'step'
-      )} away from leaving 1C (${cameraNames['1C']}) ${stats}`;
+      var stepsRemainingB = 3 - Foxy.subPosition;
+      message = "Foxy has failed his movement check. He is still ".concat(stepsRemainingB, " ").concat(pluralise(stepsRemainingB, 'step'), " away from leaving 1C (").concat(cameraNames['1C'], ") ").concat(stats);
       type = 'good';
       break;
     case 'foxy leaving pirate cove':
-      message = `FOXY HAS LEFT ${cameraNames['1C'].toUpperCase()}
-      <div class="report-extra-info">He will attempt to jumpscare you in 25 seconds or when you next look at cam 2A, whichever comes first</div>`;
+      message = "FOXY HAS LEFT ".concat(cameraNames['1C'].toUpperCase(), "\n      <div class=\"report-extra-info\">He will attempt to jumpscare you in 25 seconds or when you next look at cam 2A, whichever comes first</div>");
       type = 'alert';
       break;
     case 'foxy left door closed':
-      message = `Foxy attempted to enter your office but the left door was closed. He has drained ${
-        additionalInfo.powerDrainage
-      }% of your power and returned to cam 1C (${cameraNames['1C']}) at step ${additionalInfo.restartSubPosition + 1}
-      <div class="report-extra-info">Restarting step chosen at random from 1 & 2</div>`;
+      message = "Foxy attempted to enter your office but the left door was closed. He has drained ".concat(additionalInfo.powerDrainage, "% of your power and returned to cam 1C (").concat(cameraNames['1C'], ") at step ").concat(additionalInfo.restartSubPosition + 1, "\n      <div class=\"report-extra-info\">Restarting step chosen at random from 1 & 2</div>");
       type = 'good';
       break;
     case 'foxy coming down hall':
@@ -855,31 +843,22 @@ const addReport = (
       type = 'death-zone';
       break;
     case 'jumpscare':
-      message = `${animatronic.name} successfully jumpscared you`;
+      message = "".concat(animatronic.name, " successfully jumpscared you");
       type = 'death-zone';
       break;
   }
-  const reportToAddTo = document.querySelector(`.animatronic-report[for="${animatronic.name}"] .report-item-container`);
-  const firstReport =
-    reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.querySelector('.report-item');
+  var reportToAddTo = document.querySelector(".animatronic-report[for=\"".concat(animatronic.name, "\"] .report-item-container"));
+  var firstReport = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.querySelector('.report-item');
   if (preventDuplicates && firstReport && firstReport.innerHTML.indexOf(message) > 0) {
+    return;
     // Don't do anything here
   } else if (reportToAddTo) {
-    const InGameTime = calculateInGameTime();
-    reportToAddTo.innerHTML = `
-
-    <div class="report-item" type="${type}">
-    <span class="report-time">${InGameTime.hour}:${InGameTime.minute}AM</span>
-    <div class="report-description">${message}</div></div>
-    ${
-      (_a = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null &&
-      _a !== void 0
-        ? _a
-        : ''
-    }
-  `;
+    var _reportToAddTo$innerH;
+    var InGameTime = calculateInGameTime();
+    reportToAddTo.innerHTML = "\n\n    <div class=\"report-item\" type=\"".concat(type, "\">\n    <span class=\"report-time\">").concat(InGameTime.hour, ":").concat(InGameTime.minute, "AM</span>\n    <div class=\"report-description\">").concat(message, "</div></div>\n    ").concat((_reportToAddTo$innerH = reportToAddTo === null || reportToAddTo === void 0 ? void 0 : reportToAddTo.innerHTML) !== null && _reportToAddTo$innerH !== void 0 ? _reportToAddTo$innerH : '', "\n  ");
   }
 };
+
 // ========================================================================== //
 // IMAGES FOR INDIVIDUAL CAMERAS
 // I wish it were simple as figuring out which animatronics were at the current
@@ -888,8 +867,9 @@ const addReport = (
 // Foxy will always be the only one to show at his location.
 // Some locations and animatronics have more than one image option.
 // ========================================================================== //
-const getCameraImage = (cam) => {
-  let camImageSrc = '';
+
+var getCameraImage = function getCameraImage(cam) {
+  var camImageSrc = '';
   switch (cam) {
     case '1A':
       camImageSrc = generateCamImage1A();
@@ -925,81 +905,92 @@ const getCameraImage = (cam) => {
       camImageSrc = generateCamImage7();
       break;
   }
-  return `${paths.cameras}/${camImageSrc}`;
+  return "".concat(paths.cameras, "/").concat(camImageSrc);
 };
-const getLocationInfo = (cam) => {
-  const bonnieIsHere = Bonnie.currentPosition === cam;
-  const chicaIsHere = Chica.currentPosition === cam;
-  const foxyIsHere = Foxy.currentPosition === cam;
-  const freddyIsHere = Freddy.currentPosition === cam;
-  const bonnieIsAlone = bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
-  const chicaIsAlone = !bonnieIsHere && chicaIsHere && !foxyIsHere && !freddyIsHere;
+var getLocationInfo = function getLocationInfo(cam) {
+  var bonnieIsHere = Bonnie.currentPosition === cam;
+  var chicaIsHere = Chica.currentPosition === cam;
+  var foxyIsHere = Foxy.currentPosition === cam;
+  var freddyIsHere = Freddy.currentPosition === cam;
+  var bonnieIsAlone = bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
+  var chicaIsAlone = !bonnieIsHere && chicaIsHere && !foxyIsHere && !freddyIsHere;
   // const foxyIsAlone = !bonnieIsHere && !chicaIsHere && foxyIsHere && !freddyIsHere; // Do I ever actually need to know whether Foxy is alone?
-  const freddyIsAlone = !bonnieIsHere && !chicaIsHere && !foxyIsHere && freddyIsHere;
-  const isEmpty = !bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
+  var freddyIsAlone = !bonnieIsHere && !chicaIsHere && !foxyIsHere && freddyIsHere;
+  var isEmpty = !bonnieIsHere && !chicaIsHere && !foxyIsHere && !freddyIsHere;
   return {
-    bonnieIsHere,
-    chicaIsHere,
-    foxyIsHere,
-    freddyIsHere,
-    bonnieIsAlone,
-    chicaIsAlone,
-    freddyIsAlone,
-    isEmpty,
+    bonnieIsHere: bonnieIsHere,
+    chicaIsHere: chicaIsHere,
+    foxyIsHere: foxyIsHere,
+    freddyIsHere: freddyIsHere,
+    bonnieIsAlone: bonnieIsAlone,
+    chicaIsAlone: chicaIsAlone,
+    freddyIsAlone: freddyIsAlone,
+    isEmpty: isEmpty
   };
 };
+
 // Chance should be the 1 in X number chance it has
-const randomise = (chance) => Math.random() < 1 / chance;
+var randomise = function randomise(chance) {
+  return Math.random() < 1 / chance;
+};
+
 // Note - Foxy can never be here.
-const generateCamImage1A = () => {
-  const info = getLocationInfo('1A');
+var generateCamImage1A = function generateCamImage1A() {
+  var info = getLocationInfo('1A');
+
   // Bonnie, Chica and Freddy are all here
   if (info.bonnieIsHere && info.chicaIsHere && info.freddyIsHere) {
-    return '1A-bonnie-chica-freddy.webp';
+    return "1A-bonnie-chica-freddy.webp";
   }
+
   // Chica and Freddy are here
   if (!info.bonnieIsHere && info.chicaIsHere && info.freddyIsHere) {
-    return '1A-chica-freddy.webp';
+    return "1A-chica-freddy.webp";
   }
+
   // Bonnie and Freddy are here
   if (info.bonnieIsHere && !info.chicaIsHere && info.freddyIsHere) {
-    return '1A-bonnie-freddy.webp';
+    return "1A-bonnie-freddy.webp";
   }
   if (info.freddyIsAlone) {
     // UNKNOWN - I can't find info on the chances of Freddy facing right rather than the camera
-    const randomiser = randomise(8) ? '-2' : '-1';
-    return `1A-freddy${randomiser}.webp`;
+    var randomiser = randomise(8) ? '-2' : '-1';
+    return "1A-freddy".concat(randomiser, ".webp");
   }
+
   // If we've reached this point it must be empty
-  return '1A-empty.webp';
+  return "1A-empty.webp";
 };
+
 // Freddy will only show if he's alone. Bonnnie will only show if Chica isn't there.
-const generateCamImage1B = () => {
-  const info = getLocationInfo('1B');
-  const randomiser = randomise(3) ? '-2' : '-1';
+var generateCamImage1B = function generateCamImage1B() {
+  var info = getLocationInfo('1B');
+  var randomiser = randomise(3) ? '-2' : '-1';
   if (info.chicaIsHere) {
-    return `1B-chica${randomiser}.webp`;
+    return "1B-chica".concat(randomiser, ".webp");
   }
   if (info.bonnieIsHere) {
-    return `1B-bonnie${randomiser}.webp`;
+    return "1B-bonnie".concat(randomiser, ".webp");
   }
   if (info.freddyIsAlone) {
     return '1B-freddy.webp';
   }
   return '1B-empty.webp';
 };
+
 // Foxy is the only one who can be here. Exactly which image is shown depends
 // on how close he is to leaving Pirate Cove.
-const generateCamImage1C = () => {
-  const { foxyIsHere } = getLocationInfo('1C');
+var generateCamImage1C = function generateCamImage1C() {
+  var _getLocationInfo = getLocationInfo('1C'),
+    foxyIsHere = _getLocationInfo.foxyIsHere;
   if (foxyIsHere) {
-    return `1C-foxy-${Foxy.subPosition}.webp`;
+    return "1C-foxy-".concat(Foxy.subPosition, ".webp");
   }
-  const emptyRandomiser = randomise(10) ? '-its-me' : '-default';
-  return `1C-empty${emptyRandomiser}.webp`;
+  var emptyRandomiser = randomise(10) ? '-its-me' : '-default';
+  return "1C-empty".concat(emptyRandomiser, ".webp");
 };
-const generateCamImage2A = () => {
-  const info = getLocationInfo('2A');
+var generateCamImage2A = function generateCamImage2A() {
+  var info = getLocationInfo('2A');
   if (info.foxyIsHere) {
     return '2A-foxy.webp';
   }
@@ -1008,14 +999,16 @@ const generateCamImage2A = () => {
   }
   return '2A-empty.webp';
 };
+
 // Bonnie is the only one who can be here.
 // This code does not currently deal with the unlikely prospect of Golden Freddy
-const generateCamImage2B = () => {
-  const info = getLocationInfo('2B');
+var generateCamImage2B = function generateCamImage2B() {
+  var info = getLocationInfo('2B');
+
   // There are 3 different options for Bonnie's images, with some being more
   // likely than others.
   if (info.bonnieIsHere && Bonnie.subPosition === -1) {
-    const bonnieRandomiser = Math.ceil(Math.random() * 8);
+    var bonnieRandomiser = Math.ceil(Math.random() * 8);
     if (bonnieRandomiser === 1 && nightToSimulate >= 3) {
       playAudio('robot-voice');
       return '2B-bonnie-3.webp';
@@ -1025,40 +1018,46 @@ const generateCamImage2B = () => {
       return '2B-bonnie-1.webp';
     }
   }
-  const emptyRandomiser = randomise(4) ? '-2' : '-1';
-  return `2B-empty${emptyRandomiser}.webp`;
+  var emptyRandomiser = randomise(4) ? '-2' : '-1';
+  return "2B-empty".concat(emptyRandomiser, ".webp");
 };
+
 // Bonnie is the only animatronic who can be here, and only has one image :)
-const generateCamImage3 = () => (getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp');
+var generateCamImage3 = function generateCamImage3() {
+  return getLocationInfo('3').bonnieIsHere ? '3-bonnie.webp' : '3-empty.webp';
+};
+
 // Freddy or Chica may be here
-const generateCamImage4A = () => {
-  const info = getLocationInfo('4A');
+var generateCamImage4A = function generateCamImage4A() {
+  var info = getLocationInfo('4A');
   if (info.chicaIsHere) {
-    const randomiser = randomise(3) ? '-2' : '-1';
-    return `4A-chica${randomiser}.webp`;
+    var randomiser = randomise(3) ? '-2' : '-1';
+    return "4A-chica".concat(randomiser, ".webp");
   }
   if (info.freddyIsAlone) {
     return '4A-freddy.webp';
   }
+
   // There are 3 image options for empty, with one of them being FAR more likely
   // than the others
-  const emptyRandomiser = Math.ceil(Math.random() * 10);
+  var emptyRandomiser = Math.ceil(Math.random() * 10);
   if (emptyRandomiser === 1) {
-    return '4A-empty-1.webp';
+    return "4A-empty-1.webp";
   } else if (emptyRandomiser === 2) {
-    return '4A-empty-2.webp';
+    return "4A-empty-2.webp";
   } else {
     return '4A-empty-default.webp';
   }
 };
+
 // Freddy or Chica may be here.
-const generateCamImage4B = () => {
-  const info = getLocationInfo('4B');
+var generateCamImage4B = function generateCamImage4B() {
+  var info = getLocationInfo('4B');
   if (info.freddyIsAlone) {
     return '4B-freddy.webp';
   }
   if (info.chicaIsHere && Chica.subPosition === -1) {
-    const chicaRandomiser = Math.ceil(Math.random() * 6);
+    var chicaRandomiser = Math.ceil(Math.random() * 6);
     if (chicaRandomiser === 1 && nightToSimulate >= 3) {
       playAudio('robot-voice');
       return '4B-chica-3.webp';
@@ -1068,9 +1067,10 @@ const generateCamImage4B = () => {
       return '4B-chica-1.webp';
     }
   }
+
   // It must be empty if we've reached this point
   // There are 5 image options here, with one being FAR more likely than the others
-  const emptyRandomiser = Math.ceil(Math.random() * 30);
+  var emptyRandomiser = Math.ceil(Math.random() * 30);
   if (emptyRandomiser === 1) {
     return '4B-empty-4.webp';
   } else if (emptyRandomiser === 2) {
@@ -1085,27 +1085,30 @@ const generateCamImage4B = () => {
     return '4B-empty-default.webp';
   }
 };
+
 // Bonnie is the only animatronic who can be here. There are 2 options for
 // Bonnie and 2 options for empty
-const generateCamImage5 = () => {
-  const randomiser = randomise(8) ? '-2' : '-1';
-  return getLocationInfo('5').bonnieIsHere ? `5-bonnie${randomiser}.webp` : `5-empty${randomiser}.webp`;
+var generateCamImage5 = function generateCamImage5() {
+  var randomiser = randomise(8) ? '-2' : '-1';
+  return getLocationInfo('5').bonnieIsHere ? "5-bonnie".concat(randomiser, ".webp") : "5-empty".concat(randomiser, ".webp");
 };
-const generateCamImage7 = () => {
-  const info = getLocationInfo('7');
+var generateCamImage7 = function generateCamImage7() {
+  var info = getLocationInfo('7');
   if (info.freddyIsAlone) {
     return '7-freddy.webp';
   }
   if (info.chicaIsHere) {
-    const randomiser = randomise(8) ? '-2' : '-1';
-    return `7-chica${randomiser}.webp`;
+    var randomiser = randomise(8) ? '-2' : '-1';
+    return "7-chica".concat(randomiser, ".webp");
   }
   return '7-empty.webp';
 };
+
 // ========================================================================== //
 // CAMERAS
 // ========================================================================== //
-const toggleCameras = () => {
+
+var toggleCameras = function toggleCameras() {
   user.camerasOn = !user.camerasOn;
   document.body.setAttribute('cameras-on', String(user.camerasOn));
   cameraButton.setAttribute('active', String(user.camerasOn));
@@ -1126,19 +1129,19 @@ const toggleCameras = () => {
   setAudioVolumes();
   updatePowerDisplay();
 };
-const generateCameraButtons = () => {
+var generateCameraButtons = function generateCameraButtons() {
   cameraScreen.src = getCameraImage(defaultCamera);
-  for (const key in cameraNames) {
-    const myCameraButton = document.createElement('button');
+  var _loop = function _loop(key) {
+    var myCameraButton = document.createElement('button');
     myCameraButton.classList.add('camera-button');
     if (key === defaultCamera) {
       myCameraButton.classList.add('active');
     }
-    myCameraButton.textContent = `CAM ${key}`;
+    myCameraButton.textContent = "CAM ".concat(key);
     myCameraButton.setAttribute('camera', key);
     simulator.appendChild(myCameraButton);
-    myCameraButton.addEventListener('click', () => {
-      document.querySelectorAll('.camera-button').forEach((btn) => {
+    myCameraButton.addEventListener('click', function () {
+      document.querySelectorAll('.camera-button').forEach(function (btn) {
         btn.classList.remove('active');
       });
       myCameraButton.classList.add('active');
@@ -1148,13 +1151,17 @@ const generateCameraButtons = () => {
         lookAtCamera(user.currentCamera);
       }
     });
+  };
+  for (var key in cameraNames) {
+    _loop(key);
   }
 };
+
 // We need to listen for certain cameras in certain situations.
 // This will publish an event when a given camera is being looked at
-const lookAtCamera = (camera) => {
-  window.dispatchEvent(new Event(`cam-on-${camera}`));
-  console.log(`cam-on-${camera}`);
+var lookAtCamera = function lookAtCamera(camera) {
+  window.dispatchEvent(new Event("cam-on-".concat(camera)));
+  console.log("cam-on-".concat(camera));
   cameraScreen.src = getCameraImage(camera);
   playAudio('camera-change');
   if (Math.random() * 10 > 7) {
@@ -1162,26 +1169,28 @@ const lookAtCamera = (camera) => {
   }
   setAudioVolumes();
 };
+
 // ========================================================================== //
 // DOORS
 // ========================================================================== //
-const initialiseDoors = () => {
-  ['left', 'right'].forEach((direction) => {
-    let _a;
+
+var initialiseDoors = function initialiseDoors() {
+  ['left', 'right'].forEach(function (direction) {
+    var _document$querySelect3;
     // Create door buttons
-    const myButton = document.createElement('button');
+    var myButton = document.createElement('button');
     myButton.classList.add('door-button');
     // myButton.textContent = `${direction} door`;
     myButton.setAttribute('door', direction);
-    (_a = document.querySelector('#controls')) === null || _a === void 0 ? void 0 : _a.append(myButton);
+    (_document$querySelect3 = document.querySelector('#controls')) === null || _document$querySelect3 === void 0 || _document$querySelect3.append(myButton);
+
     // Make the door buttons toggle the doors
-    myButton.addEventListener('click', () => {
-      let _a;
+    myButton.addEventListener('click', function () {
       if (!myButton.classList.contains('error-state')) {
+        var _simulator$querySelec;
         myButton.classList.toggle('active');
-        (_a = simulator.querySelector(`g#${direction}-door-close-icon`)) === null || _a === void 0
-          ? void 0
-          : _a.classList.toggle('hidden');
+        (_simulator$querySelec = simulator.querySelector("g#".concat(direction, "-door-close-icon"))) === null || _simulator$querySelec === void 0 || _simulator$querySelec.classList.toggle('hidden');
+
         // Note - I could simplify this using else, but I'm leaving it like this to future proof it
         // Other FNAF games have doors in directions other than left and right.
         if (direction === 'left') {
@@ -1198,33 +1207,35 @@ const initialiseDoors = () => {
     });
   });
 };
-const disableOfficeButtons = () => {
-  document.querySelectorAll('#controls button').forEach((btn) => {
+var disableOfficeButtons = function disableOfficeButtons() {
+  document.querySelectorAll('#controls button').forEach(function (btn) {
     btn.classList.add('error-state');
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', function (e) {
       playAudio('error');
     });
   });
 };
-const initialiseLights = () => {
-  const lightControlsContainer = document.querySelector('#controls');
-  ['left', 'right'].forEach((direction) => {
-    const lightButton = document.createElement('button');
+
+// ========================================================================== //
+// LIGHTS
+// ========================================================================== //
+var initialiseLights = function initialiseLights() {
+  var lightControlsContainer = document.querySelector('#controls');
+  ['left', 'right'].forEach(function (direction) {
+    var lightButton = document.createElement('button');
     lightButton.classList.add('light-button');
     // lightButton.textContent = `${direction} light`;
     lightButton.setAttribute('door', direction);
-    lightButton.addEventListener('click', () => {
+    lightButton.addEventListener('click', function () {
       if (!lightButton.classList.contains('error-state')) {
         toggleLight(direction);
       }
     });
-    lightControlsContainer === null || lightControlsContainer === void 0
-      ? void 0
-      : lightControlsContainer.appendChild(lightButton);
+    lightControlsContainer === null || lightControlsContainer === void 0 || lightControlsContainer.appendChild(lightButton);
   });
 };
-const toggleLight = (direction) => {
-  const matchingDoorway = direction === 'left' ? '2B' : '4B';
+var toggleLight = function toggleLight(direction) {
+  var matchingDoorway = direction === 'left' ? '2B' : '4B';
   if (direction === 'left') {
     user.leftLightIsOn = !user.leftLightIsOn;
     if (!user.leftLightIsOn) {
@@ -1238,27 +1249,29 @@ const toggleLight = (direction) => {
     }
     clearTimeout(rightLightTimeout);
   }
-  if ((direction === 'left' && user.leftLightIsOn) || (direction === 'right' && user.rightLightIsOn)) {
-    [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
+  if (direction === 'left' && user.leftLightIsOn || direction === 'right' && user.rightLightIsOn) {
+    [Bonnie, Chica, Foxy, Freddy].forEach(function (animatronic) {
       if (animatronic.currentPosition === matchingDoorway && animatronic.subPosition !== -1) {
         playAudio('doorway-warning');
       }
     });
-    playAudio(`light-${direction}`);
+    playAudio("light-".concat(direction));
   }
   if (direction === 'left' && user.leftLightIsOn) {
-    leftLightTimeout = window.setTimeout(() => {
+    leftLightTimeout = window.setTimeout(function () {
       timeoutLight('left');
     }, 5 * secondLength); // TODO - CHECK HOW LONG THE LIGHTS ACTUALLY STAY ON IF YOU DON'T TURN THEM OFF
   }
+
   if (direction === 'right' && user.rightLightIsOn) {
-    rightLightTimeout = window.setTimeout(() => {
+    rightLightTimeout = window.setTimeout(function () {
       timeoutLight('right');
     }, 5 * secondLength); // TODO - CHECK HOW LONG THE LIGHTS ACTUALLY STAY ON IF YOU DON'T TURN THEM OFF
   }
+
   displayLightVisuals();
 };
-const timeoutLight = (direction) => {
+var timeoutLight = function timeoutLight(direction) {
   if (direction === 'left' && user.leftLightIsOn) {
     user.leftLightIsOn = false;
     killAudio('light-left');
@@ -1268,129 +1281,91 @@ const timeoutLight = (direction) => {
   }
   displayLightVisuals();
 };
-const displayLightVisuals = () => {
+var displayLightVisuals = function displayLightVisuals() {
   simulator.setAttribute('left-light-on', user.leftLightIsOn.toString());
   simulator.setAttribute('right-light-on', user.rightLightIsOn.toString());
   updatePowerDisplay();
 };
+
 // ========================================================================== //
 // DEATH
 // ========================================================================== //
+
 // Clear all the intervals and timeouts so the game stops running
-const clearAllIntervals = (gameOver = true) => {
-  const intervalsToClear = [
-    bonnieInterval,
-    chicaInterval,
-    foxyInterval,
-    foxyCooldown,
-    freddyInterval,
-    freddyCountdown,
-    defaultPowerDrainInterval,
-    additionalPowerDrainInterval,
-    powerOutageInterval,
-    pirateSongInterval,
-    circusInterval,
-    eerieInterval,
-    ambienceInterval,
-    coldPresenceInterval,
-  ];
-  const timeoutsToClear = [
-    leftLightTimeout,
-    rightLightTimeout,
-    foxyJumpscareCountdown,
-    bonnieJumpscareCountdown,
-    chicaJumpscareCountdown,
-  ];
+var clearAllIntervals = function clearAllIntervals() {
+  var gameOver = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  var intervalsToClear = [bonnieInterval, chicaInterval, foxyInterval, foxyCooldown, freddyInterval, freddyCountdown, defaultPowerDrainInterval, additionalPowerDrainInterval, powerOutageInterval, pirateSongInterval, circusInterval, eerieInterval, ambienceInterval, coldPresenceInterval];
+  var timeoutsToClear = [leftLightTimeout, rightLightTimeout, foxyJumpscareCountdown, bonnieJumpscareCountdown, chicaJumpscareCountdown];
+
   // It's possible to reach this function when you've run out of power, so the game isn't over quite yet.
   // We want to stop the animatronics etc from doing anything, but the timer should still be running in this case.
   if (gameOver) {
     intervalsToClear.push(timeUpdate, frameUpdate);
   }
-  intervalsToClear.forEach((interval) => {
+  intervalsToClear.forEach(function (interval) {
     clearInterval(interval);
   });
-  timeoutsToClear.forEach((timeout) => {
+  timeoutsToClear.forEach(function (timeout) {
     clearTimeout(timeout);
   });
 };
-const gameOver = (reason) => {
+var gameOver = function gameOver(reason) {
+  var _document$querySelect4;
   killAudio(null);
   if (reason === '6AM') {
     playAudio('6AM');
   } else {
     playAudio('jumpscare');
   }
-  document.querySelector('#sound-prompt').remove();
   document.body.setAttribute('game-in-progress', 'false');
+  (_document$querySelect4 = document.querySelector('#sound-prompt')) === null || _document$querySelect4 === void 0 || _document$querySelect4.remove();
   clearAllIntervals();
-  const gameOverWindow = document.querySelector('#game-over-stats');
-  const generateStatsTable = (animatronic) => {
-    const myStats = `
-      <div class="stats-report" for="${animatronic.name}">
-        <h3>${animatronic.name}</h3>
-        <div class="animatronic-icon"></div>
-        <div>Successful movement checks: <span>${animatronic.stats.successfulMovementChecks}</span></div>
-        <div>Failed movement checks: <span>${animatronic.stats.failedMovementChecks}</span></div>
-        <div>Attempts to get into office: <span>${animatronic.stats.officeAttempts}</span></div>
-      </div>
-    `;
+  var gameOverWindow = document.querySelector('#game-over-stats');
+  var generateStatsTable = function generateStatsTable(animatronic) {
+    var myStats = "\n      <div class=\"stats-report\" for=\"".concat(animatronic.name, "\">\n        <h3>").concat(animatronic.name, "</h3>\n        <div class=\"animatronic-icon\"></div>\n        <div>Successful movement checks: <span>").concat(animatronic.stats.successfulMovementChecks, "</span></div>\n        <div>Failed movement checks: <span>").concat(animatronic.stats.failedMovementChecks, "</span></div>\n        <div>Attempts to get into office: <span>").concat(animatronic.stats.officeAttempts, "</span></div>\n      </div>\n    ");
     return myStats;
   };
-  const gameOverTitle = reason === '6AM' ? 'CONGRATULATIONS!' : 'GAME OVER';
-  const gameOverMessage = reason === '6AM' ? 'You survived until 6AM' : `You were jumpscared by ${reason.name}`;
-  gameOverWindow.innerHTML = `
-    <h2>${gameOverTitle}</h2>
-    <h3>${gameOverMessage}</h3>
-    <div class="stats-report" for="user">
-      <h3>You</h3>
-      <div class="animatronic-icon"></div>
-      <div>Cameras turned on/off </span>${user.camerasToggled}</span> times</div>
-      <div>Cameras looked at: </span>${user.camerasLookedAt}</span></div>
-      <div>Left door toggled <span>${user.leftDoorToggled}</span> times</div>
-      <div>Right door toggled <span>${user.rightDoorToggled}</span> times</div>
-    </div>
-    ${generateStatsTable(Freddy)}
-    ${generateStatsTable(Bonnie)}
-    ${generateStatsTable(Chica)}
-    ${generateStatsTable(Foxy)}
-    <button id="new-game" onclick="location.reload();">Start a new game</button>
-  `;
+  var gameOverTitle = reason === '6AM' ? 'CONGRATULATIONS!' : 'GAME OVER';
+  var gameOverMessage = reason === '6AM' ? 'You survived until 6AM' : "You were jumpscared by ".concat(reason.name);
+  gameOverWindow.innerHTML = "\n    <h2>".concat(gameOverTitle, "</h2>\n    <h3>").concat(gameOverMessage, "</h3>\n    <div class=\"stats-report\" for=\"user\">\n      <h3>You</h3>\n      <div class=\"animatronic-icon\"></div>\n      <div>Cameras turned on/off </span>").concat(user.camerasToggled, "</span> times</div>\n      <div>Cameras looked at: </span>").concat(user.camerasLookedAt, "</span></div>\n      <div>Left door toggled <span>").concat(user.leftDoorToggled, "</span> times</div>\n      <div>Right door toggled <span>").concat(user.rightDoorToggled, "</span> times</div>\n    </div>\n    ").concat(generateStatsTable(Freddy), "\n    ").concat(generateStatsTable(Bonnie), "\n    ").concat(generateStatsTable(Chica), "\n    ").concat(generateStatsTable(Foxy), "\n    <button id=\"new-game\" onclick=\"location.reload();\">Start a new game</button>\n  ");
 };
-const gameOverBonnie = () => {
+var gameOverBonnie = function gameOverBonnie() {
   addReport(Bonnie, 'jumpscare');
   window.dispatchEvent(new Event('game-over-bonnie'));
 };
-const gameOverChica = () => {
+var gameOverChica = function gameOverChica() {
   addReport(Chica, 'jumpscare');
   window.dispatchEvent(new Event('game-over-chica'));
 };
-const gameOverFoxy = () => {
+var gameOverFoxy = function gameOverFoxy() {
   addReport(Foxy, 'jumpscare');
   window.dispatchEvent(new Event('game-over-foxy'));
 };
-const gameOverFreddy = () => {
+var gameOverFreddy = function gameOverFreddy() {
   addReport(Freddy, 'jumpscare');
   window.dispatchEvent(new Event('game-over-freddy'));
 };
-window.addEventListener('game-over-bonnie', () => {
+window.addEventListener('game-over-bonnie', function () {
   gameOver(Bonnie);
 });
-window.addEventListener('game-over-chica', () => {
+window.addEventListener('game-over-chica', function () {
   gameOver(Chica);
 });
-window.addEventListener('game-over-foxy', () => {
+window.addEventListener('game-over-foxy', function () {
   gameOver(Foxy);
 });
-window.addEventListener('game-over-freddy', () => {
+window.addEventListener('game-over-freddy', function () {
   gameOver(Freddy);
 });
+
 // ========================================================================== //
 // POWER
 // ========================================================================== //
+
 // The additional penalties on time - an additional 1% every X seconds
 // Again, I've added a 0 to the start of this so night 1 is at index 1 and so on for more readable code
-const additionalPowerDrainageIntervalSpacing = [0, 9.6, 6, 5, 4, 3, 3, 3];
-const drainPower = () => {
+var additionalPowerDrainageIntervalSpacing = [0, 9.6, 6, 5, 4, 3, 3, 3];
+var drainPower = function drainPower() {
   user.power -= calculatePowerDrain();
   if (user.power <= 0) {
     clearAllIntervals(false);
@@ -1398,63 +1373,40 @@ const drainPower = () => {
   }
   updatePowerDisplay();
 };
-const calculatePowerDrain = () => {
-  const defaultPowerDrain = 0.1 * calculatePowerDrainMultiplier();
-  const nightlyBuffPowerDrain = nightToSimulate > 1 ? 0.1 / additionalPowerDrainageIntervalSpacing[nightToSimulate] : 0;
+var calculatePowerDrain = function calculatePowerDrain() {
+  var defaultPowerDrain = 0.1 * calculatePowerDrainMultiplier();
+  var nightlyBuffPowerDrain = nightToSimulate > 1 ? 0.1 / additionalPowerDrainageIntervalSpacing[nightToSimulate] : 0;
   return (defaultPowerDrain + nightlyBuffPowerDrain) / 10; // We are running this every 0.1 seconds, hence the /10
 };
-const calculatePowerDrainMultiplier = () => {
+
+var calculatePowerDrainMultiplier = function calculatePowerDrainMultiplier() {
   // You lose a default amount of power, multiplied for each door/light/camera you have on, up to a maximum of 4x
   // The first item in this array is true as the multiplier needs to be at least 1
-  const usage = [
-    true,
-    user.leftDoorIsClosed,
-    user.rightDoorIsClosed,
-    user.camerasOn,
-    user.leftLightIsOn,
-    user.rightLightIsOn,
-  ].filter(Boolean).length;
+  var usage = [true, user.leftDoorIsClosed, user.rightDoorIsClosed, user.camerasOn, user.leftLightIsOn, user.rightLightIsOn].filter(Boolean).length;
   return usage > 4 ? 4 : usage;
 };
-const updatePowerDisplay = () => {
-  const secondsOfGameRemaining = 535 - currentSecond;
-  const secondsOfPowerRemaining = Math.ceil(user.power / (calculatePowerDrain() * 10)); // x10 as this function calculates for 0.1 seconds
-  const timeUserWillRunOutOfPower = calculateInGameTime(secondsOfPowerRemaining);
-  const timeMessaging =
-    parseInt(timeUserWillRunOutOfPower.hour) >= 6
-      ? 'you have enough power to last until 6AM'
-      : `you will run out of power at ${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM`;
-  const powerToDisplay = user.gameMode ? user.power.toFixed(0) : user.power.toFixed(1);
-  powerDisplay.innerHTML = `
-    <div id="power-percentage">
-      Power remaining: ${powerToDisplay.toString()}%
-    </div>
-    <div id="power-usage" multiplier="${calculatePowerDrainMultiplier().toString()}">
-      <span>Power usage: </span>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
-    <div id="power-time">
-      <div>Based on current usage, ${timeMessaging}</div>
-      <div>Seconds of game remaining: ${secondsOfGameRemaining}</div>
-      <div>Seconds of power remaining based on current usage: ${secondsOfPowerRemaining}</div>
-    </div>
-  `;
+var updatePowerDisplay = function updatePowerDisplay() {
+  var secondsOfGameRemaining = 535 - currentSecond;
+  var secondsOfPowerRemaining = Math.ceil(user.power / (calculatePowerDrain() * 10)); // x10 as this function calculates for 0.1 seconds
+
+  var timeUserWillRunOutOfPower = calculateInGameTime(secondsOfPowerRemaining);
+  var timeMessaging = parseInt(timeUserWillRunOutOfPower.hour) >= 6 ? "you have enough power to last until 6AM" : "you will run out of power at ".concat(timeUserWillRunOutOfPower.hour, ":").concat(timeUserWillRunOutOfPower.minute, "AM");
+  var powerToDisplay = user.gameMode ? user.power.toFixed(0) : user.power.toFixed(1);
+  powerDisplay.innerHTML = "\n    <div id=\"power-percentage\">\n      Power remaining: ".concat(powerToDisplay.toString(), "%\n    </div>\n    <div id=\"power-usage\" multiplier=\"").concat(calculatePowerDrainMultiplier().toString(), "\">\n      <span>Power usage: </span>\n      <div></div>\n      <div></div>\n      <div></div>\n      <div></div>\n    </div>\n    <div id=\"power-time\">\n      <div>Based on current usage, ").concat(timeMessaging, "</div>\n      <div>Seconds of game remaining: ").concat(secondsOfGameRemaining, "</div>\n      <div>Seconds of power remaining based on current usage: ").concat(secondsOfPowerRemaining, "</div>\n    </div>\n  ");
 };
+
 // The sequence of events between you running out of power and Freddy jumpscaring you.
-const powerOutage = () => {
-  let _a;
-  officeDisplay.src = `${paths.office}/office-no-power.webp`;
-  let i = 0;
+var powerOutage = function powerOutage() {
+  var _document$querySelect5;
+  officeDisplay.src = "".concat(paths.office, "/office-no-power.webp");
+  var i = 0;
   addReport(Freddy, 'power outage - freddy not arrived');
   playAudio('power-outage');
-  (_a = document.querySelector('#office-overlay')) === null || _a === void 0 ? void 0 : _a.classList.remove('hidden');
-  const awaitFreddyArrival = () => {
+  (_document$querySelect5 = document.querySelector('#office-overlay')) === null || _document$querySelect5 === void 0 || _document$querySelect5.classList.remove('hidden');
+  var awaitFreddyArrival = function awaitFreddyArrival() {
     i += 1;
     if (randomise(5) || i >= 4) {
-      officeDisplay.src = `${paths.office}/freddy-no-power.webp`;
+      officeDisplay.src = "".concat(paths.office, "/freddy-no-power.webp");
       clearInterval(powerOutageInterval);
       powerOutageInterval = window.setInterval(toreadorMarch, secondLength * 5);
       addReport(Freddy, 'power outage - freddy has arrived');
@@ -1465,11 +1417,12 @@ const powerOutage = () => {
     }
   };
   powerOutageInterval = window.setInterval(awaitFreddyArrival, secondLength * 5);
+
   // Once Freddy has arrived, he will start playing his song, which has a 20% chance of ending every 20 seconds, up to a maximum of 20 seconds when the lights will go out.
-  const toreadorMarch = () => {
+  var toreadorMarch = function toreadorMarch() {
     i += 1;
     if (randomise(5) || i >= 4) {
-      officeDisplay.src = `${paths.office}/office-dark.webp`;
+      officeDisplay.src = "".concat(paths.office, "/office-dark.webp");
       clearInterval(powerOutageInterval);
       addReport(Freddy, 'power outage - freddy is waiting to jumpscare', null, 4 - i);
       powerOutageInterval = window.setInterval(awaitFreddyFinalJumpscare, secondLength * 2);
@@ -1479,37 +1432,45 @@ const powerOutage = () => {
       addReport(Freddy, "power outage - freddy's song didn't end", null, (4 - i) * 5);
     }
   };
+
   // Once the lights are out, you have a 20% chance every 2 seconds for him to jumpscare you
-  const awaitFreddyFinalJumpscare = () => {
+  var awaitFreddyFinalJumpscare = function awaitFreddyFinalJumpscare() {
     if (randomise(5)) {
       gameOverFreddy();
     } else {
       addReport(Freddy, "power outage - freddy didn't jumpscare", null, 4 - i);
     }
   };
+
   // Note - you will still win the night if you reach 6AM after the power has gone out but before Freddy jumpscares you
 };
-const playAudio = (audio) => {
+
+// ========================================================================== //
+// AUDIO
+// ========================================================================== //
+
+var playAudio = function playAudio(audio) {
   // Audio that should loop
-  const loopingAudio = ['office-fan', 'camera-feed'];
-  let blockMultiples = Boolean(document.querySelector(`audio.${audio}`));
+  var loopingAudio = ['office-fan', 'camera-feed'];
+  var blockMultiples = Boolean(document.querySelector("audio.".concat(audio)));
+
   // Some audio types should be randomly picked from a number of available files
-  let myAudioSource;
+  var myAudioSource;
   switch (audio) {
     case 'oven':
-      myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+      myAudioSource = "oven-".concat(Math.ceil(Math.random() * 4));
       break;
     case 'breath':
-      myAudioSource = `breath-${Math.ceil(Math.random() * 4)}`;
+      myAudioSource = "breath-".concat(Math.ceil(Math.random() * 4));
       break;
     case 'freddy-move':
-      myAudioSource = `freddy-move-${Math.ceil(Math.random() * 3)}`;
+      myAudioSource = "freddy-move-".concat(Math.ceil(Math.random() * 3));
       break;
     case 'garble':
-      myAudioSource = `garble-${Math.ceil(Math.random() * 3)}`;
+      myAudioSource = "garble-".concat(Math.ceil(Math.random() * 3));
       break;
     case 'phone-guy':
-      myAudioSource = `phone-guy-night-${nightToSimulate}`;
+      myAudioSource = "phone-guy-night-".concat(nightToSimulate);
       break;
     case 'light-left':
     case 'light-right':
@@ -1520,44 +1481,47 @@ const playAudio = (audio) => {
       myAudioSource = audio;
   }
   if (user.audioOn && !blockMultiples) {
-    const myAudio = document.createElement('audio');
+    var myAudio = document.createElement('audio');
     myAudio.classList.add(audio);
-    myAudio.src = `${paths.audio}/${myAudioSource}.mp3`;
+    myAudio.src = "".concat(paths.audio, "/").concat(myAudioSource, ".mp3");
     if (loopingAudio.includes(audio)) {
       myAudio.setAttribute('loop', 'true');
     }
     document.body.appendChild(myAudio);
     myAudio.play();
-    myAudio.onended = () => {
-      let _a;
+    myAudio.onended = function () {
       document.body.removeChild(myAudio);
       if (audio === 'phone-guy') {
-        (_a = document.querySelector('button#mute-call')) === null || _a === void 0 ? void 0 : _a.remove();
+        var _document$querySelect6;
+        (_document$querySelect6 = document.querySelector('button#mute-call')) === null || _document$querySelect6 === void 0 || _document$querySelect6.remove();
       }
     };
   }
   if (audio === 'jumpscare') {
-    window.setTimeout(() => {
+    window.setTimeout(function () {
       playAudio('post-jumpscare');
     }, 5000);
   } else if (audio === '6AM') {
-    window.setTimeout(() => {
+    window.setTimeout(function () {
       playAudio('cheer');
     }, 5500);
   }
   setAudioVolumes();
 };
+
 // Passing in null will kill all audio
-const killAudio = (audio = null) => {
-  const matchingAudio = audio ? document.querySelectorAll(`audio.${audio}`) : document.querySelectorAll('audio');
-  matchingAudio.forEach((match) => {
+var killAudio = function killAudio() {
+  var audio = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var matchingAudio = audio ? document.querySelectorAll("audio.".concat(audio)) : document.querySelectorAll("audio");
+  matchingAudio.forEach(function (match) {
     match.remove();
   });
 };
+
 // Update the audio volumes depending on certain conditions
-const setAudioVolumes = () => {
-  const audios = document.querySelectorAll('audio');
-  audios.forEach((audio) => {
+var setAudioVolumes = function setAudioVolumes() {
+  var audios = document.querySelectorAll('audio');
+  audios.forEach(function (audio) {
     if (audio.classList.contains('office-fan')) {
       // Office fan should be quieter if we're looking at the cameras
       audio.volume = user.camerasOn ? 0.4 : 1;
@@ -1567,13 +1531,10 @@ const setAudioVolumes = () => {
     } else if (audio.classList.contains('pirate-song')) {
       audio.volume = user.camerasOn && user.currentCamera === '1C' ? 1 : 0.4;
     } else if (audio.classList.contains('robot-voice')) {
-      if (
-        (user.currentCamera !== '2B' && user.currentCamera !== '4B') ||
-        (user.currentCamera === '2B' && Bonnie.currentPosition !== '2B') ||
-        (user.currentCamera === '4B' && Chica.currentPosition !== '4B')
-      ) {
+      if (user.currentCamera !== '2B' && user.currentCamera !== '4B' || user.currentCamera === '2B' && Bonnie.currentPosition !== '2B' || user.currentCamera === '4B' && Chica.currentPosition !== '4B') {
         killAudio('robot-voice');
       }
+
       // Some audio just generally needs to be quieter
     } else if (audio.classList.contains('eerie')) {
       audio.volume = 0.5;
@@ -1582,32 +1543,32 @@ const setAudioVolumes = () => {
     }
   });
 };
-const playAudioAmbience = () => {
+var playAudioAmbience = function playAudioAmbience() {
   playAudio('office-fan');
-  circusInterval = window.setInterval(() => {
+  circusInterval = window.setInterval(function () {
     if (Math.random() * 20 > 19) {
       playAudio('circus');
       clearInterval(circusInterval);
     }
   }, 30 * secondLength);
-  pirateSongInterval = window.setInterval(() => {
+  pirateSongInterval = window.setInterval(function () {
     if (Math.random() * 20 > 19) {
       playAudio('pirate-song');
     }
   }, 30 * secondLength);
-  ambienceInterval = window.setInterval(() => {
+  ambienceInterval = window.setInterval(function () {
     if (Math.random() * 20 > 19) {
       playAudio('ambience');
       clearInterval(ambienceInterval);
     }
   }, 10 * secondLength);
-  coldPresenceInterval = window.setInterval(() => {
+  coldPresenceInterval = window.setInterval(function () {
     if (Math.random() * 20 > 19) {
       playAudio('cold-presence');
       clearInterval(coldPresenceInterval);
     }
   }, 11 * secondLength);
-  eerieInterval = window.setInterval(() => {
+  eerieInterval = window.setInterval(function () {
     if (Math.random() * 20 > 19) {
       playAudio('eerie');
       clearInterval(eerieInterval);
@@ -1615,49 +1576,54 @@ const playAudioAmbience = () => {
   }, 12 * secondLength);
   setAudioVolumes();
 };
+
 // ========================================================================== //
 // INITIALISE THE PAGE
 // ========================================================================== //
-const startGame = () => {
-  let _a;
-  const selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
-  gameSpeed = (_a = parseFloat(selectedRadio.value)) !== null && _a !== void 0 ? _a : 1;
+
+var startGame = function startGame() {
+  var _parseFloat;
+  var selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
+  gameSpeed = (_parseFloat = parseFloat(selectedRadio.value)) !== null && _parseFloat !== void 0 ? _parseFloat : 1;
   secondLength = Math.ceil(1000 / gameSpeed);
   killAudio('game-menu');
   playAudioAmbience();
+
   // Phone guy stuff
   playAudio('phone-guy');
   if (user.audioOn) {
-    const muteButton = document.createElement('button');
+    var muteButton = document.createElement('button');
     muteButton.id = 'mute-button';
     muteButton.textContent = 'MUTE CALL';
-    window.setTimeout(() => {
+    window.setTimeout(function () {
       cameraArea.appendChild(muteButton);
-      muteButton.addEventListener('click', () => {
+      muteButton.addEventListener('click', function () {
         killAudio('phone-guy');
         muteButton.remove();
       });
     }, 1000);
   }
-  [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
-    let _a;
-    const animatronicAIinput = document.querySelector(`.custom-ai-selector[for="${animatronic.name}"] input`);
-    animatronic.aiLevels[7] = (_a = parseInt(animatronicAIinput.value)) !== null && _a !== void 0 ? _a : 0;
+  [Bonnie, Chica, Foxy, Freddy].forEach(function (animatronic) {
+    var _parseInt;
+    var animatronicAIinput = document.querySelector(".custom-ai-selector[for=\"".concat(animatronic.name, "\"] input"));
+    animatronic.aiLevels[7] = (_parseInt = parseInt(animatronicAIinput.value)) !== null && _parseInt !== void 0 ? _parseInt : 0;
   });
   document.body.setAttribute('game-in-progress', 'true');
   drainPower;
   defaultPowerDrainInterval = window.setInterval(drainPower, secondLength / 10);
   // additionalPowerDrainInterval = window.setInterval(drainAdditionalPower, secondLength / 10);
+
   timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
   frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
   freddyInterval = window.setInterval(moveFreddy, secondLength * Freddy.movementOpportunityInterval);
   foxyInterval = window.setInterval(moveFoxy, secondLength * Foxy.movementOpportunityInterval);
-  bonnieInterval = window.setInterval(() => {
+  bonnieInterval = window.setInterval(function () {
     moveBonnieOrChica(Bonnie);
   }, secondLength * Bonnie.movementOpportunityInterval);
-  chicaInterval = window.setInterval(() => {
+  chicaInterval = window.setInterval(function () {
     moveBonnieOrChica(Chica);
   }, secondLength * Chica.movementOpportunityInterval);
+
   // If Foxy is at 4A for testing purposes we need get him working immediately and not wait for his first movement opportunity
   if (Foxy.currentPosition === '4A') {
     moveFoxy();
@@ -1671,39 +1637,35 @@ const startGame = () => {
   // cameraButton.addEventListener('mouseenter', toggleCameras);
   window.addEventListener('cameras-off', pauseFoxy);
 };
-const initialiseMenu = () => {
-  let _a, _b, _c;
-  const gameMenu = document.querySelector('#game-menu');
-  const nightMenu = gameMenu.querySelector('#night-selector-menu');
-  const customNightMenu = gameMenu.querySelector('#custom-night-menu');
+var initialiseMenu = function initialiseMenu() {
+  var _document$querySelect7, _document$querySelect8, _gameMenu$querySelect;
+  var gameMenu = document.querySelector('#game-menu');
+  var nightMenu = gameMenu.querySelector('#night-selector-menu');
+  var customNightMenu = gameMenu.querySelector('#custom-night-menu');
+
   // Generate the custom night buttons
-  [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
-    const mySelector = document.createElement('div');
+  [Freddy, Bonnie, Chica, Foxy].forEach(function (animatronic) {
+    var mySelector = document.createElement('div');
     mySelector.classList.add('custom-ai-selector');
     mySelector.setAttribute('for', animatronic.name);
-    mySelector.innerHTML = `
-      <h2>${animatronic.name}</h2>
-      <img src="${paths.animatronics}/${animatronic.name.toLowerCase()}.png">
-    `;
-    const aiAdjuster = document.createElement('div');
+    mySelector.innerHTML = "\n      <h2>".concat(animatronic.name, "</h2>\n      <img src=\"").concat(paths.animatronics, "/").concat(animatronic.name.toLowerCase(), ".png\">\n    ");
+    var aiAdjuster = document.createElement('div');
     aiAdjuster.classList.add('ai-adjuster');
     mySelector.append(aiAdjuster);
-    const aiDisplay = document.createElement('input');
+    var aiDisplay = document.createElement('input');
     aiDisplay.type = 'number';
     aiDisplay.value = animatronic.aiLevels[1].toString();
-    aiDisplay.addEventListener('input', () => {
+    aiDisplay.addEventListener('input', function () {
       nightToSimulate = 7;
     });
     aiAdjuster.append(aiDisplay);
-    const myDecreaseButton = document.createElement('button');
+    var myDecreaseButton = document.createElement('button');
     myDecreaseButton.textContent = '<';
-    myDecreaseButton.addEventListener('click', () => {
-      let _a;
-      (_a = nightMenu.querySelector('button.active')) === null || _a === void 0
-        ? void 0
-        : _a.classList.remove('active');
+    myDecreaseButton.addEventListener('click', function () {
+      var _nightMenu$querySelec;
+      (_nightMenu$querySelec = nightMenu.querySelector('button.active')) === null || _nightMenu$querySelec === void 0 || _nightMenu$querySelec.classList.remove('active');
       nightToSimulate = 7;
-      const newAILevel = parseInt(aiDisplay.value);
+      var newAILevel = parseInt(aiDisplay.value);
       animatronic.aiLevels[7] = newAILevel;
       aiDisplay.value = newAILevel.toString();
       nightToSimulate = 7;
@@ -1713,14 +1675,12 @@ const initialiseMenu = () => {
       }
     });
     aiAdjuster.append(myDecreaseButton);
-    const myIncreaseButton = document.createElement('button');
+    var myIncreaseButton = document.createElement('button');
     myIncreaseButton.textContent = '>';
-    myIncreaseButton.addEventListener('click', () => {
-      let _a;
-      (_a = nightMenu.querySelector('button.active')) === null || _a === void 0
-        ? void 0
-        : _a.classList.remove('active');
-      const newAILevel = parseInt(aiDisplay.value);
+    myIncreaseButton.addEventListener('click', function () {
+      var _nightMenu$querySelec2;
+      (_nightMenu$querySelec2 = nightMenu.querySelector('button.active')) === null || _nightMenu$querySelec2 === void 0 || _nightMenu$querySelec2.classList.remove('active');
+      var newAILevel = parseInt(aiDisplay.value);
       animatronic.aiLevels[7] = newAILevel;
       aiDisplay.value = newAILevel.toString();
       nightToSimulate = 7;
@@ -1732,82 +1692,85 @@ const initialiseMenu = () => {
     aiAdjuster.append(myIncreaseButton);
     customNightMenu.append(mySelector);
   });
+
   // Generate the night selector buttons
-  for (let i = 1; i <= 7; i++) {
-    const myButton = document.createElement('button');
+  var _loop2 = function _loop2(i) {
+    var myButton = document.createElement('button');
     myButton.classList.add('simulate-night');
     myButton.setAttribute('for', i.toString());
-    myButton.textContent = i < 7 ? `Simulate night ${i}` : 'Activate 4/20 mode';
+    myButton.textContent = i < 7 ? "Simulate night ".concat(i) : "Activate 4/20 mode";
     if (i === 1) {
       myButton.classList.add('active');
     }
     nightMenu.append(myButton);
-    myButton.addEventListener('click', () => {
+    myButton.addEventListener('click', function () {
       // I've got separate entries here for night 7 and 4/20 mode, but they should be considered the same thing
       nightToSimulate = i < 7 ? i : 7;
-      document.querySelectorAll('button.simulate-night').forEach((btn) => {
+      document.querySelectorAll('button.simulate-night').forEach(function (btn) {
         if (btn.getAttribute('for') === nightToSimulate.toString()) {
           btn.classList.add('active');
         } else {
           btn.classList.remove('active');
         }
       });
-      [Freddy, Bonnie, Chica, Foxy].forEach((animatronic) => {
-        const myInput = customNightMenu.querySelector(`[for="${animatronic.name}"] input`);
+      [Freddy, Bonnie, Chica, Foxy].forEach(function (animatronic) {
+        var myInput = customNightMenu.querySelector("[for=\"".concat(animatronic.name, "\"] input"));
         myInput.value = animatronic.aiLevels[nightToSimulate].toString();
       });
     });
+  };
+  for (var i = 1; i <= 7; i++) {
+    _loop2(i);
   }
+
   // Make the audio toggle work
-  (_a = document.querySelector('#audio-toggle input')) === null || _a === void 0
-    ? void 0
-    : _a.addEventListener('change', () => {
-        user.audioOn = !user.audioOn;
-        // Play the game menu music if the game hasn't started yet
-        if (!document.body.getAttribute('game-in-progress') && user.audioOn) {
-          playAudio('game-menu');
-        }
-        // Turn all the audio off if the user has chosen so
-        else if (!user.audioOn) {
-          killAudio();
-        } else {
-          playAudioAmbience();
-        }
-      });
+  (_document$querySelect7 = document.querySelector('#audio-toggle input')) === null || _document$querySelect7 === void 0 || _document$querySelect7.addEventListener('change', function () {
+    user.audioOn = !user.audioOn;
+
+    // Play the game menu music if the game hasn't started yet
+    if (!document.body.getAttribute('game-in-progress') && user.audioOn) {
+      playAudio('game-menu');
+    }
+
+    // Turn all the audio off if the user has chosen so
+    else if (!user.audioOn) {
+      killAudio();
+    } else {
+      playAudioAmbience();
+    }
+  });
+
   // Make the game mode selector work
-  (_b = document.querySelector('#game-mode input')) === null || _b === void 0
-    ? void 0
-    : _b.addEventListener('click', () => {
-        user.gameMode = !user.gameMode;
-        const gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
-        document.body.setAttribute('game-mode', gameModeName);
-      });
-  (_c = gameMenu.querySelector('#start-game')) === null || _c === void 0
-    ? void 0
-    : _c.addEventListener('click', startGame);
+  (_document$querySelect8 = document.querySelector('#game-mode input')) === null || _document$querySelect8 === void 0 || _document$querySelect8.addEventListener('click', function () {
+    user.gameMode = !user.gameMode;
+    var gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
+    document.body.setAttribute('game-mode', gameModeName);
+  });
+  (_gameMenu$querySelect = gameMenu.querySelector('#start-game')) === null || _gameMenu$querySelect === void 0 || _gameMenu$querySelect.addEventListener('click', startGame);
 };
+
 // All of the variables saved for various setIntervals and setTimeouts. These will be set and unset in various conditions so need to be global.
-let timeUpdate;
-let frameUpdate;
-let defaultPowerDrainInterval;
-let additionalPowerDrainInterval;
-let bonnieInterval;
-let chicaInterval;
-let foxyInterval;
-let freddyInterval;
-let foxyCooldown;
-let freddyCountdown;
-let foxyJumpscareCountdown;
-let bonnieJumpscareCountdown;
-let chicaJumpscareCountdown;
-let powerOutageInterval;
-let leftLightTimeout;
-let rightLightTimeout;
-let circusInterval;
-let pirateSongInterval;
-let eerieInterval;
-let ambienceInterval;
-let coldPresenceInterval;
+var timeUpdate;
+var frameUpdate;
+var defaultPowerDrainInterval;
+var additionalPowerDrainInterval;
+var bonnieInterval;
+var chicaInterval;
+var foxyInterval;
+var freddyInterval;
+var foxyCooldown;
+var freddyCountdown;
+var foxyJumpscareCountdown;
+var bonnieJumpscareCountdown;
+var chicaJumpscareCountdown;
+var powerOutageInterval;
+var leftLightTimeout;
+var rightLightTimeout;
+var circusInterval;
+var pirateSongInterval;
+var eerieInterval;
+var ambienceInterval;
+var coldPresenceInterval;
 initialiseMenu();
 // startGame();
-// # sourceMappingURL=app.js.map
+//# sourceMappingURL=app.js.map
