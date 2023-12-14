@@ -1390,9 +1390,9 @@ var updatePowerDisplay = function updatePowerDisplay() {
   var secondsOfPowerRemaining = Math.ceil(user.power / (calculatePowerDrain() * 10)); // x10 as this function calculates for 0.1 seconds
 
   var timeUserWillRunOutOfPower = calculateInGameTime(secondsOfPowerRemaining);
-  var timeMessaging = parseInt(timeUserWillRunOutOfPower.hour) >= 6 ? "you have enough power to last until 6AM" : "you will run out of power at ".concat(timeUserWillRunOutOfPower.hour, ":").concat(timeUserWillRunOutOfPower.minute, "AM");
+  var timeMessaging = parseInt(timeUserWillRunOutOfPower.hour) >= 6 ? "You have enough power to last until 6AM" : "You will run out of power at <b>".concat(timeUserWillRunOutOfPower.hour, ":").concat(timeUserWillRunOutOfPower.minute, "AM</b>");
   var powerToDisplay = user.gameMode ? user.power.toFixed(0) : user.power.toFixed(1);
-  powerDisplay.innerHTML = "\n    <div id=\"power-percentage\">\n      Power remaining: ".concat(powerToDisplay.toString(), "%\n    </div>\n    <div id=\"power-usage\" multiplier=\"").concat(calculatePowerDrainMultiplier().toString(), "\">\n      <span>Power usage: </span>\n      <div></div>\n      <div></div>\n      <div></div>\n      <div></div>\n    </div>\n    <div id=\"power-time\">\n      <div>Based on current usage, ").concat(timeMessaging, "</div>\n      <div>Seconds of game remaining: ").concat(secondsOfGameRemaining, "</div>\n      <div>Seconds of power remaining based on current usage: ").concat(secondsOfPowerRemaining, "</div>\n    </div>\n  ");
+  powerDisplay.innerHTML = "\n    <div id=\"main-power-info\">\n      <div id=\"power-percentage\">\n        Power left: ".concat(powerToDisplay.toString(), "%\n      </div>\n      <div id=\"power-usage\" multiplier=\"").concat(calculatePowerDrainMultiplier().toString(), "\">\n        <span>Usage: </span>\n        <div></div>\n        <div></div>\n        <div></div>\n        <div></div>\n      </div>\n    </div>\n    <div id=\"power-time\">\n      <h3>Based on current usage:</h3>\n      <div>").concat(timeMessaging, "</div>\n      <div>Seconds of power remaining: ").concat(secondsOfPowerRemaining, "</div>\n      <div>Seconds of game remaining: ").concat(secondsOfGameRemaining, "</div>\n    </div>\n  ");
 };
 
 // The sequence of events between you running out of power and Freddy jumpscaring you.

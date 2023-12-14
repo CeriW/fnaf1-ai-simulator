@@ -1,51 +1,88 @@
 /* POWER  ------------------------------------------------------------------- */
 
-#power{
+#power {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#main-power-info {
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   .customFont();
 }
 
-#power-usage{
+#power-usage {
   display: grid;
-  grid-template-columns: 1fr 20px 20px 20px 20px;
+  grid-template-columns: min-content 20px 20px 20px 20px;
   gap: 2px;
+  font-size: 25px;
 
-  div{
+  span {
+    margin-right: 15px;
+  }
+
+  div {
     width: 20px;
     height: 30px;
     .usage-bar-background(#23eb1f, #27b723);
   }
 
-  div:nth-child(4){
+  div:nth-child(4) {
     .usage-bar-background(#fff300, #f3870b);
-
   }
 
-  div:nth-child(5){
+  div:nth-child(5) {
     .usage-bar-background(#ff2323, #cb0000);
   }
 
-  .usage-bar-background(@left, @right){
+  .usage-bar-background(@left, @right) {
     background: linear-gradient(to right, @left 0%, @left 75%, @right 75%);
   }
 
-  &[multiplier="1"]{
+  &[multiplier='1'] {
     div:nth-child(5),
     div:nth-child(4),
-    div:nth-child(3){
+    div:nth-child(3) {
       opacity: 0;
     }
   }
 
-  &[multiplier="2"]{
+  &[multiplier='2'] {
     div:nth-child(5),
-    div:nth-child(4){
+    div:nth-child(4) {
       opacity: 0;
     }
   }
 
-  &[multiplier="3"]{
-    div:nth-child(5){
+  &[multiplier='3'] {
+    div:nth-child(5) {
       opacity: 0;
     }
+  }
+}
+
+#power-percentage {
+  font-size: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+#power-time {
+  h3 {
+    // font-size: 1.25em;
+    // font-weight: bold;
+    // padding: 5px;
+    margin: 0;
+  }
+
+  div {
+    margin-top: 3px;
+    // font-size: 1em;
+    // font-size: 1.1em;
   }
 }

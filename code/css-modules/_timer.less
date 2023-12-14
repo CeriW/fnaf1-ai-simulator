@@ -1,11 +1,11 @@
 /* Timer -------------------------------------------------------------------- */
 
 #in-game-time,
-#real-time{
+#real-time {
   .customFont();
 }
 
-#timer{
+#timer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,52 +13,47 @@
   flex-wrap: wrap;
 }
 
-
 /* IN GAME TIME ------------------------------------------------------------- */
 
-#in-game-time{
+#in-game-time {
   display: grid;
   grid-template:
-    "hour minutes" min-content
-    "hour am" min-content
-    / 1fr min-content
-  ;
+    'hour minutes' min-content
+    'hour am' min-content
+    / 1fr min-content;
   gap: 0 10px;
   align-items: end;
-
 }
 
-#in-game-time > span{
+#in-game-time > span {
   line-height: 0.6;
   text-align: right;
 }
 
-.in-game-hour{
+.in-game-hour {
   font-size: 10em;
   grid-area: hour;
   justify-self: start;
 }
 
-.in-game-minutes{
+.in-game-minutes {
   font-size: 2em;
-  
 }
 
-.am-marker{
+.am-marker {
   font-size: 3em;
 }
 
-
 /* REAL TIME ---------------------------------------------------------------- */
 
-#supplementary-time-info{
-  border: 1px solid @white;
+#supplementary-time-info {
+  // border: 1px solid @white;
   padding: 10px;
   margin-top: 20px;
   min-width: 175px;
 }
 
-#real-time{
+#real-time {
   font-size: 2em;
-  margin: 10px 0;
+  // margin: 10px 0;
 }

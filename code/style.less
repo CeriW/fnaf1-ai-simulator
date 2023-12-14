@@ -61,6 +61,7 @@
 @import 'css-modules/_playable-game-mode.less';
 @import 'css-modules/_lights.less';
 @import 'css-modules/_controls.less';
+@import 'css-modules/_player-info.less';
 
 // Game menu
 @import 'css-modules/game-menu/_game-speed-selector.less';
@@ -177,8 +178,8 @@ button {
 #sidebar {
   display: grid;
   grid-template:
-    '. .' auto
+    '. .' min-content
     ' reports reports' min-content
     / 1fr 1fr;
-  gap: 10px;
+  gap: 50px 10px;
 }

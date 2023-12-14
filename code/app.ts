@@ -1707,26 +1707,29 @@ const updatePowerDisplay = () => {
 
   const timeMessaging =
     parseInt(timeUserWillRunOutOfPower.hour) >= 6
-      ? `you have enough power to last until 6AM`
-      : `you will run out of power at ${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM`;
+      ? `You have enough power to last until 6AM`
+      : `You will run out of power at <b>${timeUserWillRunOutOfPower.hour}:${timeUserWillRunOutOfPower.minute}AM</b>`;
 
   let powerToDisplay = user.gameMode ? user.power.toFixed(0) : user.power.toFixed(1);
 
   powerDisplay.innerHTML = `
-    <div id="power-percentage">
-      Power remaining: ${powerToDisplay.toString()}%
-    </div>
-    <div id="power-usage" multiplier="${calculatePowerDrainMultiplier().toString()}">
-      <span>Power usage: </span>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div id="main-power-info">
+      <div id="power-percentage">
+        Power left: ${powerToDisplay.toString()}%
+      </div>
+      <div id="power-usage" multiplier="${calculatePowerDrainMultiplier().toString()}">
+        <span>Usage: </span>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
     <div id="power-time">
-      <div>Based on current usage, ${timeMessaging}</div>
+      <h3>Based on current usage:</h3>
+      <div>${timeMessaging}</div>
+      <div>Seconds of power remaining: ${secondsOfPowerRemaining}</div>
       <div>Seconds of game remaining: ${secondsOfGameRemaining}</div>
-      <div>Seconds of power remaining based on current usage: ${secondsOfPowerRemaining}</div>
     </div>
   `;
 };
