@@ -612,14 +612,14 @@ button#cameras {
           justify-content: center;
   z-index: 3;
 }
-body[cameras-on="false"] #camera-screen {
-  opacity: 0.1;
+body[cameras-on='false'] #camera-screen {
+  opacity: 0;
 }
-body[cameras-on="false"] .camera-button {
+body[cameras-on='false'] .camera-button {
   pointer-events: none;
   opacity: 0.3;
 }
-body[cameras-on="false"] #camera-display {
+body[cameras-on='false'] #camera-display {
   border-color: #646464;
 }
 .camera-button {
@@ -652,47 +652,47 @@ body[cameras-on="false"] #camera-display {
   pointer-events: none;
 }
 /* Camera button placement -------------------------------------------------- */
-.camera-button[camera="1A"] {
+.camera-button[camera='1A'] {
   top: 0;
   left: 27%;
 }
-.camera-button[camera="1B"] {
+.camera-button[camera='1B'] {
   top: 15.3%;
   left: 22%;
 }
-.camera-button[camera="1C"] {
+.camera-button[camera='1C'] {
   top: 37%;
   left: 14.5%;
 }
-.camera-button[camera="2A"] {
+.camera-button[camera='2A'] {
   top: 76%;
   left: 28.4%;
 }
-.camera-button[camera="2B"] {
+.camera-button[camera='2B'] {
   top: calc(76% + 54px);
   left: 28.4%;
 }
-.camera-button[camera="3"] {
+.camera-button[camera='3'] {
   top: 64%;
   left: 9%;
 }
-.camera-button[camera="4A"] {
+.camera-button[camera='4A'] {
   top: 76%;
   left: 54.4%;
 }
-.camera-button[camera="4B"] {
+.camera-button[camera='4B'] {
   top: calc(76% + 54px);
   left: 54.4%;
 }
-.camera-button[camera="5"] {
+.camera-button[camera='5'] {
   top: 26%;
   left: 0;
 }
-.camera-button[camera="6"] {
+.camera-button[camera='6'] {
   top: 60%;
   left: 83%;
 }
-.camera-button[camera="7"] {
+.camera-button[camera='7'] {
   top: 19%;
   left: 82%;
 }
