@@ -1,5 +1,5 @@
 // TESTING VARIABLES
-let nightToSimulate: number = 1;
+let nightToSimulate: number = 6;
 let secondLength: number = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
 
@@ -1831,6 +1831,7 @@ const playAudio = (audio: AvailableAudio) => {
   switch (audio) {
     case 'oven':
       myAudioSource = `oven-${Math.ceil(Math.random() * 4)}`;
+      document.querySelector('#kitchen-audio-graphic')?.setAttribute('visible', 'true');
       break;
     case 'breath':
       myAudioSource = `breath-${Math.ceil(Math.random() * 4)}`;
@@ -1864,6 +1865,10 @@ const playAudio = (audio: AvailableAudio) => {
     myAudio.play();
     myAudio.onended = () => {
       document.body.removeChild(myAudio);
+
+      if (audio === 'oven') {
+        document.querySelector('#kitchen-audio-graphic')?.removeAttribute('visible');
+      }
 
       if (audio === 'phone-guy') {
         document.querySelector('button#mute-call')?.remove();
@@ -2178,4 +2183,4 @@ let ambienceInterval: number;
 let coldPresenceInterval: number;
 
 initialiseMenu();
-// startGame();
+startGame();

@@ -1,25 +1,24 @@
-
-#simulator-container{
+#simulator-container {
   display: grid;
   grid-template:
-
-  "." auto
-  "." auto
-  "." auto
-  "camera-button" min-content
-  / 1fr;
+    '.' auto
+    '.' auto
+    '.' auto
+    'camera-button' min-content
+    / 1fr;
   position: relative;
 }
 
-#simulator{
+#simulator {
   position: relative;
 }
 
-#Rooms, #Dead_space{
+#Rooms,
+#Dead_space {
   pointer-events: none;
 }
 
-svg#close-icons{
+svg#close-icons {
   position: absolute;
   top: 0;
   left: 0;
@@ -27,8 +26,7 @@ svg#close-icons{
   pointer-events: none;
 }
 
-
-button#cameras{
+button#cameras {
   border: 3px solid #646464;
   background: rgba(#646464, 0.3) url(../../assets/icons/down-arrow.svg) center right no-repeat;
   background-size: contain;
@@ -42,4 +40,20 @@ button#cameras{
   box-sizing: border-box;
   font-size: 1.5em;
   grid-area: camera-button;
+}
+
+#kitchen-audio-graphic {
+  background: #000 url(../../assets/icons/audio.svg) center right no-repeat;
+  background-size: contain;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  right: 10%;
+  top: 70.5%;
+  opacity: 0;
+  z-index: 10;
+}
+
+#kitchen-audio-graphic[visible] {
+  opacity: 1;
 }

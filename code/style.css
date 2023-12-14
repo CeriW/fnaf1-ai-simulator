@@ -339,8 +339,8 @@
   -ms-grid-rows: auto auto auto -webkit-min-content;
   -ms-grid-rows: auto auto auto min-content;
   -ms-grid-columns: 1fr;
-      grid-template: "." auto "." auto "." auto "camera-button" -webkit-min-content / 1fr;
-      grid-template: "." auto "." auto "." auto "camera-button" min-content / 1fr;
+      grid-template: '.' auto '.' auto '.' auto 'camera-button' -webkit-min-content / 1fr;
+      grid-template: '.' auto '.' auto '.' auto 'camera-button' min-content / 1fr;
   position: relative;
 }
 #simulator {
@@ -374,6 +374,20 @@ button#cameras {
           box-sizing: border-box;
   font-size: 1.5em;
   grid-area: camera-button;
+}
+#kitchen-audio-graphic {
+  background: #000 url(../../assets/icons/audio.svg) center right no-repeat;
+  background-size: contain;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  right: 10%;
+  top: 70.5%;
+  opacity: 0;
+  z-index: 10;
+}
+#kitchen-audio-graphic[visible] {
+  opacity: 1;
 }
 .report-item-container {
   overflow-y: scroll;
