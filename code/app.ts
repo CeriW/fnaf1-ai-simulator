@@ -131,7 +131,6 @@ const inGameHourDisplay: HTMLDivElement = document.querySelector('#in-game-time'
 const simulator: HTMLDivElement = document.querySelector('#simulator')!;
 const sidebar: HTMLDivElement = document.querySelector('#sidebar')!;
 const officeDisplay: HTMLImageElement = document.querySelector('#office-overlay img')!;
-const muteButton = document.querySelector('button#mute-call');
 
 // Camera related page elements
 const cameraArea: HTMLDivElement = document.querySelector('#camera-display')!;
@@ -1866,7 +1865,7 @@ const playAudio = (audio: AvailableAudio) => {
       document.body.removeChild(myAudio);
 
       if (audio === 'phone-guy') {
-        muteButton?.remove();
+        document.querySelector('button#mute-call')?.remove();
       }
     };
   }
@@ -1973,12 +1972,23 @@ const startGame = () => {
 
   killAudio('game-menu');
   playAudioAmbience();
+
+  // Phone guy stuff
   playAudio('phone-guy');
 
-  muteButton?.addEventListener('click', () => {
-    killAudio('phone-guy');
-    muteButton.remove();
-  });
+  if (user.audioOn) {
+    let muteButton = document.createElement('button');
+    muteButton.id = 'mute-button';
+    muteButton.textContent = 'MUTE CALL';
+
+    window.setTimeout(() => {
+      cameraArea.appendChild(muteButton);
+      muteButton.addEventListener('click', () => {
+        killAudio('phone-guy');
+        muteButton.remove();
+      });
+    }, 1000);
+  }
 
   [Bonnie, Chica, Foxy, Freddy].forEach((animatronic) => {
     let animatronicAIinput = document.querySelector(
