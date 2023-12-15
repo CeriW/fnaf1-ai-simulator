@@ -2008,9 +2008,8 @@ const startGame = () => {
   });
 
   document.body.setAttribute('game-in-progress', 'true');
-  drainPower;
+  drainPower();
   defaultPowerDrainInterval = window.setInterval(drainPower, secondLength / 10);
-  // additionalPowerDrainInterval = window.setInterval(drainAdditionalPower, secondLength / 10);
 
   timeUpdate = window.setInterval(updateTime, secondLength); // Update the frames every 1/60th of a second
   frameUpdate = window.setInterval(updateFrames, secondLength / framesPerSecond);
