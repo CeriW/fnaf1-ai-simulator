@@ -4,6 +4,8 @@ I was inspired to make this simulator of how the AI in FNAF1 works after watchin
 
 That said, it was surprisingly difficult to do - each animatronic has its own different path around the building, different movement intervals and different criteria for whether they are able to move or not. Furthermore power consumption proved to be a _major_ difficulty to code, owing to the fact that none of the formulae found online matched up with what the game actually did. This required a lot of play testing on my part and I was eventually able to come up with an amended formula based on what others claimed that does seem to match what the game does.
 
+At present I have no intention of making any other versions of this, but I did code it keeping in mind that I _could_ adapt it to work with other games in the series.
+
 ## The brief
 
 - [How the game works](https://github.com/CeriW/fnaf-but-boring/blob/b19f53be151db013c89aa0b1a235db43eb26e668/research/how-the-game-works.md)
