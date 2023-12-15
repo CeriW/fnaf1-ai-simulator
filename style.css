@@ -1196,6 +1196,20 @@ body[game-mode="playable-game"] .current-ai-level {
 #power {
   grid-area: power;
 }
+/* Footer ------------------------------------------------------------------- */
+footer {
+  padding: 20px;
+  border-top: 1px solid #333;
+  width: 100%;
+  margin-top: 50px;
+  box-sizing: border-box;
+  text-align: center;
+}
+footer a {
+  color: #b9b9b9;
+  margin: 0 20px;
+  display: inline-block;
+}
 /* Game speed selector ------------------------------------------------------ */
 #game-speed-selector {
   display: flex;
