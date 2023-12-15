@@ -194,10 +194,6 @@ const updateTime = () => {
     <span class="am-marker">AM</span>
   `;
 
-  // console.log(
-  //   `${realMinutes} : ${String(realRemainingSeconds).padStart(2, '0')}  ${JSON.stringify(calculateInGameTime())}`
-  // );
-
   updateFrames();
 
   // 2AM
@@ -399,7 +395,7 @@ const attemptFoxyJumpscare = (e?: Event) => {
 };
 
 // When the cameras come down Foxy will be unable to make any more movement checks for a random amount of time between 0.83 and 16.67 seconds
-// QUESTION - I am assuming the countdown doesn't renew if another cameras-off event happens during his cooldown.
+// I am assuming the countdown doesn't renew if another cameras-off event happens during his cooldown.
 const pauseFoxy = () => {
   if (Foxy.currentPosition === '1C') {
     let cooldownInSeconds = Math.random() * (16.67 - 0.83) + 0.83;
@@ -476,9 +472,6 @@ const moveFreddy = () => {
     movementCheck.canMove
   ) {
     // Freddy can't get you when the right door is closed even if you're not looking at 4B
-    // QUESTION - I HAVE ASSUMED HE RETURNS TO 4A WHEN THIS IS THE CASE?
-    // QUESTION - DOES HE HAVE TO PASS A MOVEMENT CHECK BEFORE HE MOVES BACK TO 4A?
-    // QUESTION - I ASSUME HE DOES A COUNTDOWN AND DOESN'T LEAVE IMMEDIATELY? Because that's not happening right here with this code
     addReport(Freddy, 'right door closed', null, '4A');
     Freddy.currentPosition = '4A';
     moveAnimatronic(Freddy, { start: '4B', end: '4A' });
@@ -493,13 +486,10 @@ const moveFreddy = () => {
     !user.rightDoorIsClosed &&
     !movementCheck.canMove
   ) {
-    // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
-
     // Freddy could have entered the office but he failed his movement check. He will continue to wait at Cam 4B
     addReport(Freddy, 'enter office failed movement check', movementCheck);
     Freddy.stats.failedMovementChecks++;
   } else if (!user.camerasOn && Freddy.currentPosition === '4B' && movementCheck.canMove) {
-    // QUESTION - I ASSUME HE DOESN'T MOVE BACK TO 4A ON THIS OCCASION?
     addReport(Freddy, 'enter office cameras off');
     Freddy.stats.officeAttempts++;
 

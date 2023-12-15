@@ -61,22 +61,9 @@
 
 #custom-night-menu {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
-
-  @media (max-width: @s-screens) {
-    display: grid;
-    grid-template:
-      '. .'
-      '. .';
-  }
-
-  @media (max-width: @xs-screens) {
-    grid-template:
-      '.'
-      '.'
-      '.'
-      '.';
-  }
 }
 
 #night-selector-menu {
