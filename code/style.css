@@ -130,7 +130,7 @@
     margin-bottom: 10px;
   }
 }
-/* Timer -------------------------------------------------------------------- */
+/* TIMER -------------------------------------------------------------------- */
 #in-game-time,
 #real-time {
   font-family: 'VT323', monospace;
@@ -205,6 +205,7 @@
     margin-left: -10px;
   }
 }
+/* Animatronics ------------------------------------------------------------- */
 .animatronic {
   width: 50px;
   height: 50px;
@@ -231,103 +232,103 @@
   }
 }
 /* Camera 1A -----------------------------------------------------------------*/
-.animatronic[position="1A"] {
+.animatronic[position='1A'] {
   top: 6.7%;
   left: 33.5%;
 }
-.animatronic#Chica[position="1A"] {
+.animatronic#Chica[position='1A'] {
   left: 42.5%;
 }
-.animatronic#Freddy[position="1A"] {
+.animatronic#Freddy[position='1A'] {
   left: 51%;
 }
 /* Camera 1B ------------------------------------------------------------------*/
-.animatronic[position="1B"] {
+.animatronic[position='1B'] {
   top: 26%;
   left: 30%;
 }
-.animatronic#Bonnie[position="1B"] {
+.animatronic#Bonnie[position='1B'] {
   top: 30%;
   left: 50%;
 }
-.animatronic#Freddy[position="1B"] {
+.animatronic#Freddy[position='1B'] {
   top: 22%;
   left: 40%;
 }
-.animatronic#Freddy[position="1B"] {
+.animatronic#Freddy[position='1B'] {
   top: 22%;
   left: 40%;
 }
 /* Camera 1C ------------------------------------------------------------------*/
-.animatronic[position="1C"] {
+.animatronic[position='1C'] {
   top: 42%;
   left: 8.3%;
 }
 /* Camera 2A ------------------------------------------------------------------*/
-.animatronic[position="2A"] {
+.animatronic[position='2A'] {
   top: 63.5%;
   left: 29.2%;
 }
 /* Camera 2B ------------------------------------------------------------------*/
-.animatronic[position="2B"] {
+.animatronic[position='2B'] {
   top: 84%;
   left: 29.2%;
 }
-.animatronic[position="2B"][sub-position="1"] {
+.animatronic[position='2B'][sub-position='1'] {
   left: 32.2%;
 }
 /* Camera 3 ------------------------------------------------------------------*/
-.animatronic[position="3"] {
+.animatronic[position='3'] {
   top: 73%;
   left: 15.8%;
 }
 /* Camera 4A ------------------------------------------------------------------*/
-.animatronic[position="4A"] {
+.animatronic[position='4A'] {
   top: 63.5%;
   left: 55.2%;
 }
-.animatronic[position="4A"] ~ .animatronic[position="4A"] {
+.animatronic[position='4A'] ~ .animatronic[position='4A'] {
   top: calc(63.5% + 50px);
 }
 /* Camera 4B ------------------------------------------------------------------*/
-.animatronic[position="4B"] {
+.animatronic[position='4B'] {
   top: 84%;
   left: 55.2%;
 }
-.animatronic[position="4B"][sub-position="1"] {
+.animatronic[position='4B'][sub-position='1'] {
   top: 84%;
   left: 51.2%;
 }
-.animatronic[position="4B"] ~ .animatronic[position="4B"] {
+.animatronic[position='4B'] ~ .animatronic[position='4B'] {
   top: calc(84% + 50px);
 }
 /* Camera 5 ------------------------------------------------------------------*/
-.animatronic[position="5"] {
+.animatronic[position='5'] {
   top: 17%;
   left: 4.6%;
 }
 /* Camera 6 ------------------------------------------------------------------*/
-.animatronic[position="6"] {
+.animatronic[position='6'] {
   top: 63.5%;
   left: 69%;
 }
-.animatronic[position="6"] ~ .animatronic[position="6"] {
+.animatronic[position='6'] ~ .animatronic[position='6'] {
   left: calc(69% + 50px);
 }
 /* Camera 7 ------------------------------------------------------------------*/
-.animatronic[position="7"] {
+.animatronic[position='7'] {
   top: 33%;
   left: 78.65%;
 }
-.animatronic[position="7"] ~ .animatronic[position="7"] {
+.animatronic[position='7'] ~ .animatronic[position='7'] {
   top: calc(33% + 50px);
 }
 /* Office ------------------------------------------------------------------*/
-.animatronic[position="office"] {
+.animatronic[position='office'] {
   top: 74%;
   left: 42.09%;
 }
-.animatronic[position="office"] ~ .animatronic[position="office"] {
+.animatronic[position='office'] ~ .animatronic[position='office'] {
   top: calc(74% + 50px);
 }
 /* Individual animatronic styling ------------------------------------------- */
@@ -353,8 +354,8 @@
   background-image: url('../../assets/Foxy.svg');
   background-size: 120%;
 }
-#Foxy[position="1C"]:before,
-#Foxy[position="1C"]:after {
+#Foxy[position='1C']:before,
+#Foxy[position='1C']:after {
   content: '';
   width: 25px;
   height: 25px;
@@ -365,32 +366,32 @@
   right: -10px;
   top: -10px;
 }
-#Foxy[position="1C"]:after {
+#Foxy[position='1C']:after {
   background: #fff;
 }
-#Foxy[position="1C"][sub-position="0"]:before {
+#Foxy[position='1C'][sub-position='0']:before {
   border-color: green;
 }
-#Foxy[position="1C"][sub-position="0"]:after {
+#Foxy[position='1C'][sub-position='0']:after {
   display: none;
 }
-#Foxy[position="1C"][sub-position="1"]:before,
-#Foxy[position="1C"][sub-position="1"]:after {
+#Foxy[position='1C'][sub-position='1']:before,
+#Foxy[position='1C'][sub-position='1']:after {
   border-color: #f60;
 }
-#Foxy[position="1C"][sub-position="1"]:after {
+#Foxy[position='1C'][sub-position='1']:after {
   -webkit-clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%);
           clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%);
 }
-#Foxy[position="1C"][sub-position="2"]:before,
-#Foxy[position="1C"][sub-position="2"]:after {
+#Foxy[position='1C'][sub-position='2']:before,
+#Foxy[position='1C'][sub-position='2']:after {
   border-color: red;
 }
-#Foxy[position="1C"][sub-position="2"]:after {
+#Foxy[position='1C'][sub-position='2']:after {
   -webkit-clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%);
           clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%);
 }
-#Foxy[position="4A"] {
+#Foxy[position='4A'] {
   opacity: 0.2;
 }
 @-webkit-keyframes foxyHallAnimation {
@@ -409,6 +410,7 @@
     top: 84%;
   }
 }
+/* SIMULATOR ---------------------------------------------------------------- */
 #simulator-container {
   -ms-grid-row: 1;
   -ms-grid-row-span: 3;
@@ -691,6 +693,7 @@ button#cameras {
 .animatronic-report[for='Freddy'] .current-ai-level {
   background: brown;
 }
+/* Cameras ------------------------------------------------------------------ */
 #camera-display {
   position: relative;
   display: -webkit-box;
@@ -846,6 +849,7 @@ body[cameras-on='false'] #camera-display {
           justify-content: center;
   z-index: 3;
 }
+/* Gamer over screen -------------------------------------------------------- */
 #game-over-stats {
   position: absolute;
   top: 0;
@@ -1081,7 +1085,7 @@ body[game-in-progress='false'] #controls {
     font-size: 1.25em;
   }
 }
-/* Switch ------------------------------------------------------------------- */
+/* SWITCH ------------------------------------------------------------------- */
 .switch {
   position: relative;
   display: inline-block;
@@ -1555,6 +1559,7 @@ body[game-mode="playable-game"] .current-ai-level {
 #game-speed-selector label:hover {
   border-color: #7fb000;
 }
+/* AI adjuster -------------------------------------------------------------- */
 .ai-adjuster {
   display: -webkit-box;
   display: -ms-flexbox;

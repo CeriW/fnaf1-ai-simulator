@@ -1,11 +1,12 @@
+/* AI adjuster -------------------------------------------------------------- */
 
-.ai-adjuster{
+.ai-adjuster {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
   margin-top: 20px;
 
-  button{
+  button {
     background: #464664;
     color: white;
     font-weight: bold;
@@ -14,7 +15,7 @@
     padding: 10px;
   }
 
-  input{
+  input {
     background: transparent;
     color: white;
     border: none;
@@ -23,29 +24,29 @@
     font-family: monospace;
     width: 150px;
     outline: none;
-    
-    &::-webkit-inner-spin-button{
+
+    &::-webkit-inner-spin-button {
       display: none;
     }
 
-    @media(max-width: @m-screens){
+    @media (max-width: @m-screens) {
       font-size: 2em;
       width: 75px;
     }
   }
 
-  button:nth-child(2){
+  button:nth-child(2) {
     order: -1;
   }
 }
 
-.custom-ai-selector{
+.custom-ai-selector {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.ai-descriptions{
+.ai-descriptions {
   font-size: 1.5em;
   margin: 20px 0;
 }
