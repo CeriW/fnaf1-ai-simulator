@@ -4,6 +4,7 @@
 var nightToSimulate = 6;
 var secondLength = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 var defaultCamera = '1A';
+var autoStartGame = false;
 var Freddy = {
   name: 'Freddy',
   currentPosition: '1A',
@@ -1778,5 +1779,7 @@ var eerieInterval;
 var ambienceInterval;
 var coldPresenceInterval;
 initialiseMenu();
-startGame();
+if (autoStartGame) {
+  startGame();
+}
 //# sourceMappingURL=app.js.map

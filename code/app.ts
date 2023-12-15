@@ -2,6 +2,7 @@
 let nightToSimulate: number = 6;
 let secondLength: number = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 const defaultCamera = '1A' as Camera;
+let autoStartGame = false;
 
 type MovementCheck = {
   animatronicName: string;
@@ -13,7 +14,7 @@ type MovementCheck = {
 type Animatronic = {
   name: string;
   currentPosition: Position; // The camera the animatronic is currently at
-  subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes thrsough multiple steps before he's able to leave. -1 is the equivalent of null.
+  subPosition: number; // Used for Foxy. He will almost always be in 1C, but he goes through multiple steps before he's able to leave. -1 is the equivalent of null.
   movementOpportunityInterval: number; // How often in seconds this animatronic gets a movement opportunity
   aiLevels: [null, number, number, number, number, number, number, number]; // The starting AI levels on nights 1-6. To make the code more readable, null is at the start so night 1 is at index 1 and so on
   currentAIlevel: number; // Some animatronics increase their AI level as the night goes on. This will be used to store what their current AI level is. It's set to 0 when the animatronics are first declared, then set to the correct value in generateAnimatronics()
@@ -2186,4 +2187,6 @@ let ambienceInterval: number;
 let coldPresenceInterval: number;
 
 initialiseMenu();
-startGame();
+if (autoStartGame) {
+  startGame();
+}
