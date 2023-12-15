@@ -78,3 +78,27 @@
   font-size: 23px;
   border-radius: 8px;
 }
+
+@media (max-width: @xs-screens) {
+  button#cameras {
+    background-image: none;
+    font-size: 18px;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  #controls {
+    gap: 5px 50px;
+
+    button:after {
+      width: 33px;
+      font-size: initial;
+    }
+
+    button[door='right']:after {
+      display: none;
+    }
+  }
+}

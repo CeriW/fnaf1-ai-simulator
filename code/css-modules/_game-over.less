@@ -35,6 +35,12 @@ body[game-in-progress='true'] #game-over-stats {
   display: none;
 }
 
+body[game-in-progress='false'] #simulator,
+body[game-in-progress='false'] #cameras,
+body[game-in-progress='false'] #controls {
+  opacity: 0;
+}
+
 .stats-report {
   text-align: left;
   display: grid;

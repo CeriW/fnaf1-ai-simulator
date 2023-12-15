@@ -5,7 +5,7 @@
 @l-screens: 1600px;
 @m-screens: 1300px;
 @s-screens: 1100px;
-@xs-screens: 500px;
+@xs-screens: 800px;
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
@@ -132,6 +132,27 @@ main {
       'animatronic-report animatronic-report'
       / 500px 1fr;
   }
+}
+
+@media (max-width: @xs-screens) {
+  main {
+    grid-template:
+      'simulator'
+      'sidebar'
+      'animatronic-report';
+  }
+
+  #sidebar {
+    gap: 20px 10px;
+  }
+
+  // #simulator-container {
+  //   transform: scale(0.85);
+  // }
+
+  // #controls {
+  //   margin-top: 80px;
+  // }
 }
 
 details {

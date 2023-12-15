@@ -12,6 +12,7 @@
 
 #simulator {
   position: relative;
+  grid-area: simulator;
 }
 
 #Rooms,
@@ -57,4 +58,24 @@ button#cameras {
 
 #kitchen-audio-graphic[visible] {
   opacity: 1;
+}
+
+@media (max-width: @xs-screens) {
+  // #simulator {
+  //   max-width: 480px;
+  //   margin-bottom: 40px;
+  // }
+
+  #simulator-container {
+    grid-template:
+      'simulator simulator' auto
+      'controls camera-button' auto
+      / 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  #simulator {
+    margin-bottom: 50px;
+  }
 }
