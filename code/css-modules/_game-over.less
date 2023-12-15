@@ -29,6 +29,10 @@
 
     .buttonStyle.hover();
   }
+
+  @media (max-width: 500px) {
+    right: 0;
+  }
 }
 
 body[game-in-progress='true'] #game-over-stats {
@@ -69,12 +73,16 @@ body[game-in-progress='false'] #controls {
   }
 
   .animatronic-icon {
-    height: 100px;
+    height: 100%;
     width: 100%;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     grid-area: icon;
+  }
+
+  &[for='user'] .animatronic-icon {
+    background-image: url('../../assets/icons/player.png');
   }
 
   &[for='Freddy'] .animatronic-icon {

@@ -894,6 +894,11 @@ body[cameras-on='false'] #camera-display {
 #game-over-stats button:hover {
   background: #7fb000;
 }
+@media (max-width: 500px) {
+  #game-over-stats {
+    right: 0;
+  }
+}
 body[game-in-progress='true'] #game-over-stats {
   display: none;
 }
@@ -935,7 +940,7 @@ body[game-in-progress='false'] #controls {
   -ms-grid-row: 1;
   -ms-grid-row-span: 9;
   -ms-grid-column: 1;
-  height: 100px;
+  height: 100%;
   width: 100%;
   background-position: center;
   background-size: cover;
@@ -948,6 +953,9 @@ body[game-in-progress='false'] #controls {
     -ms-grid-row-span: 5;
     -ms-grid-column: 1;
   }
+}
+.stats-report[for='user'] .animatronic-icon {
+  background-image: url('../../assets/icons/player.png');
 }
 .stats-report[for='Freddy'] .animatronic-icon {
   background-image: url('../../assets/animatronics/freddy.png');

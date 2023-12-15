@@ -1322,7 +1322,7 @@ var gameOver = function gameOver(reason) {
   clearAllIntervals();
   var gameOverWindow = document.querySelector('#game-over-stats');
   var generateStatsTable = function generateStatsTable(animatronic) {
-    var myStats = "\n      <div class=\"stats-report\" for=\"".concat(animatronic.name, "\">\n        <h3>").concat(animatronic.name, "</h3>\n        <div class=\"animatronic-icon\"></div>\n        <div>Successful movement checks: <span>").concat(animatronic.stats.successfulMovementChecks, "</span></div>\n        <div>Failed movement checks: <span>").concat(animatronic.stats.failedMovementChecks, "</span></div>\n        <div>Attempts to get into office: <span>").concat(animatronic.stats.officeAttempts, "</span></div>\n      </div>\n    ");
+    var myStats = "\n      <div class=\"stats-report\" for=\"".concat(animatronic.name, "\">\n        <h3>").concat(animatronic.name, "</h3>\n        <div class=\"animatronic-icon\"></div>\n        <div>Successful movement checks:&nbsp;<span>").concat(animatronic.stats.successfulMovementChecks, "</span></div>\n        <div>Failed movement checks:&nbsp;<span>").concat(animatronic.stats.failedMovementChecks, "</span></div>\n        <div>Attempts to get into office:&nbsp;<span>").concat(animatronic.stats.officeAttempts, "</span></div>\n      </div>\n    ");
     return myStats;
   };
   var gameOverTitle = reason === '6AM' ? 'CONGRATULATIONS!' : 'GAME OVER';

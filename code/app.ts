@@ -1596,9 +1596,9 @@ const gameOver = (reason: Animatronic | '6AM') => {
       <div class="stats-report" for="${animatronic.name}">
         <h3>${animatronic.name}</h3>
         <div class="animatronic-icon"></div>
-        <div>Successful movement checks: <span>${animatronic.stats.successfulMovementChecks}</span></div>
-        <div>Failed movement checks: <span>${animatronic.stats.failedMovementChecks}</span></div>
-        <div>Attempts to get into office: <span>${animatronic.stats.officeAttempts}</span></div>
+        <div>Successful movement checks:&nbsp;<span>${animatronic.stats.successfulMovementChecks}</span></div>
+        <div>Failed movement checks:&nbsp;<span>${animatronic.stats.failedMovementChecks}</span></div>
+        <div>Attempts to get into office:&nbsp;<span>${animatronic.stats.officeAttempts}</span></div>
       </div>
     `;
 
