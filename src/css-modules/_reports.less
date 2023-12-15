@@ -1,0 +1,187 @@
+.report-item-container {
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.report-item {
+  color: white;
+  display: grid;
+  grid-template:
+    'time'
+    'description'
+    'extra-info';
+  margin-bottom: 10px;
+}
+
+.report-item[type='bad'] .report-description {
+  color: #f60;
+}
+
+.report-item[type='good'] .report-description {
+  color: green;
+}
+
+.report-item[type='warning'] .report-description {
+  color: red;
+}
+
+.report-item[type='alert'] .report-description,
+.report-item[type='death-zone'] .report-description {
+  color: red;
+  padding-left: 30px;
+  background: url('../../assets/icons/alert.svg') left top no-repeat;
+  background-size: 25px;
+  text-transform: uppercase;
+}
+
+.report-item[type='death-zone'] .report-description {
+  background-image: url('../../assets/icons/skull.svg');
+  background-size: 18px;
+  background-position: left 2px;
+}
+
+.report-time {
+  color: #646464;
+  grid-area: time;
+}
+
+.report-description {
+  grid-area: description;
+}
+
+.report-extra-info {
+  color: #646464;
+  grid-area: extra-info;
+  text-transform: initial;
+}
+
+/* General panel ------------------------------------------------------------ */
+
+#animatronic-report {
+  display: grid;
+  grid-template:
+    '. .' auto
+    '. .' auto
+    / 1fr 1fr;
+  gap: 10px;
+  grid-area: animatronic-report;
+}
+
+@media (max-width: @xs-screens) {
+  #animatronic-report {
+    grid-template:
+      '.' auto
+      '.' auto
+      '.' auto
+      '.' auto
+      / 1fr;
+  }
+}
+
+.animatronic-report {
+  display: grid;
+  grid-template:
+    'icon name starting-ai-level' min-content
+    'icon reports reports' 1fr
+    'icon current-ai-level current-ai-level' min-content
+    / 60px 1fr max-content;
+  border: 2px solid;
+}
+
+.animatronic-icon {
+  grid-area: icon;
+  border-right: inherit;
+}
+.current-ai-level {
+  grid-area: current-ai-level;
+}
+.report-item-container {
+  grid-area: reports;
+  height: 150px;
+}
+
+.animatronic-name {
+  font-size: 1.5em;
+  font-weight: bold;
+  grid-area: name;
+  text-transform: uppercase;
+  padding: 5px;
+}
+
+.starting-ai-level {
+  grid-area: starting-ai-level;
+
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8em;
+
+  span {
+    font-size: 1.5em;
+  }
+}
+
+.animatronic-name,
+.starting-ai-level,
+.current-ai-level {
+  padding-left: 10px;
+}
+
+.animatronic-report[for='Bonnie'] {
+  border-color: rebeccapurple;
+
+  .animatronic-icon {
+    background: url('../../assets/animatronics/bonnie.png') center / cover;
+  }
+
+  .animatronic-name,
+  .starting-ai-level,
+  .current-ai-level {
+    background: rebeccapurple;
+  }
+}
+
+.animatronic-report[for='Chica'] {
+  border-color: yellow;
+
+  .animatronic-icon {
+    background: url('../../assets/animatronics/chica.png') center / cover;
+  }
+
+  .animatronic-name,
+  .starting-ai-level,
+  .current-ai-level {
+    background: yellow;
+    color: black;
+  }
+}
+
+.animatronic-report[for='Foxy'] {
+  border-color: red;
+
+  .animatronic-icon {
+    background: url('../../assets/animatronics/foxy.png') center / cover;
+  }
+
+  .animatronic-name,
+  .starting-ai-level,
+  .current-ai-level {
+    background: red;
+  }
+}
+
+.animatronic-report[for='Freddy'] {
+  border-color: brown;
+
+  .animatronic-icon {
+    background: url('../../assets/animatronics/freddy.png') center / cover;
+  }
+
+  .animatronic-name,
+  .starting-ai-level,
+  .current-ai-level {
+    background: brown;
+  }
+}

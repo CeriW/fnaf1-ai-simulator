@@ -1,0 +1,109 @@
+/* Controls ----------------------------------------------------------------- */
+
+#controls {
+  display: grid;
+  grid-template:
+    '. .'
+    '. .'
+    / 48px 48px;
+  gap: 5px 150px;
+  justify-content: center;
+  padding-right: 9%;
+
+  button {
+    height: 48px;
+    position: relative;
+    border: none;
+    border: 3px solid #9c0000;
+    border-right-color: #850000;
+    border-bottom-color: #680000;
+
+    &:after {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: calc(100% + 12px);
+      color: @white;
+      .customFont();
+      font-size: 1.75em;
+    }
+
+    &[door='right']:after {
+      left: unset;
+      right: calc(100% + 12px);
+    }
+  }
+
+  .door-button {
+    background: radial-gradient(#c40000, #720000);
+
+    &.active {
+      background: radial-gradient(#6ae500 33%, #1e6c00);
+      border-color: #1e6c00;
+    }
+
+    &:after {
+      content: 'DOOR';
+    }
+  }
+
+  .light-button {
+    background: radial-gradient(#666, #474747);
+    border-color: #494949;
+    border-right-color: #363636;
+    border-bottom-color: #363636;
+
+    &:after {
+      content: 'LIGHT';
+    }
+  }
+}
+
+#simulator[left-light-on='true'] + #controls .light-button[door='left'],
+#simulator[right-light-on='true'] + #controls .light-button[door='right'] {
+  background: radial-gradient(#d4d5d9 33%, #637bbe);
+  border-color: #6d82bd;
+}
+
+#mute-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #9a9a9a;
+  border: 2px solid #9a9a9a;
+  background-color: rgba(white, 0.2);
+  z-index: 10;
+  padding: 3px 7px;
+  font-family: 'VT323', monospace;
+  font-size: 23px;
+  border-radius: 8px;
+}
+
+@media (max-width: @xs-screens) {
+  button#cameras {
+    background-image: none;
+    font-size: 18px;
+    margin: 0;
+    width: 100%;
+  }
+
+  #controls {
+    justify-content: start;
+    margin-left: -10px;
+  }
+}
+
+@media (max-width: 500px) {
+  #controls {
+    gap: 5px 50px;
+
+    button:after {
+      width: 33px;
+      font-size: initial;
+    }
+
+    button[door='right']:after {
+      display: none;
+    }
+  }
+}

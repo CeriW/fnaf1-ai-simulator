@@ -1,0 +1,247 @@
+/* Animatronics ------------------------------------------------------------- */
+
+.animatronic {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+
+  @media (max-width: @l-screens) {
+    transform: scale(0.9) translate(-10%, -10%);
+  }
+
+  @media (max-width: @m-screens) {
+    transform: scale(0.8) translate(-20%, -20%);
+  }
+}
+
+/* Camera 1A -----------------------------------------------------------------*/
+
+.animatronic[position='1A'] {
+  top: 6.7%;
+  left: 33.5%;
+}
+
+.animatronic#Chica[position='1A'] {
+  left: 42.5%;
+}
+
+.animatronic#Freddy[position='1A'] {
+  left: 51%;
+}
+
+/* Camera 1B ------------------------------------------------------------------*/
+
+.animatronic[position='1B'] {
+  top: 26%;
+  left: 30%;
+}
+
+.animatronic#Bonnie[position='1B'] {
+  top: 30%;
+  left: 50%;
+}
+
+.animatronic#Freddy[position='1B'] {
+  top: 22%;
+  left: 40%;
+}
+
+.animatronic#Freddy[position='1B'] {
+  top: 22%;
+  left: 40%;
+}
+
+/* Camera 1C ------------------------------------------------------------------*/
+
+.animatronic[position='1C'] {
+  top: 42%;
+  left: 8.3%;
+}
+
+/* Camera 2A ------------------------------------------------------------------*/
+
+.animatronic[position='2A'] {
+  top: 63.5%;
+  left: 29.2%;
+}
+
+/* Camera 2B ------------------------------------------------------------------*/
+
+.animatronic[position='2B'] {
+  top: 84%;
+  left: 29.2%;
+}
+
+.animatronic[position='2B'][sub-position='1'] {
+  left: 32.2%;
+}
+
+/* Camera 3 ------------------------------------------------------------------*/
+
+.animatronic[position='3'] {
+  top: 73%;
+  left: 15.8%;
+}
+
+/* Camera 4A ------------------------------------------------------------------*/
+
+.animatronic[position='4A'] {
+  top: 63.5%;
+  left: 55.2%;
+}
+
+.animatronic[position='4A'] ~ .animatronic[position='4A'] {
+  top: calc(63.5% + 50px);
+}
+
+/* Camera 4B ------------------------------------------------------------------*/
+
+.animatronic[position='4B'] {
+  top: 84%;
+  left: 55.2%;
+}
+
+.animatronic[position='4B'][sub-position='1'] {
+  top: 84%;
+  left: 51.2%;
+}
+
+.animatronic[position='4B'] ~ .animatronic[position='4B'] {
+  top: calc(84% + 50px);
+}
+
+/* Camera 5 ------------------------------------------------------------------*/
+
+.animatronic[position='5'] {
+  top: 17%;
+  left: 4.6%;
+}
+
+/* Camera 6 ------------------------------------------------------------------*/
+
+.animatronic[position='6'] {
+  top: 63.5%;
+  left: 69%;
+}
+
+.animatronic[position='6'] ~ .animatronic[position='6'] {
+  left: calc(69% + 50px);
+}
+
+/* Camera 7 ------------------------------------------------------------------*/
+
+.animatronic[position='7'] {
+  top: 33%;
+  left: 78.65%;
+}
+
+.animatronic[position='7'] ~ .animatronic[position='7'] {
+  top: calc(33% + 50px);
+}
+
+/* Office ------------------------------------------------------------------*/
+
+.animatronic[position='office'] {
+  top: 74%;
+  left: 42.09%;
+}
+
+.animatronic[position='office'] ~ .animatronic[position='office'] {
+  top: calc(74% + 50px);
+}
+
+/* Individual animatronic styling ------------------------------------------- */
+
+#Bonnie {
+  background-color: purple;
+  background-image: url('../../assets/Bonnie.svg');
+  background-size: cover;
+  background-position: center bottom;
+}
+
+#Chica {
+  background-color: yellow;
+  background-image: url('../../assets/Chica.svg');
+  background-size: 80%;
+  background-position: center top;
+}
+
+#Freddy {
+  background-color: brown;
+  background-image: url('../../assets/Freddy.svg');
+  background-size: cover;
+}
+
+#Foxy {
+  background-color: red;
+  background-image: url('../../assets/Foxy.svg');
+  background-size: 120%;
+}
+
+#Foxy[position='1C']:before,
+#Foxy[position='1C']:after {
+  content: '';
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: absolute;
+  background: @black;
+  border: 2px solid @white;
+  right: -10px;
+  top: -10px;
+}
+
+#Foxy[position='1C']:after {
+  background: @white;
+}
+
+#Foxy[position='1C'][sub-position='0'] {
+  &:before {
+    border-color: green;
+  }
+
+  &:after {
+    display: none;
+  }
+}
+
+#Foxy[position='1C'][sub-position='1'] {
+  &:before,
+  &:after {
+    border-color: #f60;
+  }
+
+  &:after {
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 75%);
+  }
+}
+
+#Foxy[position='1C'][sub-position='2'] {
+  &:before,
+  &:after {
+    border-color: red;
+  }
+
+  &:after {
+    clip-path: polygon(50% 0%, 50% 50%, 0% 75%, 0% 100%, 100% 100%, 100% 0%);
+  }
+}
+
+#Foxy[position='4A'] {
+  opacity: 0.2;
+}
+
+@keyframes foxyHallAnimation {
+  from {
+    top: 63.5%;
+  }
+  to {
+    top: 84%;
+  }
+}

@@ -1,0 +1,105 @@
+/* Gamer over screen -------------------------------------------------------- */
+
+#game-over-stats {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  left: 0;
+  bottom: 0;
+  z-index: 99;
+  background: black;
+  border: 2px solid white;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+
+  h2 {
+    font-family: 'VT323', monospace;
+    font-size: 4em;
+    margin: 0;
+  }
+
+  button {
+    .buttonStyle();
+    text-align: center;
+    width: auto;
+    font-size: 2em;
+    line-height: 1;
+
+    .buttonStyle.hover();
+  }
+
+  @media (max-width: 500px) {
+    right: 0;
+  }
+}
+
+body[game-in-progress='true'] #game-over-stats {
+  display: none;
+}
+
+body[game-in-progress='false'] #simulator,
+body[game-in-progress='false'] #cameras,
+body[game-in-progress='false'] #controls {
+  opacity: 0;
+}
+
+.stats-report {
+  text-align: left;
+  display: grid;
+  grid-template:
+    'icon name' 1fr
+    'icon .' auto
+    'icon .' auto
+    'icon .' auto
+    'icon .' auto
+    / 100px 1fr;
+  gap: 0 20px;
+  margin-bottom: 20px;
+
+  @media (max-width: @xs-screens) {
+    grid-template:
+      'icon name' 1fr
+      'icon .' auto
+      'icon .' auto
+      'icon .' auto
+      'icon .' auto
+      / 50px 1fr;
+  }
+
+  h3 {
+    margin: 0 0 10px;
+  }
+
+  .animatronic-icon {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    grid-area: icon;
+  }
+
+  &[for='user'] .animatronic-icon {
+    background-image: url('../../assets/icons/player.png');
+  }
+
+  &[for='Freddy'] .animatronic-icon {
+    background-image: url('../../assets/animatronics/freddy.png');
+  }
+
+  &[for='Bonnie'] .animatronic-icon {
+    background-image: url('../../assets/animatronics/bonnie.png');
+  }
+
+  &[for='Chica'] .animatronic-icon {
+    background-image: url('../../assets/animatronics/chica.png');
+  }
+
+  &[for='Foxy'] .animatronic-icon {
+    background-image: url('../../assets/animatronics/foxy.png');
+  }
+}
