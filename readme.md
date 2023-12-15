@@ -1,6 +1,6 @@
 # Five Nights At Freddy's AI simulator
 
-I was inspired to make this simulator of how the AI in [Five Nights At Freddy's 1](https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/) works after watching this Youtube video by Tech Rules, which reveals that the 'artificial intelligence' is really just a bunch of if statements based on random number generation: https://www.youtube.com/watch?v=ujg0Y5IziiY
+I was inspired to make this simulator of how the AI in [Five Nights At Freddy's 1](https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/) works after watching this Youtube video, which reveals that the 'artificial intelligence' is really just a bunch of if statements based on random number generation: https://www.youtube.com/watch?v=ujg0Y5IziiY
 
 That said, it was surprisingly difficult to do - each animatronic has its own different path around the building, different movement intervals and different criteria for whether they are able to move or not. Furthermore power consumption proved to be a _major_ difficulty to code, owing to the fact that none of the formulae found online matched up with what the game actually did. This required a lot of play testing on my part and I was eventually able to come up with an amended formula based on what others claimed that does seem to match what the game does.
 
