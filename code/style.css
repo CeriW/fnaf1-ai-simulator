@@ -808,6 +808,7 @@ body[cameras-on='false'] #camera-display {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  overflow: auto;
 }
 #game-over-stats h2 {
   font-family: 'VT323', monospace;
@@ -841,7 +842,7 @@ body[cameras-on='false'] #camera-display {
 #game-over-stats button:hover {
   background: #7fb000;
 }
-body[game-in-progress="true"] #game-over-stats {
+body[game-in-progress='true'] #game-over-stats {
   display: none;
 }
 .stats-report {
@@ -850,7 +851,7 @@ body[game-in-progress="true"] #game-over-stats {
   display: grid;
   -ms-grid-rows: 1fr 0 auto 0 auto 0 auto 0 auto;
   -ms-grid-columns: 100px 20px 1fr;
-      grid-template: "icon name" 1fr "icon ." auto "icon ." auto "icon ." auto "icon ." auto / 100px 1fr;
+      grid-template: 'icon name' 1fr 'icon .' auto 'icon .' auto 'icon .' auto 'icon .' auto / 100px 1fr;
   gap: 0 20px;
 }
 .stats-report h3 {
@@ -867,16 +868,16 @@ body[game-in-progress="true"] #game-over-stats {
   background-repeat: no-repeat;
   grid-area: icon;
 }
-.stats-report[for="Freddy"] .animatronic-icon {
+.stats-report[for='Freddy'] .animatronic-icon {
   background-image: url('../../assets/animatronics/freddy.png');
 }
-.stats-report[for="Bonnie"] .animatronic-icon {
+.stats-report[for='Bonnie'] .animatronic-icon {
   background-image: url('../../assets/animatronics/bonnie.png');
 }
-.stats-report[for="Chica"] .animatronic-icon {
+.stats-report[for='Chica'] .animatronic-icon {
   background-image: url('../../assets/animatronics/chica.png');
 }
-.stats-report[for="Foxy"] .animatronic-icon {
+.stats-report[for='Foxy'] .animatronic-icon {
   background-image: url('../../assets/animatronics/foxy.png');
 }
 #game-menu {
@@ -1560,7 +1561,7 @@ main {
   main {
     -ms-grid-rows: auto auto;
     -ms-grid-columns: 500px 1fr;
-        grid-template: 'simulator sidebar' 'animatronic-report animatronic-report' / 500px 1fr;
+        grid-template: 'simulator sidebar' auto 'animatronic-report animatronic-report' / 500px 1fr;
   }
   #simulator-container {
     -ms-grid-row: 1;
