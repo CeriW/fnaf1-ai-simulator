@@ -93,7 +93,7 @@ On top of this, additional power is lost depending on what night the player is o
 
 These two numbers are added together to calculate how much power the player loses every 0.1 seconds, divided by 10.
 
-Examples:
+## Examples:
 
 - Base power loss: left door is closed, cameras are on: 2/10 = 0.2
 - Night 1 - nightly debuff power loss - 0.1 / 9.6 = 0.0104166
@@ -101,11 +101,15 @@ Examples:
 - Night 1 total power loss every 0.1 seconds: (0.2 + 0.0104166) / 10 = 0.02104166 (equivalent to 0.2104166% every 1 second)
 - Night 6 total power loss every 0.1 seconds: (0.2 + 0.03) / 10 = 0.023 (equivalent to 0.23% every 1 second)
 
+---
+
 - Base power loss: Both doors closed, both lights on, cameras on: 4/10 = 0.4
 - Night 1 - nightly debuff power loss - 0.1 / 9.6 = 0.0104166
 - Night 6 - nightly debuff power loss - 0.1 / 3 = 0.03 (equivalent to 0.3% every 1 second)
 - Night 1 total power loss every 0.1 seconds: (0.4 + 0.0104166) / 10 = 0.0410416 (equivalent to 0.4166% every 1 second)
 - Night 6 total power loss every 0.1 seconds: (0.4 + 0.03) / 10 = 0.043 (equivalent to 0.43% every 1 second)
+
+---
 
 A game lasts a maximum of 535 seconds.
 
