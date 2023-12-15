@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   border: 2px solid transparent;
+  overflow: hidden;
 }
 
 #static {
@@ -117,4 +118,11 @@ body[cameras-on='false'] {
 .camera-button[camera='7'] {
   top: 19%;
   left: 82%;
+}
+
+@media (max-width: @m-screens) and (min-width: @s-screens) {
+  #camera-display img {
+    max-width: 140%;
+    margin-left: -20%;
+  }
 }
