@@ -1,6 +1,7 @@
-All details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
+The vast majority of details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
+A small amount of this is based on my own play testing.
 
-When using "left" and "right" in this document, this will be from the point of view of the player sat in the security office.
+When using "left" and "right" in this document, this will be from the point of view of the player sat in the security office, who is facing upwards from the perspective of the map.
 
 12AM lasts 90 seconds, while 1AM - 6AM each last 89 seconds each hour, meaning a night lasts 8:55.
 
@@ -239,7 +240,3 @@ Everything else stops. You cannot use lights or cameras, and the doors are open.
 This means it can theoretically be 40+ seconds between the time the power runs out and you actually being jumpscared - long enough that you could pass 6AM in the meantime.
 
 Despite common belief, not moving does not slow down the time you have before Freddy attacks you.
-
-# QUESTIONS
-
-Can more than one animatronic be on the same camera at the same time?
