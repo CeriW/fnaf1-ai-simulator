@@ -1,5 +1,5 @@
 The vast majority of details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
-A small amount of this is based on my own play testing.
+, with a small amount of this is based on my own play testing.
 
 When using "left" and "right" in this document, this will be from the point of view of the player sat in the security office, who is facing upwards from the perspective of the map.
 
