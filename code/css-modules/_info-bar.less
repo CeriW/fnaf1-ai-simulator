@@ -65,3 +65,21 @@ body[game-in-progress='true'] #sound-prompt {
     background: #333 !important;
   }
 }
+
+@media (max-width: @xs-screens) {
+  #info-bar {
+    font-size: 14px;
+  }
+
+  #game-mode-selector {
+    & > span:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  #info-bar {
+    font-size: 12px;
+  }
+}

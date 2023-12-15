@@ -53,6 +53,16 @@ body[game-in-progress='false'] #controls {
     / 100px 1fr;
   gap: 0 20px;
 
+  @media (max-width: @xs-screens) {
+    grid-template:
+      'icon name' 1fr
+      'icon .' auto
+      'icon .' auto
+      'icon .' auto
+      'icon .' auto
+      / 50px 1fr;
+  }
+
   h3 {
     margin: 0 0 10px;
   }

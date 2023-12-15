@@ -45,7 +45,7 @@ button#cameras {
 }
 
 #kitchen-audio-graphic {
-  background: #000 url(../../assets/icons/audio.svg) center right no-repeat;
+  background: #000 url(../../assets/icons/audio.svg) center no-repeat;
   background-size: contain;
   width: 35px;
   height: 35px;
@@ -54,6 +54,12 @@ button#cameras {
   top: 70.5%;
   opacity: 0;
   z-index: 10;
+  pointer-events: none;
+
+  @media (max-width: @xs-screens) {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 #kitchen-audio-graphic[visible] {

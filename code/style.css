@@ -202,7 +202,7 @@
 }
 @media (max-width: 500px) {
   #timer {
-    margin-left: -20px;
+    margin-left: -10px;
   }
 }
 .animatronic {
@@ -466,7 +466,7 @@ button#cameras {
   grid-area: camera-button;
 }
 #kitchen-audio-graphic {
-  background: #000 url(../../assets/icons/audio.svg) center right no-repeat;
+  background: #000 url(../../assets/icons/audio.svg) center no-repeat;
   background-size: contain;
   width: 35px;
   height: 35px;
@@ -475,6 +475,13 @@ button#cameras {
   top: 70.5%;
   opacity: 0;
   z-index: 10;
+  pointer-events: none;
+}
+@media (max-width: 800px) {
+  #kitchen-audio-graphic {
+    width: 25px;
+    height: 25px;
+  }
 }
 #kitchen-audio-graphic[visible] {
   opacity: 1;
@@ -915,6 +922,22 @@ body[game-in-progress='false'] #controls {
       grid-template: 'icon name' 1fr 'icon .' auto 'icon .' auto 'icon .' auto 'icon .' auto / 100px 1fr;
   gap: 0 20px;
 }
+@media (max-width: 800px) {
+  .stats-report {
+    -ms-grid-rows: 1fr auto auto auto auto;
+    -ms-grid-columns: 50px 1fr;
+        grid-template: 'icon name' 1fr 'icon .' auto 'icon .' auto 'icon .' auto 'icon .' auto / 50px 1fr;
+  }
+  .stats-report > .animatronic-icon {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 5;
+    -ms-grid-column: 1;
+  }
+  .stats-report > .animatronic-name {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+  }
+}
 .stats-report h3 {
   margin: 0 0 10px;
 }
@@ -928,6 +951,13 @@ body[game-in-progress='false'] #controls {
   background-size: cover;
   background-repeat: no-repeat;
   grid-area: icon;
+}
+@media (max-width: 800px) {
+  .stats-report > .animatronic-icon {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 5;
+    -ms-grid-column: 1;
+  }
 }
 .stats-report[for='Freddy'] .animatronic-icon {
   background-image: url('../../assets/animatronics/freddy.png');
@@ -1189,6 +1219,19 @@ body[game-in-progress='true'] #sound-prompt {
 }
 #game-mode-selector .slider {
   background: #333 !important;
+}
+@media (max-width: 800px) {
+  #info-bar {
+    font-size: 14px;
+  }
+  #game-mode-selector > span:first-child {
+    margin-left: 0;
+  }
+}
+@media (max-width: 500px) {
+  #info-bar {
+    font-size: 12px;
+  }
 }
 /* Playable game mode ------------------------------------------------------- */
 body[game-mode="playable-game"] .in-game-minutes,
@@ -1562,7 +1605,7 @@ body {
   color: #fff;
   padding: 0;
   margin: 0;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -1785,6 +1828,7 @@ button {
   #sidebar {
         grid-template: '.' '.' -webkit-min-content;
         grid-template: '.' '.' min-content;
+    margin-left: -10px;
   }
 }
 /*# sourceMappingURL=style.css.map */
