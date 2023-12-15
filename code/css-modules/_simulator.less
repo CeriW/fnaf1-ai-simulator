@@ -1,18 +1,19 @@
 #simulator-container {
   display: grid;
   grid-template:
-    '.' auto
+    'simulator-svg' auto
     '.' auto
     '.' auto
     'camera-button' min-content
     / 1fr;
   position: relative;
   grid-area: simulator;
+  gap: 10px;
 }
 
 #simulator {
   position: relative;
-  grid-area: simulator;
+  grid-area: simulator-svg;
 }
 
 #Rooms,
@@ -74,7 +75,7 @@ button#cameras {
 
   #simulator-container {
     grid-template:
-      'simulator simulator' auto
+      'simulator-svg simulator-svg' auto
       'controls camera-button' auto
       / 1fr 1fr;
   }

@@ -410,31 +410,25 @@
   }
 }
 #simulator-container {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 3;
+  -ms-grid-column: 1;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: auto auto auto -webkit-min-content;
-  -ms-grid-rows: auto auto auto min-content;
+  -ms-grid-rows: auto 10px auto 10px auto 10px -webkit-min-content;
+  -ms-grid-rows: auto 10px auto 10px auto 10px min-content;
   -ms-grid-columns: 1fr;
-      grid-template: '.' auto '.' auto '.' auto 'camera-button' -webkit-min-content / 1fr;
-      grid-template: '.' auto '.' auto '.' auto 'camera-button' min-content / 1fr;
+      grid-template: 'simulator-svg' auto '.' auto '.' auto 'camera-button' -webkit-min-content / 1fr;
+      grid-template: 'simulator-svg' auto '.' auto '.' auto 'camera-button' min-content / 1fr;
   position: relative;
   grid-area: simulator;
-}
-main > #simulator-container {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 3;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 1;
+  gap: 10px;
 }
 #simulator {
-  position: relative;
-  grid-area: simulator;
-}
-main > #simulator {
   -ms-grid-row: 1;
-  -ms-grid-row-span: 3;
   -ms-grid-column: 1;
-  -ms-grid-column-span: 1;
+  position: relative;
+  grid-area: simulator-svg;
 }
 #Rooms,
 #Dead_space {
@@ -448,7 +442,7 @@ svg#close-icons {
   pointer-events: none;
 }
 button#cameras {
-  -ms-grid-row: 4;
+  -ms-grid-row: 7;
   -ms-grid-column: 1;
   border: 3px solid #646464;
   background: rgba(100, 100, 100, 0.3) url(../../assets/icons/down-arrow.svg) center right no-repeat;
@@ -490,12 +484,7 @@ button#cameras {
   #simulator-container {
     -ms-grid-rows: auto auto;
     -ms-grid-columns: 1fr 1fr;
-        grid-template: 'simulator simulator' auto 'controls camera-button' auto / 1fr 1fr;
-  }
-  #simulator-container {
-    -ms-grid-row: 1;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 2;
+        grid-template: 'simulator-svg simulator-svg' auto 'controls camera-button' auto / 1fr 1fr;
   }
   #simulator {
     -ms-grid-row: 1;
@@ -921,6 +910,7 @@ body[game-in-progress='false'] #controls {
   -ms-grid-columns: 100px 20px 1fr;
       grid-template: 'icon name' 1fr 'icon .' auto 'icon .' auto 'icon .' auto 'icon .' auto / 100px 1fr;
   gap: 0 20px;
+  margin-bottom: 20px;
 }
 @media (max-width: 800px) {
   .stats-report {
@@ -946,7 +936,7 @@ body[game-in-progress='false'] #controls {
   -ms-grid-row-span: 9;
   -ms-grid-column: 1;
   height: 100px;
-  width: 100px;
+  width: 100%;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -1464,6 +1454,12 @@ body[game-mode="playable-game"] .current-ai-level {
     margin: 0;
     width: 100%;
   }
+  #controls {
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: start;
+    margin-left: -10px;
+  }
 }
 @media (max-width: 500px) {
   #controls {
@@ -1649,21 +1645,14 @@ main {
   main {
     -ms-grid-rows: auto -webkit-min-content;
     -ms-grid-rows: auto min-content;
-    -ms-grid-columns: 600px 1fr;
-        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 600px 1fr;
-        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 600px 1fr;
+    -ms-grid-columns: 500px 1fr;
+        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 500px 1fr;
+        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 500px 1fr;
   }
-  main > #simulator-container {
+  #simulator-container {
     -ms-grid-row: 1;
     -ms-grid-row-span: 2;
     -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
-  }
-  main > #simulator {
-    -ms-grid-row: 1;
-    -ms-grid-row-span: 2;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
   }
   #animatronic-report {
     -ms-grid-row: 2;
@@ -1678,17 +1667,10 @@ main {
         grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 500px 1fr;
         grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 500px 1fr;
   }
-  main > #simulator-container {
+  #simulator-container {
     -ms-grid-row: 1;
     -ms-grid-row-span: 2;
     -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
-  }
-  main > #simulator {
-    -ms-grid-row: 1;
-    -ms-grid-row-span: 2;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
   }
   #animatronic-report {
     -ms-grid-row: 2;
@@ -1698,20 +1680,13 @@ main {
 @media (max-width: 1100px) {
   main {
     -ms-grid-rows: auto auto;
-    -ms-grid-columns: 500px 1fr;
-        grid-template: 'simulator sidebar' auto 'animatronic-report animatronic-report' / 500px 1fr;
+    -ms-grid-columns: 400px 1fr;
+        grid-template: 'simulator sidebar' auto 'animatronic-report animatronic-report' / 400px 1fr;
   }
-  main > #simulator-container {
+  #simulator-container {
     -ms-grid-row: 1;
     -ms-grid-row-span: 1;
     -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
-  }
-  main > #simulator {
-    -ms-grid-row: 1;
-    -ms-grid-row-span: 1;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
   }
   #animatronic-report {
     -ms-grid-row: 2;
@@ -1727,17 +1702,10 @@ main {
   #sidebar {
     gap: 20px 10px;
   }
-  main > #simulator-container {
+  #simulator-container {
     -ms-grid-row: 1;
     -ms-grid-row-span: 1;
     -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
-  }
-  main > #simulator {
-    -ms-grid-row: 1;
-    -ms-grid-row-span: 1;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
   }
   #animatronic-report {
     -ms-grid-row: 3;
@@ -1800,12 +1768,6 @@ button {
   gap: 50px 10px;
   grid-area: sidebar;
 }
-@media (max-width: 800px) {
-  #sidebar {
-    -ms-grid-row: 2;
-    -ms-grid-column: 1;
-  }
-}
 @media (max-width: 1600px) {
   #sidebar {
     -ms-grid-row: 1;
@@ -1822,6 +1784,12 @@ button {
   #sidebar {
     -ms-grid-row: 1;
     -ms-grid-column: 2;
+  }
+}
+@media (max-width: 800px) {
+  #sidebar {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
   }
 }
 @media (max-width: 1100px) {
