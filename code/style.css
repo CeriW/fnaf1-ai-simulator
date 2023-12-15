@@ -107,11 +107,20 @@
           align-items: center;
   margin-bottom: 5px;
 }
+#power-time {
+  margin-bottom: 20px;
+}
 #power-time h3 {
   margin: 0;
 }
 #power-time div {
   margin-top: 3px;
+}
+@media (max-width: 1300px) {
+  #power-time {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+  }
 }
 /* Timer -------------------------------------------------------------------- */
 #in-game-time,
@@ -147,6 +156,13 @@
       -ms-flex-align: end;
           align-items: end;
 }
+@media (max-width: 1600px) {
+  #in-game-time {
+    -webkit-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+            transform: scale(0.8);
+  }
+}
 #in-game-time > span {
   line-height: 0.6;
   text-align: right;
@@ -168,9 +184,10 @@
 }
 /* REAL TIME ---------------------------------------------------------------- */
 #supplementary-time-info {
-  padding: 10px;
-  margin-top: 20px;
-  min-width: 175px;
+  padding: 10px 10px 10px 20px;
+}
+#frames {
+  font-size: 0.8em;
 }
 #real-time {
   font-size: 2em;
@@ -186,14 +203,14 @@
   pointer-events: none;
   z-index: 3;
 }
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   .animatronic {
     -webkit-transform: scale(0.9) translate(-10%, -10%);
         -ms-transform: scale(0.9) translate(-10%, -10%);
             transform: scale(0.9) translate(-10%, -10%);
   }
 }
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
   .animatronic {
     -webkit-transform: scale(0.8) translate(-20%, -20%);
         -ms-transform: scale(0.8) translate(-20%, -20%);
@@ -380,6 +397,9 @@
   }
 }
 #simulator-container {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 3;
+  -ms-grid-column: 1;
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto auto auto -webkit-min-content;
@@ -388,6 +408,7 @@
       grid-template: '.' auto '.' auto '.' auto 'camera-button' -webkit-min-content / 1fr;
       grid-template: '.' auto '.' auto '.' auto 'camera-button' min-content / 1fr;
   position: relative;
+  grid-area: simulator;
 }
 #simulator {
   position: relative;
@@ -444,27 +465,27 @@ button#cameras {
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto auto;
-      grid-template: "time" "description" "extra-info";
+      grid-template: 'time' 'description' 'extra-info';
   margin-bottom: 10px;
 }
-.report-item[type="bad"] .report-description {
+.report-item[type='bad'] .report-description {
   color: #f60;
 }
-.report-item[type="good"] .report-description {
+.report-item[type='good'] .report-description {
   color: green;
 }
-.report-item[type="warning"] .report-description {
+.report-item[type='warning'] .report-description {
   color: red;
 }
-.report-item[type="alert"] .report-description,
-.report-item[type="death-zone"] .report-description {
+.report-item[type='alert'] .report-description,
+.report-item[type='death-zone'] .report-description {
   color: red;
   padding-left: 30px;
   background: url('../../assets/icons/alert.svg') left top no-repeat;
   background-size: 25px;
   text-transform: uppercase;
 }
-.report-item[type="death-zone"] .report-description {
+.report-item[type='death-zone'] .report-description {
   background-image: url('../../assets/icons/skull.svg');
   background-size: 18px;
   background-position: left 2px;
@@ -489,31 +510,25 @@ button#cameras {
 }
 /* General panel ------------------------------------------------------------ */
 #animatronic-report {
-  -ms-grid-row: 2;
-  -ms-grid-column: 2;
-  -ms-grid-column-span: 2;
+  -ms-grid-row: 3;
+  -ms-grid-column: 3;
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto 10px auto;
   -ms-grid-columns: 1fr 10px 1fr;
-      grid-template: ". ." auto ". ." auto / 1fr 1fr;
+      grid-template: '. .' auto '. .' auto / 1fr 1fr;
   gap: 10px;
-  grid-area: reports;
-}
-#sidebar > #animatronic-report {
-  -ms-grid-row: 3;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 3;
+  grid-area: animatronic-report;
 }
 .animatronic-report {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: -webkit-min-content 150px -webkit-min-content;
-  -ms-grid-rows: min-content 150px min-content;
+  -ms-grid-rows: -webkit-min-content 1fr -webkit-min-content;
+  -ms-grid-rows: min-content 1fr min-content;
   -ms-grid-columns: 60px 1fr -webkit-max-content;
   -ms-grid-columns: 60px 1fr max-content;
-      grid-template: "icon name starting-ai-level" -webkit-min-content "icon reports reports" 150px "icon current-ai-level current-ai-level" -webkit-min-content / 60px 1fr -webkit-max-content;
-      grid-template: "icon name starting-ai-level" min-content "icon reports reports" 150px "icon current-ai-level current-ai-level" min-content / 60px 1fr max-content;
+      grid-template: 'icon name starting-ai-level' -webkit-min-content 'icon reports reports' 1fr 'icon current-ai-level current-ai-level' -webkit-min-content / 60px 1fr -webkit-max-content;
+      grid-template: 'icon name starting-ai-level' min-content 'icon reports reports' 1fr 'icon current-ai-level current-ai-level' min-content / 60px 1fr max-content;
   border: 2px solid;
 }
 .animatronic-icon {
@@ -539,11 +554,7 @@ button#cameras {
   -ms-grid-column: 2;
   -ms-grid-column-span: 2;
   grid-area: reports;
-}
-#sidebar > .report-item-container {
-  -ms-grid-row: 3;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 3;
+  height: 150px;
 }
 .animatronic-name {
   -ms-grid-row: 1;
@@ -583,49 +594,49 @@ button#cameras {
 .current-ai-level {
   padding-left: 10px;
 }
-.animatronic-report[for="Bonnie"] {
+.animatronic-report[for='Bonnie'] {
   border-color: rebeccapurple;
 }
-.animatronic-report[for="Bonnie"] .animatronic-icon {
+.animatronic-report[for='Bonnie'] .animatronic-icon {
   background: url('../../assets/animatronics/bonnie.png') center / cover;
 }
-.animatronic-report[for="Bonnie"] .animatronic-name,
-.animatronic-report[for="Bonnie"] .starting-ai-level,
-.animatronic-report[for="Bonnie"] .current-ai-level {
+.animatronic-report[for='Bonnie'] .animatronic-name,
+.animatronic-report[for='Bonnie'] .starting-ai-level,
+.animatronic-report[for='Bonnie'] .current-ai-level {
   background: rebeccapurple;
 }
-.animatronic-report[for="Chica"] {
+.animatronic-report[for='Chica'] {
   border-color: yellow;
 }
-.animatronic-report[for="Chica"] .animatronic-icon {
+.animatronic-report[for='Chica'] .animatronic-icon {
   background: url('../../assets/animatronics/chica.png') center / cover;
 }
-.animatronic-report[for="Chica"] .animatronic-name,
-.animatronic-report[for="Chica"] .starting-ai-level,
-.animatronic-report[for="Chica"] .current-ai-level {
+.animatronic-report[for='Chica'] .animatronic-name,
+.animatronic-report[for='Chica'] .starting-ai-level,
+.animatronic-report[for='Chica'] .current-ai-level {
   background: yellow;
   color: black;
 }
-.animatronic-report[for="Foxy"] {
+.animatronic-report[for='Foxy'] {
   border-color: red;
 }
-.animatronic-report[for="Foxy"] .animatronic-icon {
+.animatronic-report[for='Foxy'] .animatronic-icon {
   background: url('../../assets/animatronics/foxy.png') center / cover;
 }
-.animatronic-report[for="Foxy"] .animatronic-name,
-.animatronic-report[for="Foxy"] .starting-ai-level,
-.animatronic-report[for="Foxy"] .current-ai-level {
+.animatronic-report[for='Foxy'] .animatronic-name,
+.animatronic-report[for='Foxy'] .starting-ai-level,
+.animatronic-report[for='Foxy'] .current-ai-level {
   background: red;
 }
-.animatronic-report[for="Freddy"] {
+.animatronic-report[for='Freddy'] {
   border-color: brown;
 }
-.animatronic-report[for="Freddy"] .animatronic-icon {
+.animatronic-report[for='Freddy'] .animatronic-icon {
   background: url('../../assets/animatronics/freddy.png') center / cover;
 }
-.animatronic-report[for="Freddy"] .animatronic-name,
-.animatronic-report[for="Freddy"] .starting-ai-level,
-.animatronic-report[for="Freddy"] .current-ai-level {
+.animatronic-report[for='Freddy'] .animatronic-name,
+.animatronic-report[for='Freddy'] .starting-ai-level,
+.animatronic-report[for='Freddy'] .current-ai-level {
   background: brown;
 }
 #camera-display {
@@ -890,7 +901,7 @@ body[game-in-progress="true"] #game-over-stats {
   font-size: 4em;
   margin: 0;
 }
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   #game-menu h1 {
     font-size: 3em;
     margin-bottom: 30px;
@@ -932,7 +943,7 @@ body[game-in-progress="true"] #game-over-stats {
 #game-menu button#start-game:hover {
   border-color: #7fb000;
 }
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   #game-menu button.simulate-night,
   #game-menu button#start-game {
     font-size: 1.5em;
@@ -960,7 +971,7 @@ body[game-in-progress="true"] #game-over-stats {
   display: flex;
   gap: 20px;
 }
-@media (max-width: 780px) {
+@media (max-width: 1100px) {
   #custom-night-menu {
     display: -ms-grid;
     display: grid;
@@ -1346,11 +1357,11 @@ body[game-mode="playable-game"] .current-ai-level {
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto;
-  -ms-grid-columns: -webkit-min-content 40px 1fr;
-  -ms-grid-columns: min-content 40px 1fr;
+  -ms-grid-columns: -webkit-min-content 10px 1fr;
+  -ms-grid-columns: min-content 10px 1fr;
       grid-template: 'in-game-time power' / -webkit-min-content 1fr;
       grid-template: 'in-game-time power' / min-content 1fr;
-  gap: 40px;
+  gap: 10px;
 }
 #in-game-time {
   -ms-grid-row: 1;
@@ -1437,7 +1448,7 @@ body[game-mode="playable-game"] .current-ai-level {
 .ai-adjuster input::-webkit-inner-spin-button {
   display: none;
 }
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
   .ai-adjuster input {
     font-size: 2em;
     width: 75px;
@@ -1496,25 +1507,70 @@ body:not([game-in-progress]) main {
   display: none;
 }
 main {
+  padding: 20px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   width: 100%;
+  gap: 40px 10px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: auto;
-  -ms-grid-columns: 750px 1fr;
-      grid-template: '. .' auto / 750px 1fr;
+  -ms-grid-rows: auto 40px -webkit-min-content;
+  -ms-grid-rows: auto 40px min-content;
+  -ms-grid-columns: 750px 10px 1fr;
+      grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 750px 1fr;
+      grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 750px 1fr;
 }
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   main {
-    -ms-grid-rows: auto;
+    -ms-grid-rows: auto -webkit-min-content;
+    -ms-grid-rows: auto min-content;
     -ms-grid-columns: 600px 1fr;
-        grid-template: '. .' auto / 600px 1fr;
+        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 600px 1fr;
+        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 600px 1fr;
+  }
+  #simulator-container {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 2;
+    -ms-grid-column: 1;
+  }
+  #animatronic-report {
+    -ms-grid-row: 2;
+    -ms-grid-column: 2;
   }
 }
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
   main {
-    -ms-grid-rows: auto;
+    -ms-grid-rows: auto -webkit-min-content;
+    -ms-grid-rows: auto min-content;
     -ms-grid-columns: 500px 1fr;
-        grid-template: '. .' auto / 500px 1fr;
+        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 500px 1fr;
+        grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 500px 1fr;
+  }
+  #simulator-container {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 2;
+    -ms-grid-column: 1;
+  }
+  #animatronic-report {
+    -ms-grid-row: 2;
+    -ms-grid-column: 2;
+  }
+}
+@media (max-width: 1100px) {
+  main {
+    -ms-grid-rows: auto auto;
+    -ms-grid-columns: 500px 1fr;
+        grid-template: 'simulator sidebar' 'animatronic-report animatronic-report' / 500px 1fr;
+  }
+  #simulator-container {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 1;
+    -ms-grid-column: 1;
+  }
+  #animatronic-report {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 2;
   }
 }
 details {
@@ -1560,13 +1616,40 @@ button {
   stroke: #333333;
 }
 #sidebar {
+  -ms-grid-row: 1;
+  -ms-grid-column: 3;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: -webkit-min-content 50px -webkit-min-content;
-  -ms-grid-rows: min-content 50px min-content;
+  -ms-grid-rows: -webkit-min-content;
+  -ms-grid-rows: min-content;
   -ms-grid-columns: 1fr 10px 1fr;
-      grid-template: '. .' -webkit-min-content ' reports reports' -webkit-min-content / 1fr 1fr;
-      grid-template: '. .' min-content ' reports reports' min-content / 1fr 1fr;
+      grid-template: '. .' -webkit-min-content / 1fr 1fr;
+      grid-template: '. .' min-content / 1fr 1fr;
   gap: 50px 10px;
+  grid-area: sidebar;
+}
+@media (max-width: 1600px) {
+  #sidebar {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+  }
+}
+@media (max-width: 1300px) {
+  #sidebar {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+  }
+}
+@media (max-width: 1100px) {
+  #sidebar {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+  }
+}
+@media (max-width: 1100px) {
+  #sidebar {
+        grid-template: '.' '.' -webkit-min-content;
+        grid-template: '.' '.' min-content;
+  }
 }
 /*# sourceMappingURL=style.css.map */

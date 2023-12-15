@@ -266,7 +266,7 @@ const generateAnimatronics = () => {
       <div class="current-ai-level">Current AI level: <span>${animatronic.currentAIlevel}</span></div>
       <div class="report-item-container"></div>
     `;
-    sidebar.querySelector('#animatronic-report')!.appendChild(animatronicReport);
+    document.querySelector('#animatronic-report')!.appendChild(animatronicReport);
     if (animatronic === Freddy) {
       animatronicReport.querySelector('.animatronic-icon')?.addEventListener('click', () => {
         playAudio('freddy-nose');

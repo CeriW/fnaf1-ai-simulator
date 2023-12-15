@@ -218,7 +218,7 @@ var generateAnimatronics = function generateAnimatronics() {
     animatronicReport.classList.add('animatronic-report');
     animatronicReport.setAttribute('for', animatronic.name);
     animatronicReport.innerHTML = "\n      <div class=\"animatronic-icon\"></div>\n      <div class=\"animatronic-name\">".concat(animatronic.name, "</div>\n      <div class=\"starting-ai-level\">Starting AI:<span>").concat(animatronic.currentAIlevel, "</span></div>\n      <div class=\"current-ai-level\">Current AI level: <span>").concat(animatronic.currentAIlevel, "</span></div>\n      <div class=\"report-item-container\"></div>\n    ");
-    sidebar.querySelector('#animatronic-report').appendChild(animatronicReport);
+    document.querySelector('#animatronic-report').appendChild(animatronicReport);
     if (animatronic === Freddy) {
       var _animatronicReport$qu;
       (_animatronicReport$qu = animatronicReport.querySelector('.animatronic-icon')) === null || _animatronicReport$qu === void 0 || _animatronicReport$qu.addEventListener('click', function () {

@@ -25,6 +25,12 @@
   align-items: end;
 }
 
+@media (max-width: @l-screens) {
+  #in-game-time {
+    transform: scale(0.8);
+  }
+}
+
 #in-game-time > span {
   line-height: 0.6;
   text-align: right;
@@ -47,10 +53,13 @@
 /* REAL TIME ---------------------------------------------------------------- */
 
 #supplementary-time-info {
-  // border: 1px solid @white;
-  padding: 10px;
-  margin-top: 20px;
-  min-width: 175px;
+  padding: 10px 10px 10px 20px;
+  // margin-top: 20px;
+  // min-width: 175px;
+}
+
+#frames {
+  font-size: 0.8em;
 }
 
 #real-time {

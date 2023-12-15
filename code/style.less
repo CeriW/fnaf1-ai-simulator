@@ -2,9 +2,9 @@
 @white: #fff;
 @green: #7fb000;
 
-@l-screens: 1400px;
-@m-screens: 1000px;
-@s-screens: 780px;
+@l-screens: 1600px;
+@m-screens: 1300px;
+@s-screens: 1100px;
 @xs-screens: 500px;
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
@@ -70,7 +70,6 @@
 body {
   background: @black;
   color: @white;
-  // padding: 30px;
   padding: 0;
   margin: 0;
   width: 100vw;
@@ -97,17 +96,22 @@ body:not([game-in-progress]) {
 }
 
 main {
+  padding: 20px;
+  box-sizing: border-box;
   width: 100%;
+  gap: 40px 10px;
   display: grid;
   grid-template:
-    '. .' auto
+    'simulator sidebar' auto
+    'simulator animatronic-report' min-content
     / 750px 1fr;
 }
 
 @media (max-width: @l-screens) {
   main {
     grid-template:
-      '. .' auto
+      'simulator sidebar' auto
+      'simulator animatronic-report' min-content
       / 600px 1fr;
   }
 }
@@ -115,7 +119,17 @@ main {
 @media (max-width: @m-screens) {
   main {
     grid-template:
-      '. .' auto
+      'simulator sidebar' auto
+      'simulator animatronic-report' min-content
+      / 500px 1fr;
+  }
+}
+
+@media (max-width: @s-screens) {
+  main {
+    grid-template:
+      'simulator sidebar'
+      'animatronic-report animatronic-report'
       / 500px 1fr;
   }
 }
@@ -179,7 +193,14 @@ button {
   display: grid;
   grid-template:
     '. .' min-content
-    ' reports reports' min-content
+    // ' reports reports' min-content
     / 1fr 1fr;
   gap: 50px 10px;
+  grid-area: sidebar;
+
+  @media (max-width: @s-screens) {
+    grid-template:
+      '.'
+      '.' min-content;
+  }
 }
