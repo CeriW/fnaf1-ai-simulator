@@ -1,8 +1,8 @@
 "use strict";
 
 // TESTING VARIABLES
-var nightToSimulate = 6;
-var secondLength = 1; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
+var nightToSimulate = 1;
+var secondLength = 1000; // How long we want a real life 'second' to be in milliseconds. Used to speed up testing.
 var defaultCamera = '1A';
 var autoStartGame = false;
 var Freddy = {
