@@ -279,24 +279,24 @@
 /* Individual animatronic styling ------------------------------------------- */
 #Bonnie {
   background-color: purple;
-  background-image: url('../assets/Bonnie.svg');
+  background-image: url('assets/Bonnie.svg');
   background-size: cover;
   background-position: center bottom;
 }
 #Chica {
   background-color: yellow;
-  background-image: url('../assets/Chica.svg');
+  background-image: url('assets/Chica.svg');
   background-size: 80%;
   background-position: center top;
 }
 #Freddy {
   background-color: brown;
-  background-image: url('../assets/Freddy.svg');
+  background-image: url('assets/Freddy.svg');
   background-size: cover;
 }
 #Foxy {
   background-color: red;
-  background-image: url('../assets/Foxy.svg');
+  background-image: url('assets/Foxy.svg');
   background-size: 120%;
 }
 #Foxy[position='1C']:before,
@@ -370,7 +370,7 @@ svg#close-icons {
 }
 button#cameras {
   border: 3px solid #646464;
-  background: rgba(100, 100, 100, 0.3) url(../assets/icons/down-arrow.svg) center right no-repeat;
+  background: rgba(100, 100, 100, 0.3) url(assets/icons/down-arrow.svg) center right no-repeat;
   background-size: contain;
   padding: 15px;
   border-radius: 5px;
@@ -384,7 +384,7 @@ button#cameras {
   grid-area: camera-button;
 }
 #kitchen-audio-graphic {
-  background: #000 url(../assets/icons/audio.svg) center no-repeat;
+  background: #000 url(assets/icons/audio.svg) center no-repeat;
   background-size: contain;
   width: 35px;
   height: 35px;
@@ -437,12 +437,12 @@ button#cameras {
 .report-item[type='death-zone'] .report-description {
   color: red;
   padding-left: 30px;
-  background: url('../assets/icons/alert.svg') left top no-repeat;
+  background: url('assets/icons/alert.svg') left top no-repeat;
   background-size: 25px;
   text-transform: uppercase;
 }
 .report-item[type='death-zone'] .report-description {
-  background-image: url('../assets/icons/skull.svg');
+  background-image: url('assets/icons/skull.svg');
   background-size: 18px;
   background-position: left 2px;
 }
@@ -514,7 +514,7 @@ button#cameras {
   border-color: rebeccapurple;
 }
 .animatronic-report[for='Bonnie'] .animatronic-icon {
-  background: url('../assets/animatronics/bonnie.png') center / cover;
+  background: url('assets/animatronics/bonnie.png') center / cover;
 }
 .animatronic-report[for='Bonnie'] .animatronic-name,
 .animatronic-report[for='Bonnie'] .starting-ai-level,
@@ -525,7 +525,7 @@ button#cameras {
   border-color: yellow;
 }
 .animatronic-report[for='Chica'] .animatronic-icon {
-  background: url('../assets/animatronics/chica.png') center / cover;
+  background: url('assets/animatronics/chica.png') center / cover;
 }
 .animatronic-report[for='Chica'] .animatronic-name,
 .animatronic-report[for='Chica'] .starting-ai-level,
@@ -537,7 +537,7 @@ button#cameras {
   border-color: red;
 }
 .animatronic-report[for='Foxy'] .animatronic-icon {
-  background: url('../assets/animatronics/foxy.png') center / cover;
+  background: url('assets/animatronics/foxy.png') center / cover;
 }
 .animatronic-report[for='Foxy'] .animatronic-name,
 .animatronic-report[for='Foxy'] .starting-ai-level,
@@ -548,7 +548,7 @@ button#cameras {
   border-color: brown;
 }
 .animatronic-report[for='Freddy'] .animatronic-icon {
-  background: url('../assets/animatronics/freddy.png') center / cover;
+  background: url('assets/animatronics/freddy.png') center / cover;
 }
 .animatronic-report[for='Freddy'] .animatronic-name,
 .animatronic-report[for='Freddy'] .starting-ai-level,
@@ -571,7 +571,7 @@ button#cameras {
   height: 100%;
   z-index: 2;
   opacity: 0;
-  background: url('../assets/cameras/static.gif');
+  background: url('assets/cameras/static.gif');
   background-size: cover;
   transition: opacity 0.2s;
 }
@@ -778,19 +778,19 @@ body[game-in-progress='false'] #controls {
   grid-area: icon;
 }
 .stats-report[for='user'] .animatronic-icon {
-  background-image: url('../assets/icons/player.png');
+  background-image: url('assets/icons/player.png');
 }
 .stats-report[for='Freddy'] .animatronic-icon {
-  background-image: url('../assets/animatronics/freddy.png');
+  background-image: url('assets/animatronics/freddy.png');
 }
 .stats-report[for='Bonnie'] .animatronic-icon {
-  background-image: url('../assets/animatronics/bonnie.png');
+  background-image: url('assets/animatronics/bonnie.png');
 }
 .stats-report[for='Chica'] .animatronic-icon {
-  background-image: url('../assets/animatronics/chica.png');
+  background-image: url('assets/animatronics/chica.png');
 }
 .stats-report[for='Foxy'] .animatronic-icon {
-  background-image: url('../assets/animatronics/foxy.png');
+  background-image: url('assets/animatronics/foxy.png');
 }
 #game-menu {
   display: flex;
