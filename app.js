@@ -80,11 +80,11 @@ var cameraNames = {
   '7': 'Restrooms'
 };
 var paths = {
-  assets: '../assets',
-  cameras: '../assets/cameras',
-  animatronics: '../assets/animatronics',
-  office: '../assets/office',
-  audio: '../assets/sounds'
+  assets: 'assets',
+  cameras: 'assets/cameras',
+  animatronics: 'assets/animatronics',
+  office: 'assets/office',
+  audio: 'assets/sounds'
 };
 
 /* Time related variables */
