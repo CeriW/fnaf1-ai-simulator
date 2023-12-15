@@ -3,7 +3,11 @@
 #player-info {
   display: grid;
   grid-template: 'in-game-time power' / min-content 1fr;
-  gap: 10px;
+  gap: 10px 60px;
+
+  @media (max-width: @l-screens) {
+    gap: 10px;
+  }
 }
 
 #in-game-time {

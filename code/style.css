@@ -1486,11 +1486,16 @@ body[game-mode="playable-game"] .current-ai-level {
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto;
-  -ms-grid-columns: -webkit-min-content 10px 1fr;
-  -ms-grid-columns: min-content 10px 1fr;
+  -ms-grid-columns: -webkit-min-content 60px 1fr;
+  -ms-grid-columns: min-content 60px 1fr;
       grid-template: 'in-game-time power' / -webkit-min-content 1fr;
       grid-template: 'in-game-time power' / min-content 1fr;
-  gap: 10px;
+  gap: 10px 60px;
+}
+@media (max-width: 1600px) {
+  #player-info {
+    gap: 10px;
+  }
 }
 #in-game-time {
   -ms-grid-row: 1;
@@ -1645,9 +1650,9 @@ main {
   display: grid;
   -ms-grid-rows: auto 40px -webkit-min-content;
   -ms-grid-rows: auto 40px min-content;
-  -ms-grid-columns: 750px 10px 1fr;
-      grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 750px 1fr;
-      grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 750px 1fr;
+  -ms-grid-columns: 700px 10px 1fr;
+      grid-template: 'simulator sidebar' auto 'simulator animatronic-report' -webkit-min-content / 700px 1fr;
+      grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 700px 1fr;
 }
 @media (max-width: 1600px) {
   main {
