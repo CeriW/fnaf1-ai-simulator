@@ -123,7 +123,7 @@ Always shows up at the **right** door. You can prevent her from entering by clos
 
 Each time Chica gets a "movement opportunity" she will randomly chose an adjacent room on the right side of the building.
 
-Once Chica is outside your door, he will attempt to get inside the office at her next successful movement opportunity.
+Once Chica is outside your door, she will attempt to get inside the office at her next successful movement opportunity.
 
 - If the door is closed, she will return to the dining room.
 - If the door is not closed, she will enter the office, the door will be disabled and you will be jumpscared the next time you bring the cameras down. You cannot cheat by keeping the cameras up - after 30 seconds you will be jumpscared regardless.
