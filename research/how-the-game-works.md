@@ -1,6 +1,8 @@
 The vast majority of details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
 , with a small amount based on my own play testing.
 
+"Five Nights at Freddy's" is a popular indie horror game developed created by Scott Cawthon in 2014. The game is set in a fictional pizza restaurant called "Freddy Fazbear's Pizza", where the player takes on the role of a night security guard. The main selling point of the pizzeria is a group of 4 animatronic characters (Freddy, Chica, Bonnie and Foxy) who perform on stage during the day. Unfortunately due to supernatural forces these animatronics are intent on killing any security guards on staff at night. As the security guard, the player must monitor security cameras, conserve limited power, and close security doors to survive five nights and avoid being attacked by the animatronics.
+
 12AM lasts 90 seconds, while 1AM - 6AM each last 89 seconds each hour, meaning a night lasts 8:55.
 
 # How AI levels work
