@@ -1183,7 +1183,7 @@ body[game-mode="playable-game"] .current-ai-level {
 #player-info {
   display: grid;
   grid-template: 'in-game-time power' / min-content 1fr;
-  gap: 10px 60px;
+  gap: 10px 40px;
 }
 @media (max-width: 1600px) {
   #player-info {
