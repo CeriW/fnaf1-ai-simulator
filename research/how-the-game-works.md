@@ -128,7 +128,7 @@ Once Chica is outside your door, she will attempt to get inside the office at he
 - If the door is closed, she will return to the dining room.
 - If the door is not closed, she will enter the office, the door will be disabled and you will be jumpscared the next time you bring the cameras down. You cannot cheat by keeping the cameras up - after 30 seconds you will be jumpscared regardless.
 
-In a way this makes AI level 20 easier than the AI levels leading up to it. If your door is closed you are guaranteed that they will move back to the dining room on their next movement opportunity. At lower levels, they can repeatedly fail, meaning they stay outside your office, forcing you to drain the power by keeping your door closed.
+In a way this makes AI level 20 easier than the AI levels leading up to it. If your door is closed you are guaranteed that she will move back to the dining room on their next movement opportunity. At lower levels, she can repeatedly fail, meaning they stay outside your office, forcing you to drain the power by keeping your door closed.
 
 ## Bonnie
 
@@ -141,7 +141,7 @@ Once Bonnie is outside your door, he will attempt to get inside the office at hi
 - If the door is closed, he will return to the dining room.
 - If the door is not closed, he will enter the office, the door will be disabled and you will be jumpscared the next time you bring the cameras down. You cannot cheat by keeping the cameras up - after 30 seconds you will be jumpscared regardless.
 
-In a way this makes AI level 20 easier than the AI levels leading up to it. If your door is closed you are guaranteed that they will move back to the dining room on their next movement opportunity. At lower levels, they can repeatedly fail, meaning they stay outside your office, forcing you to drain the power by keeping your door closed.
+In a way this makes AI level 20 easier than the AI levels leading up to it. If your door is closed you are guaranteed that he will move back to the dining room on their next movement opportunity. At lower levels, he can repeatedly fail, meaning they stay outside your office, forcing you to drain the power by keeping your door closed.
 
 ## Freddy
 
