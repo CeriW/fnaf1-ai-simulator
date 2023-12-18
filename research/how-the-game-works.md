@@ -175,7 +175,7 @@ This effectively means that he waits this amount of time at each AI level before
 
 If he is already in a countdown and you put the cameras back up this countdown will not be affected - he will take it as soon as you put the cameras down.
 
-Freddy is unable to leave the stage while Bonnie and/or Chica are still there. This means that even if you set the AI levels to 20/0/0/0, Freddy wouldn't be able to leave the stage until just after 3AM - when Bonnie and Chica have both had AI boosts and can leave the stage.
+Freddy is unable to leave the stage while Bonnie and/or Chica are still there. This means that even if you set the AI levels to 20/0/0/0, Freddy wouldn't be able to leave the stage until some time after 3AM - when Bonnie and Chica have both had AI boosts and can leave the stage.
 
 ### Freddy's path
 
