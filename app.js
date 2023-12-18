@@ -1482,14 +1482,12 @@ var playAudio = function playAudio(audio) {
     document.body.appendChild(myAudio);
     myAudio.play();
     myAudio.onended = function () {
+      var _document$querySelect7;
       document.body.removeChild(myAudio);
+      (_document$querySelect7 = document.querySelector('button#mute-call')) === null || _document$querySelect7 === void 0 || _document$querySelect7.remove();
       if (audio === 'oven') {
-        var _document$querySelect7;
-        (_document$querySelect7 = document.querySelector('#kitchen-audio-graphic')) === null || _document$querySelect7 === void 0 || _document$querySelect7.removeAttribute('visible');
-      }
-      if (audio === 'phone-guy') {
         var _document$querySelect8;
-        (_document$querySelect8 = document.querySelector('button#mute-call')) === null || _document$querySelect8 === void 0 || _document$querySelect8.remove();
+        (_document$querySelect8 = document.querySelector('#kitchen-audio-graphic')) === null || _document$querySelect8 === void 0 || _document$querySelect8.removeAttribute('visible');
       }
     };
   }
@@ -1510,7 +1508,9 @@ var killAudio = function killAudio() {
   var audio = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
   var matchingAudio = audio ? document.querySelectorAll("audio.".concat(audio)) : document.querySelectorAll("audio");
   matchingAudio.forEach(function (match) {
+    var _document$querySelect9;
     match.remove();
+    (_document$querySelect9 = document.querySelector('button#mute-call')) === null || _document$querySelect9 === void 0 || _document$querySelect9.remove();
   });
 };
 
@@ -1634,7 +1634,7 @@ var startGame = function startGame() {
   window.addEventListener('cameras-off', pauseFoxy);
 };
 var initialiseMenu = function initialiseMenu() {
-  var _document$querySelect9, _document$querySelect10, _gameMenu$querySelect;
+  var _document$querySelect10, _document$querySelect11, _gameMenu$querySelect;
   var gameMenu = document.querySelector('#game-menu');
   var nightMenu = gameMenu.querySelector('#night-selector-menu');
   var customNightMenu = gameMenu.querySelector('#custom-night-menu');
@@ -1720,7 +1720,7 @@ var initialiseMenu = function initialiseMenu() {
   }
 
   // Make the audio toggle work
-  (_document$querySelect9 = document.querySelector('#audio-toggle input')) === null || _document$querySelect9 === void 0 || _document$querySelect9.addEventListener('change', function () {
+  (_document$querySelect10 = document.querySelector('#audio-toggle input')) === null || _document$querySelect10 === void 0 || _document$querySelect10.addEventListener('change', function () {
     user.audioOn = !user.audioOn;
 
     // Play the game menu music if the game hasn't started yet
@@ -1737,7 +1737,7 @@ var initialiseMenu = function initialiseMenu() {
   });
 
   // Make the game mode selector work
-  (_document$querySelect10 = document.querySelector('#game-mode input')) === null || _document$querySelect10 === void 0 || _document$querySelect10.addEventListener('click', function () {
+  (_document$querySelect11 = document.querySelector('#game-mode input')) === null || _document$querySelect11 === void 0 || _document$querySelect11.addEventListener('click', function () {
     user.gameMode = !user.gameMode;
     var gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
     document.body.setAttribute('game-mode', gameModeName);

@@ -1859,13 +1859,10 @@ const playAudio = (audio: AvailableAudio) => {
     myAudio.play();
     myAudio.onended = () => {
       document.body.removeChild(myAudio);
+      document.querySelector('button#mute-call')?.remove();
 
       if (audio === 'oven') {
         document.querySelector('#kitchen-audio-graphic')?.removeAttribute('visible');
-      }
-
-      if (audio === 'phone-guy') {
-        document.querySelector('button#mute-call')?.remove();
       }
     };
   }
@@ -1888,6 +1885,7 @@ const killAudio = (audio: AvailableAudio | null = null) => {
   const matchingAudio = audio ? document.querySelectorAll(`audio.${audio}`) : document.querySelectorAll(`audio`);
   matchingAudio.forEach((match) => {
     match.remove();
+    document.querySelector('button#mute-call')?.remove();
   });
 };
 
