@@ -1586,7 +1586,9 @@ var startGame = function startGame() {
   playAudioAmbience();
 
   // Phone guy stuff
-  playAudio('phone-guy');
+  if (nightToSimulate !== 7) {
+    playAudio('phone-guy');
+  }
   if (user.audioOn) {
     var muteButton = document.createElement('button');
     muteButton.id = 'mute-button';

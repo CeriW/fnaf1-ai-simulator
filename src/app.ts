@@ -1974,7 +1974,9 @@ const startGame = () => {
   playAudioAmbience();
 
   // Phone guy stuff
-  playAudio('phone-guy');
+  if (nightToSimulate !== 7) {
+    playAudio('phone-guy');
+  }
 
   if (user.audioOn) {
     let muteButton = document.createElement('button');
