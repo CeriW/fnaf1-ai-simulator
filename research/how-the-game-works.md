@@ -1,8 +1,6 @@
 The vast majority of details in this document are taken from this Youtube video by Tech Rules: https://www.youtube.com/watch?v=ujg0Y5IziiY
 , with a small amount based on my own play testing.
 
-When using "left" and "right" in this document, this will be from the point of view of the player sat in the security office, who is facing upwards from the perspective of the map.
-
 12AM lasts 90 seconds, while 1AM - 6AM each last 89 seconds each hour, meaning a night lasts 8:55.
 
 # How AI levels work
