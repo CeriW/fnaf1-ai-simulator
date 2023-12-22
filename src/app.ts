@@ -1974,6 +1974,8 @@ const startGame = () => {
   // Phone guy stuff
   if (nightToSimulate !== 7) {
     playAudio('phone-guy');
+  } else {
+    document.querySelector('button#mute-call')?.remove();
   }
 
   if (user.audioOn) {

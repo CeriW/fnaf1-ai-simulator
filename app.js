@@ -1588,6 +1588,9 @@ var startGame = function startGame() {
   // Phone guy stuff
   if (nightToSimulate !== 7) {
     playAudio('phone-guy');
+  } else {
+    var _document$querySelect10;
+    (_document$querySelect10 = document.querySelector('button#mute-call')) === null || _document$querySelect10 === void 0 || _document$querySelect10.remove();
   }
   if (user.audioOn) {
     var muteButton = document.createElement('button');
@@ -1634,7 +1637,7 @@ var startGame = function startGame() {
   window.addEventListener('cameras-off', pauseFoxy);
 };
 var initialiseMenu = function initialiseMenu() {
-  var _document$querySelect10, _document$querySelect11, _gameMenu$querySelect;
+  var _document$querySelect11, _document$querySelect12, _gameMenu$querySelect;
   var gameMenu = document.querySelector('#game-menu');
   var nightMenu = gameMenu.querySelector('#night-selector-menu');
   var customNightMenu = gameMenu.querySelector('#custom-night-menu');
@@ -1720,7 +1723,7 @@ var initialiseMenu = function initialiseMenu() {
   }
 
   // Make the audio toggle work
-  (_document$querySelect10 = document.querySelector('#audio-toggle input')) === null || _document$querySelect10 === void 0 || _document$querySelect10.addEventListener('change', function () {
+  (_document$querySelect11 = document.querySelector('#audio-toggle input')) === null || _document$querySelect11 === void 0 || _document$querySelect11.addEventListener('change', function () {
     user.audioOn = !user.audioOn;
 
     // Play the game menu music if the game hasn't started yet
@@ -1737,7 +1740,7 @@ var initialiseMenu = function initialiseMenu() {
   });
 
   // Make the game mode selector work
-  (_document$querySelect11 = document.querySelector('#game-mode input')) === null || _document$querySelect11 === void 0 || _document$querySelect11.addEventListener('click', function () {
+  (_document$querySelect12 = document.querySelector('#game-mode input')) === null || _document$querySelect12 === void 0 || _document$querySelect12.addEventListener('click', function () {
     user.gameMode = !user.gameMode;
     var gameModeName = user.gameMode ? 'playable-game' : 'ai-simulator';
     document.body.setAttribute('game-mode', gameModeName);
