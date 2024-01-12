@@ -884,6 +884,11 @@ body[game-in-progress='false'] #controls {
     font-size: 1.25em;
   }
 }
+#lets-go {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 /* SWITCH ------------------------------------------------------------------- */
 .switch {
   position: relative;
@@ -1212,19 +1217,19 @@ footer a {
 }
 /* Game speed selector ------------------------------------------------------ */
 #game-speed-selector {
-  display: flex;
-  align-items: center;
-}
-#game-speed-selector span {
-  margin-right: 10px;
+  background: #7fb000;
+  color: #000;
+  padding: 4px;
 }
 #game-speed-selector select {
   padding: 8px;
-  border: 3px solid #7fb000;
+  border: none;
   border-radius: 0;
   cursor: pointer;
   background: #000;
   color: #fff;
+  min-width: 100px;
+  margin-top: 7px;
 }
 #game-speed-selector select:focus {
   outline: #7fb000;

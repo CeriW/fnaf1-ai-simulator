@@ -50,21 +50,23 @@ body
       span Playable game
 
   #game-menu
-    h1 WELCOME TO THE FIVE NIGHTS AT FREDDY&apos;S SIMULATOR
+    h1 WELCOME TO THE FIVE NIGHTS AT FREDDY&apos;S AI SIMULATOR
     #night-selector-menu
     #custom-night-menu
     //- .ai-descriptions 0&#x2011;2(easy) 3&#x2011;6(med) 7&#x2011;12(hard) 13&#x2011;20(extreme)
-    button#start-game START GAME
-    #game-speed-selector
-      span Game speed:
-      select#speedSelector(name='speed')
-        option(value='0.25') x 0.25
-        option(value='0.5') x 0.5
-        option(value='1' selected) x 1
-        option(value='2') x 2
-        option(value='3') x 3
-        option(value='5') x 5
-        option(value='7') x 7
+    #lets-go
+      button#start-game START GAME
+      #game-speed-selector
+        span Game speed
+        br
+        select#speedSelector(name='speed')
+          option(value='0.25') x 0.25
+          option(value='0.5') x 0.5
+          option(value='1' selected) x 1
+          option(value='2') x 2
+          option(value='3') x 3
+          option(value='5') x 5
+          option(value='7') x 7
 
   main
     #simulator-container

@@ -1,20 +1,19 @@
 /* Game speed selector ------------------------------------------------------ */
 
 #game-speed-selector {
-  display: flex;
-  align-items: center;
-
-  span {
-    margin-right: 10px;
-  }
+  background: @green;
+  color: @black;
+  padding: 4px;
 
   select {
     padding: 8px;
-    border: 3px solid @green;
+    border: none;
     border-radius: 0;
     cursor: pointer;
     background: @black;
     color: @white;
+    min-width: 100px;
+    margin-top: 7px;
 
     &:focus {
       outline: @green;
