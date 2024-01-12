@@ -1214,6 +1214,7 @@ footer a {
 #game-speed-selector {
   display: flex;
   align-items: center;
+  margin-top: 20px;
 }
 #game-speed-selector span {
   margin-right: 10px;
