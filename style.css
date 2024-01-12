@@ -797,9 +797,9 @@ body[game-in-progress='false'] #controls {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  min-height: calc(100vh - 60px);
   text-align: center;
   padding-top: 50px;
+  gap: 30px;
 }
 #game-menu h1 {
   font-family: 'VT323', monospace;
@@ -1214,7 +1214,6 @@ footer a {
 #game-speed-selector {
   display: flex;
   align-items: center;
-  margin-top: 20px;
 }
 #game-speed-selector span {
   margin-right: 10px;
