@@ -57,20 +57,14 @@ body
     button#start-game START GAME
     #game-speed-selector
       span Game speed:
-      input#speed0(type='radio' name='speed' value='0.25')
-      label(for='speed0') x0.25
-      input#speed1(type='radio' name='speed' value='0.5')
-      label(for='speed1') x0.5
-      input#speed2(type='radio' name='speed' value='1' checked='')
-      label(for='speed2') x1
-      input#speed3(type='radio' name='speed' value='2')
-      label(for='speed3') x2
-      input#speed4(type='radio' name='speed' value='3')
-      label(for='speed4') x3
-      input#speed5(type='radio' name='speed' value='5')
-      label(for='speed5') x5
-      input#speed6(type='radio' name='speed' value='7')
-      label(for='speed6') x7
+      select#speedSelector(name='speed')
+        option(value='0.25') x 0.25
+        option(value='0.5') x 0.5
+        option(value='1' selected) x 1
+        option(value='2') x 2
+        option(value='3') x 3
+        option(value='5') x 5
+        option(value='7') x 7
 
   main
     #simulator-container

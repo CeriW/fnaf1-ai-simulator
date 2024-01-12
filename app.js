@@ -1579,8 +1579,8 @@ var playAudioAmbience = function playAudioAmbience() {
 
 var startGame = function startGame() {
   var _parseFloat;
-  var selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked');
-  gameSpeed = (_parseFloat = parseFloat(selectedRadio.value)) !== null && _parseFloat !== void 0 ? _parseFloat : 1;
+  var selectedOption = document.querySelector('#game-speed-selector select');
+  gameSpeed = (_parseFloat = parseFloat(selectedOption.value)) !== null && _parseFloat !== void 0 ? _parseFloat : 1;
   secondLength = Math.ceil(1000 / gameSpeed);
   killAudio('game-menu');
   playAudioAmbience();

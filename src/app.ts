@@ -1964,8 +1964,8 @@ const playAudioAmbience = () => {
 // ========================================================================== //
 
 const startGame = () => {
-  let selectedRadio = document.querySelector('#game-speed-selector input[type="radio"]:checked') as HTMLInputElement;
-  gameSpeed = parseFloat(selectedRadio.value) ?? 1;
+  let selectedOption = document.querySelector('#game-speed-selector select') as HTMLSelectElement;
+  gameSpeed = parseFloat(selectedOption.value) ?? 1;
   secondLength = Math.ceil(1000 / gameSpeed);
 
   killAudio('game-menu');

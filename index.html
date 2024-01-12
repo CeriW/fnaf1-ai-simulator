@@ -47,20 +47,15 @@
     <div class="ai-descriptions">0&#x2011;2(easy) 3&#x2011;6(med) 7&#x2011;12(hard) 13&#x2011;20(extreme)</div>
     <button id="start-game">START GAME</button>
     <div id="game-speed-selector"><span>Game speed:</span>
-      <input id="speed0" type="radio" name="speed" value="0.25">
-      <label for="speed0">x0.25</label>
-      <input id="speed1" type="radio" name="speed" value="0.5">
-      <label for="speed1">x0.5</label>
-      <input id="speed2" type="radio" name="speed" value="1" checked="">
-      <label for="speed2">x1</label>
-      <input id="speed3" type="radio" name="speed" value="2">
-      <label for="speed3">x2</label>
-      <input id="speed4" type="radio" name="speed" value="3">
-      <label for="speed4">x3</label>
-      <input id="speed5" type="radio" name="speed" value="5">
-      <label for="speed5">x5</label>
-      <input id="speed6" type="radio" name="speed" value="7">
-      <label for="speed6">x7</label>
+      <select id="speedSelector" name="speed">
+        <option value="0.25">x 0.25</option>
+        <option value="0.5">x 0.5</option>
+        <option value="1" selected>x 1</option>
+        <option value="2">x 2</option>
+        <option value="3">x 3</option>
+        <option value="5">x 5</option>
+        <option value="7">x 7</option>
+      </select>
     </div>
   </div>
   <main>

@@ -1214,42 +1214,20 @@ footer a {
 #game-speed-selector {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
 }
-#game-speed-selector input {
-  opacity: 0;
+#game-speed-selector span {
+  margin-right: 10px;
 }
-#game-speed-selector label {
-  border: 3px solid #fff;
-  background: #424242;
-  color: #fff;
-  font-family: 'VT323', monospace;
-  font-size: 1.5em;
-  padding: 5px;
-  text-align: left;
-  line-height: 0.8;
-  margin: 0;
-  min-width: 50px;
-  text-align: center;
+#game-speed-selector select {
+  padding: 8px;
+  border: 3px solid #7fb000;
+  border-radius: 0;
   cursor: pointer;
-  margin: 10px;
+  background: #000;
+  color: #fff;
 }
-#game-speed-selector label.active {
-  background: #7fb000;
-}
-#game-speed-selector label[disabled] {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-#game-speed-selector label:hover {
-  border-color: #7fb000;
-}
-#game-speed-selector input:checked + label {
-  background: #7fb000;
-}
-#game-speed-selector label:hover {
-  border-color: #7fb000;
+#game-speed-selector select:focus {
+  outline: #7fb000;
 }
 /* AI adjuster -------------------------------------------------------------- */
 .ai-adjuster {
