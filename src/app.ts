@@ -973,7 +973,7 @@ const addReport = (
       break;
 
     case 'freddy bonnie and chica on stage':
-      message = 'Freddy is unable to leave the stage while Bonnie and Chica are still there';
+      message = 'Freddy is unable to leave the stage while Bonnie or Chica are still there';
       preventDuplicates = true;
       break;
 
