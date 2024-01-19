@@ -1221,7 +1221,7 @@ footer {
 }
 footer a {
   color: #b9b9b9;
-  margin: 0 20px;
+  margin: 0 20px 10px;
   display: inline-block;
 }
 /* Game speed selector ------------------------------------------------------ */
