@@ -348,7 +348,7 @@
 /* SIMULATOR ---------------------------------------------------------------- */
 #simulator-container {
   display: grid;
-  grid-template: 'simulator-svg' auto '.' auto '.' auto 'camera-button' min-content / 1fr;
+  grid-template: 'simulator-svg' auto '.' min-content '.' min-content 'camera-button' min-content / 1fr;
   position: relative;
   grid-area: simulator;
   gap: 10px;
