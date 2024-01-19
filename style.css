@@ -1004,14 +1004,21 @@ body[game-in-progress='true'] #sound-prompt {
   }
 }
 /* Playable game mode ------------------------------------------------------- */
-body[game-mode="playable-game"] .in-game-minutes,
-body[game-mode="playable-game"] #supplementary-time-info,
-body[game-mode="playable-game"] .animatronic-report .report-item-container,
-body[game-mode="playable-game"] span.animatronic,
-body[game-mode="playable-game"] #power-time,
-body[game-mode="playable-game"] .current-ai-level {
+body[game-mode='playable-game'] .in-game-minutes,
+body[game-mode='playable-game'] #supplementary-time-info,
+body[game-mode='playable-game'] span.animatronic,
+body[game-mode='playable-game'] #power-time {
   opacity: 0;
   pointer-events: none;
+}
+body[game-mode='playable-game'] .current-ai-level {
+  color: transparent;
+}
+body[game-mode='playable-game'] .report-item-container {
+  background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 20px, rgba(255, 255, 255, 0.05) 20px, rgba(255, 255, 255, 0.05) 40px);
+}
+body[game-mode='playable-game'] .report-item-container .report-item {
+  display: none;
 }
 /* Lights ------------------------------------------------------------------- */
 @keyframes litAnimatronicAnimation {

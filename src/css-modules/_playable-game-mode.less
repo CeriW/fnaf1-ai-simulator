@@ -1,19 +1,29 @@
 /* Playable game mode ------------------------------------------------------- */
 
-body[game-mode="playable-game"]{
-
-
+body[game-mode='playable-game'] {
   .in-game-minutes,
   #supplementary-time-info,
-  .animatronic-report .report-item-container,
   span.animatronic,
-  #power-time,
-  .current-ai-level
-  {
+  #power-time {
     opacity: 0;
     pointer-events: none;
   }
 
+  .current-ai-level {
+    color: transparent;
+  }
 
+  .report-item-container {
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba(white, 0.02) 0,
+      rgba(white, 0.02) 20px,
+      rgba(white, 0.05) 20px,
+      rgba(white, 0.05) 40px
+    );
+
+    .report-item {
+      display: none;
+    }
+  }
 }
-
