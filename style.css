@@ -672,7 +672,7 @@ body[cameras-on='false'] #camera-display {
   top: 19%;
   left: 82%;
 }
-@media (max-width: 1300px) and (min-width: 1100px) {
+@media (max-width: 1300px) and (min-width: 1150px) {
   #camera-display img {
     max-width: 140%;
     margin-left: -20%;
@@ -1328,7 +1328,7 @@ main {
     grid-template: 'simulator sidebar' auto 'simulator animatronic-report' min-content / 500px 1fr;
   }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1150px) {
   main {
     grid-template: 'simulator sidebar' auto 'animatronic-report animatronic-report' / 400px 1fr;
   }
@@ -1389,7 +1389,7 @@ button {
   gap: 50px 10px;
   grid-area: sidebar;
 }
-@media (max-width: 1100px) {
+@media (max-width: 1150px) {
   #sidebar {
     grid-template: '.' '.' min-content;
     margin-left: -10px;
